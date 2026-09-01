@@ -32,10 +32,12 @@ export function Player() {
   const markDone = useSessionStore((s) => s.markDone)
 
   const [stepIndex, setStepIndex] = useState(0)
-  const [remaining, setRemaining] = useState(routine?.steps[0]?.durationS ?? 0)
+  const [remaining, setRemaining] = useState(0)
   const [paused, setPaused] = useState(false)
   const [finished, setFinished] = useState(false)
   const startedAtRef = useRef<number>(Date.now())
+  /** Wall-clock instant the current step ends. Null while paused. */
+  const deadlineRef = useRef<number | null>(null)
 
   const steps = useMemo(() => routine?.steps ?? [], [routine])
   const step = steps[stepIndex]
@@ -50,13 +52,9 @@ export function Player() {
       setFinished(true)
       return
     }
-    setStepIndex((i) => {
-      const next = i + 1
-      setRemaining(steps[next]?.durationS ?? 0)
-      return next
-    })
+    setStepIndex((i) => i + 1)
     tick()
-  }, [isLast, steps, tick])
+  }, [isLast, tick])
 
   // Keep the screen awake while playing (§11.3).
   useEffect(() => {
@@ -67,21 +65,48 @@ export function Player() {
     }
   }, [])
 
-  // Countdown. When a step reaches zero, advance.
+  // Arm the step: also covers the routine arriving after the first render.
   useEffect(() => {
-    if (paused || finished) return
+    const s = steps[stepIndex]
+    if (!s) return
+    setRemaining(s.durationS)
+    deadlineRef.current = Date.now() + s.durationS * 1000
+  }, [steps, stepIndex])
+
+  // Countdown read from the wall clock, never by counting ticks: the WebView
+  // throttles (and on Android may suspend) timers as soon as the app goes to
+  // the background, which made steps run long. Reading a deadline means a
+  // frozen interval self-corrects on the very next tick after resume.
+  // Held in a ref so a new goNext identity does not restart the interval and
+  // reset its phase on every step.
+  const goNextRef = useRef(goNext)
+  useEffect(() => {
+    goNextRef.current = goNext
+  }, [goNext])
+
+  useEffect(() => {
+    if (paused || finished || !step) return
     const t = setInterval(() => {
-      setRemaining((r) => {
-        if (r <= 1) {
-          // Defer the state transition out of the setter.
-          queueMicrotask(goNext)
-          return 0
-        }
-        return r - 1
-      })
-    }, 1000)
+      const deadline = deadlineRef.current
+      if (deadline === null) return
+      const left = Math.max(0, Math.ceil((deadline - Date.now()) / 1000))
+      setRemaining(left)
+      if (left === 0) goNextRef.current()
+    }, 250)
     return () => clearInterval(t)
-  }, [paused, finished, goNext, stepIndex])
+  }, [paused, finished, step])
+
+  const togglePause = useCallback(() => {
+    if (paused) {
+      deadlineRef.current = Date.now() + remaining * 1000
+      setPaused(false)
+      return
+    }
+    const deadline = deadlineRef.current
+    if (deadline !== null) setRemaining(Math.max(0, Math.ceil((deadline - Date.now()) / 1000)))
+    deadlineRef.current = null
+    setPaused(true)
+  }, [paused, remaining])
 
   // On finish: record completion + event.
   useEffect(() => {
@@ -180,7 +205,7 @@ export function Player() {
         <button
           type="button"
           className="btn btn-secondary flex-1"
-          onClick={() => setPaused((p) => !p)}
+          onClick={togglePause}
           aria-label={paused ? 'Reprendre' : 'Mettre en pause'}
         >
           {paused ? <Play size={20} /> : <Pause size={20} />}
