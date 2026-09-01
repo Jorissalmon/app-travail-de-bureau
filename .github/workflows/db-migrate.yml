@@ -1,0 +1,31 @@
+name: DB migrate (Neon)
+
+# Applique db/001_init.sql puis db/002_seed_content.sql sur la base "releve".
+# Les runners GitHub joignent Neon (contrairement à l'environnement de dev distant).
+#
+# Prérequis : créer le secret DATABASE_URL (rôle releve_app, base releve) dans
+# GitHub → Settings → Secrets and variables → Actions.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Appliquer les migrations
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "::error::Le secret DATABASE_URL n'est pas défini."
+            exit 1
+          fi
+          pnpm db:migrate
