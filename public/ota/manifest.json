@@ -1,7 +1,7 @@
 {
-  "version": "1.0.6",
-  "url": "https://app-travail-de-bureau.vercel.app/ota/bundle-1.0.6.zip",
-  "checksum": "babf28649ad537b5880c2e9429ecb2efc5ad91eff4f2cf83236383cb10a5bc2c",
+  "version": "1.0.7",
+  "url": "https://app-travail-de-bureau.vercel.app/ota/bundle-1.0.7.zip",
+  "checksum": "f39e153d4a9144a39b3bff517cace38c31c69cc3c7e99ea66c08d437b736c1ab",
   "minNative": "1.0.0",
-  "notes": "Merge branch 'claude/megaprompt-application-hr9w06': fix des 500 de l'API"
+  "notes": "Trim DATABASE_URL: a stray tab in the env var broke every DB call\n\nThe value stored in Vercel starts with a tab character, so neon() rejected it\nas an invalid URL and every function returned 500 after the ESM fix.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 }
