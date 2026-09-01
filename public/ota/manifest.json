@@ -1,7 +1,7 @@
 {
-  "version": "1.0.7",
-  "url": "https://app-travail-de-bureau.vercel.app/ota/bundle-1.0.7.zip",
-  "checksum": "f39e153d4a9144a39b3bff517cace38c31c69cc3c7e99ea66c08d437b736c1ab",
+  "version": "1.0.8",
+  "url": "https://app-travail-de-bureau.vercel.app/ota/bundle-1.0.8.zip",
+  "checksum": "386ccdaf34c74babb04a92174a8a3adcdaa651d078f7c8b26c36a2cf53a439d7",
   "minNative": "1.0.0",
-  "notes": "Trim DATABASE_URL: a stray tab in the env var broke every DB call\n\nThe value stored in Vercel starts with a tab character, so neon() rejected it\nas an invalid URL and every function returned 500 after the ESM fix.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
+  "notes": "Player: drive the countdown from the wall clock\n\nsetInterval ticks were counted one by one, so a WebView that throttles or\nsuspends timers in the background made a step run long. Each tick now reads the\nremaining time from a deadline, which self-corrects on resume, and the interval\nno longer restarts on every step. Arming the step in an effect also fixes the\ncountdown starting at zero when the routine loads after the first render.\n\nAlso upload the debug APK as a run artifact so it can be downloaded from the\nActions tab, not only from the Release.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 }
