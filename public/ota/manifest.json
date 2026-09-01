@@ -1,7 +1,7 @@
 {
-  "version": "1.0.9",
-  "url": "https://app-travail-de-bureau.vercel.app/ota/bundle-1.0.9.zip",
-  "checksum": "79d072bd29bd5ecf7a9326276e66c10b2d900012c625e6a76df18b381f32dde2",
+  "version": "1.0.10",
+  "url": "https://app-travail-de-bureau.vercel.app/ota/bundle-1.0.10.zip",
+  "checksum": "3f58af95ba12de40d6088c4664462653779b2d049de6f41169fe4c020754c47f",
   "minNative": "1.0.0",
-  "notes": "Reminders: actually request the battery optimisation exemption\n\nThe notice's \"Ouvrir le réglage\" button only marked the card as seen, so the app\nstayed subject to manufacturer power management — the usual reason a scheduled\nreminder is delayed or never fires. It now opens the system exemption dialog\nthrough @capawesome-team/capacitor-android-battery-optimization, and Réglages →\nRappels shows the current state with a way to fix it, since the card is shown\nonly once.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
+  "notes": "Player: audio cues on step change and the final five seconds\n\nThree synthesised Web Audio blips — a tick for each of the last five seconds of\na step, a higher tone when the step gives way, a longer one when the routine\nends. Synthesised rather than sampled so nothing has to load and nothing is\nadded to the OTA bundle.\n\nThe preference is device-local: Settings is replaced wholesale by the server\ncopy on every /api/me, so a field there would need a migration for one boolean.\nOn by default, unlike the notification sound, and switchable in Réglages.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 }
