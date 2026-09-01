@@ -8,6 +8,7 @@ import { useAuthStore } from '@/stores/auth'
 import { INTERVAL_CHOICES, RECOMMENDED_INTERVAL } from '@/lib/defaults'
 import { BUNDLE_VERSION, isNativeUpdatePending } from '@/features/ota/updater'
 import { isOptimised, requestExemption } from '@/features/reminders/battery'
+import { loadCues, setCues } from '@/features/session/cues'
 import { isNative } from '@/lib/platform'
 
 const REPO_URL = 'https://github.com/Jorissalmon/app-travail-de-bureau'
@@ -44,6 +45,12 @@ export function Settings() {
     await requestExemption()
     setOptimised(await isOptimised())
   }
+
+  // Device-local: Settings is replaced wholesale by the server copy on /api/me.
+  const [playerSound, setPlayerSound] = useState(true)
+  useEffect(() => {
+    void loadCues().then(setPlayerSound)
+  }, [])
 
   function toggleWeekday(n: number) {
     const set = new Set(settings.weekdays)
@@ -166,8 +173,21 @@ export function Settings() {
             onChange={(v) => void update({ vibrate: v })}
           />
         </SettingRow>
-        <SettingRow label="Son" hint="Désactivé par défaut (open space).">
+        <SettingRow label="Son des notifications" hint="Désactivé par défaut (open space).">
           <Toggle label="Son" checked={settings.sound} onChange={(v) => void update({ sound: v })} />
+        </SettingRow>
+        <SettingRow
+          label="Sons du minuteur"
+          hint="Bip au changement d’étape et sur les cinq dernières secondes."
+        >
+          <Toggle
+            label="Sons du minuteur"
+            checked={playerSound}
+            onChange={(v) => {
+              setPlayerSound(v)
+              void setCues(v)
+            }}
+          />
         </SettingRow>
       </SettingsSection>
 

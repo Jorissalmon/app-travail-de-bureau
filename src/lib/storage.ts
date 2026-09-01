@@ -20,6 +20,7 @@ export const KEYS = {
   articles: 'content.articles',
   scheduled: 'reminders.scheduled',
   batteryNoticeSeen: 'notice.battery.seen',
+  playerSound: 'player.sound',
   bundleVersion: 'ota.bundleVersion',
   pendingNativeUpdate: 'ota.pendingNativeUpdate',
 } as const

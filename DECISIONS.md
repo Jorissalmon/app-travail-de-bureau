@@ -27,6 +27,13 @@ Chaque écart par rapport au mégaprompt, avec sa raison en une phrase (§15.8).
   l'état est relisible dans Réglages → Rappels, la fiche ne s'affichant qu'une
   fois. L'app n'est pas distribuée sur le Play Store, donc la restriction de
   Google sur cet intent ne s'applique pas.
+- **Sons du minuteur synthétisés, réglage local** — trois bips Web Audio
+  (changement d'étape, cinq dernières secondes, fin) plutôt que des fichiers
+  audio : rien à charger, rien dans le bundle OTA. Le réglage vit dans le
+  stockage de l'appareil et non dans `Settings`, que `/api/me` remplace en
+  entier — l'y mettre coûterait une migration SQL pour un booléen. Activé par
+  défaut, contrairement au son des notifications (§8.3) : un bip pendant une
+  pause qu'on a lancée soi-même n'est pas une notification en open space.
 - **Alarmes exactes** — `checkExactNotificationSetting` / `changeExactNotificationSetting`
   sont appelées via un accès typé souple ; si l'API n'existe pas (OS/plugin), on
   dégrade silencieusement vers des alarmes inexactes (§8.3). Jamais bloquant.

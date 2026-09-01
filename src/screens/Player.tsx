@@ -13,6 +13,14 @@ import { mmss } from '@/lib/format'
 import { localDate } from '@/lib/date'
 import { uuid } from '@/lib/uuid'
 import { logCompletion } from '@/features/reminders/events'
+import {
+  FINAL_COUNTDOWN_S,
+  cueEnd,
+  cueStep,
+  cueTick,
+  loadCues,
+  primeCues,
+} from '@/features/session/cues'
 import type { Completion } from '@/lib/types'
 
 /**
@@ -38,6 +46,8 @@ export function Player() {
   const startedAtRef = useRef<number>(Date.now())
   /** Wall-clock instant the current step ends. Null while paused. */
   const deadlineRef = useRef<number | null>(null)
+  /** Last second already cued, so the 250 ms interval blips only once each. */
+  const lastCuedRef = useRef<number | null>(null)
 
   const steps = useMemo(() => routine?.steps ?? [], [routine])
   const step = steps[stepIndex]
@@ -45,6 +55,7 @@ export function Player() {
 
   const tick = useCallback(() => {
     if (vibrate && isNative()) void Haptics.impact({ style: ImpactStyle.Light })
+    cueStep()
   }, [vibrate])
 
   const goNext = useCallback(() => {
@@ -65,18 +76,21 @@ export function Player() {
     }
   }, [])
 
+  // Reaching this screen is always a tap, which is the gesture the browser
+  // wants before it will let an AudioContext make a sound.
+  useEffect(() => {
+    void loadCues().then(primeCues)
+  }, [])
+
   // Arm the step: also covers the routine arriving after the first render.
   useEffect(() => {
     const s = steps[stepIndex]
     if (!s) return
     setRemaining(s.durationS)
     deadlineRef.current = Date.now() + s.durationS * 1000
+    lastCuedRef.current = null
   }, [steps, stepIndex])
 
-  // Countdown read from the wall clock, never by counting ticks: the WebView
-  // throttles (and on Android may suspend) timers as soon as the app goes to
-  // the background, which made steps run long. Reading a deadline means a
-  // frozen interval self-corrects on the very next tick after resume.
   // Held in a ref so a new goNext identity does not restart the interval and
   // reset its phase on every step.
   const goNextRef = useRef(goNext)
@@ -84,6 +98,10 @@ export function Player() {
     goNextRef.current = goNext
   }, [goNext])
 
+  // Countdown read from the wall clock, never by counting ticks: the WebView
+  // throttles (and on Android may suspend) timers as soon as the app goes to
+  // the background, which made steps run long. Reading a deadline means a
+  // frozen interval self-corrects on the very next tick after resume.
   useEffect(() => {
     if (paused || finished || !step) return
     const t = setInterval(() => {
@@ -91,6 +109,12 @@ export function Player() {
       if (deadline === null) return
       const left = Math.max(0, Math.ceil((deadline - Date.now()) / 1000))
       setRemaining(left)
+      // Four ticks a second, so the cue is gated on the displayed second
+      // actually changing.
+      if (left !== lastCuedRef.current) {
+        lastCuedRef.current = left
+        if (left > 0 && left <= FINAL_COUNTDOWN_S) cueTick()
+      }
       if (left === 0) goNextRef.current()
     }, 250)
     return () => clearInterval(t)
@@ -111,6 +135,7 @@ export function Player() {
   // On finish: record completion + event.
   useEffect(() => {
     if (!finished || !routine) return
+    cueEnd()
     const durationS = Math.round((Date.now() - startedAtRef.current) / 1000)
     const completion: Completion = {
       clientId: uuid(),
