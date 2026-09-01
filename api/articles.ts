@@ -1,10 +1,11 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { db } from './_db'
-import { ApiError, fail, json, methods } from './_http'
+import { ApiError, allowCors, fail, json, methods } from './_http'
 
 /** Article list, or one article when ?slug= is given (§6). */
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
+    if (allowCors(req, res)) return
     methods(req, 'GET')
     const sql = db()
     const slug = typeof req.query.slug === 'string' ? req.query.slug : null

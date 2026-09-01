@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { db } from './_db'
-import { ApiError, body, fail, json, methods } from './_http'
+import { ApiError, allowCors, body, fail, json, methods } from './_http'
 import { requireUser } from './_auth'
 import { toSettings } from './_models'
 import { optionalHHMM } from './_validate'
@@ -8,6 +8,7 @@ import { optionalHHMM } from './_validate'
 /** Columns the client may set, with their validators. */
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
+    if (allowCors(req, res)) return
     const m = methods(req, 'GET', 'PUT')
     const { sub } = await requireUser(req)
     const sql = db()

@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { db } from './_db'
-import { fail, json, methods } from './_http'
+import { allowCors, fail, json, methods } from './_http'
 import { requireUser } from './_auth'
 import {
   computeAdherence,
@@ -19,6 +19,7 @@ import type { ReminderAction } from '../src/lib/types'
  */
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
+    if (allowCors(req, res)) return
     methods(req, 'GET')
     const { sub } = await requireUser(req)
     const sql = db()

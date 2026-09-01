@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { db } from './_db'
-import { ApiError, body, fail, json, methods } from './_http'
+import { ApiError, allowCors, body, fail, json, methods } from './_http'
 import { requireUser } from './_auth'
 import { requireString } from './_validate'
 
@@ -12,6 +12,7 @@ import { requireString } from './_validate'
  */
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
+    if (allowCors(req, res)) return
     methods(req, 'POST')
     const { sub } = await requireUser(req)
     const b = body<{ action?: unknown; at?: unknown; localDate?: unknown }>(req)

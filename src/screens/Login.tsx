@@ -33,7 +33,13 @@ export function Login() {
       }
       navigate('/', { replace: true })
     } catch (err) {
-      setError(err instanceof HttpError ? err.message : 'Connexion impossible. Réessaie.')
+      // An HttpError means the server answered and its message is displayable.
+      // Anything else is a network failure — say so, rather than blaming credentials.
+      setError(
+        err instanceof HttpError
+          ? err.message
+          : 'Impossible de joindre le serveur. Vérifie ta connexion.',
+      )
     } finally {
       setBusy(false)
     }

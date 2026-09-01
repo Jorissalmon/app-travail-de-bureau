@@ -7,8 +7,39 @@ import type { VercelRequest, VercelResponse } from '@vercel/node'
  */
 
 export function json(res: VercelResponse, status: number, body: unknown): void {
+  setCors(res)
   res.status(status).setHeader('Content-Type', 'application/json; charset=utf-8')
   res.send(JSON.stringify(body))
+}
+
+/**
+ * CORS. The Android webview serves the app from https://localhost and calls the
+ * API on the Vercel domain, so every request is cross-origin and the browser
+ * sends an OPTIONS preflight first. Without these headers the preflight is
+ * rejected and fetch fails before the request is ever made.
+ *
+ * `*` is safe here: auth is a bearer token, never a cookie, so a third-party
+ * page cannot ride on an ambient session.
+ */
+export function setCors(res: VercelResponse): void {
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,OPTIONS')
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+  res.setHeader('Access-Control-Max-Age', '86400')
+}
+
+/**
+ * Sets CORS headers and answers the preflight. Returns true when the request
+ * was an OPTIONS preflight and the response is already finished — the caller
+ * must return immediately in that case.
+ */
+export function allowCors(req: VercelRequest, res: VercelResponse): boolean {
+  setCors(res)
+  if ((req.method ?? '').toUpperCase() === 'OPTIONS') {
+    res.status(204).end()
+    return true
+  }
+  return false
 }
 
 export class ApiError extends Error {

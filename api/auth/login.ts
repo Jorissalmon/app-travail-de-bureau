@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { db } from '../_db'
-import { ApiError, body, clientIp, fail, json, methods } from '../_http'
+import { ApiError, allowCors, body, clientIp, fail, json, methods } from '../_http'
 import { issueRefreshToken, signAccessToken, verifyPassword } from '../_auth'
 import { toPublicUser } from '../_models'
 import { requireEmail } from '../_validate'
@@ -8,6 +8,7 @@ import { rateLimit } from '../_ratelimit'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
+    if (allowCors(req, res)) return
     methods(req, 'POST')
 
     // 10 attempts per IP per 15 minutes, in function memory (§6). No Redis.

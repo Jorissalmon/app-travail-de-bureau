@@ -1,10 +1,11 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { db } from './_db'
-import { fail, json, methods } from './_http'
+import { allowCors, fail, json, methods } from './_http'
 
 /** All routines with their steps, ordered (§6). */
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
+    if (allowCors(req, res)) return
     methods(req, 'GET')
     const sql = db()
     const routines = await sql`
