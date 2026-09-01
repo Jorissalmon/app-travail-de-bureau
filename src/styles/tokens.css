@@ -1,0 +1,90 @@
+/* Design tokens — §10 of the spec.
+   The app is dark-only on purpose: there is no light theme and none should be
+   added. Values below are the single source of truth; nothing else in the
+   codebase may hardcode a colour. */
+
+:root {
+  --bg: #000000; /* app background, pure black */
+  --surface: #1a1a1c; /* cards */
+  --surface-2: #2a2a2e; /* search field, chips, secondary buttons */
+  --surface-3: #3a3a3f; /* hover / pressed */
+  --border: #262629; /* 1px rule on small cards */
+
+  --text: #ffffff;
+  --text-2: #8e8e93; /* section labels, subtitles */
+  --text-3: #5a5a60; /* inactive tab icons, fine print */
+
+  --accent: #c6dc72; /* lime — primary action, timer ring */
+  --accent-ink: #14160c; /* text sitting on the accent */
+  --danger: #e0674f; /* stop the session */
+
+  --ev-solid: #7fc79b; /* "solid evidence" pill */
+  --ev-partial: #e3b865; /* "partial evidence" */
+  --ev-weak: #c97a66; /* "not demonstrated" */
+
+  /* Illustration palette — pastille backgrounds, one per routine accent
+     and per figure key. §10.1 */
+  --peach: #f5c6a5;
+  --sage: #8fbfa3;
+  --navy: #2e4a8f;
+  --sky: #cde7f5;
+  --brick: #a32b2b;
+  --lime: #c6dc72;
+  --pine: #0f4f45;
+  --blush: #e9c4d9;
+  --sun: #f5d14e;
+  --slate: #6c7a89;
+
+  /* Figures are drawn in two tones only, picked for contrast against the
+     pastille background. */
+  --figure-dark: #1a1a1c;
+  --figure-light: #f7f4ef;
+
+  /* Radii — §10.3 */
+  --r-hero: 32px;
+  --r-routine: 20px;
+  --r-zone: 14px;
+  --r-button: 16px;
+  --r-sheet: 28px;
+  --r-pill: 999px;
+
+  /* Screen gutter */
+  --gutter: 20px;
+
+  /* Motion */
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --dur: 160ms;
+}
+
+/* Expose the tokens to Tailwind v4 so utilities like `bg-surface`,
+   `text-text-2`, `rounded-hero` exist and stay in sync with the values above. */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-border: var(--border);
+
+  --color-text: var(--text);
+  --color-text-2: var(--text-2);
+  --color-text-3: var(--text-3);
+
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-danger: var(--danger);
+
+  --color-ev-solid: var(--ev-solid);
+  --color-ev-partial: var(--ev-partial);
+  --color-ev-weak: var(--ev-weak);
+
+  --radius-hero: var(--r-hero);
+  --radius-routine: var(--r-routine);
+  --radius-zone: var(--r-zone);
+  --radius-button: var(--r-button);
+  --radius-sheet: var(--r-sheet);
+
+  --font-sans: 'Manrope', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --ease-out-soft: cubic-bezier(0.2, 0.8, 0.2, 1);
+}

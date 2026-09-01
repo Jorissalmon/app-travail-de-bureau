@@ -1,0 +1,70 @@
+name: OTA bundle
+
+# On push to main: typecheck, test, build, bump patch, package the bundle, and
+# commit it back so Vercel deploys the new manifest + zip (§9.4).
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'public/ota/**'
+      - 'ota/version.json'
+
+# Prevent two runs from racing on the committed manifest.
+concurrency:
+  group: ota-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # A real token so the follow-up push retriggers deploy hooks as needed.
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Typecheck and test
+        run: |
+          pnpm typecheck
+          pnpm test
+
+      - name: Build
+        env:
+          VITE_API_BASE_URL: ${{ vars.OTA_BASE_URL }}
+        run: |
+          NEXT=$(node -e "const v=require('./ota/version.json').version.split('.');v[2]=+v[2]+1;console.log(v.join('.'))")
+          echo "BUNDLE_VERSION=$NEXT" >> "$GITHUB_ENV"
+          VITE_BUNDLE_VERSION=$NEXT pnpm build:only
+
+      - name: Package OTA bundle
+        env:
+          OTA_BASE_URL: ${{ vars.OTA_BASE_URL }}
+          OTA_NOTES: ${{ github.event.head_commit.message }}
+        run: pnpm ota:local
+
+      - name: Commit bundle + manifest
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/ota ota/version.json
+          if git diff --cached --quiet; then
+            echo "No OTA changes to commit."
+          else
+            git commit -m "chore(ota): bundle ${BUNDLE_VERSION} [skip ci]"
+            git push
+          fi
