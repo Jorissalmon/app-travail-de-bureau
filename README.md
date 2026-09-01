@@ -115,3 +115,22 @@ Voir l'arborescence dans le mégaprompt (§4). Le cœur de l'app est
 
 Aucune donnée ne quitte l'app en dehors de son propre backend. Pas d'analytics,
 pas de publicité, pas de crash reporter tiers.
+
+## Déploiement production (Vercel via GitHub Actions)
+
+Le workflow `.github/workflows/deploy-vercel.yml` déploie en production à chaque
+push sur `main` — sans avoir à connecter le dépôt dans le dashboard Vercel.
+
+À configurer **une fois** dans GitHub → **Settings → Secrets and variables → Actions** :
+
+- Secret **`VERCEL_TOKEN`** — Vercel → Account Settings → Tokens.
+- Variable **`VERCEL_ORG_ID`** et variable **`VERCEL_PROJECT_ID`** — récupérées via
+  `vercel link` en local, ou dans Vercel → Project → Settings.
+
+Les variables d'exécution de l'app (`DATABASE_URL`, `JWT_SECRET`, `INVITE_CODE`,
+`OTA_BASE_URL`) restent définies **dans le projet Vercel** ; `vercel pull` les
+récupère au moment du build. Ne les mets jamais dans le dépôt.
+
+> Choisis **un seul** mécanisme de déploiement : soit ce workflow, soit
+> l'intégration Git native de Vercel (dashboard). Les deux en même temps
+> déclenchent des déploiements en double.

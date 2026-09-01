@@ -65,6 +65,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No OTA changes to commit."
           else
-            git commit -m "chore(ota): bundle ${BUNDLE_VERSION} [skip ci]"
+            git commit -m "chore(ota): bundle ${BUNDLE_VERSION}"
             git push
           fi
