@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Sheet } from './Sheet'
 import { KEYS, getRaw, setRaw } from '@/lib/storage'
 import { isNative } from '@/lib/platform'
+import { requestExemption } from '@/features/reminders/battery'
 
 /**
  * Shown once, after the first session start (§8.3): manufacturer battery
@@ -31,10 +32,9 @@ export function BatteryNotice({ open, onClose }: { open: boolean; onClose: () =>
   }
 
   async function openSettings() {
-    // Opening ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS needs a tiny native
-    // plugin (Capacitor core does not expose that intent). Until it is added,
-    // this marks the notice seen and closes; see DECISIONS.md. The button copy
-    // stays honest — it points the user at the OS battery setting.
+    // Opens the system exemption dialog and only then marks the notice seen —
+    // the card must not disappear as if it had done something when it did not.
+    await requestExemption()
     await setRaw(KEYS.batteryNoticeSeen, '1')
     await dismiss(false)
   }

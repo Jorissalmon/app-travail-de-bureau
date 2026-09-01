@@ -20,11 +20,13 @@ Chaque écart par rapport au mégaprompt, avec sa raison en une phrase (§15.8).
 - **Route de la barre d'onglets `/library/:slug` pour le détail** — le mégaprompt
   liste `Player.tsx` et `Library.tsx` sans nommer l'écran de détail de routine ;
   il est rendu par `RoutineDetail.tsx` sous `/library/:slug`.
-- **Fiche batterie : ouverture de l'intent non câblée** — `ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`
-  n'est pas exposé par le cœur de Capacitor ; la permission est déclarée au
-  manifeste et la fiche s'affiche une seule fois, mais le bouton se contente
-  pour l'instant de marquer « vu » (à compléter par un petit plugin natif ou
-  `@capawesome/capacitor-android-battery-optimization`). Aucun blocage d'usage.
+- **Fiche batterie : intent câblée via `@capawesome-team/capacitor-android-battery-optimization`**
+  — `ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` n'est pas exposé par le cœur
+  de Capacitor ; ce plugin (MIT, Capacitor 8) l'expose sans code natif à
+  maintenir. Le bouton de la fiche ouvre réellement la demande d'exemption, et
+  l'état est relisible dans Réglages → Rappels, la fiche ne s'affichant qu'une
+  fois. L'app n'est pas distribuée sur le Play Store, donc la restriction de
+  Google sur cet intent ne s'applique pas.
 - **Alarmes exactes** — `checkExactNotificationSetting` / `changeExactNotificationSetting`
   sont appelées via un accès typé souple ; si l'API n'existe pas (OS/plugin), on
   dégrade silencieusement vers des alarmes inexactes (§8.3). Jamais bloquant.

@@ -7,6 +7,7 @@ import { useSettingsStore } from '@/stores/settings'
 import { useAuthStore } from '@/stores/auth'
 import { INTERVAL_CHOICES, RECOMMENDED_INTERVAL } from '@/lib/defaults'
 import { BUNDLE_VERSION, isNativeUpdatePending } from '@/features/ota/updater'
+import { isOptimised, requestExemption } from '@/features/reminders/battery'
 import { isNative } from '@/lib/platform'
 
 const REPO_URL = 'https://github.com/Jorissalmon/app-travail-de-bureau'
@@ -31,6 +32,18 @@ export function Settings() {
   useEffect(() => {
     void isNativeUpdatePending().then(setNativeUpdate)
   }, [])
+
+  // Battery optimisation is the usual reason a reminder never arrives, and the
+  // one-off notice can be dismissed for good — so its state is readable here.
+  const [optimised, setOptimised] = useState<boolean | null>(null)
+  useEffect(() => {
+    void isOptimised().then(setOptimised)
+  }, [])
+
+  async function fixBattery() {
+    await requestExemption()
+    setOptimised(await isOptimised())
+  }
 
   function toggleWeekday(n: number) {
     const set = new Set(settings.weekdays)
@@ -123,6 +136,22 @@ export function Settings() {
       </SettingsSection>
 
       <SettingsSection title="Rappels">
+        {optimised !== null && (
+          <SettingRow
+            label="Optimisation de la batterie"
+            hint={
+              optimised
+                ? 'Active : Android peut retarder ou bloquer les rappels.'
+                : 'Désactivée pour Relève. Les rappels arrivent à l’heure.'
+            }
+          >
+            {optimised && (
+              <button type="button" className="btn btn-secondary" onClick={() => void fixBattery()}>
+                Corriger
+              </button>
+            )}
+          </SettingRow>
+        )}
         <SettingRow label="Rappels des yeux" hint="Désactivé par défaut. Voir l’article dédié.">
           <Toggle
             label="Rappels des yeux"
