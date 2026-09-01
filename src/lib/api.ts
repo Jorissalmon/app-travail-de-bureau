@@ -146,7 +146,23 @@ export async function request<T>(path: string, opts: RequestOptions = {}): Promi
   if (res.status === 204) return undefined as T
 
   const text = await res.text()
-  const data: unknown = text ? JSON.parse(text) : null
+
+  // A non-JSON body means we did not reach the API at all — typically an HTML
+  // error page because the function is missing or the route is wrong. Surface
+  // that as a real error instead of letting JSON.parse throw a SyntaxError,
+  // which the UI would otherwise report as a generic network failure.
+  let data: unknown = null
+  if (text) {
+    try {
+      data = JSON.parse(text)
+    } catch {
+      throw new HttpError(
+        res.status,
+        'bad_response',
+        `Réponse inattendue du serveur (${res.status}). L’API est-elle bien déployée ?`,
+      )
+    }
+  }
 
   if (!res.ok) {
     const err = (data as ApiError | null)?.error
