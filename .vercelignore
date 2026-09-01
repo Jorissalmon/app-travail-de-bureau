@@ -1,0 +1,5 @@
+android/
+ota/tmp/
+*.apk
+*.jks
+*.keystore
