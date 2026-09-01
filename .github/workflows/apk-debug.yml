@@ -1,0 +1,60 @@
+name: APK debug
+
+# Construit un APK de TEST (debug, non signé par ta clé — signé par la clé debug
+# Android auto-générée). Installable par sideload, idéal pour les bêta-testeurs
+# sans avoir à fournir de keystore. Déclenché à la main (onglet Actions) ou par
+# l'API. Publie l'APK dans une Release taguée "debug".
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: android-actions/setup-android@v3
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build web + sync Android
+        env:
+          # L'app dans le webview est servie depuis localhost : l'API doit être
+          # une URL absolue, sinon login/inscription ne joignent pas le backend.
+          VITE_API_BASE_URL: ${{ vars.OTA_BASE_URL || 'https://app-travail-de-bureau.vercel.app' }}
+          VITE_BUNDLE_VERSION: 1.0.0-debug
+        run: |
+          pnpm build:only
+          pnpm exec cap sync android
+
+      - name: Assemble debug APK
+        working-directory: android
+        run: ./gradlew --no-daemon assembleDebug
+
+      - name: Publier l'APK dans une Release "debug"
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: debug
+          name: Relève — APK de test (debug)
+          prerelease: true
+          files: android/app/build/outputs/apk/debug/app-debug.apk
+          fail_on_unmatched_files: true
+          body: |
+            APK de test (debug) de Relève, à installer par sideload.
+            Autorise les « sources inconnues » sur ton téléphone Android, puis installe app-debug.apk.
+            Ce build pointe vers le backend de production Vercel.
