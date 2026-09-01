@@ -1,7 +1,7 @@
 {
-  "version": "1.0.4",
-  "url": "/ota/bundle-1.0.4.zip",
-  "checksum": "2c760170a3da60040c074e828e13e6ae284b256ac95b32d33883e04f0895f22a",
+  "version": "1.0.5",
+  "url": "/ota/bundle-1.0.5.zip",
+  "checksum": "8fdac54ac315589e4a182fc309ecadf5582d068d9fdf8a47b392f12a2bc23b10",
   "minNative": "1.0.0",
   "notes": "Merge remote-tracking branch 'origin/main' into claude/megaprompt-application-hr9w06"
 }
