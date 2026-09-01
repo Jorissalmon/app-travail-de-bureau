@@ -1,7 +1,7 @@
 {
-  "version": "1.0.0",
-  "url": "https://releve.vercel.app/ota/bundle-1.0.0.zip",
-  "checksum": "",
+  "version": "1.0.1",
+  "url": "/ota/bundle-1.0.1.zip",
+  "checksum": "29822b2dd4647d82844390f3faaeddc403dd1269c7579fd263e78a73ac8cb758",
   "minNative": "1.0.0",
-  "notes": "Première version."
+  "notes": "CI : corrige pnpm/action-setup (conflit version + packageManager)\n\nL'input 'version: 10' entrait en conflit avec le champ packageManager de\npackage.json (pnpm@10.33.0), faisant échouer tous les workflows dès l'étape\nsetup. On retire l'input : l'action lit la version depuis packageManager.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_016MbMr7roygJwTsuuwJEzNG"
 }
