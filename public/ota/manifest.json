@@ -1,7 +1,7 @@
 {
-  "version": "1.0.5",
-  "url": "/ota/bundle-1.0.5.zip",
-  "checksum": "8fdac54ac315589e4a182fc309ecadf5582d068d9fdf8a47b392f12a2bc23b10",
+  "version": "1.0.6",
+  "url": "https://app-travail-de-bureau.vercel.app/ota/bundle-1.0.6.zip",
+  "checksum": "babf28649ad537b5880c2e9429ecb2efc5ad91eff4f2cf83236383cb10a5bc2c",
   "minNative": "1.0.0",
-  "notes": "Merge remote-tracking branch 'origin/main' into claude/megaprompt-application-hr9w06"
+  "notes": "Merge branch 'claude/megaprompt-application-hr9w06': fix des 500 de l'API"
 }
