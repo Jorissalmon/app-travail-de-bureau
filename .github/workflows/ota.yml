@@ -43,7 +43,7 @@ jobs:
 
       - name: Build
         env:
-          VITE_API_BASE_URL: ${{ vars.OTA_BASE_URL }}
+          VITE_API_BASE_URL: ${{ vars.OTA_BASE_URL || 'https://app-travail-de-bureau.vercel.app' }}
         run: |
           NEXT=$(node -e "const v=require('./ota/version.json').version.split('.');v[2]=+v[2]+1;console.log(v.join('.'))")
           echo "BUNDLE_VERSION=$NEXT" >> "$GITHUB_ENV"
@@ -51,7 +51,7 @@ jobs:
 
       - name: Package OTA bundle
         env:
-          OTA_BASE_URL: ${{ vars.OTA_BASE_URL }}
+          OTA_BASE_URL: ${{ vars.OTA_BASE_URL || 'https://app-travail-de-bureau.vercel.app' }}
           OTA_NOTES: ${{ github.event.head_commit.message }}
         run: pnpm ota:local
 

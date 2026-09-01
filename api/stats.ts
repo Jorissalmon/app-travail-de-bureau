@@ -1,14 +1,14 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { db } from './_db'
-import { allowCors, fail, json, methods } from './_http'
-import { requireUser } from './_auth'
+import { db } from './_db.js'
+import { allowCors, fail, json, methods } from './_http.js'
+import { requireUser } from './_auth.js'
 import {
   computeAdherence,
   computeStreak,
   fillDays,
   type DayCount,
-} from '../src/features/session/stats'
-import type { ReminderAction } from '../src/lib/types'
+} from '../src/features/session/stats.js'
+import type { ReminderAction } from '../src/lib/types.js'
 
 /**
  * §11.5 — four honest numbers: stands today, a 7-day bar series, the streak, and

@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { allowCors, body, fail, json, methods } from '../_http'
-import { rotateRefreshToken, signAccessToken } from '../_auth'
-import { requireString } from '../_validate'
+import { allowCors, body, fail, json, methods } from '../_http.js'
+import { rotateRefreshToken, signAccessToken } from '../_auth.js'
+import { requireString } from '../_validate.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {

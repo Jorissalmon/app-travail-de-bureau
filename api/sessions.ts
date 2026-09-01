@@ -1,8 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { db } from './_db'
-import { ApiError, allowCors, body, fail, json, methods } from './_http'
-import { requireUser } from './_auth'
-import { requireString } from './_validate'
+import { db } from './_db.js'
+import { ApiError, allowCors, body, fail, json, methods } from './_http.js'
+import { requireUser } from './_auth.js'
+import { requireString } from './_validate.js'
 
 /**
  * Start or stop a work session. The client sends `localDate` (computed from the

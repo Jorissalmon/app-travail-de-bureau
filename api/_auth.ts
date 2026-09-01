@@ -2,8 +2,8 @@ import { createHash, randomBytes } from 'node:crypto'
 import bcrypt from 'bcryptjs'
 import { SignJWT, jwtVerify } from 'jose'
 import type { VercelRequest } from '@vercel/node'
-import { db } from './_db'
-import { ApiError } from './_http'
+import { db } from './_db.js'
+import { ApiError } from './_http.js'
 
 /**
  * Auth (§7). Passwords: bcrypt cost 12. Access token: JWT, 15 min. Refresh

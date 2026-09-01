@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { db } from './_db'
-import { ApiError, allowCors, body, fail, json, methods } from './_http'
-import { requireUser } from './_auth'
+import { db } from './_db.js'
+import { ApiError, allowCors, body, fail, json, methods } from './_http.js'
+import { requireUser } from './_auth.js'
 
 /**
  * Batch, idempotent reminder-event ingestion (§6). Each event carries a
