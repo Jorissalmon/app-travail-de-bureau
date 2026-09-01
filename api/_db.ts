@@ -10,7 +10,9 @@ let client: NeonQueryFunction<false, false> | null = null
 
 export function db(): NeonQueryFunction<false, false> {
   if (client) return client
-  const url = process.env.DATABASE_URL
+  // Trimmed: a stray space or tab around the value in the dashboard makes
+  // neon() reject the string as an invalid URL, and every function 500s.
+  const url = process.env.DATABASE_URL?.trim()
   if (!url) throw new Error('DATABASE_URL is not configured')
   client = neon(url)
   return client

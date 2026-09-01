@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url'
 import { dirname, resolve } from 'node:path'
 import { neon } from '@neondatabase/serverless'
 
-const url = process.env.DATABASE_URL
+const url = process.env.DATABASE_URL?.trim()
 if (!url) {
   console.error('DATABASE_URL is not set. See db/README.md.')
   process.exit(1)
