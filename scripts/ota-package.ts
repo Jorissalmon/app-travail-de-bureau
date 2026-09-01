@@ -42,7 +42,10 @@ const zipPath = resolve(outDir, zipName)
 execFileSync('zip', ['-r', '-q', zipPath, '.'], { cwd: dist })
 
 const checksum = createHash('sha256').update(readFileSync(zipPath)).digest('hex')
-const base = (process.env.OTA_BASE_URL ?? 'https://releve.vercel.app').replace(/\/$/, '')
+const base = (process.env.OTA_BASE_URL || 'https://app-travail-de-bureau.vercel.app').replace(
+  /\/$/,
+  '',
+)
 
 const manifest = {
   version,

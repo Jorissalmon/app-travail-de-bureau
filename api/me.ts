@@ -1,8 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { db } from './_db'
-import { ApiError, allowCors, fail, json, methods } from './_http'
-import { requireUser } from './_auth'
-import { toPublicUser, toSettings } from './_models'
+import { db } from './_db.js'
+import { ApiError, allowCors, fail, json, methods } from './_http.js'
+import { requireUser } from './_auth.js'
+import { toPublicUser, toSettings } from './_models.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {

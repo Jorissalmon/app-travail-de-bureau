@@ -1,5 +1,5 @@
-import { addDays, daysBetween } from '../../lib/date'
-import type { ReminderAction } from '../../lib/types'
+import { addDays, daysBetween } from '../../lib/date.js'
+import type { ReminderAction } from '../../lib/types.js'
 
 /**
  * Pure statistics used by both the server (/api/stats) and, as a fallback, the

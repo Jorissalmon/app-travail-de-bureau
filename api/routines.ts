@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { db } from './_db'
-import { allowCors, fail, json, methods } from './_http'
+import { db } from './_db.js'
+import { allowCors, fail, json, methods } from './_http.js'
 
 /** All routines with their steps, ordered (§6). */
 export default async function handler(req: VercelRequest, res: VercelResponse) {

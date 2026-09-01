@@ -1,10 +1,10 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { db } from '../_db'
-import { ApiError, allowCors, body, clientIp, fail, json, methods } from '../_http'
-import { issueRefreshToken, signAccessToken, verifyPassword } from '../_auth'
-import { toPublicUser } from '../_models'
-import { requireEmail } from '../_validate'
-import { rateLimit } from '../_ratelimit'
+import { db } from '../_db.js'
+import { ApiError, allowCors, body, clientIp, fail, json, methods } from '../_http.js'
+import { issueRefreshToken, signAccessToken, verifyPassword } from '../_auth.js'
+import { toPublicUser } from '../_models.js'
+import { requireEmail } from '../_validate.js'
+import { rateLimit } from '../_ratelimit.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
