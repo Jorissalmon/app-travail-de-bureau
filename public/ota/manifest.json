@@ -1,7 +1,7 @@
 {
-  "version": "1.0.8",
-  "url": "https://app-travail-de-bureau.vercel.app/ota/bundle-1.0.8.zip",
-  "checksum": "386ccdaf34c74babb04a92174a8a3adcdaa651d078f7c8b26c36a2cf53a439d7",
+  "version": "1.0.9",
+  "url": "https://app-travail-de-bureau.vercel.app/ota/bundle-1.0.9.zip",
+  "checksum": "79d072bd29bd5ecf7a9326276e66c10b2d900012c625e6a76df18b381f32dde2",
   "minNative": "1.0.0",
-  "notes": "Player: drive the countdown from the wall clock\n\nsetInterval ticks were counted one by one, so a WebView that throttles or\nsuspends timers in the background made a step run long. Each tick now reads the\nremaining time from a deadline, which self-corrects on resume, and the interval\nno longer restarts on every step. Arming the step in an effect also fixes the\ncountdown starting at zero when the routine loads after the first render.\n\nAlso upload the debug APK as a run artifact so it can be downloaded from the\nActions tab, not only from the Release.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
+  "notes": "Reminders: actually request the battery optimisation exemption\n\nThe notice's \"Ouvrir le réglage\" button only marked the card as seen, so the app\nstayed subject to manufacturer power management — the usual reason a scheduled\nreminder is delayed or never fires. It now opens the system exemption dialog\nthrough @capawesome-team/capacitor-android-battery-optimization, and Réglages →\nRappels shows the current state with a way to fix it, since the card is shown\nonly once.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 }
