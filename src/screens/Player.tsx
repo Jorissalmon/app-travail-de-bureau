@@ -41,6 +41,8 @@ export function Player() {
   const routine = useContentStore((s) => (slug ? s.routineBySlug(slug) : undefined))
   const vibrate = useSettingsStore((s) => s.settings.vibrate)
   const markDone = useSessionStore((s) => s.markDone)
+  const pauseForBreak = useSessionStore((s) => s.pauseForBreak)
+  const resumeFromBreak = useSessionStore((s) => s.resumeFromBreak)
 
   const [stepIndex, setStepIndex] = useState(0)
   const [remaining, setRemaining] = useState(0)
@@ -94,6 +96,16 @@ export function Player() {
       void KeepAwake.allowSleep()
     }
   }, [])
+
+  // The reminder grid is stopped for as long as the routine is on screen, and
+  // restarts from the moment it is left — done, skipped or closed alike. A
+  // no-op when no work session is running (a routine opened from the library).
+  useEffect(() => {
+    void pauseForBreak()
+    return () => {
+      void resumeFromBreak()
+    }
+  }, [pauseForBreak, resumeFromBreak])
 
   // Reaching this screen is always a tap, which is the gesture the browser
   // wants before it will let an AudioContext make a sound. The durations are

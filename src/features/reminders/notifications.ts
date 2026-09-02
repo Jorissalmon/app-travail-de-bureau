@@ -7,6 +7,7 @@ import { isNative } from '@/lib/platform'
 import type { Occurrence } from './schedule'
 import { KINDS, alertRoute } from './kinds'
 import { nudgeFor } from '@/features/session/daypart'
+import { cancelWakeAlerts, scheduleWakeAlerts } from './screenwake'
 
 /**
  * Thin wrapper over @capacitor/local-notifications (§8). All scheduling is
@@ -82,6 +83,16 @@ export async function scheduleAll(occurrences: Occurrence[], ctx: ScheduleContex
   await LocalNotifications.schedule({
     notifications: occurrences.map((o) => toSchedule(o, ctx)),
   })
+  // A notification alone is not read through a dark screen: mirror every
+  // occurrence with a native alarm that turns the screen on (§8.3).
+  await scheduleWakeAlerts(
+    occurrences.map((o) => ({
+      id: o.id,
+      at: o.at.getTime(),
+      route: alertRoute(o.kind),
+      title: KINDS[o.kind].title,
+    })),
+  )
 }
 
 /** Schedule a single occurrence (used by the +10 min snooze). */
@@ -106,6 +117,7 @@ export async function getPending(): Promise<PendingResult> {
  */
 export async function cancelAll(): Promise<void> {
   if (!isNative()) return
+  await cancelWakeAlerts()
   const pending = await LocalNotifications.getPending()
   if (pending.notifications.length > 0) {
     await LocalNotifications.cancel({

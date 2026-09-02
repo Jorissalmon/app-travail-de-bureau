@@ -45,6 +45,34 @@ Chaque écart par rapport au mégaprompt, avec sa raison en une phrase (§15.8).
   dans l'allowlist réseau de l'environnement de développement distant ; la
   migration est scriptée (`pnpm db:migrate`) et documentée (`db/README.md`), à
   exécuter une fois avec le rôle `releve_app`.
+- **Réveil de l'écran : plugin natif `ScreenWake`** — `@capacitor/local-notifications`
+  ne sait pas poser de *full-screen intent*, seul moyen sanctionné par Android
+  pour qu'une app en arrière-plan démarre une activité. Chaque occurrence est
+  donc doublée d'une alarme native (`WakeReceiver`) qui ne fait rien tant que
+  l'écran est allumé — la notification ordinaire a déjà fait son travail — et
+  qui, écran éteint, poste une notification silencieuse à full-screen intent :
+  Android rallume l'écran et affiche la page « Commencer » par-dessus le
+  verrouillage. `MainActivity` ne pose `showWhenLocked`/`turnScreenOn` que pour
+  ce lancement-là, jamais pour une ouverture à la main. Le moteur de rappels
+  reste entièrement en JavaScript ; le plugin n'y ajoute que ça. Côté JS chaque
+  appel est en `try/catch` : un bundle OTA peut atterrir sur un APK antérieur au
+  plugin, et un plugin manquant ne doit jamais empêcher une session de démarrer.
+- **4e autorisation, « Alertes plein écran »** — depuis Android 14
+  `USE_FULL_SCREEN_INTENT` n'est plus accordée à l'installation aux apps qui ne
+  sont ni téléphone ni réveil ; elle se demande via
+  `ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT`. Elle rejoint les trois autres dans
+  la fiche (§8.3) et se lit comme accordée en dessous d'Android 14 ou si le
+  plugin est absent, pour la même raison que les alarmes exactes.
+- **La grille s'arrête pendant l'exercice** — `pauseForBreak` / `resumeFromBreak`
+  annulent tout ce qui est en attente tant que la page d'alerte ou le lecteur
+  sont à l'écran, et replanifient **depuis la fin** de l'exercice. Sans ça un
+  rappel pouvait tomber pendant celui qu'on était en train de faire, et le
+  suivant arrivait un intervalle après le *début* de la pause. Un « +10 min »
+  pris pendant l'arrêt survit à la reprise (fusion par id). `topUpIfNeeded` ne
+  fait rien tant que c'est en pause, sinon le foreground annulerait l'arrêt.
+- **La page d'alerte s'ouvre seule** — `localNotificationReceived` navigue vers
+  `/alerte/:kind` sans attendre de tap, sauf si une routine est déjà à l'écran :
+  un rappel n'interrompt jamais l'exercice en cours.
 - **`versionName` natif = `1.0.0`** — aligné sur `ota/version.json` pour que la
   comparaison `minNative` de l'OTA soit cohérente (§9.3).
 

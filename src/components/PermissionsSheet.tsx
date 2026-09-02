@@ -71,8 +71,8 @@ export function PermissionsSheet({
   return (
     <Sheet open={open} onClose={onClose} title="Avant de démarrer">
       <p className="t-body" style={{ color: 'var(--text-2)' }}>
-        Une session sans ces trois autorisations ne déclenche aucun rappel. Android les exige, et
-        rien ici ne peut les contourner.
+        Une session sans ces autorisations ne déclenche aucun rappel. Android les exige, et rien
+        ici ne peut les contourner.
       </p>
 
       <ul className="mt-5 flex flex-col gap-2">
@@ -117,7 +117,7 @@ export function PermissionsSheet({
         disabled={!ready}
         onClick={onAllGranted}
       >
-        {ready ? 'Démarrer la session' : 'Autorise les trois pour continuer'}
+        {ready ? 'Démarrer la session' : 'Autorise tout pour continuer'}
       </button>
     </Sheet>
   )

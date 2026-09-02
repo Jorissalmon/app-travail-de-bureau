@@ -16,8 +16,18 @@ import {
   requestPermission,
 } from './permissions'
 
-const none: PermissionState = { notifications: false, exactAlarms: false, battery: false }
-const all: PermissionState = { notifications: true, exactAlarms: true, battery: true }
+const none: PermissionState = {
+  notifications: false,
+  exactAlarms: false,
+  battery: false,
+  fullScreen: false,
+}
+const all: PermissionState = {
+  notifications: true,
+  exactAlarms: true,
+  battery: true,
+  fullScreen: true,
+}
 
 describe('allGranted / missing', () => {
   it('needs every entry', () => {

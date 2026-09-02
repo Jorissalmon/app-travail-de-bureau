@@ -4,6 +4,7 @@ import { isNative } from '@/lib/platform'
 import { useSessionStore } from '@/stores/session'
 import { flushEvents } from './events'
 import { navigateTo } from './deeplink'
+import { onWakeAlert } from './screenwake'
 
 /**
  * Wires the native listeners for the reminder engine (§8.4). Registered from
@@ -12,6 +13,15 @@ import { navigateTo } from './deeplink'
  */
 
 let installed = false
+
+/**
+ * A routine already on screen is never interrupted: the reminder that just
+ * fired waits in the shade rather than replacing the exercise being done.
+ * HashRouter, so the current route is the hash.
+ */
+function inPlayer(): boolean {
+  return window.location.hash.startsWith('#/player/')
+}
 
 export function installReminderListeners(): void {
   if (installed || !isNative()) return
@@ -38,6 +48,21 @@ export function installReminderListeners(): void {
     }
     // Body tap (actionId === 'tap'): open the player (§8.4).
     if (extra.route) navigateTo(extra.route)
+  })
+
+  // The break page opens by itself, without waiting for a tap — the whole
+  // point is not having to decide anything (§8.4). Fires whenever the app is
+  // running as the notification is posted.
+  LocalNotifications.addListener('localNotificationReceived', (notification) => {
+    const extra = (notification.extra ?? {}) as { route?: string }
+    if (!extra.route || inPlayer()) return
+    navigateTo(extra.route)
+  })
+
+  // Woken from a dark screen by the native alarm: the app was just launched
+  // over the lock screen and has to land on the right break.
+  void onWakeAlert((route) => {
+    if (!inPlayer()) navigateTo(route)
   })
 
   // Re-plan and flush on every foreground (§8.2).

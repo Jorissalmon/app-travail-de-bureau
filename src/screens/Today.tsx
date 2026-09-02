@@ -28,6 +28,7 @@ export function Today() {
   const occurrences = useSessionStore((s) => s.occurrences)
   const start = useSessionStore((s) => s.start)
   const stop = useSessionStore((s) => s.stop)
+  const pausedAt = useSessionStore((s) => s.pausedAt)
 
   const intervalMin = useSettingsStore((s) => s.settings.intervalMin)
   const user = useAuthStore((s) => s.user)
@@ -127,6 +128,7 @@ export function Today() {
         active={active}
         elapsedS={elapsedS}
         nextInS={nextInS}
+        paused={pausedAt !== null}
         intervalS={intervalMin * 60}
         onStart={handleStart}
         onStop={handleStop}

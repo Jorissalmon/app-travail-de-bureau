@@ -2,6 +2,7 @@ import { LocalNotifications } from '@capacitor/local-notifications'
 import { AndroidSettings, NativeSettings } from 'capacitor-native-settings'
 import { isNative, platform } from '@/lib/platform'
 import { isOptimised, requestExemption } from './battery'
+import { canWakeScreen, requestWakeScreen } from './screenwake'
 
 /**
  * The three grants a reminder actually needs to fire (§8.3). Asking is not
@@ -13,11 +14,16 @@ import { isOptimised, requestExemption } from './battery'
  * is never blocked.
  */
 
-export type PermissionKey = 'notifications' | 'exactAlarms' | 'battery'
+export type PermissionKey = 'notifications' | 'exactAlarms' | 'battery' | 'fullScreen'
 
 export type PermissionState = Record<PermissionKey, boolean>
 
-export const PERMISSION_ORDER: PermissionKey[] = ['notifications', 'exactAlarms', 'battery']
+export const PERMISSION_ORDER: PermissionKey[] = [
+  'notifications',
+  'exactAlarms',
+  'battery',
+  'fullScreen',
+]
 
 export const PERMISSION_COPY: Record<PermissionKey, { label: string; why: string }> = {
   notifications: {
@@ -32,9 +38,18 @@ export const PERMISSION_COPY: Record<PermissionKey, { label: string; why: string
     label: 'Optimisation de la batterie',
     why: 'Tant qu’elle est active, Android met l’app en veille et supprime les rappels.',
   },
+  fullScreen: {
+    label: 'Alertes plein écran',
+    why: 'Sans elle, rien ne rallume l’écran quand le téléphone est en veille.',
+  },
 }
 
-const ALL_GRANTED: PermissionState = { notifications: true, exactAlarms: true, battery: true }
+const ALL_GRANTED: PermissionState = {
+  notifications: true,
+  exactAlarms: true,
+  battery: true,
+  fullScreen: true,
+}
 
 function onAndroid(): boolean {
   return isNative() && platform() === 'android'
@@ -64,14 +79,15 @@ async function readExactAlarms(): Promise<boolean> {
 
 export async function readPermissions(): Promise<PermissionState> {
   if (!onAndroid()) return { ...ALL_GRANTED }
-  const [display, exactAlarms, optimised] = await Promise.all([
+  const [display, exactAlarms, optimised, fullScreen] = await Promise.all([
     LocalNotifications.checkPermissions()
       .then((p) => p.display === 'granted')
       .catch(() => false),
     readExactAlarms(),
     isOptimised(),
+    canWakeScreen(),
   ])
-  return { notifications: display, exactAlarms, battery: !optimised }
+  return { notifications: display, exactAlarms, battery: !optimised, fullScreen }
 }
 
 /**
@@ -109,6 +125,10 @@ export async function requestPermission(key: PermissionKey): Promise<PermissionS
 
   if (key === 'battery') {
     await requestExemption()
+  }
+
+  if (key === 'fullScreen') {
+    await requestWakeScreen()
   }
 
   return readPermissions()
