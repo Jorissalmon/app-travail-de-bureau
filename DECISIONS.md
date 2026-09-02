@@ -79,7 +79,12 @@ Chaque écart par rapport au mégaprompt, avec sa raison en une phrase (§15.8).
   À propos affiche désormais cette version (la ligne existait mais restait vide
   sur l'appareil), à côté de la version du contenu OTA qui, elle, bouge seule.
   `minNative` reste `1.0.0` : le bundle OTA continue de tourner sur l'ancienne
-  coque, sans le réveil de l'écran (§9.3).
+  coque, sans le réveil de l'écran (§9.3). Corollaire : `apk.yml` tire
+  `VITE_BUNDLE_VERSION` de `ota/version.json` et non du tag git. Les deux
+  numéros sont des lignes distinctes — la coque et le contenu — et les
+  confondre voulait dire qu'un tag `v1.1.0` rendait tout bundle OTA ultérieur
+  (1.0.11, 1.0.12…) plus ancien que l'APK : plus aucune mise à jour ne serait
+  jamais descendue.
 
 ## À la charge du propriétaire (secrets, hors dépôt)
 

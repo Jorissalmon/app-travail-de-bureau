@@ -41,8 +41,14 @@ jobs:
       - name: Build web + sync
         env:
           VITE_API_BASE_URL: ${{ vars.OTA_BASE_URL || 'https://app-travail-de-bureau.vercel.app' }}
-          VITE_BUNDLE_VERSION: ${{ github.ref_name }}
         run: |
+          # BUNDLE_VERSION is the version of the web content, which the OTA
+          # check compares against the manifest — not the version of the shell.
+          # It used to be the git tag, so tagging a release numbered above the
+          # OTA line (v1.1.0 against a manifest at 1.0.11) made every later
+          # bundle read as older, and the APK would never take an update again.
+          export VITE_BUNDLE_VERSION=$(node -p "require('./ota/version.json').version")
+          echo "Bundle version baked in: $VITE_BUNDLE_VERSION (tag: ${{ github.ref_name }})"
           pnpm build:only
           pnpm exec cap sync android
 
