@@ -5,7 +5,7 @@ import '@/styles/index.css'
 import { AppRoutes } from '@/app/routes'
 import { StatusBar, Style } from '@capacitor/status-bar'
 import { isNative } from '@/lib/platform'
-import { installReminderListeners } from '@/features/reminders/listener'
+import { catchUpAndRoute, installReminderListeners } from '@/features/reminders/listener'
 import { ensureChannelAndActions } from '@/features/reminders/notifications'
 import { notifyReady, checkForUpdate } from '@/features/ota/updater'
 import { useAuthStore } from '@/stores/auth'
@@ -40,7 +40,9 @@ async function boot() {
 
   // Hydrate local state (all from device storage, non-blocking to render).
   void useSettingsStore.getState().load()
-  void useSessionStore.getState().hydrate()
+  // A reminder may have fired and gone unanswered while the app was closed; the
+  // route it queues is drained as soon as the router mounts (§8.4).
+  void useSessionStore.getState().hydrate().then(catchUpAndRoute)
   void useContentStore.getState().load()
   void useAuthStore.getState().bootstrap()
 

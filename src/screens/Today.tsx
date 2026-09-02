@@ -28,7 +28,10 @@ export function Today() {
   const occurrences = useSessionStore((s) => s.occurrences)
   const start = useSessionStore((s) => s.start)
   const stop = useSessionStore((s) => s.stop)
-  const pausedAt = useSessionStore((s) => s.pausedAt)
+  const pause = useSessionStore((s) => s.pause)
+  const awaiting = useSessionStore((s) => s.awaiting)
+  const pauseWork = useSessionStore((s) => s.pauseWork)
+  const resumeWork = useSessionStore((s) => s.resumeWork)
 
   const intervalMin = useSettingsStore((s) => s.settings.intervalMin)
   const user = useAuthStore((s) => s.user)
@@ -128,10 +131,13 @@ export function Today() {
         active={active}
         elapsedS={elapsedS}
         nextInS={nextInS}
-        paused={pausedAt !== null}
+        pauseReason={pause?.reason ?? null}
+        awaiting={awaiting !== null}
         intervalS={intervalMin * 60}
         onStart={handleStart}
         onStop={handleStop}
+        onPause={() => void pauseWork()}
+        onResume={() => void resumeWork()}
         busy={busy}
       />
 

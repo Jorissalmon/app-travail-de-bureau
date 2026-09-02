@@ -42,6 +42,7 @@ export function Player() {
   const vibrate = useSettingsStore((s) => s.settings.vibrate)
   const markDone = useSessionStore((s) => s.markDone)
   const pauseForBreak = useSessionStore((s) => s.pauseForBreak)
+  const routineDone = useSessionStore((s) => s.routineDone)
   const resumeFromBreak = useSessionStore((s) => s.resumeFromBreak)
 
   const [stepIndex, setStepIndex] = useState(0)
@@ -190,7 +191,8 @@ export function Player() {
     }
     void logCompletion(completion)
     if (fromNotification) void markDone(new Date(startedAtRef.current))
-  }, [finished, routine, fromNotification, markDone])
+    else void routineDone()
+  }, [finished, routine, fromNotification, markDone, routineDone])
 
   const progress = useMemo(() => {
     const total = phase === 'ready' ? READY_S : workSeconds

@@ -158,10 +158,28 @@ export function planSnooze(sessionId: string, from: Date): Occurrence {
   return { id: occurrenceId(sessionId, 'stand', index), kind: 'stand', at, index }
 }
 
-/** Occurrences still in the future, used to decide whether to top up (§8.2). */
+/** Occurrences still in the future. */
 export function pendingAfter(occurrences: Occurrence[], now: Date): Occurrence[] {
   return occurrences.filter((o) => o.at.getTime() > now.getTime())
 }
 
-/** Below this many pending occurrences, the app re-plans on foreground (§8.2). */
-export const TOPUP_THRESHOLD = 4
+/**
+ * The next one to arm: only ever one reminder is scheduled at a time, so that
+ * missing it stops the chain instead of letting the next fire on schedule.
+ */
+export function firstOccurrence(occurrences: Occurrence[]): Occurrence | null {
+  if (occurrences.length === 0) return null
+  return [...occurrences].sort((a, b) => a.at.getTime() - b.at.getTime())[0]
+}
+
+/**
+ * The armed occurrence whose time has come and gone. With one reminder armed at
+ * a time this is how the app finds out, on its next look at the clock, that a
+ * notification fired while it was not running and was never answered.
+ * The latest one wins, so a snooze taken on top of a reminder is what shows.
+ */
+export function dueBy(occurrences: Occurrence[], now: Date): Occurrence | null {
+  const past = occurrences.filter((o) => o.at.getTime() <= now.getTime())
+  if (past.length === 0) return null
+  return past.sort((a, b) => b.at.getTime() - a.at.getTime())[0]
+}
