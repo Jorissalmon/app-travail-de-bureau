@@ -23,6 +23,20 @@ jobs:
   apk:
     runs-on: ubuntu-latest
     steps:
+      # La branche par défaut du dépôt n'est pas main, donc « Run workflow »
+      # propose autre chose et on publiait une release signée construite depuis
+      # une branche au hasard. Mieux vaut refuser que publier ça.
+      - name: Refuser une release construite hors de main ou d'un tag
+        run: |
+          REF='${{ github.ref }}'
+          case "$REF" in
+            refs/heads/main|refs/tags/v*) echo "Construction depuis $REF." ;;
+            *)
+              echo "::error::Une release signée se construit depuis main ou un tag v* — pas depuis $REF. Relance le workflow en choisissant main dans le menu, ou pousse un tag v1.1.0."
+              exit 1
+              ;;
+          esac
+
       - uses: actions/checkout@v4
 
       - uses: pnpm/action-setup@v4
@@ -52,14 +66,40 @@ jobs:
           pnpm build:only
           pnpm exec cap sync android
 
+      # A missing secret used to sail through this step — `base64 -d` on an
+      # empty string writes an empty file and exits 0 — and the build then died
+      # inside Gradle with a message about a tampered keystore, which says
+      # nothing about the actual cause. Check here, and name what is missing.
       - name: Decode keystore
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android/releve-release.jks
+          missing=""
+          [ -n "$KEYSTORE_B64" ]  || missing="$missing ANDROID_KEYSTORE_BASE64"
+          [ -n "$STORE_PASSWORD" ] || missing="$missing ANDROID_KEYSTORE_PASSWORD"
+          [ -n "$KEY_ALIAS" ]     || missing="$missing ANDROID_KEY_ALIAS"
+          [ -n "$KEY_PASSWORD" ]  || missing="$missing ANDROID_KEY_PASSWORD"
+          if [ -n "$missing" ]; then
+            echo "::error::Secrets manquants :$missing. Crée-les dans Settings → Secrets and variables → Actions. Sans keystore, seul le workflow « APK debug » peut produire un APK."
+            exit 1
+          fi
+
+          printf '%s' "$KEYSTORE_B64" | base64 -d > android/releve-release.jks
+          if ! keytool -list -keystore android/releve-release.jks \
+               -storepass "$STORE_PASSWORD" -alias "$KEY_ALIAS" >/dev/null 2>&1; then
+            echo "::error::Le keystore ne s'ouvre pas avec ce mot de passe et cet alias. Vérifie ANDROID_KEYSTORE_BASE64 (base64 du .jks, sans retour à la ligne), ANDROID_KEYSTORE_PASSWORD et ANDROID_KEY_ALIAS."
+            exit 1
+          fi
+          echo "Keystore lu, alias « $KEY_ALIAS » présent."
+
           cat > android/keystore.properties <<PROPS
           storeFile=releve-release.jks
-          storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}
-          keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}
+          storePassword=$STORE_PASSWORD
+          keyAlias=$KEY_ALIAS
+          keyPassword=$KEY_PASSWORD
           PROPS
 
       - name: Assemble release APK

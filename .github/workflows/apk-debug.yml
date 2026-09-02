@@ -14,6 +14,13 @@ name: APK debug
 on:
   push:
     branches: [main]
+    # Le workflow OTA committe le bundle sur main après chaque push, ce qui
+    # relançait un second build par push — et comme la clé de debug est
+    # regénérée à chaque run, les deux APK n'avaient pas la même signature.
+    # Ces chemins-là ne changent rien à ce que contient l'APK.
+    paths-ignore:
+      - 'public/ota/**'
+      - 'ota/version.json'
   workflow_dispatch:
 
 permissions:
