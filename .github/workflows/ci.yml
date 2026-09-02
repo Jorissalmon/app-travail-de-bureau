@@ -22,3 +22,8 @@ jobs:
       - run: pnpm lint
       - run: pnpm test
       - run: pnpm build:only
+      # Exercises the real release path, guards included, on every PR — the
+      # bundle nesting that reached 98 MB got there because nothing packaged
+      # outside a push to main. Nothing is published: --no-bump, and ci.yml
+      # commits nothing.
+      - run: pnpm ota:local --no-bump
