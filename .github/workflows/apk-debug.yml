@@ -21,6 +21,7 @@ on:
     paths-ignore:
       - 'public/ota/**'
       - 'ota/version.json'
+      - '**.md'
   workflow_dispatch:
 
 permissions:

@@ -1,6 +1,6 @@
-# Base de données — Relève
+# Base de données — Log Off
 
-Relève utilise le **projet Neon Postgres déjà en place**, mais dans une **base et
+Log Off utilise le **projet Neon Postgres déjà en place**, mais dans une **base et
 un rôle dédiés**. On ne lit, n'écrit et ne migre **rien** dans la base de l'autre
 application du projet (§C2).
 
@@ -36,8 +36,8 @@ GRANT ALL ON SCHEMA public TO releve_app;
 
   **Mais vérifie d'abord que le rôle applicatif de l'autre app a bien un
   `GRANT CONNECT` explicite**, sinon tu la casses. Ne fais cette révocation que si
-  tu confirmes ce point. Elle est **optionnelle** et hors du périmètre de Relève.
-- La chaîne de connexion de Relève va dans `DATABASE_URL` côté Vercel. Elle
+  tu confirmes ce point. Elle est **optionnelle** et hors du périmètre de Log Off.
+- La chaîne de connexion de Log Off va dans `DATABASE_URL` côté Vercel. Elle
   **ne doit jamais** pointer vers l'autre base.
 
 ## 3. Appliquer les migrations

@@ -9,6 +9,9 @@ on:
     paths-ignore:
       - 'public/ota/**'
       - 'ota/version.json'
+      # Le bundle est reproductible à l'octet : une doc modifiée publierait une
+      # version de plus pour une archive rigoureusement identique.
+      - '**.md'
 
 # Prevent two runs from racing on the committed manifest.
 concurrency:

@@ -1,4 +1,4 @@
-# Relève
+# Log Off
 
 Application Android personnelle qui rappelle de se lever et de bouger pendant les
 journées de bureau, propose des routines guidées courtes, et explique pourquoi
