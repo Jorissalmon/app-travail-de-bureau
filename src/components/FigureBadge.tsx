@@ -1,6 +1,7 @@
 import { Suspense, lazy, useMemo } from 'react'
 import type { AccentKey } from '@/lib/types'
 import { isFigureKey } from './figures/figureKeys'
+import { motionClass } from './figures/figureMotion'
 
 const Figures = lazy(async () => {
   const mod = await import('./figures/figures')
@@ -34,10 +35,19 @@ export interface FigureBadgeProps {
   tone: AccentKey
   /** Rendered diameter in px. The spec's three sizes are 32 / 56 / 88. */
   size?: number
+  /** Loop the figure's own movement. For the sizes that demonstrate a gesture
+      rather than label a row — the alert screen and the player. */
+  animated?: boolean
   className?: string
 }
 
-export function FigureBadge({ figureKey, tone, size = 56, className }: FigureBadgeProps) {
+export function FigureBadge({
+  figureKey,
+  tone,
+  size = 56,
+  animated = false,
+  className,
+}: FigureBadgeProps) {
   const pastille = `var(--${tone})`
   const ink = LIGHT_TONES.has(tone) ? 'var(--figure-dark)' : 'var(--figure-light)'
   const style = useMemo(
@@ -61,7 +71,13 @@ export function FigureBadge({ figureKey, tone, size = 56, className }: FigureBad
       {/* Below ~28px the figure is illegible; the plain pastille reads better. */}
       {size >= 28 && (
         <Suspense fallback={null}>
-          <svg viewBox="0 0 100 100" width="72%" height="72%" role="presentation">
+          <svg
+            viewBox="0 0 100 100"
+            width="72%"
+            height="72%"
+            role="presentation"
+            className={animated ? motionClass(figureKey) : undefined}
+          >
             <Figures figureKey={figureKey} />
           </svg>
         </Suspense>

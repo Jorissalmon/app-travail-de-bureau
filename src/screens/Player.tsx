@@ -213,7 +213,7 @@ export function Player() {
 
       <div className="flex min-h-0 flex-1 flex-col items-center justify-center gutter">
         <TimerRing progress={progress} size={260} stroke={6}>
-          <FigureBadge figureKey={step.figureKey} tone={routine.accent} size={200} />
+          <FigureBadge figureKey={step.figureKey} tone={routine.accent} size={200} animated />
         </TimerRing>
 
         <p className="num mt-6" style={{ fontSize: 72, lineHeight: 1 }}>

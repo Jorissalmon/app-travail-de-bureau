@@ -191,6 +191,91 @@
     justify-content: center;
   }
 
+  /* ---- Figure motion — a large figure demonstrates, it does not decorate.
+     All six loops are killed by the reduced-motion block at the end of the
+     file, so none of them needs its own guard. */
+  .fig-bob,
+  .fig-tilt,
+  .fig-pulse,
+  .fig-blink,
+  .fig-turn,
+  .fig-breathe {
+    transform-box: fill-box;
+    transform-origin: center;
+    will-change: transform, opacity;
+  }
+  .fig-bob {
+    animation: fig-bob 1.6s ease-in-out infinite;
+  }
+  .fig-tilt {
+    animation: fig-tilt 3.2s ease-in-out infinite;
+  }
+  .fig-pulse {
+    animation: fig-pulse 2.8s ease-in-out infinite;
+  }
+  .fig-blink {
+    animation: fig-blink 2.4s ease-in-out infinite;
+  }
+  .fig-turn {
+    animation: fig-turn 4s linear infinite;
+  }
+  .fig-breathe {
+    animation: fig-breathe 4.4s ease-in-out infinite;
+  }
+
+  @keyframes fig-bob {
+    0%,
+    100% {
+      transform: translateY(2.5%);
+    }
+    50% {
+      transform: translateY(-2.5%);
+    }
+  }
+  @keyframes fig-tilt {
+    0%,
+    100% {
+      transform: rotate(-5deg);
+    }
+    50% {
+      transform: rotate(5deg);
+    }
+  }
+  @keyframes fig-pulse {
+    0%,
+    100% {
+      transform: scale(0.94);
+    }
+    50% {
+      transform: scale(1.06);
+    }
+  }
+  @keyframes fig-blink {
+    0%,
+    42%,
+    52%,
+    100% {
+      opacity: 1;
+    }
+    47% {
+      opacity: 0.25;
+    }
+  }
+  @keyframes fig-turn {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes fig-breathe {
+    0%,
+    100% {
+      transform: scale(0.97);
+    }
+    50% {
+      transform: scale(1.03);
+    }
+  }
+
   /* ---- Article typography — §11.4 */
   .prose-releve {
     font-size: 17px;

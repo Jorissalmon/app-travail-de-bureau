@@ -72,7 +72,7 @@ interface SessionState {
 
 function scheduleContext(): ScheduleContext {
   const { sound } = useSettingsStore.getState().settings
-  return { sound, route: '/player/debout' }
+  return { sound }
 }
 
 function serialize(occ: Occurrence[]): SerializableOcc[] {

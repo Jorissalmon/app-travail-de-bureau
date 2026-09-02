@@ -5,7 +5,7 @@ import {
 } from '@capacitor/local-notifications'
 import { isNative } from '@/lib/platform'
 import type { Occurrence } from './schedule'
-import type { ReminderKind } from '@/lib/types'
+import { KINDS, alertRoute } from './kinds'
 
 /**
  * Thin wrapper over @capacitor/local-notifications (§8). All scheduling is
@@ -16,19 +16,10 @@ import type { ReminderKind } from '@/lib/types'
 export const CHANNEL_ID = 'releve_breaks'
 export const ACTION_TYPE = 'RELEVE_BREAK'
 
-/** Notification body copy per kind (§8.4). */
-const COPY: Record<ReminderKind, { title: string; body: string }> = {
-  stand: { title: 'Debout.', body: '3 minutes. Marche, et regarde par la fenêtre.' },
-  mobility: { title: 'Pause mobilité.', body: 'Trois minutes pour une zone qui coince.' },
-  eyes: { title: 'Les yeux.', body: 'Regarde au loin, et cligne franchement.' },
-}
-
 export interface ScheduleContext {
   /** Opt-in notification sound. Vibration is a channel property, set in
       createChannel, so it is not per-notification here. */
   sound: boolean
-  /** Where the notification body-tap should land (§8.4). */
-  route: string
 }
 
 /** Register the notification channel and the three-action type (§8.3 / §8.4). */
@@ -63,7 +54,7 @@ export async function ensureChannelAndActions(): Promise<void> {
 // recorded refusal has to be routed to the matching Android settings screen.
 
 function toSchedule(occ: Occurrence, ctx: ScheduleContext): ScheduleOptions['notifications'][number] {
-  const copy = COPY[occ.kind]
+  const copy = KINDS[occ.kind]
   return {
     id: occ.id,
     title: copy.title,
@@ -75,8 +66,9 @@ function toSchedule(occ: Occurrence, ctx: ScheduleContext): ScheduleOptions['not
     // channel property on Android, so it is set once in createChannel.
     ...(ctx.sound ? { sound: 'default' } : {}),
     smallIcon: 'ic_stat_releve',
-    // The deep-link target rides in `extra` — no custom URL scheme (§8.4).
-    extra: { route: ctx.route, from: 'notification', kind: occ.kind, occurrenceId: occ.id },
+    // The deep-link target rides in `extra` — no custom URL scheme (§8.4). It
+    // is derived from the kind so the tap lands on the matching alert screen.
+    extra: { route: alertRoute(occ.kind), kind: occ.kind, occurrenceId: occ.id },
   }
 }
 

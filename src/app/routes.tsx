@@ -6,6 +6,7 @@ import { Today } from '@/screens/Today'
 import { Library } from '@/screens/Library'
 import { RoutineDetail } from '@/screens/RoutineDetail'
 import { Player } from '@/screens/Player'
+import { Alert } from '@/screens/Alert'
 import { Articles } from '@/screens/Articles'
 import { ArticleDetail } from '@/screens/ArticleDetail'
 import { Stats } from '@/screens/Stats'
@@ -31,6 +32,15 @@ export function AppRoutes() {
       <RouterBridge />
       <Routes>
         <Route path="/login" element={<Login />} />
+
+        <Route
+          path="/alerte/:kind"
+          element={
+            <RequireAuth>
+              <Alert />
+            </RequireAuth>
+          }
+        />
 
         <Route
           path="/player/:slug"
