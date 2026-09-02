@@ -205,6 +205,8 @@ Une équipe de Columbia a fait asseoir onze adultes pendant huit heures en labor
 
 Un seul protocole a amélioré à la fois la glycémie et la tension artérielle : **cinq minutes de marche toutes les trente minutes**. Le pic de sucre après le repas baissait de 58 %, et la tension de 4 à 5 mmHg — une baisse que l''auteur principal compare à six mois d''entraînement quotidien. Une minute toutes les trente minutes donnait un effet modeste, sur la glycémie seulement.
 
+::figure marche | Cinq minutes de marche toutes les trente minutes : le seul protocole qui a bougé les deux marqueurs.
+
 Ce qu''il faut garder en tête : onze participants, en laboratoire, sur des marqueurs intermédiaires. C''est une démonstration de mécanisme, pas une étude de mortalité. Mais c''est le seul essai qui a comparé les doses entre elles, et c''est pour ça que trente minutes est l''intervalle par défaut de cette app.
 
 Si trente minutes ne tient pas dans tes journées, quarante-cinq vaut mieux que rien. L''intervalle que tu respectes bat toujours celui que tu ignores.', 'preuve', 'solide', 3, 'Columbia University Irving Medical Center, 2023', 'https://www.cuimc.columbia.edu/news/rx-prolonged-sitting-five-minute-stroll-every-half-hour', 1)
@@ -222,7 +224,11 @@ Une étude contrôlée l''a testée directement : trente participants, une tâch
 
 Ça ne veut pas dire que la fatigue visuelle est imaginaire. Le mécanisme est réel : devant un écran, le taux de clignement s''effondre, le film lacrymal s''évapore, et l''œil sèche. Mais la variable utile n''est pas le chronomètre.
 
+::figure clignement | Cligner franchement, paupière complètement fermée. C’est ce qui refait le film lacrymal.
+
 Ce qui marche, dans l''ordre : **baisser l''écran** sous la ligne des yeux, ce qui fait tomber la paupière et réduit la surface exposée ; **écarter la ventilation** ou la clim qui souffle vers le visage ; et **cligner franchement**, paupières complètement fermées, quand tu y penses.
+
+::figure loin-pres | Regarder au loin relâche l’accommodation, même sans compter jusqu’à vingt.
 
 Le rappel « yeux » existe dans cette app, mais il est désactivé par défaut. C''est volontaire.', 'preuve', 'non-demontree', 3, '« 20-20-20 Rule: Are These Numbers Justified? », PubMed 36473088', 'https://pubmed.ncbi.nlm.nih.gov/36473088/', 2)
 ON CONFLICT (slug) DO UPDATE SET
@@ -241,6 +247,8 @@ Au-delà de dix heures assis par jour, en revanche, les deux risques montent. Le
 
 La conclusion des chercheurs tient en une phrase : rester debout trop longtemps ne compense pas un mode de vie sédentaire. Ce qui compte, c''est le **changement de position** et la marche, pas la station verticale.
 
+::figure extension-debout | Alterner assis et debout, pas tenir huit heures debout.
+
 Concrètement : si tu as un bureau réglable, sers-t''en pour alterner, pas pour tenir huit heures debout. Et alterner ne remplace pas de sortir marcher.', 'preuve', 'solide', 3, 'University of Sydney / International Journal of Epidemiology, 2024', 'https://www.sydney.edu.au/news-opinion/news/2024/10/17/standing-more-may-not-reduce-cardiovascular-disease-risk--could-.html', 3)
 ON CONFLICT (slug) DO UPDATE SET
   title = EXCLUDED.title, dek = EXCLUDED.dek, body_md = EXCLUDED.body_md,
@@ -253,6 +261,8 @@ INSERT INTO articles (slug, title, dek, body_md, tag, evidence, read_min, source
 VALUES ('ce-que-les-pauses-changent', 'Ce que les pauses changent vraiment', 'Elles rechargent, elles ne rendent pas plus performant. La nuance a son importance.', 'Une méta-analyse de 2022 a rassemblé 22 échantillons et 2 335 participants pour mesurer ce que font les micro-pauses.
 
 Sur le bien-être, l''effet est net et constant : plus de vigueur (d = 0,36), moins de fatigue (d = 0,35), quel que soit le contexte.
+
+::figure respiration | Plus de vigueur, moins de fatigue : c’est là que l’effet est net et constant.
 
 Sur la performance, c''est autre chose. L''effet global est petit et **non significatif** (d = 0,16). Il devient positif sur les tâches administratives et créatives, et reste quasi nul sur les tâches cognitivement exigeantes — celles-là demandent des pauses de plus de dix minutes pour en tirer quoi que ce soit.
 
@@ -273,6 +283,8 @@ Réponse : les groupes qui s''entraînaient avaient environ **deux fois moins de
 
 Ce qui marchait dans les essais : renforcement de la nuque et des épaules, pauses actives, travail de contrôle moteur, activité physique générale. Aucun format n''écrase les autres — celui que tu suivras est le bon.
 
+::figure omoplates | Le serrage d’omoplates : la base du renforcement du haut du dos.
+
 Et c''est le point important : trois minutes de mobilité toutes les trente minutes ne remplacent pas dix minutes de tirage horizontal deux fois par semaine. Si tu vas déjà à la salle, ajoute du travail de haut du dos à ce que tu fais. C''est là que se joue l''essentiel, pas dans une notification.', 'pratique', 'solide', 3, 'Journal of Orthopaedic & Sports Physical Therapy, 2023', 'https://www.jospt.org/doi/10.2519/jospt.2023.12063', 5)
 ON CONFLICT (slug) DO UPDATE SET
   title = EXCLUDED.title, dek = EXCLUDED.dek, body_md = EXCLUDED.body_md,
@@ -291,6 +303,8 @@ VALUES ('regler-son-poste', 'Régler son poste une fois pour toutes', 'Sept mesu
 - **Fenêtres** : écran perpendiculaire à la fenêtre, à plus de 150 cm.
 - **Éclairage** : 300 à 500 lux sur un écran à fond clair, température 3000 à 4000 K.
 - **Pauses actives** : idéalement toutes les 30 minutes.
+
+::figure menton-rentre | Écran au niveau des yeux : le menton reste rentré, la nuque n’a rien à compenser.
 
 Une note pour les yeux secs en particulier : baisser l''écran fait tomber la paupière plus bas, réduit la surface de l''œil exposée à l''air, et donc l''évaporation. C''est le réglage qui a le plus d''effet, il est gratuit, et il prend trente secondes.
 

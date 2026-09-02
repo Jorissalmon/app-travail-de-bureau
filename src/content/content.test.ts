@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { LOCAL_ROUTINES, ZONES } from './index'
+import { LOCAL_ARTICLES, LOCAL_ROUTINES, ZONES } from './index'
 import { FIGURE_KEYS, isFigureKey } from '@/components/figures/figureKeys'
+import { articleFigures } from '@/lib/markdown'
 
 /**
  * The content is hand-written JSON that the database is generated from, so a
@@ -46,6 +47,27 @@ describe('routines', () => {
       for (const s of r.steps) {
         expect(isFigureKey(s.figureKey), `${r.slug} / ${s.name}: "${s.figureKey}"`).toBe(true)
       }
+    }
+  })
+})
+
+describe('articles', () => {
+  it('have unique slugs', () => {
+    const slugs = LOCAL_ARTICLES.map((a) => a.slug)
+    expect(new Set(slugs).size).toBe(slugs.length)
+  })
+
+  it('only place figures that exist', () => {
+    for (const a of LOCAL_ARTICLES) {
+      for (const key of articleFigures(a.bodyMd)) {
+        expect(isFigureKey(key), `${a.slug}: "${key}"`).toBe(true)
+      }
+    }
+  })
+
+  it('are illustrated', () => {
+    for (const a of LOCAL_ARTICLES) {
+      expect(articleFigures(a.bodyMd).length, `${a.slug}`).toBeGreaterThan(0)
     }
   })
 })

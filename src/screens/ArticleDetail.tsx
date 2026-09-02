@@ -3,8 +3,10 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { ArrowLeft, ExternalLink } from 'lucide-react'
 import { Browser } from '@capacitor/browser'
 import { EvidencePill } from '@/components/EvidencePill'
+import { FigureBadge } from '@/components/FigureBadge'
 import { useContentStore } from '@/stores/content'
-import { renderMarkdown } from '@/lib/markdown'
+import { splitArticle } from '@/lib/markdown'
+import { stepTone } from '@/lib/tones'
 import { isNative } from '@/lib/platform'
 
 /** §11.4 — article detail with sanitised markdown body and an external source link. */
@@ -13,7 +15,7 @@ export function ArticleDetail() {
   const navigate = useNavigate()
   const article = useContentStore((s) => (slug ? s.articleBySlug(slug) : undefined))
 
-  const html = useMemo(() => (article ? renderMarkdown(article.bodyMd) : ''), [article])
+  const blocks = useMemo(() => (article ? splitArticle(article.bodyMd) : []), [article])
 
   if (!article) {
     return (
@@ -46,11 +48,30 @@ export function ArticleDetail() {
         {article.dek}
       </p>
 
-      <div
-        className="prose-releve mt-6"
-        // Sanitised in renderMarkdown.
-        dangerouslySetInnerHTML={{ __html: html }}
-      />
+      <div className="mt-6 flex flex-col gap-1">
+        {blocks.map((block, i) =>
+          block.kind === 'figure' ? (
+            <figure key={i} className="my-3 flex flex-col items-center text-center">
+              <FigureBadge
+                figureKey={block.figureKey}
+                tone={stepTone(block.figureKey)}
+                size={168}
+                animated
+              />
+              {block.caption && (
+                <figcaption className="t-meta mt-3 max-w-[34ch]">{block.caption}</figcaption>
+              )}
+            </figure>
+          ) : (
+            <div
+              key={i}
+              className="prose-releve"
+              // Sanitised in renderMarkdown.
+              dangerouslySetInnerHTML={{ __html: block.html }}
+            />
+          ),
+        )}
+      </div>
 
       <footer className="mt-8 border-t pt-4" style={{ borderColor: 'var(--border)' }}>
         <p className="t-meta mb-2">Source</p>
