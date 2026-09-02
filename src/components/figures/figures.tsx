@@ -376,14 +376,13 @@ const figures: Record<FigureKey, () => JSX.Element> = {
 
   'doigts-ecartes': () => (
     <g>
-      <path {...S} d="M40 82 L40 56" />
-      <path {...S} d="M40 56 C36 44 40 38 46 40" />
-      <path {...THIN} d="M32 54 L18 40" />
-      <path {...THIN} d="M44 44 L40 22" />
-      <path {...THIN} d="M54 44 L58 20" />
-      <path {...THIN} d="M62 48 L74 30" />
-      <path {...S} d="M46 40 C56 36 66 42 64 52 L58 66 L40 66" />
-      <path {...HAIR} d="M22 74 A26 26 0 0 1 30 60" opacity={0.4} />
+      <path {...S} d="M48 84 L48 70" />
+      <rect x={35} y={56} width={27} height={15} rx={7.5} fill="currentColor" />
+      <path {...THIN} d="M40 56 L30 34" />
+      <path {...THIN} d="M46 56 L44 30" />
+      <path {...THIN} d="M53 56 L57 31" />
+      <path {...THIN} d="M59 58 L70 40" />
+      <path {...THIN} d="M37 63 L20 57" />
     </g>
   ),
 
@@ -409,28 +408,28 @@ const figures: Record<FigureKey, () => JSX.Element> = {
     </g>
   ),
 
+  // Drawn as a lower leg rather than a whole body: at badge size a standing
+  // figure on tiptoe is indistinguishable from one walking.
   'mollet-releve': () => (
     <g>
       <Ground />
-      <Head cx={50} cy={18} />
-      <path {...S} d="M50 27 L50 52" />
-      <path {...S} d="M50 52 L44 70 L52 78" />
-      <path {...S} d="M50 52 L58 70 L64 78" />
-      <path {...S} d="M50 34 L36 40" />
-      <path {...S} d="M50 34 L64 40" />
-      <path {...THIN} d="M22 46 L22 34 M17 39 L22 33 L27 39" opacity={0.55} />
+      <path {...S} d="M50 16 L50 54" />
+      <path {...S} d="M50 54 L43 62" />
+      <path {...S} d="M43 62 L70 80" />
+      <path {...THIN} d="M28 62 L28 44 M22 51 L28 43 L34 51" opacity={0.6} />
     </g>
   ),
 
   'talon-pointe': () => (
     <g>
       <Ground />
-      <path {...S} d="M30 20 L30 56" />
-      <path {...S} d="M30 56 L48 62" />
-      <path {...S} d="M66 24 L66 60" />
-      <path {...S} d="M66 60 L74 78" />
-      <path {...HAIR} d="M22 74 L40 74" opacity={0.5} />
-      <path {...HAIR} d="M44 30 L56 30 M50 24 L58 30 L50 36" opacity={0.55} />
+      <path {...S} d="M44 14 L44 50" />
+      <path {...S} d="M44 50 L38 64" />
+      <path {...S} d="M38 64 L38 80" />
+      <path {...S} d="M38 72 L70 60" />
+      <path {...THIN} d="M80 52 L86 58 L80 64" opacity={0.6} />
+      <path {...THIN} d="M80 84 L86 78 L80 72" opacity={0.6} />
+      <path {...HAIR} d="M86 58 L86 78" />
     </g>
   ),
 
@@ -438,12 +437,14 @@ const figures: Record<FigureKey, () => JSX.Element> = {
 
   'nuque-diagonale': () => (
     <g>
-      <Head cx={40} cy={32} r={12} />
-      <path {...S} d="M46 43 C52 50 54 56 54 62" />
-      <path {...S} d="M32 72 L74 72" />
-      <path {...S} d="M54 62 L54 72" />
-      <path {...S} d="M60 34 C50 22 38 22 32 28" />
-      <path {...HAIR} d="M22 46 L30 40" opacity={0.5} />
+      <Head cx={42} cy={36} r={12} />
+      <path {...S} d="M48 46 C54 52 56 58 56 64" />
+      <path {...S} d="M34 74 L74 74" />
+      <path {...S} d="M56 64 L56 74" />
+      {/* The hand comes up the far side and lands behind the crown, so the arm
+          never crosses the face. */}
+      <path {...S} d="M70 72 C78 52 70 30 52 26" />
+      <path {...HAIR} d="M28 54 L20 62 M20 54 L20 62 L28 62" />
     </g>
   ),
 }
