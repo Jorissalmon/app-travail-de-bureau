@@ -435,6 +435,57 @@ const figures: Record<FigureKey, () => JSX.Element> = {
 
   // ---- Neck, diagonal -------------------------------------------------------
 
+  // ---- Second positions -----------------------------------------------------
+  // A stretch you hold needs one drawing; a movement between two positions
+  // needs both, or the figure shows half the exercise. These are the "b" frames
+  // that figureFrames.ts pairs with the "a" ones above.
+
+  'chat-vache-b': () => (
+    <g>
+      <Ground />
+      <Head cx={30} cy={34} />
+      <path {...S} d="M36 38 C48 48 62 50 72 44" />
+      <path {...S} d="M72 44 L74 82" />
+      <path {...S} d="M40 44 L38 82" />
+      <path {...HAIR} d="M44 26 C56 34 66 34 74 30" />
+    </g>
+  ),
+
+  'omoplates-b': () => (
+    <g>
+      <Ground />
+      <Head cx={50} cy={20} />
+      <path {...S} d="M50 29 L50 58" />
+      <path {...S} d="M50 58 L42 82" />
+      <path {...S} d="M50 58 L58 82" />
+      <path {...S} d="M50 36 C40 40 34 48 34 56" />
+      <path {...S} d="M50 36 C60 40 66 48 66 56" />
+    </g>
+  ),
+
+  'doigts-poing': () => (
+    <g>
+      <path {...S} d="M48 84 L48 70" />
+      <rect x={33} y={48} width={31} height={23} rx={11} fill="currentColor" />
+      {/* Carved out in the pastille colour, as in `paumes`: the folded fingers
+          and the thumb across them are what make this read as a fist. */}
+      <path {...S} d="M40 49 L40 58" stroke="var(--pastille)" strokeWidth={3} />
+      <path {...S} d="M48 48 L48 58" stroke="var(--pastille)" strokeWidth={3} />
+      <path {...S} d="M56 49 L56 58" stroke="var(--pastille)" strokeWidth={3} />
+      <path {...S} d="M35 64 L60 62" stroke="var(--pastille)" strokeWidth={3.5} />
+    </g>
+  ),
+
+  'mollet-plat': () => (
+    <g>
+      <Ground />
+      <path {...S} d="M50 16 L50 58" />
+      <path {...S} d="M50 58 L44 72" />
+      <path {...S} d="M44 72 L44 80" />
+      <path {...S} d="M44 78 L72 78" />
+    </g>
+  ),
+
   // ---- Shoulders and arms ---------------------------------------------------
 
   'calin-bras': () => (

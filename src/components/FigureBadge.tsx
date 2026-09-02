@@ -2,6 +2,7 @@ import { Suspense, lazy, useMemo } from 'react'
 import type { AccentKey } from '@/lib/types'
 import { isFigureKey } from './figures/figureKeys'
 import { motionClass } from './figures/figureMotion'
+import { secondFrame } from './figures/figureFrames'
 
 const Figures = lazy(async () => {
   const mod = await import('./figures/figures')
@@ -50,6 +51,7 @@ export function FigureBadge({
 }: FigureBadgeProps) {
   const pastille = `var(--${tone})`
   const ink = LIGHT_TONES.has(tone) ? 'var(--figure-dark)' : 'var(--figure-light)'
+  const second = secondFrame(figureKey)
   const style = useMemo(
     () =>
       ({
@@ -71,15 +73,28 @@ export function FigureBadge({
       {/* Below ~28px the figure is illegible; the plain pastille reads better. */}
       {size >= 28 && (
         <Suspense fallback={null}>
-          <svg
-            viewBox="0 0 100 100"
-            width="72%"
-            height="72%"
-            role="presentation"
-            className={animated ? motionClass(figureKey) : undefined}
-          >
-            <Figures figureKey={figureKey} />
-          </svg>
+          {animated && second ? (
+            // A movement between two positions: the two frames alternate in
+            // place, which shows the whole exercise instead of half of it.
+            <span className="relative inline-grid place-items-center" style={{ width: '72%', height: '72%' }}>
+              <svg viewBox="0 0 100 100" className="fig-frame-a absolute inset-0 h-full w-full" role="presentation">
+                <Figures figureKey={figureKey} />
+              </svg>
+              <svg viewBox="0 0 100 100" className="fig-frame-b absolute inset-0 h-full w-full" role="presentation">
+                <Figures figureKey={second} />
+              </svg>
+            </span>
+          ) : (
+            <svg
+              viewBox="0 0 100 100"
+              width="72%"
+              height="72%"
+              role="presentation"
+              className={animated ? motionClass(figureKey) : undefined}
+            >
+              <Figures figureKey={figureKey} />
+            </svg>
+          )}
         </Suspense>
       )}
     </span>

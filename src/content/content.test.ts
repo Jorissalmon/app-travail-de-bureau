@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { LOCAL_ARTICLES, LOCAL_ROUTINES, ZONES } from './index'
 import { FIGURE_KEYS, isFigureKey } from '@/components/figures/figureKeys'
 import { articleFigures } from '@/lib/markdown'
+import { secondFrame } from '@/components/figures/figureFrames'
 
 /**
  * The content is hand-written JSON that the database is generated from, so a
@@ -47,6 +48,22 @@ describe('routines', () => {
       for (const s of r.steps) {
         expect(isFigureKey(s.figureKey), `${r.slug} / ${s.name}: "${s.figureKey}"`).toBe(true)
       }
+    }
+  })
+})
+
+describe('two-position figures', () => {
+  it('pair keys that both exist', () => {
+    for (const key of FIGURE_KEYS) {
+      const second = secondFrame(key)
+      if (second !== null) expect(isFigureKey(second), `${key} -> ${second}`).toBe(true)
+    }
+  })
+
+  it('are only declared for exercises a routine actually uses', () => {
+    const used = new Set(LOCAL_ROUTINES.flatMap((r) => r.steps.map((s) => s.figureKey)))
+    for (const key of FIGURE_KEYS) {
+      if (secondFrame(key) !== null) expect(used, `${key} has a second frame`).toContain(key)
     }
   })
 })

@@ -6,6 +6,7 @@ import {
 import { isNative } from '@/lib/platform'
 import type { Occurrence } from './schedule'
 import { KINDS, alertRoute } from './kinds'
+import { nudgeFor } from '@/features/session/daypart'
 
 /**
  * Thin wrapper over @capacitor/local-notifications (§8). All scheduling is
@@ -58,7 +59,10 @@ function toSchedule(occ: Occurrence, ctx: ScheduleContext): ScheduleOptions['not
   return {
     id: occ.id,
     title: copy.title,
-    body: copy.body,
+    // The stand reminder speaks to the hour it fires at — the reason to get up
+    // at 15 h is not the reason at 9 h. The other two are about a body part,
+    // and time does not change what they are for.
+    body: occ.kind === 'stand' ? nudgeFor(occ.at) : copy.body,
     channelId: CHANNEL_ID,
     actionTypeId: ACTION_TYPE,
     schedule: { at: occ.at, allowWhileIdle: true },

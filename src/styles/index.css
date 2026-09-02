@@ -266,6 +266,29 @@
       transform: rotate(360deg);
     }
   }
+  /* Two-position exercises: the frames alternate in place, held long enough to
+     read each one. Killed with the rest by the reduced-motion block, which
+     leaves frame A visible on its own. */
+  .fig-frame-a,
+  .fig-frame-b {
+    animation: fig-frame 3.4s steps(1, end) infinite;
+  }
+  .fig-frame-b {
+    animation-delay: -1.7s;
+  }
+
+  @keyframes fig-frame {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
   @keyframes fig-breathe {
     0%,
     100% {

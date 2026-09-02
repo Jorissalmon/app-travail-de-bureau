@@ -5,6 +5,8 @@ import { SessionCard } from '@/components/SessionCard'
 import { SearchField } from '@/components/SearchField'
 import { ZoneCard } from '@/components/ZoneCard'
 import { PermissionsSheet } from '@/components/PermissionsSheet'
+import { DayCard } from '@/components/DayCard'
+import { adviceFor } from '@/features/session/daypart'
 import { useSessionStore } from '@/stores/session'
 import { useSettingsStore } from '@/stores/settings'
 import { useAuthStore } from '@/stores/auth'
@@ -40,6 +42,17 @@ export function Today() {
 
   const active = session !== null
   const elapsedS = active ? Math.max(0, (now.getTime() - new Date(session.startedAt).getTime()) / 1000) : 0
+
+  // Re-derived on every clock tick, so the card follows the day by itself.
+  const advice = useMemo(
+    () =>
+      adviceFor({
+        now,
+        sessionActive: active,
+        standsToday: stats?.standsToday ?? 0,
+      }),
+    [now, active, stats],
+  )
 
   const nextInS = useMemo(() => {
     if (!active) return null
@@ -116,6 +129,8 @@ export function Today() {
         onStop={handleStop}
         busy={busy}
       />
+
+      <DayCard advice={advice} />
 
       <div className="mt-5">
         <SearchField value="" onChange={(v) => navigate(`/library?q=${encodeURIComponent(v)}`)} />
