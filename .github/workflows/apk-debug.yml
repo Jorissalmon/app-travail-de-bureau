@@ -55,19 +55,55 @@ jobs:
       - name: Publier l'APK en artefact du run (zip téléchargeable)
         uses: actions/upload-artifact@v4
         with:
-          name: releve-apk-debug
+          name: logoff-apk-debug
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
+
+      # Le tag "debug" est un tag mobile : il doit suivre le commit qui a produit
+      # l'APK attaché. Sans ça il reste où il a été créé, et la page de la
+      # release affiche un code source sans rapport avec le fichier proposé.
+      - name: Faire pointer le tag debug sur ce commit
+        run: |
+          git tag -f debug "${{ github.sha }}"
+          git push -f origin refs/tags/debug
+
+      - name: Relever les versions à annoncer
+        id: meta
+        run: |
+          APP=$(sed -n 's/.*versionName *"\([^"]*\)".*/\1/p' android/app/build.gradle)
+          OTA=$(node -p "require('./ota/version.json').version")
+          echo "app=$APP" >> "$GITHUB_OUTPUT"
+          echo "ota=$OTA" >> "$GITHUB_OUTPUT"
+          echo "Coque $APP, contenu $OTA"
 
       - name: Publier l'APK dans une Release "debug"
         uses: softprops/action-gh-release@v2
         with:
           tag_name: debug
-          name: Relève — APK de test (debug)
-          prerelease: true
+          target_commitish: ${{ github.sha }}
+          name: Log Off ${{ steps.meta.outputs.app }} — APK de test (debug)
+          # Pas en prerelease : c'est la seule façon d'installer l'app, elle doit
+          # apparaître sur la page d'accueil du dépôt. Le nom dit ce que c'est.
+          prerelease: false
+          make_latest: 'true'
           files: android/app/build/outputs/apk/debug/app-debug.apk
           fail_on_unmatched_files: true
           body: |
-            APK de test (debug) de Relève, à installer par sideload.
-            Autorise les « sources inconnues » sur ton téléphone Android, puis installe app-debug.apk.
+            APK de test de **Log Off ${{ steps.meta.outputs.app }}**, à installer par sideload.
+            Contenu web ${{ steps.meta.outputs.ota }} · construit depuis `main` (${{ github.sha }}).
+
+            ### Désinstalle l'app avant d'installer
+
+            Cet APK est signé par la clé de debug d'Android, regénérée à chaque
+            build. La signature change donc d'une version à l'autre, et Android
+            refuse d'installer par-dessus (« Application non installée »).
+            Désinstaller efface la session locale : il faudra se reconnecter.
+
+            ### Installation
+
+            1. Autorise les « sources inconnues » pour ton navigateur ou ton gestionnaire de fichiers.
+            2. Installe `app-debug.apk`.
+            3. Réglages → Rappels : accorde les **quatre** autorisations. Sans
+               « Alertes plein écran », rien ne rallume l'écran quand le téléphone dort.
+
             Ce build pointe vers le backend de production Vercel.
