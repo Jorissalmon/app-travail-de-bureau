@@ -1,7 +1,0 @@
-{
-  "version": "1.0.10",
-  "url": "https://app-travail-de-bureau.vercel.app/ota/bundle-1.0.10.zip",
-  "checksum": "3f58af95ba12de40d6088c4664462653779b2d049de6f41169fe4c020754c47f",
-  "minNative": "1.0.0",
-  "notes": "Player: audio cues on step change and the final five seconds\n\nThree synthesised Web Audio blips — a tick for each of the last five seconds of\na step, a higher tone when the step gives way, a longer one when the routine\nends. Synthesised rather than sampled so nothing has to load and nothing is\nadded to the OTA bundle.\n\nThe preference is device-local: Settings is replaced wholesale by the server\ncopy on every /api/me, so a field there would need a migration for one boolean.\nOn by default, unlike the notification sound, and switchable in Réglages.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
-}

@@ -9,12 +9,15 @@
  */
 import { execFileSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, resolve } from 'node:path'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const root = resolve(here, '..')
+
+/** Bundles kept in public/ota; older ones are committed weight nothing reads. */
+const KEEP_BUNDLES = 5
 
 function bumpPatch(v: string): string {
   const m = /^(\d+)\.(\d+)\.(\d+)$/.exec(v.trim())
@@ -60,4 +63,17 @@ const manifest = {
 writeFileSync(resolve(outDir, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n')
 if (!noBump) writeFileSync(versionFile, JSON.stringify({ version }, null, 2) + '\n')
 
-console.log(`OTA bundle ${zipName} (${checksum.slice(0, 12)}…), manifest updated → ${version}`)
+// The manifest only ever points at the newest bundle, so every older one sits
+// in the repository, in the deployment and in the APK for nothing. A handful
+// are kept in case a device is mid-download when the next release lands.
+const dropped = readdirSync(outDir)
+  .filter((f) => f.startsWith('bundle-') && f.endsWith('.zip'))
+  .map((f) => ({ file: f, parts: f.slice('bundle-'.length, -'.zip'.length).split('.').map(Number) }))
+  .sort((a, b) => b.parts[0] - a.parts[0] || b.parts[1] - a.parts[1] || b.parts[2] - a.parts[2])
+  .slice(KEEP_BUNDLES)
+for (const { file } of dropped) unlinkSync(resolve(outDir, file))
+
+console.log(
+  `OTA bundle ${zipName} (${checksum.slice(0, 12)}…), manifest updated → ${version}` +
+    (dropped.length > 0 ? `, ${dropped.length} older bundle(s) removed` : ''),
+)
