@@ -1,7 +1,7 @@
 {
-  "version": "1.0.11",
-  "url": "https://app-travail-de-bureau.vercel.app/ota/bundle-1.0.11.zip",
-  "checksum": "0ca522332b529e78d0c6fd26da94673218b4d3e6a972aef7acb4a37610275c4e",
+  "version": "1.0.12",
+  "url": "https://app-travail-de-bureau.vercel.app/ota/bundle-1.0.12.zip",
+  "checksum": "ead842baf7d86fad63bf22998785b150b7c76c89d079d0e31f96bac2e0aacf33",
   "minNative": "1.0.0",
-  "notes": "Merge branch 'wake-screen-and-pause-during-break'"
+  "notes": "Build the debug APK on every push to main\n\nThe repository's default branch is not main, so the \"Run workflow\"\ndropdown offered another one and the APK published to the debug release\nwas built from a branch without the merge — the plugin was simply not in\nit. Trigger on push to main as well, so the asset at the debug release\nalways matches what main holds. Manual dispatch still works.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 }
