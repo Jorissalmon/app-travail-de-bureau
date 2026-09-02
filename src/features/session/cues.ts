@@ -13,6 +13,9 @@ import { KEYS, getRaw, setRaw } from '@/lib/storage'
 /** Seconds before the end of a step that get a tick. */
 export const FINAL_COUNTDOWN_S = 5
 
+/** Seconds of "get into position" before each exercise starts counting. */
+export const READY_S = 5
+
 let enabled = true
 let ctx: AudioContext | null = null
 
@@ -47,17 +50,22 @@ function blip(freq: number, durationS: number, peak: number): void {
 
 /** One of the last few seconds of a step just elapsed. */
 export function cueTick(): void {
-  blip(880, 0.07, 0.09)
+  blip(880, 0.09, 0.32)
 }
 
 /** A step gives way to the next one. */
 export function cueStep(): void {
-  blip(1175, 0.13, 0.13)
+  blip(1175, 0.16, 0.42)
+}
+
+/** The get-ready phase begins: lower and softer, it announces rather than ends. */
+export function cueReady(): void {
+  blip(660, 0.14, 0.3)
 }
 
 /** The routine is over. */
 export function cueEnd(): void {
-  blip(1568, 0.32, 0.15)
+  blip(1568, 0.36, 0.5)
 }
 
 /**

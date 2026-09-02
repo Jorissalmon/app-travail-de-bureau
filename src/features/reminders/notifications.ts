@@ -65,7 +65,7 @@ function toSchedule(occ: Occurrence, ctx: ScheduleContext): ScheduleOptions['not
     // Sound is opt-in and off by default (open space, §8.3). Vibration is a
     // channel property on Android, so it is set once in createChannel.
     ...(ctx.sound ? { sound: 'default' } : {}),
-    smallIcon: 'ic_stat_releve',
+    smallIcon: 'ic_stat_logoff',
     // The deep-link target rides in `extra` — no custom URL scheme (§8.4). It
     // is derived from the kind so the tap lands on the matching alert screen.
     extra: { route: alertRoute(occ.kind), kind: occ.kind, occurrenceId: occ.id },
@@ -97,7 +97,7 @@ export async function getPending(): Promise<PendingResult> {
 }
 
 /**
- * Cancel every pending Relève notification and verify nothing is left (§8.2).
+ * Cancel every pending Log Off notification and verify nothing is left (§8.2).
  * Logs if the platform still reports pending ids after the cancel.
  */
 export async function cancelAll(): Promise<void> {

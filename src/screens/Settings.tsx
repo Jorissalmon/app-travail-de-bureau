@@ -227,7 +227,7 @@ export function Settings() {
           </button>
         </div>
         <p className="t-meta py-4">
-          Relève n’est pas un dispositif médical. En cas de douleur qui persiste, un médecin ou un
+          Log Off n’est pas un dispositif médical. En cas de douleur qui persiste, un médecin ou un
           kiné tranchera mieux qu’une app.
         </p>
       </SettingsSection>

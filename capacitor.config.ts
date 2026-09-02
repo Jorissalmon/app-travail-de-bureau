@@ -7,7 +7,7 @@ import type { CapacitorConfig } from '@capacitor/cli'
  */
 const config: CapacitorConfig = {
   appId: 'app.releve',
-  appName: 'Relève',
+  appName: 'Log Off',
   webDir: 'dist',
   android: {
     // Draw behind the system bars; safe-area insets handle the padding.
@@ -22,7 +22,7 @@ const config: CapacitorConfig = {
       resetWhenUpdate: true,
     },
     LocalNotifications: {
-      smallIcon: 'ic_stat_releve',
+      smallIcon: 'ic_stat_logoff',
     },
   },
 }

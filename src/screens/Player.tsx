@@ -15,7 +15,9 @@ import { uuid } from '@/lib/uuid'
 import { logCompletion } from '@/features/reminders/events'
 import {
   FINAL_COUNTDOWN_S,
+  READY_S,
   cueEnd,
+  cueReady,
   cueStep,
   cueTick,
   loadCues,
@@ -50,14 +52,30 @@ export function Player() {
   /** Last second already cued, so the 250 ms interval blips only once each. */
   const lastCuedRef = useRef<number | null>(null)
 
+  /** Every exercise opens with a few seconds to get into position. */
+  const [phase, setPhase] = useState<'ready' | 'work'>('ready')
+
   const steps = useMemo(() => routine?.steps ?? [], [routine])
   const step = steps[stepIndex]
   const isLast = stepIndex >= steps.length - 1
+
+  const workSeconds = useMemo(
+    () => (step && routine ? durationFor(routine.slug, step.position, step.durationS) : 0),
+    [step, routine],
+  )
 
   const tick = useCallback(() => {
     if (vibrate && isNative()) void Haptics.impact({ style: ImpactStyle.Light })
     cueStep()
   }, [vibrate])
+
+  const startWork = useCallback(() => {
+    setPhase('work')
+    setRemaining(workSeconds)
+    deadlineRef.current = Date.now() + workSeconds * 1000
+    lastCuedRef.current = null
+    tick()
+  }, [workSeconds, tick])
 
   const goNext = useCallback(() => {
     if (isLast) {
@@ -85,22 +103,28 @@ export function Player() {
     void Promise.all([loadCues().then(primeCues), loadDurations()]).then(() => setReady(true))
   }, [])
 
-  // Arm the step: also covers the routine arriving after the first render.
+  // Arm the step on its get-ready countdown. Also covers the routine arriving
+  // after the first render.
   useEffect(() => {
     const s = steps[stepIndex]
     if (!s || !routine || !ready) return
-    const seconds = durationFor(routine.slug, s.position, s.durationS)
-    setRemaining(seconds)
-    deadlineRef.current = Date.now() + seconds * 1000
+    setPhase('ready')
+    setRemaining(READY_S)
+    deadlineRef.current = Date.now() + READY_S * 1000
     lastCuedRef.current = null
+    cueReady()
   }, [steps, stepIndex, routine, ready])
 
-  // Held in a ref so a new goNext identity does not restart the interval and
-  // reset its phase on every step.
+  // Held in refs so a new identity does not restart the interval and reset its
+  // phase on every step.
   const goNextRef = useRef(goNext)
   useEffect(() => {
     goNextRef.current = goNext
   }, [goNext])
+  const startWorkRef = useRef(startWork)
+  useEffect(() => {
+    startWorkRef.current = startWork
+  }, [startWork])
 
   // Countdown read from the wall clock, never by counting ticks: the WebView
   // throttles (and on Android may suspend) timers as soon as the app goes to
@@ -119,10 +143,13 @@ export function Player() {
         lastCuedRef.current = left
         if (left > 0 && left <= FINAL_COUNTDOWN_S) cueTick()
       }
-      if (left === 0) goNextRef.current()
+      if (left === 0) {
+        if (phase === 'ready') startWorkRef.current()
+        else goNextRef.current()
+      }
     }, 250)
     return () => clearInterval(t)
-  }, [paused, finished, step])
+  }, [paused, finished, step, phase])
 
   const togglePause = useCallback(() => {
     if (paused) {
@@ -154,10 +181,10 @@ export function Player() {
   }, [finished, routine, fromNotification, markDone])
 
   const progress = useMemo(() => {
-    if (!step || !routine) return 0
-    const total = durationFor(routine.slug, step.position, step.durationS)
+    const total = phase === 'ready' ? READY_S : workSeconds
+    if (total <= 0) return 0
     return 1 - remaining / total
-  }, [step, routine, remaining])
+  }, [phase, workSeconds, remaining])
 
   if (!routine || !step) {
     return (
@@ -217,12 +244,28 @@ export function Player() {
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col items-center justify-center gutter">
+        <p
+          className="t-card-eyebrow mb-3"
+          style={{ color: phase === 'ready' ? 'var(--text-2)' : 'var(--accent)' }}
+        >
+          {phase === 'ready'
+            ? 'En place'
+            : `Étape ${stepIndex + 1} sur ${steps.length}`}
+        </p>
+
         <TimerRing progress={progress} size={260} stroke={6}>
           <FigureBadge figureKey={step.figureKey} tone={routine.accent} size={200} animated />
         </TimerRing>
 
-        <p className="num mt-6" style={{ fontSize: 72, lineHeight: 1 }}>
-          {mmss(remaining)}
+        <p
+          className="num mt-6"
+          style={{
+            fontSize: 72,
+            lineHeight: 1,
+            color: phase === 'ready' ? 'var(--text-2)' : 'var(--text)',
+          }}
+        >
+          {phase === 'ready' ? remaining : mmss(remaining)}
         </p>
 
         <h2 className="t-screen mt-6 text-center">{step.name}</h2>
@@ -241,10 +284,29 @@ export function Player() {
           {paused ? <Play size={20} /> : <Pause size={20} />}
           {paused ? 'Reprendre' : 'Pause'}
         </button>
-        <button type="button" className="btn btn-accent flex-1" onClick={goNext} aria-label="Étape suivante">
-          <SkipForward size={20} />
-          {isLast ? 'Terminer' : 'Suivant'}
-        </button>
+        {/* During the get-ready phase the obvious action is to start early, not
+            to skip the exercise you have not done yet. */}
+        {phase === 'ready' ? (
+          <button
+            type="button"
+            className="btn btn-accent flex-1"
+            onClick={startWork}
+            aria-label="Démarrer l’exercice"
+          >
+            <Play size={20} />
+            Je suis prêt
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="btn btn-accent flex-1"
+            onClick={goNext}
+            aria-label="Étape suivante"
+          >
+            <SkipForward size={20} />
+            {isLast ? 'Terminer' : 'Suivant'}
+          </button>
+        )}
       </div>
     </div>
   )

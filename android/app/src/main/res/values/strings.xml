@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Relève</string>
-    <string name="title_activity_main">Relève</string>
+    <string name="app_name">Log Off</string>
+    <string name="title_activity_main">Log Off</string>
     <string name="package_name">app.releve</string>
     <string name="custom_url_scheme">app.releve</string>
 </resources>

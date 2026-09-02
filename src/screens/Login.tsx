@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Wordmark } from '@/components/Wordmark'
 import { HttpError } from '@/lib/api'
 import { useAuthStore } from '@/stores/auth'
 
@@ -55,7 +56,10 @@ export function Login() {
       }}
     >
       <div className="gutter mx-auto w-full" style={{ maxWidth: 420 }}>
-        <h1 className="t-day mb-10">Relève</h1>
+        <h1 className="mb-3">
+          <Wordmark size={38} />
+        </h1>
+        <p className="t-meta mb-9">Lève-toi. L’app s’occupe du reste.</p>
 
         <form onSubmit={submit} className="flex flex-col gap-3">
           {mode === 'register' && (
