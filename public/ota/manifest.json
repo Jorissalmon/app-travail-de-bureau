@@ -1,7 +1,7 @@
 {
-  "version": "1.0.13",
-  "url": "https://app-travail-de-bureau.vercel.app/ota/bundle-1.0.13.zip",
-  "checksum": "b7800265628df263c379bf1f050064865e9af03378c4b873ee8f5a2930738c6b",
+  "version": "1.0.14",
+  "url": "https://app-travail-de-bureau.vercel.app/ota/bundle-1.0.14.zip",
+  "checksum": "dc15d25cb271a3b5f6746e404b137306db0c867b71bb7a4db6c733d306136de3",
   "minNative": "1.0.0",
-  "notes": "Debug release: name it Log Off, and move the tag with the build\n\nThe release around the APK was wrong in three ways while the file itself\nwas fine. The debug tag still pointed at 75e86ee from 1 Sep, so the page\noffered source code unrelated to the attached build. The title and body\nstill said \"Relève\", a name the app dropped. And nothing on the page\nmentioned that the debug signing key is regenerated every run, which is\nthe one thing that makes an install fail.\n\nMove the tag to the built commit, title it from versionName, state both\nversion lines and the commit, and lead with the uninstall step. Drop the\nprerelease flag too: this is the only way to install the app, so it\nshould show on the repository home page.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
+  "notes": "Stop a missing keystore from failing deep inside Gradle\n\nAPK release run #1 died at `assembleRelease` with a message about a\ntampered keystore. The cause was upstream: `base64 -d` on an unset\nsecret writes an empty file and exits 0, so the decode step passed and\nGradle inherited the problem. Check the four secrets are present and\nthat keytool can actually open the store with that password and alias,\nand name what is missing when it cannot.\n\nThat run also built from the repository's default branch, which is not\nmain, so a signed release would have been published from unrelated code.\nRefuse any ref that is not main or a v* tag.\n\nAlso stop the debug APK rebuilding twice per push: the OTA workflow\ncommits the bundle to main right after, which retriggered it — with a\nfreshly generated debug key, so the two APKs of one push did not even\nshare a signature.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 }
