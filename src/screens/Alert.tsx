@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { FigureBadge } from '@/components/FigureBadge'
 import { useContentStore } from '@/stores/content'
@@ -17,7 +17,21 @@ export function Alert() {
   const navigate = useNavigate()
   const markDone = useSessionStore((s) => s.markDone)
   const snooze = useSessionStore((s) => s.snooze)
+  const pauseForBreak = useSessionStore((s) => s.pauseForBreak)
+  const resumeFromBreak = useSessionStore((s) => s.resumeFromBreak)
   const [busy, setBusy] = useState(false)
+  /** Set when the player takes over, so it — not this screen — resumes the grid. */
+  const handedOff = useRef(false)
+
+  // The clock stops while the break is on screen: no second reminder may land
+  // on top of the one being read, and the next one is counted from the end of
+  // the exercise, not from its start.
+  useEffect(() => {
+    void pauseForBreak()
+    return () => {
+      if (!handedOff.current) void resumeFromBreak()
+    }
+  }, [pauseForBreak, resumeFromBreak])
 
   const meta = isReminderKind(kind) ? KINDS[kind] : null
   const routine = useContentStore((s) => (meta ? s.routineBySlug(meta.routineSlug) : undefined))
@@ -109,7 +123,10 @@ export function Alert() {
           type="button"
           className="btn btn-accent btn-block"
           disabled={busy || !routine}
-          onClick={() => navigate(`/player/${meta.routineSlug}?from=notification`, { replace: true })}
+          onClick={() => {
+            handedOff.current = true
+            navigate(`/player/${meta.routineSlug}?from=notification`, { replace: true })
+          }}
         >
           Commencer
         </button>

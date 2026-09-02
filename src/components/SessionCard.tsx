@@ -14,6 +14,8 @@ export interface SessionCardProps {
   elapsedS: number
   /** Seconds until the next scheduled reminder, or null if none pending. */
   nextInS: number | null
+  /** True while an exercise is on screen and the grid is stopped. */
+  paused?: boolean
   /** Interval in seconds, to size the ring. */
   intervalS: number
   onStart: () => void
@@ -29,11 +31,12 @@ export function SessionCard({
   onStart,
   onStop,
   busy,
+  paused = false,
 }: SessionCardProps) {
   const progress = useMemo(() => {
-    if (nextInS === null || intervalS <= 0) return 0
+    if (paused || nextInS === null || intervalS <= 0) return 0
     return 1 - Math.min(1, Math.max(0, nextInS / intervalS))
-  }, [nextInS, intervalS])
+  }, [paused, nextInS, intervalS])
 
   if (!active) {
     return (
@@ -68,10 +71,12 @@ export function SessionCard({
       <p className="t-card-eyebrow mb-4 text-center">En session depuis {elapsedLabel(elapsedS)}</p>
 
       <TimerRing progress={progress} size={220} stroke={6}>
-        <span className="t-count" style={{ fontSize: 54 }}>
-          {nextInS === null ? '—' : mmss(nextInS)}
+        <span className="t-count" style={{ fontSize: paused ? 34 : 54 }}>
+          {paused ? 'En pause' : nextInS === null ? '—' : mmss(nextInS)}
         </span>
-        <span className="t-meta mt-1">avant le prochain</span>
+        <span className="t-meta mt-1">
+          {paused ? 'le temps de l’exercice' : 'avant le prochain'}
+        </span>
       </TimerRing>
 
       <button
