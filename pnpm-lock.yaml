@@ -47,6 +47,9 @@ importers:
       bcryptjs:
         specifier: ^3.0.2
         version: 3.0.3
+      capacitor-native-settings:
+        specifier: ^8.2.0
+        version: 8.2.0(@capacitor/core@8.5.1)
       dompurify:
         specifier: ^3.2.7
         version: 3.4.14
@@ -1289,6 +1292,11 @@ packages:
 
   caniuse-lite@1.0.30001810:
     resolution: {integrity: sha512-TITQPUkaz+aVk5GL6NhOdwk1aEaNTSDPsGFWrTuhKGtjTF70jL/Oht2W4c6rXUe5fu7Ie19VIahAXHIIiWWNeg==}
+
+  capacitor-native-settings@8.2.0:
+    resolution: {integrity: sha512-jqklDll5YFvPpt2SI+wa+oMy0ykvWESSclDMhSI/t1TvJDnomATa7Iz0eE219DY/6pJxRhI7+8RYE0ePtAYxAw==}
+    peerDependencies:
+      '@capacitor/core': '>=8.0.2'
 
   chai@5.3.3:
     resolution: {integrity: sha512-4zNhdJD/iOjSH0A05ea+Ke6MU5mmpQcbQsSOkgdaUMJ9zTlDTD/GYlwohmIE2u0gaxHYiVHEn1Fw9mZ/ktJWgw==}
@@ -3490,6 +3498,10 @@ snapshots:
   callsites@3.1.0: {}
 
   caniuse-lite@1.0.30001810: {}
+
+  capacitor-native-settings@8.2.0(@capacitor/core@8.5.1):
+    dependencies:
+      '@capacitor/core': 8.5.1
 
   chai@5.3.3:
     dependencies:

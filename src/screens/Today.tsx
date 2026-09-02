@@ -4,7 +4,7 @@ import { Flame } from 'lucide-react'
 import { SessionCard } from '@/components/SessionCard'
 import { SearchField } from '@/components/SearchField'
 import { ZoneCard } from '@/components/ZoneCard'
-import { BatteryNotice } from '@/components/BatteryNotice'
+import { PermissionsSheet } from '@/components/PermissionsSheet'
 import { useSessionStore } from '@/stores/session'
 import { useSettingsStore } from '@/stores/settings'
 import { useAuthStore } from '@/stores/auth'
@@ -13,6 +13,7 @@ import { ZONES } from '@/content'
 import { useNow } from '@/app/useNow'
 import { dateEyebrow, dayName } from '@/lib/date'
 import { pendingAfter } from '@/features/reminders/schedule'
+import { PermissionsMissingError } from '@/features/reminders/permissions'
 import { standsLine } from '@/lib/format'
 
 /** §11.1 — Aujourd'hui. */
@@ -31,7 +32,7 @@ export function Today() {
   const loadStats = useStatsStore((s) => s.load)
 
   const [busy, setBusy] = useState(false)
-  const [showBattery, setShowBattery] = useState(false)
+  const [showPermissions, setShowPermissions] = useState(false)
 
   useEffect(() => {
     void loadStats()
@@ -52,8 +53,12 @@ export function Today() {
     setBusy(true)
     try {
       await start()
-      // Show the battery-optimisation notice once, right after the first start (§8.3).
-      setShowBattery(true)
+      setShowPermissions(false)
+    } catch (e) {
+      // Missing grants are not a failure to report, they are a thing to fix:
+      // open the sheet that fixes them (§8.3). Anything else still throws.
+      if (!(e instanceof PermissionsMissingError)) throw e
+      setShowPermissions(true)
     } finally {
       setBusy(false)
     }
@@ -135,7 +140,11 @@ export function Today() {
         {standsLine(stats?.standsToday ?? 0, stats?.remindersToday ?? 0)}
       </p>
 
-      <BatteryNotice open={showBattery} onClose={() => setShowBattery(false)} />
+      <PermissionsSheet
+        open={showPermissions}
+        onClose={() => setShowPermissions(false)}
+        onAllGranted={() => void handleStart()}
+      />
     </div>
   )
 }

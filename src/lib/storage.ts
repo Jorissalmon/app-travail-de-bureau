@@ -19,7 +19,6 @@ export const KEYS = {
   routines: 'content.routines',
   articles: 'content.articles',
   scheduled: 'reminders.scheduled',
-  batteryNoticeSeen: 'notice.battery.seen',
   playerSound: 'player.sound',
   bundleVersion: 'ota.bundleVersion',
   pendingNativeUpdate: 'ota.pendingNativeUpdate',

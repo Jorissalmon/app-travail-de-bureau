@@ -15,12 +15,15 @@ import {
 import {
   cancelAll,
   ensureChannelAndActions,
-  requestPermission,
   scheduleAll,
   scheduleOne,
-  tryEnableExactAlarms,
   type ScheduleContext,
 } from '@/features/reminders/notifications'
+import {
+  PermissionsMissingError,
+  allGranted,
+  readPermissions,
+} from '@/features/reminders/permissions'
 import { flushEvents, logEvent, makeEvent } from '@/features/reminders/events'
 import { useSettingsStore } from './settings'
 
@@ -99,10 +102,11 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   },
 
   start: async () => {
-    // Ask for permission at the moment it is needed, not at app launch (§8.3).
+    // A session whose reminders cannot fire is worse than no session: the user
+    // believes they are covered. Refuse, and let the caller open the sheet.
     await ensureChannelAndActions()
-    const granted = await requestPermission()
-    await tryEnableExactAlarms()
+    const permissions = await readPermissions()
+    if (!allGranted(permissions)) throw new PermissionsMissingError(permissions)
 
     const now = new Date()
     const id = uuid()
@@ -114,14 +118,12 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     }
 
     const settings = useSettingsStore.getState().settings
-    const occurrences = granted
-      ? planOccurrences({ sessionId: id, from: now, settings })
-      : []
+    const occurrences = planOccurrences({ sessionId: id, from: now, settings })
 
     set({ session, occurrences })
     await persist(session, occurrences)
 
-    if (granted) await scheduleAll(occurrences, scheduleContext())
+    await scheduleAll(occurrences, scheduleContext())
 
     // Tell the server, best-effort. The local session is authoritative.
     try {

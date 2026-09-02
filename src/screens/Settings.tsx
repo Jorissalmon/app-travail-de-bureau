@@ -7,7 +7,14 @@ import { useSettingsStore } from '@/stores/settings'
 import { useAuthStore } from '@/stores/auth'
 import { INTERVAL_CHOICES, RECOMMENDED_INTERVAL } from '@/lib/defaults'
 import { BUNDLE_VERSION, isNativeUpdatePending } from '@/features/ota/updater'
-import { isOptimised, requestExemption } from '@/features/reminders/battery'
+import {
+  PERMISSION_COPY,
+  PERMISSION_ORDER,
+  type PermissionKey,
+  type PermissionState,
+  readPermissions,
+  requestPermission,
+} from '@/features/reminders/permissions'
 import { loadCues, setCues } from '@/features/session/cues'
 import { isNative } from '@/lib/platform'
 
@@ -34,16 +41,15 @@ export function Settings() {
     void isNativeUpdatePending().then(setNativeUpdate)
   }, [])
 
-  // Battery optimisation is the usual reason a reminder never arrives, and the
-  // one-off notice can be dismissed for good — so its state is readable here.
-  const [optimised, setOptimised] = useState<boolean | null>(null)
+  // The three grants a reminder needs. The sheet only appears when starting a
+  // session, so this is where the state stays readable and fixable afterwards.
+  const [permissions, setPermissions] = useState<PermissionState | null>(null)
   useEffect(() => {
-    void isOptimised().then(setOptimised)
+    void readPermissions().then(setPermissions)
   }, [])
 
-  async function fixBattery() {
-    await requestExemption()
-    setOptimised(await isOptimised())
+  async function grant(key: PermissionKey) {
+    setPermissions(await requestPermission(key))
   }
 
   // Device-local: Settings is replaced wholesale by the server copy on /api/me.
@@ -143,22 +149,24 @@ export function Settings() {
       </SettingsSection>
 
       <SettingsSection title="Rappels">
-        {optimised !== null && (
-          <SettingRow
-            label="Optimisation de la batterie"
-            hint={
-              optimised
-                ? 'Active : Android peut retarder ou bloquer les rappels.'
-                : 'Désactivée pour Relève. Les rappels arrivent à l’heure.'
-            }
-          >
-            {optimised && (
-              <button type="button" className="btn btn-secondary" onClick={() => void fixBattery()}>
-                Corriger
-              </button>
-            )}
-          </SettingRow>
-        )}
+        {permissions !== null &&
+          PERMISSION_ORDER.map((key) => (
+            <SettingRow
+              key={key}
+              label={PERMISSION_COPY[key].label}
+              hint={permissions[key] ? 'Accordée.' : PERMISSION_COPY[key].why}
+            >
+              {!permissions[key] && (
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => void grant(key)}
+                >
+                  Autoriser
+                </button>
+              )}
+            </SettingRow>
+          ))}
         <SettingRow label="Rappels des yeux" hint="Désactivé par défaut. Voir l’article dédié.">
           <Toggle
             label="Rappels des yeux"

@@ -59,35 +59,8 @@ export async function ensureChannelAndActions(): Promise<void> {
   })
 }
 
-/** Ask for POST_NOTIFICATIONS at the moment it is needed (§8.3). */
-export async function requestPermission(): Promise<boolean> {
-  if (!isNative()) return true
-  const status = await LocalNotifications.checkPermissions()
-  if (status.display === 'granted') return true
-  const req = await LocalNotifications.requestPermissions()
-  return req.display === 'granted'
-}
-
-/**
- * Best-effort request for exact alarms. If the user declines, we degrade to
- * inexact alarms silently — a few minutes of drift on a 30-minute reminder is
- * harmless and must never block the app (§8.3).
- */
-export async function tryEnableExactAlarms(): Promise<void> {
-  if (!isNative()) return
-  try {
-    const anyPlugin = LocalNotifications as unknown as {
-      checkExactNotificationSetting?: () => Promise<{ exact_alarm: string }>
-      changeExactNotificationSetting?: () => Promise<unknown>
-    }
-    const setting = await anyPlugin.checkExactNotificationSetting?.()
-    if (setting && setting.exact_alarm !== 'granted') {
-      await anyPlugin.changeExactNotificationSetting?.()
-    }
-  } catch {
-    // Older plugin or unsupported OS — ignore and use inexact alarms.
-  }
-}
+// Permissions live in ./permissions.ts: asking is only half the job, since a
+// recorded refusal has to be routed to the matching Android settings screen.
 
 function toSchedule(occ: Occurrence, ctx: ScheduleContext): ScheduleOptions['notifications'][number] {
   const copy = COPY[occ.kind]
