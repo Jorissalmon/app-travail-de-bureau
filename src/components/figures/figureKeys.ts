@@ -35,6 +35,12 @@ export const FIGURE_KEYS = [
   'mollet-releve',
   'talon-pointe',
   'nuque-diagonale',
+  'calin-bras',
+  'triceps-tete',
+  'ischios-assis',
+  'genou-poitrine',
+  'nuque-flexion',
+  'poignet-priere',
 ] as const
 
 export type FigureKey = (typeof FIGURE_KEYS)[number]

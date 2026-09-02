@@ -435,6 +435,76 @@ const figures: Record<FigureKey, () => JSX.Element> = {
 
   // ---- Neck, diagonal -------------------------------------------------------
 
+  // ---- Shoulders and arms ---------------------------------------------------
+
+  'calin-bras': () => (
+    <g>
+      <Head cx={50} cy={22} r={11} />
+      <path {...S} d="M50 33 L50 62" />
+      <path {...S} d="M64 40 C52 46 40 48 28 48" />
+      <path {...S} d="M36 40 C33 50 36 55 45 52" />
+      <path {...S} d="M32 74 L68 74" />
+    </g>
+  ),
+
+  'triceps-tete': () => (
+    <g>
+      <Head cx={46} cy={34} r={11} />
+      <path {...S} d="M46 45 L48 66" />
+      <path {...S} d="M58 42 L64 18" />
+      <path {...S} d="M64 18 L46 28" />
+      <path {...S} d="M34 48 L60 20" />
+      <path {...S} d="M30 74 L70 74" />
+    </g>
+  ),
+
+  'ischios-assis': () => (
+    <g>
+      <Chair />
+      <Ground />
+      <Head cx={38} cy={26} r={8} />
+      <path {...S} d="M38 34 C41 44 41 50 44 56" />
+      <path {...S} d="M44 56 L78 64" />
+      <path {...S} d="M78 64 L84 56" />
+      <path {...S} d="M44 56 L36 72 L30 82" />
+      <path {...S} d="M40 36 L66 58" />
+    </g>
+  ),
+
+  'genou-poitrine': () => (
+    <g>
+      <Chair />
+      <Ground />
+      <Head cx={42} cy={24} r={8} />
+      <path {...S} d="M42 32 L44 54" />
+      <path {...S} d="M44 54 L60 44 L54 28" />
+      <path {...S} d="M44 54 L40 72 L33 82" />
+      <path {...S} d="M43 35 L58 42" />
+    </g>
+  ),
+
+  'nuque-flexion': () => (
+    <g>
+      <Head cx={48} cy={40} r={12} />
+      <path {...S} d="M52 51 L56 66" />
+      <path {...S} d="M34 74 L76 74" />
+      <path {...S} d="M56 66 L56 74" />
+      <path {...S} d="M36 70 C34 50 42 32 52 29" />
+      <path {...S} d="M70 70 C73 50 64 32 54 29" />
+    </g>
+  ),
+
+  'poignet-priere': () => (
+    <g>
+      <path {...S} d="M22 64 L44 46" />
+      <path {...S} d="M78 64 L56 46" />
+      <path {...S} d="M44 46 L46 20" />
+      <path {...S} d="M56 46 L54 20" />
+      <path {...HAIR} d="M22 74 L22 84 M16 78 L22 85 L28 78" />
+      <path {...HAIR} d="M78 74 L78 84 M72 78 L78 85 L84 78" />
+    </g>
+  ),
+
   'nuque-diagonale': () => (
     <g>
       <Head cx={42} cy={36} r={12} />

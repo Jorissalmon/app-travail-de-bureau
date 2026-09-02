@@ -88,7 +88,7 @@
     "slug": "assis",
     "title": "Assis",
     "zone": "bureau",
-    "durationS": 180,
+    "durationS": 260,
     "summary": "Tout se fait sur la chaise. Pour l’open space, ou entre deux réunions.",
     "accent": "sky",
     "sortOrder": 3,
@@ -127,6 +127,80 @@
         "durationS": 45,
         "cue": "Même chose de l’autre côté.",
         "figureKey": "rotation-assise"
+      },
+      {
+        "position": 6,
+        "name": "Ischio assis — droite",
+        "durationS": 40,
+        "cue": "Talon au sol, jambe tendue devant, penche le buste depuis les hanches. Dos droit.",
+        "figureKey": "ischios-assis"
+      },
+      {
+        "position": 7,
+        "name": "Ischio assis — gauche",
+        "durationS": 40,
+        "cue": "Même chose de l’autre côté.",
+        "figureKey": "ischios-assis"
+      }
+    ]
+  },
+  {
+    "slug": "bureau-complet",
+    "title": "Étirement au bureau",
+    "zone": "bureau",
+    "durationS": 300,
+    "summary": "Le tour complet, sans quitter la chaise. Cinq minutes, une zone après l’autre.",
+    "accent": "navy",
+    "sortOrder": 4,
+    "steps": [
+      {
+        "position": 1,
+        "name": "Figure 4 assise — droite",
+        "durationS": 45,
+        "cue": "Cheville droite sur le genou gauche, penche le buste, dos droit.",
+        "figureKey": "figure4-assise"
+      },
+      {
+        "position": 2,
+        "name": "Figure 4 assise — gauche",
+        "durationS": 45,
+        "cue": "Même chose de l’autre côté.",
+        "figureKey": "figure4-assise"
+      },
+      {
+        "position": 3,
+        "name": "Ischio assis — droite",
+        "durationS": 40,
+        "cue": "Talon au sol, jambe tendue devant, penche depuis les hanches.",
+        "figureKey": "ischios-assis"
+      },
+      {
+        "position": 4,
+        "name": "Ischio assis — gauche",
+        "durationS": 40,
+        "cue": "Même chose de l’autre côté.",
+        "figureKey": "ischios-assis"
+      },
+      {
+        "position": 5,
+        "name": "Rotation du torse",
+        "durationS": 45,
+        "cue": "Pieds au sol, tourne le buste, attrape le dossier. Change de côté à mi-temps.",
+        "figureKey": "rotation-assise"
+      },
+      {
+        "position": 6,
+        "name": "Câlin à un bras",
+        "durationS": 45,
+        "cue": "Bras en travers de la poitrine, l’autre avant-bras le ramène. Change à mi-temps.",
+        "figureKey": "calin-bras"
+      },
+      {
+        "position": 7,
+        "name": "Triceps au-dessus de la tête",
+        "durationS": 40,
+        "cue": "Coude en l’air, main entre les omoplates, l’autre main pousse le coude. Change à mi-temps.",
+        "figureKey": "triceps-tete"
       }
     ]
   },
@@ -137,7 +211,7 @@
     "durationS": 300,
     "summary": "Cinq minutes pour démarrer la journée avant de s'asseoir.",
     "accent": "peach",
-    "sortOrder": 4,
+    "sortOrder": 5,
     "steps": [
       {
         "position": 1,
@@ -208,10 +282,10 @@
     "slug": "nuque",
     "title": "Nuque & trapèzes",
     "zone": "nuque",
-    "durationS": 180,
+    "durationS": 210,
     "summary": "Trois minutes sur ce qui prend cher quand l'écran est trop bas.",
     "accent": "sky",
-    "sortOrder": 5,
+    "sortOrder": 6,
     "steps": [
       {
         "position": 1,
@@ -254,6 +328,13 @@
         "durationS": 30,
         "cue": "Avant-bras contre un montant de porte, avance d'un pas. Poitrine ouverte.",
         "figureKey": "encadrement-porte"
+      },
+      {
+        "position": 7,
+        "name": "Flexion de la nuque",
+        "durationS": 30,
+        "cue": "Mains croisées derrière la tête, laisse le poids des bras amener le menton vers la poitrine. Ne tire pas.",
+        "figureKey": "nuque-flexion"
       }
     ]
   },
@@ -261,10 +342,10 @@
     "slug": "dos",
     "title": "Haut du dos",
     "zone": "dos",
-    "durationS": 240,
+    "durationS": 360,
     "summary": "La zone que le renforcement protège le mieux, d'après les essais.",
     "accent": "navy",
-    "sortOrder": 6,
+    "sortOrder": 7,
     "steps": [
       {
         "position": 1,
@@ -307,6 +388,27 @@
         "durationS": 50,
         "cue": "Bras tendus devant, tire les coudes vers l'arrière comme sur une machine.",
         "figureKey": "tirage-vide"
+      },
+      {
+        "position": 7,
+        "name": "Câlin à un bras — droite",
+        "durationS": 40,
+        "cue": "Bras droit en travers de la poitrine, l’avant-bras gauche le ramène vers toi. Épaule basse.",
+        "figureKey": "calin-bras"
+      },
+      {
+        "position": 8,
+        "name": "Câlin à un bras — gauche",
+        "durationS": 40,
+        "cue": "Même chose de l’autre côté.",
+        "figureKey": "calin-bras"
+      },
+      {
+        "position": 9,
+        "name": "Triceps au-dessus de la tête",
+        "durationS": 40,
+        "cue": "Coude en l’air, main entre les omoplates, l’autre main pousse doucement le coude. Change à mi-temps.",
+        "figureKey": "triceps-tete"
       }
     ]
   },
@@ -314,10 +416,10 @@
     "slug": "lombaires",
     "title": "Lombaires",
     "zone": "lombaires",
-    "durationS": 240,
+    "durationS": 300,
     "summary": "Le bas du dos n'a pas besoin d'être renforcé après huit heures assis. Il a besoin de bouger.",
     "accent": "sage",
-    "sortOrder": 7,
+    "sortOrder": 8,
     "steps": [
       {
         "position": 1,
@@ -367,6 +469,20 @@
         "durationS": 40,
         "cue": "Debout, bascule le bassin d'avant en arrière, comme un seau qu'on vide.",
         "figureKey": "bascule-bassin"
+      },
+      {
+        "position": 8,
+        "name": "Genou à la poitrine — droite",
+        "durationS": 30,
+        "cue": "Assis, ramène un genou vers la poitrine avec les deux mains. Le dos reste long.",
+        "figureKey": "genou-poitrine"
+      },
+      {
+        "position": 9,
+        "name": "Genou à la poitrine — gauche",
+        "durationS": 30,
+        "cue": "Même chose de l’autre côté.",
+        "figureKey": "genou-poitrine"
       }
     ]
   },
@@ -377,7 +493,7 @@
     "durationS": 240,
     "summary": "Ce qui se raccourcit vraiment quand on reste assis huit heures.",
     "accent": "blush",
-    "sortOrder": 8,
+    "sortOrder": 9,
     "steps": [
       {
         "position": 1,
@@ -434,10 +550,10 @@
     "slug": "poignets",
     "title": "Poignets",
     "zone": "poignets",
-    "durationS": 120,
+    "durationS": 150,
     "summary": "Ce que huit heures de clavier et de souris demandent en retour.",
     "accent": "peach",
-    "sortOrder": 9,
+    "sortOrder": 10,
     "steps": [
       {
         "position": 1,
@@ -473,6 +589,13 @@
         "durationS": 25,
         "cue": "Dos des mains l’un contre l’autre devant la poitrine, coudes vers l’extérieur.",
         "figureKey": "priere-inversee"
+      },
+      {
+        "position": 6,
+        "name": "Prière",
+        "durationS": 30,
+        "cue": "Paumes jointes devant la poitrine, descends les mains en gardant les paumes collées.",
+        "figureKey": "poignet-priere"
       }
     ]
   },
@@ -483,7 +606,7 @@
     "durationS": 120,
     "summary": "Contre les jambes lourdes de fin de journée. Faisable sous le bureau.",
     "accent": "pine",
-    "sortOrder": 10,
+    "sortOrder": 11,
     "steps": [
       {
         "position": 1,
@@ -522,7 +645,7 @@
     "durationS": 60,
     "summary": "Une minute. Le clignement compte plus que le chronomètre.",
     "accent": "sun",
-    "sortOrder": 11,
+    "sortOrder": 12,
     "steps": [
       {
         "position": 1,
@@ -554,7 +677,7 @@
     "durationS": 120,
     "summary": "Deux minutes pour redescendre. Rien de mystique : l’expiration plus longue, c’est tout.",
     "accent": "brick",
-    "sortOrder": 12,
+    "sortOrder": 13,
     "steps": [
       {
         "position": 1,
