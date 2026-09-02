@@ -38,6 +38,14 @@ const MOTION: Partial<Record<FigureKey, MotionClass>> = {
   'haussement-epaules': 'fig-bob',
   'menton-rentre': 'fig-bob',
   'tirage-vide': 'fig-pulse',
+  'poignet-flexion': 'fig-tilt',
+  'poignet-extension': 'fig-tilt',
+  'doigts-ecartes': 'fig-pulse',
+  'priere-inversee': 'fig-breathe',
+  'cheville-cercle': 'fig-turn',
+  'mollet-releve': 'fig-bob',
+  'talon-pointe': 'fig-tilt',
+  'nuque-diagonale': 'fig-tilt',
 }
 
 /** Falls back to the slow breathing loop: a still figure reads as broken. */

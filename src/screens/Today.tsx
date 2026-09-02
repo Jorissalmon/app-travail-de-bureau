@@ -9,7 +9,7 @@ import { useSessionStore } from '@/stores/session'
 import { useSettingsStore } from '@/stores/settings'
 import { useAuthStore } from '@/stores/auth'
 import { useStatsStore } from '@/stores/stats'
-import { ZONES } from '@/content'
+import { FAMILIES, ZONES } from '@/content'
 import { useNow } from '@/app/useNow'
 import { dateEyebrow, dayName } from '@/lib/date'
 import { pendingAfter } from '@/features/reminders/schedule'
@@ -121,20 +121,22 @@ export function Today() {
         <SearchField value="" onChange={(v) => navigate(`/library?q=${encodeURIComponent(v)}`)} />
       </div>
 
-      <section className="mt-7">
-        <h2 className="t-section mb-3">Parcourir par zone</h2>
-        <div className="grid grid-cols-2 gap-2.5">
-          {ZONES.map((z) => (
-            <ZoneCard
-              key={z.zone}
-              label={z.label}
-              to={`/library?zone=${z.zone}`}
-              figureKey={z.figureKey}
-              tone={z.tone}
-            />
-          ))}
-        </div>
-      </section>
+      {FAMILIES.map((f) => (
+        <section key={f.family} className="mt-7">
+          <h2 className="t-section mb-3">{f.label}</h2>
+          <div className="grid grid-cols-2 gap-2.5">
+            {ZONES.filter((z) => z.family === f.family).map((z) => (
+              <ZoneCard
+                key={z.zone}
+                label={z.label}
+                to={`/library?zone=${z.zone}`}
+                figureKey={z.figureKey}
+                tone={z.tone}
+              />
+            ))}
+          </div>
+        </section>
+      ))}
 
       <p className="t-meta mt-7">
         {standsLine(stats?.standsToday ?? 0, stats?.remindersToday ?? 0)}

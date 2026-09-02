@@ -15,7 +15,7 @@ BEGIN;
 
 -- debout
 INSERT INTO routines (slug, title, zone, duration_s, summary, accent, sort_order)
-VALUES ('debout', 'Debout', 'general', 180, 'La pause de référence. Trois minutes, toutes les trente minutes.', 'lime', 1)
+VALUES ('debout', 'Debout', 'bureau', 180, 'La pause de référence. Trois minutes, toutes les trente minutes.', 'lime', 1)
 ON CONFLICT (slug) DO UPDATE SET
   title = EXCLUDED.title, zone = EXCLUDED.zone, duration_s = EXCLUDED.duration_s,
   summary = EXCLUDED.summary, accent = EXCLUDED.accent, sort_order = EXCLUDED.sort_order;
@@ -29,88 +29,37 @@ VALUES
   ((SELECT id FROM routines WHERE slug = 'debout'), 5, 'Regard au loin', 30, 'Cherche le point le plus lointain visible, et cligne lentement dix fois.', 'loin-pres'),
   ((SELECT id FROM routines WHERE slug = 'debout'), 6, 'Marche', 30, 'Retour au poste en marchant. Rien ne presse.', 'marche');
 
--- hanches
+-- express
 INSERT INTO routines (slug, title, zone, duration_s, summary, accent, sort_order)
-VALUES ('hanches', 'Hanches', 'hanches', 240, 'Ce qui se raccourcit vraiment quand on reste assis huit heures.', 'blush', 2)
+VALUES ('express', 'Express', 'bureau', 60, 'Soixante secondes. La version qu’on tient vraiment, seize fois par jour.', 'lime', 2)
 ON CONFLICT (slug) DO UPDATE SET
   title = EXCLUDED.title, zone = EXCLUDED.zone, duration_s = EXCLUDED.duration_s,
   summary = EXCLUDED.summary, accent = EXCLUDED.accent, sort_order = EXCLUDED.sort_order;
-DELETE FROM routine_steps WHERE routine_id = (SELECT id FROM routines WHERE slug = 'hanches');
+DELETE FROM routine_steps WHERE routine_id = (SELECT id FROM routines WHERE slug = 'express');
 INSERT INTO routine_steps (routine_id, position, name, duration_s, cue, figure_key)
 VALUES
-  ((SELECT id FROM routines WHERE slug = 'hanches'), 1, 'Fente basse — droite', 40, 'Genou arrière au sol ou tendu. Rentre le bassin, puis avance.', 'fente'),
-  ((SELECT id FROM routines WHERE slug = 'hanches'), 2, 'Fente basse — gauche', 40, 'Même chose de l''autre côté.', 'fente'),
-  ((SELECT id FROM routines WHERE slug = 'hanches'), 3, 'Figure 4 assise — droite', 40, 'Cheville droite sur le genou gauche, penche le buste, dos droit.', 'figure4-assise'),
-  ((SELECT id FROM routines WHERE slug = 'hanches'), 4, 'Figure 4 assise — gauche', 40, 'Même chose de l''autre côté.', 'figure4-assise'),
-  ((SELECT id FROM routines WHERE slug = 'hanches'), 5, 'Ischios — droite', 30, 'Talon sur une chaise basse, jambe tendue, penche depuis les hanches.', 'ischios'),
-  ((SELECT id FROM routines WHERE slug = 'hanches'), 6, 'Ischios — gauche', 30, 'Même chose de l''autre côté.', 'ischios'),
-  ((SELECT id FROM routines WHERE slug = 'hanches'), 7, 'Balancement de hanche', 20, 'Debout, jambe libre, balance d''avant en arrière. Amplitude confortable.', 'balancement-hanche');
+  ((SELECT id FROM routines WHERE slug = 'express'), 1, 'Debout', 20, 'Lève-toi, déroule-toi, épaules loin des oreilles.', 'extension-debout'),
+  ((SELECT id FROM routines WHERE slug = 'express'), 2, 'Regard au loin', 20, 'Cherche le point le plus lointain visible et cligne dix fois.', 'loin-pres'),
+  ((SELECT id FROM routines WHERE slug = 'express'), 3, 'Bascule du bassin', 20, 'Debout, bascule le bassin d’avant en arrière, sans forcer.', 'bascule-bassin');
 
--- lombaires
+-- assis
 INSERT INTO routines (slug, title, zone, duration_s, summary, accent, sort_order)
-VALUES ('lombaires', 'Lombaires', 'lombaires', 240, 'Le bas du dos n''a pas besoin d''être renforcé après huit heures assis. Il a besoin de bouger.', 'sage', 3)
+VALUES ('assis', 'Assis', 'bureau', 180, 'Tout se fait sur la chaise. Pour l’open space, ou entre deux réunions.', 'sky', 3)
 ON CONFLICT (slug) DO UPDATE SET
   title = EXCLUDED.title, zone = EXCLUDED.zone, duration_s = EXCLUDED.duration_s,
   summary = EXCLUDED.summary, accent = EXCLUDED.accent, sort_order = EXCLUDED.sort_order;
-DELETE FROM routine_steps WHERE routine_id = (SELECT id FROM routines WHERE slug = 'lombaires');
+DELETE FROM routine_steps WHERE routine_id = (SELECT id FROM routines WHERE slug = 'assis');
 INSERT INTO routine_steps (routine_id, position, name, duration_s, cue, figure_key)
 VALUES
-  ((SELECT id FROM routines WHERE slug = 'lombaires'), 1, 'Chat-vache debout', 40, 'Mains sur les cuisses. Arrondis le dos, puis creuse-le, au rythme de ta respiration.', 'chat-vache'),
-  ((SELECT id FROM routines WHERE slug = 'lombaires'), 2, 'Inclinaison latérale — droite', 30, 'Un bras au-dessus de la tête, penche du côté opposé. Respire dans les côtes.', 'inclinaison-laterale'),
-  ((SELECT id FROM routines WHERE slug = 'lombaires'), 3, 'Inclinaison latérale — gauche', 30, 'Même chose de l''autre côté.', 'inclinaison-laterale'),
-  ((SELECT id FROM routines WHERE slug = 'lombaires'), 4, 'Rotation assise — droite', 30, 'Pieds au sol, tourne le buste, attrape le dossier. Le regard suit.', 'rotation-assise'),
-  ((SELECT id FROM routines WHERE slug = 'lombaires'), 5, 'Rotation assise — gauche', 30, 'Même chose de l''autre côté.', 'rotation-assise'),
-  ((SELECT id FROM routines WHERE slug = 'lombaires'), 6, 'Extension debout', 40, 'Mains dans le bas du dos, ouvre vers l''arrière. Petite amplitude, sans forcer.', 'extension-debout'),
-  ((SELECT id FROM routines WHERE slug = 'lombaires'), 7, 'Bascule du bassin', 40, 'Debout, bascule le bassin d''avant en arrière, comme un seau qu''on vide.', 'bascule-bassin');
-
--- nuque
-INSERT INTO routines (slug, title, zone, duration_s, summary, accent, sort_order)
-VALUES ('nuque', 'Nuque & trapèzes', 'nuque', 180, 'Trois minutes sur ce qui prend cher quand l''écran est trop bas.', 'sky', 4)
-ON CONFLICT (slug) DO UPDATE SET
-  title = EXCLUDED.title, zone = EXCLUDED.zone, duration_s = EXCLUDED.duration_s,
-  summary = EXCLUDED.summary, accent = EXCLUDED.accent, sort_order = EXCLUDED.sort_order;
-DELETE FROM routine_steps WHERE routine_id = (SELECT id FROM routines WHERE slug = 'nuque');
-INSERT INTO routine_steps (routine_id, position, name, duration_s, cue, figure_key)
-VALUES
-  ((SELECT id FROM routines WHERE slug = 'nuque'), 1, 'Menton rentré', 30, 'Recule le menton comme pour faire un double menton. Tiens 5 s, relâche, recommence.', 'menton-rentre'),
-  ((SELECT id FROM routines WHERE slug = 'nuque'), 2, 'Inclinaison — droite', 30, 'Oreille vers l''épaule, la main opposée relâche. Ne tire pas.', 'nuque-laterale'),
-  ((SELECT id FROM routines WHERE slug = 'nuque'), 3, 'Inclinaison — gauche', 30, 'Même chose de l''autre côté.', 'nuque-laterale'),
-  ((SELECT id FROM routines WHERE slug = 'nuque'), 4, 'Rotation lente', 30, 'Tourne la tête d''un côté puis de l''autre, comme si tu suivais un horizon.', 'nuque-rotation'),
-  ((SELECT id FROM routines WHERE slug = 'nuque'), 5, 'Haussements d''épaules', 30, 'Monte les épaules vers les oreilles, tiens 3 s, laisse tomber d''un coup.', 'haussement-epaules'),
-  ((SELECT id FROM routines WHERE slug = 'nuque'), 6, 'Ouverture à l''encadrement', 30, 'Avant-bras contre un montant de porte, avance d''un pas. Poitrine ouverte.', 'encadrement-porte');
-
--- dos
-INSERT INTO routines (slug, title, zone, duration_s, summary, accent, sort_order)
-VALUES ('dos', 'Haut du dos', 'dos', 240, 'La zone que le renforcement protège le mieux, d''après les essais.', 'navy', 5)
-ON CONFLICT (slug) DO UPDATE SET
-  title = EXCLUDED.title, zone = EXCLUDED.zone, duration_s = EXCLUDED.duration_s,
-  summary = EXCLUDED.summary, accent = EXCLUDED.accent, sort_order = EXCLUDED.sort_order;
-DELETE FROM routine_steps WHERE routine_id = (SELECT id FROM routines WHERE slug = 'dos');
-INSERT INTO routine_steps (routine_id, position, name, duration_s, cue, figure_key)
-VALUES
-  ((SELECT id FROM routines WHERE slug = 'dos'), 1, 'Serrage d''omoplates', 40, 'Serre les omoplates l''une vers l''autre, tiens 5 s, relâche.', 'omoplates'),
-  ((SELECT id FROM routines WHERE slug = 'dos'), 2, 'Cercles de bras', 30, 'Grands cercles vers l''arrière, lentement, amplitude maximale.', 'cercle-bras'),
-  ((SELECT id FROM routines WHERE slug = 'dos'), 3, 'Ouverture pectorale', 40, 'Mains croisées derrière la tête, ouvre les coudes vers l''extérieur.', 'ouverture-pectorale'),
-  ((SELECT id FROM routines WHERE slug = 'dos'), 4, 'Rotation externe', 40, 'Coudes au corps, les avant-bras s''écartent comme deux portes.', 'rotation-externe'),
-  ((SELECT id FROM routines WHERE slug = 'dos'), 5, 'Extension sur chaise', 40, 'Assis, mains derrière la tête, passe le haut du dos par-dessus le dossier.', 'extension-chaise'),
-  ((SELECT id FROM routines WHERE slug = 'dos'), 6, 'Tirage à vide', 50, 'Bras tendus devant, tire les coudes vers l''arrière comme sur une machine.', 'tirage-vide');
-
--- yeux
-INSERT INTO routines (slug, title, zone, duration_s, summary, accent, sort_order)
-VALUES ('yeux', 'Yeux', 'yeux', 60, 'Une minute. Le clignement compte plus que le chronomètre.', 'sun', 6)
-ON CONFLICT (slug) DO UPDATE SET
-  title = EXCLUDED.title, zone = EXCLUDED.zone, duration_s = EXCLUDED.duration_s,
-  summary = EXCLUDED.summary, accent = EXCLUDED.accent, sort_order = EXCLUDED.sort_order;
-DELETE FROM routine_steps WHERE routine_id = (SELECT id FROM routines WHERE slug = 'yeux');
-INSERT INTO routine_steps (routine_id, position, name, duration_s, cue, figure_key)
-VALUES
-  ((SELECT id FROM routines WHERE slug = 'yeux'), 1, 'Clignements lents', 20, 'Vingt clignements francs, paupières complètement fermées à chaque fois.', 'clignement'),
-  ((SELECT id FROM routines WHERE slug = 'yeux'), 2, 'Loin, près', 20, 'Fixe le point le plus lointain 3 s, puis ton pouce à 20 cm 3 s. Alterne.', 'loin-pres'),
-  ((SELECT id FROM routines WHERE slug = 'yeux'), 3, 'Paumes', 20, 'Paumes en coupe sur les yeux ouverts, sans appuyer. Noir complet, respire.', 'paumes');
+  ((SELECT id FROM routines WHERE slug = 'assis'), 1, 'Menton rentré', 30, 'Recule le menton comme pour faire un double menton. Tiens 5 s, relâche.', 'menton-rentre'),
+  ((SELECT id FROM routines WHERE slug = 'assis'), 2, 'Nuque en diagonale — droite', 30, 'Menton vers l’aisselle opposée, la main accompagne sans tirer.', 'nuque-diagonale'),
+  ((SELECT id FROM routines WHERE slug = 'assis'), 3, 'Nuque en diagonale — gauche', 30, 'Même chose de l’autre côté.', 'nuque-diagonale'),
+  ((SELECT id FROM routines WHERE slug = 'assis'), 4, 'Rotation assise — droite', 45, 'Pieds au sol, tourne le buste, attrape le dossier. Le regard suit.', 'rotation-assise'),
+  ((SELECT id FROM routines WHERE slug = 'assis'), 5, 'Rotation assise — gauche', 45, 'Même chose de l’autre côté.', 'rotation-assise');
 
 -- reveil
 INSERT INTO routines (slug, title, zone, duration_s, summary, accent, sort_order)
-VALUES ('reveil', 'Réveil', 'general', 300, 'Cinq minutes pour démarrer la journée avant de s''asseoir.', 'peach', 7)
+VALUES ('reveil', 'Réveil', 'matin', 300, 'Cinq minutes pour démarrer la journée avant de s''asseoir.', 'peach', 4)
 ON CONFLICT (slug) DO UPDATE SET
   title = EXCLUDED.title, zone = EXCLUDED.zone, duration_s = EXCLUDED.duration_s,
   summary = EXCLUDED.summary, accent = EXCLUDED.accent, sort_order = EXCLUDED.sort_order;
@@ -126,6 +75,127 @@ VALUES
   ((SELECT id FROM routines WHERE slug = 'reveil'), 7, 'Inclinaison latérale — gauche', 30, 'Même chose de l''autre côté.', 'inclinaison-laterale'),
   ((SELECT id FROM routines WHERE slug = 'reveil'), 8, 'Menton rentré', 20, 'Recule le menton, tiens 5 s, relâche.', 'menton-rentre'),
   ((SELECT id FROM routines WHERE slug = 'reveil'), 9, 'Respiration', 20, 'Quatre respirations : inspire sur 4 temps, expire sur 6.', 'respiration');
+
+-- nuque
+INSERT INTO routines (slug, title, zone, duration_s, summary, accent, sort_order)
+VALUES ('nuque', 'Nuque & trapèzes', 'nuque', 180, 'Trois minutes sur ce qui prend cher quand l''écran est trop bas.', 'sky', 5)
+ON CONFLICT (slug) DO UPDATE SET
+  title = EXCLUDED.title, zone = EXCLUDED.zone, duration_s = EXCLUDED.duration_s,
+  summary = EXCLUDED.summary, accent = EXCLUDED.accent, sort_order = EXCLUDED.sort_order;
+DELETE FROM routine_steps WHERE routine_id = (SELECT id FROM routines WHERE slug = 'nuque');
+INSERT INTO routine_steps (routine_id, position, name, duration_s, cue, figure_key)
+VALUES
+  ((SELECT id FROM routines WHERE slug = 'nuque'), 1, 'Menton rentré', 30, 'Recule le menton comme pour faire un double menton. Tiens 5 s, relâche, recommence.', 'menton-rentre'),
+  ((SELECT id FROM routines WHERE slug = 'nuque'), 2, 'Inclinaison — droite', 30, 'Oreille vers l''épaule, la main opposée relâche. Ne tire pas.', 'nuque-laterale'),
+  ((SELECT id FROM routines WHERE slug = 'nuque'), 3, 'Inclinaison — gauche', 30, 'Même chose de l''autre côté.', 'nuque-laterale'),
+  ((SELECT id FROM routines WHERE slug = 'nuque'), 4, 'Rotation lente', 30, 'Tourne la tête d''un côté puis de l''autre, comme si tu suivais un horizon.', 'nuque-rotation'),
+  ((SELECT id FROM routines WHERE slug = 'nuque'), 5, 'Haussements d''épaules', 30, 'Monte les épaules vers les oreilles, tiens 3 s, laisse tomber d''un coup.', 'haussement-epaules'),
+  ((SELECT id FROM routines WHERE slug = 'nuque'), 6, 'Ouverture à l''encadrement', 30, 'Avant-bras contre un montant de porte, avance d''un pas. Poitrine ouverte.', 'encadrement-porte');
+
+-- dos
+INSERT INTO routines (slug, title, zone, duration_s, summary, accent, sort_order)
+VALUES ('dos', 'Haut du dos', 'dos', 240, 'La zone que le renforcement protège le mieux, d''après les essais.', 'navy', 6)
+ON CONFLICT (slug) DO UPDATE SET
+  title = EXCLUDED.title, zone = EXCLUDED.zone, duration_s = EXCLUDED.duration_s,
+  summary = EXCLUDED.summary, accent = EXCLUDED.accent, sort_order = EXCLUDED.sort_order;
+DELETE FROM routine_steps WHERE routine_id = (SELECT id FROM routines WHERE slug = 'dos');
+INSERT INTO routine_steps (routine_id, position, name, duration_s, cue, figure_key)
+VALUES
+  ((SELECT id FROM routines WHERE slug = 'dos'), 1, 'Serrage d''omoplates', 40, 'Serre les omoplates l''une vers l''autre, tiens 5 s, relâche.', 'omoplates'),
+  ((SELECT id FROM routines WHERE slug = 'dos'), 2, 'Cercles de bras', 30, 'Grands cercles vers l''arrière, lentement, amplitude maximale.', 'cercle-bras'),
+  ((SELECT id FROM routines WHERE slug = 'dos'), 3, 'Ouverture pectorale', 40, 'Mains croisées derrière la tête, ouvre les coudes vers l''extérieur.', 'ouverture-pectorale'),
+  ((SELECT id FROM routines WHERE slug = 'dos'), 4, 'Rotation externe', 40, 'Coudes au corps, les avant-bras s''écartent comme deux portes.', 'rotation-externe'),
+  ((SELECT id FROM routines WHERE slug = 'dos'), 5, 'Extension sur chaise', 40, 'Assis, mains derrière la tête, passe le haut du dos par-dessus le dossier.', 'extension-chaise'),
+  ((SELECT id FROM routines WHERE slug = 'dos'), 6, 'Tirage à vide', 50, 'Bras tendus devant, tire les coudes vers l''arrière comme sur une machine.', 'tirage-vide');
+
+-- lombaires
+INSERT INTO routines (slug, title, zone, duration_s, summary, accent, sort_order)
+VALUES ('lombaires', 'Lombaires', 'lombaires', 240, 'Le bas du dos n''a pas besoin d''être renforcé après huit heures assis. Il a besoin de bouger.', 'sage', 7)
+ON CONFLICT (slug) DO UPDATE SET
+  title = EXCLUDED.title, zone = EXCLUDED.zone, duration_s = EXCLUDED.duration_s,
+  summary = EXCLUDED.summary, accent = EXCLUDED.accent, sort_order = EXCLUDED.sort_order;
+DELETE FROM routine_steps WHERE routine_id = (SELECT id FROM routines WHERE slug = 'lombaires');
+INSERT INTO routine_steps (routine_id, position, name, duration_s, cue, figure_key)
+VALUES
+  ((SELECT id FROM routines WHERE slug = 'lombaires'), 1, 'Chat-vache debout', 40, 'Mains sur les cuisses. Arrondis le dos, puis creuse-le, au rythme de ta respiration.', 'chat-vache'),
+  ((SELECT id FROM routines WHERE slug = 'lombaires'), 2, 'Inclinaison latérale — droite', 30, 'Un bras au-dessus de la tête, penche du côté opposé. Respire dans les côtes.', 'inclinaison-laterale'),
+  ((SELECT id FROM routines WHERE slug = 'lombaires'), 3, 'Inclinaison latérale — gauche', 30, 'Même chose de l''autre côté.', 'inclinaison-laterale'),
+  ((SELECT id FROM routines WHERE slug = 'lombaires'), 4, 'Rotation assise — droite', 30, 'Pieds au sol, tourne le buste, attrape le dossier. Le regard suit.', 'rotation-assise'),
+  ((SELECT id FROM routines WHERE slug = 'lombaires'), 5, 'Rotation assise — gauche', 30, 'Même chose de l''autre côté.', 'rotation-assise'),
+  ((SELECT id FROM routines WHERE slug = 'lombaires'), 6, 'Extension debout', 40, 'Mains dans le bas du dos, ouvre vers l''arrière. Petite amplitude, sans forcer.', 'extension-debout'),
+  ((SELECT id FROM routines WHERE slug = 'lombaires'), 7, 'Bascule du bassin', 40, 'Debout, bascule le bassin d''avant en arrière, comme un seau qu''on vide.', 'bascule-bassin');
+
+-- hanches
+INSERT INTO routines (slug, title, zone, duration_s, summary, accent, sort_order)
+VALUES ('hanches', 'Hanches', 'hanches', 240, 'Ce qui se raccourcit vraiment quand on reste assis huit heures.', 'blush', 8)
+ON CONFLICT (slug) DO UPDATE SET
+  title = EXCLUDED.title, zone = EXCLUDED.zone, duration_s = EXCLUDED.duration_s,
+  summary = EXCLUDED.summary, accent = EXCLUDED.accent, sort_order = EXCLUDED.sort_order;
+DELETE FROM routine_steps WHERE routine_id = (SELECT id FROM routines WHERE slug = 'hanches');
+INSERT INTO routine_steps (routine_id, position, name, duration_s, cue, figure_key)
+VALUES
+  ((SELECT id FROM routines WHERE slug = 'hanches'), 1, 'Fente basse — droite', 40, 'Genou arrière au sol ou tendu. Rentre le bassin, puis avance.', 'fente'),
+  ((SELECT id FROM routines WHERE slug = 'hanches'), 2, 'Fente basse — gauche', 40, 'Même chose de l''autre côté.', 'fente'),
+  ((SELECT id FROM routines WHERE slug = 'hanches'), 3, 'Figure 4 assise — droite', 40, 'Cheville droite sur le genou gauche, penche le buste, dos droit.', 'figure4-assise'),
+  ((SELECT id FROM routines WHERE slug = 'hanches'), 4, 'Figure 4 assise — gauche', 40, 'Même chose de l''autre côté.', 'figure4-assise'),
+  ((SELECT id FROM routines WHERE slug = 'hanches'), 5, 'Ischios — droite', 30, 'Talon sur une chaise basse, jambe tendue, penche depuis les hanches.', 'ischios'),
+  ((SELECT id FROM routines WHERE slug = 'hanches'), 6, 'Ischios — gauche', 30, 'Même chose de l''autre côté.', 'ischios'),
+  ((SELECT id FROM routines WHERE slug = 'hanches'), 7, 'Balancement de hanche', 20, 'Debout, jambe libre, balance d''avant en arrière. Amplitude confortable.', 'balancement-hanche');
+
+-- poignets
+INSERT INTO routines (slug, title, zone, duration_s, summary, accent, sort_order)
+VALUES ('poignets', 'Poignets', 'poignets', 120, 'Ce que huit heures de clavier et de souris demandent en retour.', 'peach', 9)
+ON CONFLICT (slug) DO UPDATE SET
+  title = EXCLUDED.title, zone = EXCLUDED.zone, duration_s = EXCLUDED.duration_s,
+  summary = EXCLUDED.summary, accent = EXCLUDED.accent, sort_order = EXCLUDED.sort_order;
+DELETE FROM routine_steps WHERE routine_id = (SELECT id FROM routines WHERE slug = 'poignets');
+INSERT INTO routine_steps (routine_id, position, name, duration_s, cue, figure_key)
+VALUES
+  ((SELECT id FROM routines WHERE slug = 'poignets'), 1, 'Poignet en flexion — droite', 25, 'Bras tendu devant, paume vers le bas, l’autre main tire les doigts vers toi.', 'poignet-flexion'),
+  ((SELECT id FROM routines WHERE slug = 'poignets'), 2, 'Poignet en flexion — gauche', 25, 'Même chose de l’autre côté.', 'poignet-flexion'),
+  ((SELECT id FROM routines WHERE slug = 'poignets'), 3, 'Poignet en extension', 25, 'Paume vers le haut, l’autre main tire les doigts vers le sol. Change de côté à mi-temps.', 'poignet-extension'),
+  ((SELECT id FROM routines WHERE slug = 'poignets'), 4, 'Doigts écartés', 20, 'Écarte les doigts au maximum, tiens 3 s, referme le poing. Dix fois.', 'doigts-ecartes'),
+  ((SELECT id FROM routines WHERE slug = 'poignets'), 5, 'Mains dos à dos', 25, 'Dos des mains l’un contre l’autre devant la poitrine, coudes vers l’extérieur.', 'priere-inversee');
+
+-- chevilles
+INSERT INTO routines (slug, title, zone, duration_s, summary, accent, sort_order)
+VALUES ('chevilles', 'Chevilles', 'chevilles', 120, 'Contre les jambes lourdes de fin de journée. Faisable sous le bureau.', 'pine', 10)
+ON CONFLICT (slug) DO UPDATE SET
+  title = EXCLUDED.title, zone = EXCLUDED.zone, duration_s = EXCLUDED.duration_s,
+  summary = EXCLUDED.summary, accent = EXCLUDED.accent, sort_order = EXCLUDED.sort_order;
+DELETE FROM routine_steps WHERE routine_id = (SELECT id FROM routines WHERE slug = 'chevilles');
+INSERT INTO routine_steps (routine_id, position, name, duration_s, cue, figure_key)
+VALUES
+  ((SELECT id FROM routines WHERE slug = 'chevilles'), 1, 'Cercles de cheville — droite', 30, 'Décolle le pied, dessine un cercle large, dans un sens puis dans l’autre.', 'cheville-cercle'),
+  ((SELECT id FROM routines WHERE slug = 'chevilles'), 2, 'Cercles de cheville — gauche', 30, 'Même chose de l’autre côté.', 'cheville-cercle'),
+  ((SELECT id FROM routines WHERE slug = 'chevilles'), 3, 'Talon-pointe', 30, 'Assis ou debout, alterne l’appui sur les talons puis sur la pointe. Sans à-coups.', 'talon-pointe'),
+  ((SELECT id FROM routines WHERE slug = 'chevilles'), 4, 'Montées sur la pointe', 30, 'Debout, monte sur la pointe des pieds, redescends lentement. Vingt fois.', 'mollet-releve');
+
+-- yeux
+INSERT INTO routines (slug, title, zone, duration_s, summary, accent, sort_order)
+VALUES ('yeux', 'Yeux', 'yeux', 60, 'Une minute. Le clignement compte plus que le chronomètre.', 'sun', 11)
+ON CONFLICT (slug) DO UPDATE SET
+  title = EXCLUDED.title, zone = EXCLUDED.zone, duration_s = EXCLUDED.duration_s,
+  summary = EXCLUDED.summary, accent = EXCLUDED.accent, sort_order = EXCLUDED.sort_order;
+DELETE FROM routine_steps WHERE routine_id = (SELECT id FROM routines WHERE slug = 'yeux');
+INSERT INTO routine_steps (routine_id, position, name, duration_s, cue, figure_key)
+VALUES
+  ((SELECT id FROM routines WHERE slug = 'yeux'), 1, 'Clignements lents', 20, 'Vingt clignements francs, paupières complètement fermées à chaque fois.', 'clignement'),
+  ((SELECT id FROM routines WHERE slug = 'yeux'), 2, 'Loin, près', 20, 'Fixe le point le plus lointain 3 s, puis ton pouce à 20 cm 3 s. Alterne.', 'loin-pres'),
+  ((SELECT id FROM routines WHERE slug = 'yeux'), 3, 'Paumes', 20, 'Paumes en coupe sur les yeux ouverts, sans appuyer. Noir complet, respire.', 'paumes');
+
+-- respiration
+INSERT INTO routines (slug, title, zone, duration_s, summary, accent, sort_order)
+VALUES ('respiration', 'Souffle', 'bien-etre', 120, 'Deux minutes pour redescendre. Rien de mystique : l’expiration plus longue, c’est tout.', 'brick', 12)
+ON CONFLICT (slug) DO UPDATE SET
+  title = EXCLUDED.title, zone = EXCLUDED.zone, duration_s = EXCLUDED.duration_s,
+  summary = EXCLUDED.summary, accent = EXCLUDED.accent, sort_order = EXCLUDED.sort_order;
+DELETE FROM routine_steps WHERE routine_id = (SELECT id FROM routines WHERE slug = 'respiration');
+INSERT INTO routine_steps (routine_id, position, name, duration_s, cue, figure_key)
+VALUES
+  ((SELECT id FROM routines WHERE slug = 'respiration'), 1, 'Installe-toi', 20, 'Assis, dos long, épaules basses. Pose les mains sur les cuisses.', 'respiration'),
+  ((SELECT id FROM routines WHERE slug = 'respiration'), 2, 'Inspire 4, expire 6', 60, 'Inspire par le nez sur 4 temps, expire par la bouche sur 6. Sans forcer.', 'respiration'),
+  ((SELECT id FROM routines WHERE slug = 'respiration'), 3, 'Paumes sur les yeux', 40, 'Paumes en coupe sur les yeux ouverts, sans appuyer. Noir complet, respire.', 'paumes');
 
 -- pourquoi-30-minutes
 INSERT INTO articles (slug, title, dek, body_md, tag, evidence, read_min, source_label, source_url, sort_order)
@@ -233,7 +303,7 @@ ON CONFLICT (slug) DO UPDATE SET
 
 -- Drop content the JSON no longer defines. Deleting a routine sets
 -- completions.routine_id to NULL (ON DELETE SET NULL); the rows survive.
-DELETE FROM routines WHERE slug <> ALL (ARRAY['debout', 'hanches', 'lombaires', 'nuque', 'dos', 'yeux', 'reveil']);
+DELETE FROM routines WHERE slug <> ALL (ARRAY['debout', 'express', 'assis', 'reveil', 'nuque', 'dos', 'lombaires', 'hanches', 'poignets', 'chevilles', 'yeux', 'respiration']);
 DELETE FROM articles WHERE slug <> ALL (ARRAY['pourquoi-30-minutes', 'vingt-vingt-vingt', 'debout-nest-pas-actif', 'ce-que-les-pauses-changent', 'muscler-le-haut-du-dos', 'regler-son-poste']);
 
 COMMIT;

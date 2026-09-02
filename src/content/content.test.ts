@@ -1,0 +1,66 @@
+import { describe, expect, it } from 'vitest'
+import { LOCAL_ROUTINES, ZONES } from './index'
+import { FIGURE_KEYS, isFigureKey } from '@/components/figures/figureKeys'
+
+/**
+ * The content is hand-written JSON that the database is generated from, so a
+ * typo here ships a routine that renders an empty pastille or lands in a zone
+ * no screen offers. Cheaper to catch in a test than in the seed.
+ */
+
+const zoneKeys = new Set(ZONES.map((z) => z.zone))
+
+describe('routines', () => {
+  it('are not empty', () => {
+    expect(LOCAL_ROUTINES.length).toBeGreaterThan(0)
+  })
+
+  it('have unique slugs', () => {
+    const slugs = LOCAL_ROUTINES.map((r) => r.slug)
+    expect(new Set(slugs).size).toBe(slugs.length)
+  })
+
+  it('sit in a zone the app actually offers', () => {
+    for (const r of LOCAL_ROUTINES) {
+      expect(zoneKeys, `${r.slug} is in zone "${r.zone}"`).toContain(r.zone)
+    }
+  })
+
+  it('announce the duration their steps add up to', () => {
+    for (const r of LOCAL_ROUTINES) {
+      const sum = r.steps.reduce((n, s) => n + s.durationS, 0)
+      expect(sum, `${r.slug}`).toBe(r.durationS)
+    }
+  })
+
+  it('number their steps 1..n', () => {
+    for (const r of LOCAL_ROUTINES) {
+      expect(r.steps.map((s) => s.position), `${r.slug}`).toEqual(
+        r.steps.map((_, i) => i + 1),
+      )
+    }
+  })
+
+  it('only reference figures that exist', () => {
+    for (const r of LOCAL_ROUTINES) {
+      for (const s of r.steps) {
+        expect(isFigureKey(s.figureKey), `${r.slug} / ${s.name}: "${s.figureKey}"`).toBe(true)
+      }
+    }
+  })
+})
+
+describe('zones', () => {
+  it('each hold at least one routine, or the card leads nowhere', () => {
+    for (const z of ZONES) {
+      const count = LOCAL_ROUTINES.filter((r) => r.zone === z.zone).length
+      expect(count, `zone "${z.zone}"`).toBeGreaterThan(0)
+    }
+  })
+
+  it('use a figure that exists for their card', () => {
+    for (const z of ZONES) {
+      expect(FIGURE_KEYS, `zone "${z.zone}"`).toContain(z.figureKey)
+    }
+  })
+})

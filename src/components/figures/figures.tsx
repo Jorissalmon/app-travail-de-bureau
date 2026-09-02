@@ -349,6 +349,103 @@ const figures: Record<FigureKey, () => JSX.Element> = {
       <path {...HAIR} d="M78 40 A32 32 0 0 0 78 20" />
     </g>
   ),
+
+  // ---- Wrists and forearms --------------------------------------------------
+  // Drawn close up: at badge size a whole body would hide the only thing that
+  // matters here, which is the angle of the hand on the forearm.
+
+  'poignet-flexion': () => (
+    <g>
+      <path {...S} d="M14 40 L54 40" />
+      <path {...S} d="M54 40 L60 62" />
+      <path {...THIN} d="M60 62 L52 70 M60 62 L62 72 M60 62 L70 68" />
+      <path {...HAIR} d="M74 42 C80 52 78 62 70 68" />
+      <path {...HAIR} d="M74 34 L74 44 L66 42" />
+    </g>
+  ),
+
+  'poignet-extension': () => (
+    <g>
+      <path {...S} d="M14 56 L54 56" />
+      <path {...S} d="M54 56 L60 34" />
+      <path {...THIN} d="M60 34 L52 26 M60 34 L62 24 M60 34 L70 28" />
+      <path {...HAIR} d="M74 54 C80 44 78 34 70 28" />
+      <path {...HAIR} d="M74 62 L74 52 L66 54" />
+    </g>
+  ),
+
+  'doigts-ecartes': () => (
+    <g>
+      <path {...S} d="M40 82 L40 56" />
+      <path {...S} d="M40 56 C36 44 40 38 46 40" />
+      <path {...THIN} d="M32 54 L18 40" />
+      <path {...THIN} d="M44 44 L40 22" />
+      <path {...THIN} d="M54 44 L58 20" />
+      <path {...THIN} d="M62 48 L74 30" />
+      <path {...S} d="M46 40 C56 36 66 42 64 52 L58 66 L40 66" />
+      <path {...HAIR} d="M22 74 A26 26 0 0 1 30 60" opacity={0.4} />
+    </g>
+  ),
+
+  'priere-inversee': () => (
+    <g>
+      <Head cx={50} cy={20} />
+      <path {...S} d="M50 29 L50 58" />
+      <path {...S} d="M50 36 L30 48 L44 60" />
+      <path {...S} d="M50 36 L70 48 L56 60" />
+      <path {...THIN} d="M50 58 L50 74" />
+      <path {...HAIR} d="M44 62 L44 72 M56 62 L56 72" />
+    </g>
+  ),
+
+  // ---- Ankles and calves ----------------------------------------------------
+
+  'cheville-cercle': () => (
+    <g>
+      <path {...S} d="M46 14 L46 48" />
+      <path {...S} d="M46 48 L66 54" />
+      <path {...HAIR} d="M46 66 m -22 0 a 22 12 0 1 0 44 0 a 22 12 0 1 0 -44 0" />
+      <path {...HAIR} d="M62 60 L70 66 L62 72" />
+    </g>
+  ),
+
+  'mollet-releve': () => (
+    <g>
+      <Ground />
+      <Head cx={50} cy={18} />
+      <path {...S} d="M50 27 L50 52" />
+      <path {...S} d="M50 52 L44 70 L52 78" />
+      <path {...S} d="M50 52 L58 70 L64 78" />
+      <path {...S} d="M50 34 L36 40" />
+      <path {...S} d="M50 34 L64 40" />
+      <path {...THIN} d="M22 46 L22 34 M17 39 L22 33 L27 39" opacity={0.55} />
+    </g>
+  ),
+
+  'talon-pointe': () => (
+    <g>
+      <Ground />
+      <path {...S} d="M30 20 L30 56" />
+      <path {...S} d="M30 56 L48 62" />
+      <path {...S} d="M66 24 L66 60" />
+      <path {...S} d="M66 60 L74 78" />
+      <path {...HAIR} d="M22 74 L40 74" opacity={0.5} />
+      <path {...HAIR} d="M44 30 L56 30 M50 24 L58 30 L50 36" opacity={0.55} />
+    </g>
+  ),
+
+  // ---- Neck, diagonal -------------------------------------------------------
+
+  'nuque-diagonale': () => (
+    <g>
+      <Head cx={40} cy={32} r={12} />
+      <path {...S} d="M46 43 C52 50 54 56 54 62" />
+      <path {...S} d="M32 72 L74 72" />
+      <path {...S} d="M54 62 L54 72" />
+      <path {...S} d="M60 34 C50 22 38 22 32 28" />
+      <path {...HAIR} d="M22 46 L30 40" opacity={0.5} />
+    </g>
+  ),
 }
 
 export default figures

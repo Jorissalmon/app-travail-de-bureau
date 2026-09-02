@@ -1,6 +1,19 @@
 /** Shared domain types. Mirrors db/001_init.sql — keep the two in step. */
 
-export type Zone = 'general' | 'hanches' | 'lombaires' | 'nuque' | 'dos' | 'yeux'
+export type Zone =
+  | 'matin'
+  | 'bureau'
+  | 'nuque'
+  | 'dos'
+  | 'lombaires'
+  | 'hanches'
+  | 'poignets'
+  | 'chevilles'
+  | 'yeux'
+  | 'bien-etre'
+
+/** How the library is browsed (§11.2): by moment, by body part, by intent. */
+export type Family = 'moment' | 'corps' | 'bien-etre'
 
 export type AccentKey =
   | 'peach'

@@ -2,7 +2,7 @@
   {
     "slug": "debout",
     "title": "Debout",
-    "zone": "general",
+    "zone": "bureau",
     "durationS": 180,
     "summary": "La pause de référence. Trois minutes, toutes les trente minutes.",
     "accent": "lime",
@@ -53,271 +53,91 @@
     ]
   },
   {
-    "slug": "hanches",
-    "title": "Hanches",
-    "zone": "hanches",
-    "durationS": 240,
-    "summary": "Ce qui se raccourcit vraiment quand on reste assis huit heures.",
-    "accent": "blush",
+    "slug": "express",
+    "title": "Express",
+    "zone": "bureau",
+    "durationS": 60,
+    "summary": "Soixante secondes. La version qu’on tient vraiment, seize fois par jour.",
+    "accent": "lime",
     "sortOrder": 2,
     "steps": [
       {
         "position": 1,
-        "name": "Fente basse — droite",
-        "durationS": 40,
-        "cue": "Genou arrière au sol ou tendu. Rentre le bassin, puis avance.",
-        "figureKey": "fente"
+        "name": "Debout",
+        "durationS": 20,
+        "cue": "Lève-toi, déroule-toi, épaules loin des oreilles.",
+        "figureKey": "extension-debout"
       },
       {
         "position": 2,
-        "name": "Fente basse — gauche",
-        "durationS": 40,
-        "cue": "Même chose de l'autre côté.",
-        "figureKey": "fente"
+        "name": "Regard au loin",
+        "durationS": 20,
+        "cue": "Cherche le point le plus lointain visible et cligne dix fois.",
+        "figureKey": "loin-pres"
       },
       {
         "position": 3,
-        "name": "Figure 4 assise — droite",
-        "durationS": 40,
-        "cue": "Cheville droite sur le genou gauche, penche le buste, dos droit.",
-        "figureKey": "figure4-assise"
-      },
-      {
-        "position": 4,
-        "name": "Figure 4 assise — gauche",
-        "durationS": 40,
-        "cue": "Même chose de l'autre côté.",
-        "figureKey": "figure4-assise"
-      },
-      {
-        "position": 5,
-        "name": "Ischios — droite",
-        "durationS": 30,
-        "cue": "Talon sur une chaise basse, jambe tendue, penche depuis les hanches.",
-        "figureKey": "ischios"
-      },
-      {
-        "position": 6,
-        "name": "Ischios — gauche",
-        "durationS": 30,
-        "cue": "Même chose de l'autre côté.",
-        "figureKey": "ischios"
-      },
-      {
-        "position": 7,
-        "name": "Balancement de hanche",
+        "name": "Bascule du bassin",
         "durationS": 20,
-        "cue": "Debout, jambe libre, balance d'avant en arrière. Amplitude confortable.",
-        "figureKey": "balancement-hanche"
+        "cue": "Debout, bascule le bassin d’avant en arrière, sans forcer.",
+        "figureKey": "bascule-bassin"
       }
     ]
   },
   {
-    "slug": "lombaires",
-    "title": "Lombaires",
-    "zone": "lombaires",
-    "durationS": 240,
-    "summary": "Le bas du dos n'a pas besoin d'être renforcé après huit heures assis. Il a besoin de bouger.",
-    "accent": "sage",
+    "slug": "assis",
+    "title": "Assis",
+    "zone": "bureau",
+    "durationS": 180,
+    "summary": "Tout se fait sur la chaise. Pour l’open space, ou entre deux réunions.",
+    "accent": "sky",
     "sortOrder": 3,
     "steps": [
       {
         "position": 1,
-        "name": "Chat-vache debout",
-        "durationS": 40,
-        "cue": "Mains sur les cuisses. Arrondis le dos, puis creuse-le, au rythme de ta respiration.",
-        "figureKey": "chat-vache"
+        "name": "Menton rentré",
+        "durationS": 30,
+        "cue": "Recule le menton comme pour faire un double menton. Tiens 5 s, relâche.",
+        "figureKey": "menton-rentre"
       },
       {
         "position": 2,
-        "name": "Inclinaison latérale — droite",
+        "name": "Nuque en diagonale — droite",
         "durationS": 30,
-        "cue": "Un bras au-dessus de la tête, penche du côté opposé. Respire dans les côtes.",
-        "figureKey": "inclinaison-laterale"
+        "cue": "Menton vers l’aisselle opposée, la main accompagne sans tirer.",
+        "figureKey": "nuque-diagonale"
       },
       {
         "position": 3,
-        "name": "Inclinaison latérale — gauche",
+        "name": "Nuque en diagonale — gauche",
         "durationS": 30,
-        "cue": "Même chose de l'autre côté.",
-        "figureKey": "inclinaison-laterale"
+        "cue": "Même chose de l’autre côté.",
+        "figureKey": "nuque-diagonale"
       },
       {
         "position": 4,
         "name": "Rotation assise — droite",
-        "durationS": 30,
+        "durationS": 45,
         "cue": "Pieds au sol, tourne le buste, attrape le dossier. Le regard suit.",
         "figureKey": "rotation-assise"
       },
       {
         "position": 5,
         "name": "Rotation assise — gauche",
-        "durationS": 30,
-        "cue": "Même chose de l'autre côté.",
+        "durationS": 45,
+        "cue": "Même chose de l’autre côté.",
         "figureKey": "rotation-assise"
-      },
-      {
-        "position": 6,
-        "name": "Extension debout",
-        "durationS": 40,
-        "cue": "Mains dans le bas du dos, ouvre vers l'arrière. Petite amplitude, sans forcer.",
-        "figureKey": "extension-debout"
-      },
-      {
-        "position": 7,
-        "name": "Bascule du bassin",
-        "durationS": 40,
-        "cue": "Debout, bascule le bassin d'avant en arrière, comme un seau qu'on vide.",
-        "figureKey": "bascule-bassin"
-      }
-    ]
-  },
-  {
-    "slug": "nuque",
-    "title": "Nuque & trapèzes",
-    "zone": "nuque",
-    "durationS": 180,
-    "summary": "Trois minutes sur ce qui prend cher quand l'écran est trop bas.",
-    "accent": "sky",
-    "sortOrder": 4,
-    "steps": [
-      {
-        "position": 1,
-        "name": "Menton rentré",
-        "durationS": 30,
-        "cue": "Recule le menton comme pour faire un double menton. Tiens 5 s, relâche, recommence.",
-        "figureKey": "menton-rentre"
-      },
-      {
-        "position": 2,
-        "name": "Inclinaison — droite",
-        "durationS": 30,
-        "cue": "Oreille vers l'épaule, la main opposée relâche. Ne tire pas.",
-        "figureKey": "nuque-laterale"
-      },
-      {
-        "position": 3,
-        "name": "Inclinaison — gauche",
-        "durationS": 30,
-        "cue": "Même chose de l'autre côté.",
-        "figureKey": "nuque-laterale"
-      },
-      {
-        "position": 4,
-        "name": "Rotation lente",
-        "durationS": 30,
-        "cue": "Tourne la tête d'un côté puis de l'autre, comme si tu suivais un horizon.",
-        "figureKey": "nuque-rotation"
-      },
-      {
-        "position": 5,
-        "name": "Haussements d'épaules",
-        "durationS": 30,
-        "cue": "Monte les épaules vers les oreilles, tiens 3 s, laisse tomber d'un coup.",
-        "figureKey": "haussement-epaules"
-      },
-      {
-        "position": 6,
-        "name": "Ouverture à l'encadrement",
-        "durationS": 30,
-        "cue": "Avant-bras contre un montant de porte, avance d'un pas. Poitrine ouverte.",
-        "figureKey": "encadrement-porte"
-      }
-    ]
-  },
-  {
-    "slug": "dos",
-    "title": "Haut du dos",
-    "zone": "dos",
-    "durationS": 240,
-    "summary": "La zone que le renforcement protège le mieux, d'après les essais.",
-    "accent": "navy",
-    "sortOrder": 5,
-    "steps": [
-      {
-        "position": 1,
-        "name": "Serrage d'omoplates",
-        "durationS": 40,
-        "cue": "Serre les omoplates l'une vers l'autre, tiens 5 s, relâche.",
-        "figureKey": "omoplates"
-      },
-      {
-        "position": 2,
-        "name": "Cercles de bras",
-        "durationS": 30,
-        "cue": "Grands cercles vers l'arrière, lentement, amplitude maximale.",
-        "figureKey": "cercle-bras"
-      },
-      {
-        "position": 3,
-        "name": "Ouverture pectorale",
-        "durationS": 40,
-        "cue": "Mains croisées derrière la tête, ouvre les coudes vers l'extérieur.",
-        "figureKey": "ouverture-pectorale"
-      },
-      {
-        "position": 4,
-        "name": "Rotation externe",
-        "durationS": 40,
-        "cue": "Coudes au corps, les avant-bras s'écartent comme deux portes.",
-        "figureKey": "rotation-externe"
-      },
-      {
-        "position": 5,
-        "name": "Extension sur chaise",
-        "durationS": 40,
-        "cue": "Assis, mains derrière la tête, passe le haut du dos par-dessus le dossier.",
-        "figureKey": "extension-chaise"
-      },
-      {
-        "position": 6,
-        "name": "Tirage à vide",
-        "durationS": 50,
-        "cue": "Bras tendus devant, tire les coudes vers l'arrière comme sur une machine.",
-        "figureKey": "tirage-vide"
-      }
-    ]
-  },
-  {
-    "slug": "yeux",
-    "title": "Yeux",
-    "zone": "yeux",
-    "durationS": 60,
-    "summary": "Une minute. Le clignement compte plus que le chronomètre.",
-    "accent": "sun",
-    "sortOrder": 6,
-    "steps": [
-      {
-        "position": 1,
-        "name": "Clignements lents",
-        "durationS": 20,
-        "cue": "Vingt clignements francs, paupières complètement fermées à chaque fois.",
-        "figureKey": "clignement"
-      },
-      {
-        "position": 2,
-        "name": "Loin, près",
-        "durationS": 20,
-        "cue": "Fixe le point le plus lointain 3 s, puis ton pouce à 20 cm 3 s. Alterne.",
-        "figureKey": "loin-pres"
-      },
-      {
-        "position": 3,
-        "name": "Paumes",
-        "durationS": 20,
-        "cue": "Paumes en coupe sur les yeux ouverts, sans appuyer. Noir complet, respire.",
-        "figureKey": "paumes"
       }
     ]
   },
   {
     "slug": "reveil",
     "title": "Réveil",
-    "zone": "general",
+    "zone": "matin",
     "durationS": 300,
     "summary": "Cinq minutes pour démarrer la journée avant de s'asseoir.",
     "accent": "peach",
-    "sortOrder": 7,
+    "sortOrder": 4,
     "steps": [
       {
         "position": 1,
@@ -381,6 +201,381 @@
         "durationS": 20,
         "cue": "Quatre respirations : inspire sur 4 temps, expire sur 6.",
         "figureKey": "respiration"
+      }
+    ]
+  },
+  {
+    "slug": "nuque",
+    "title": "Nuque & trapèzes",
+    "zone": "nuque",
+    "durationS": 180,
+    "summary": "Trois minutes sur ce qui prend cher quand l'écran est trop bas.",
+    "accent": "sky",
+    "sortOrder": 5,
+    "steps": [
+      {
+        "position": 1,
+        "name": "Menton rentré",
+        "durationS": 30,
+        "cue": "Recule le menton comme pour faire un double menton. Tiens 5 s, relâche, recommence.",
+        "figureKey": "menton-rentre"
+      },
+      {
+        "position": 2,
+        "name": "Inclinaison — droite",
+        "durationS": 30,
+        "cue": "Oreille vers l'épaule, la main opposée relâche. Ne tire pas.",
+        "figureKey": "nuque-laterale"
+      },
+      {
+        "position": 3,
+        "name": "Inclinaison — gauche",
+        "durationS": 30,
+        "cue": "Même chose de l'autre côté.",
+        "figureKey": "nuque-laterale"
+      },
+      {
+        "position": 4,
+        "name": "Rotation lente",
+        "durationS": 30,
+        "cue": "Tourne la tête d'un côté puis de l'autre, comme si tu suivais un horizon.",
+        "figureKey": "nuque-rotation"
+      },
+      {
+        "position": 5,
+        "name": "Haussements d'épaules",
+        "durationS": 30,
+        "cue": "Monte les épaules vers les oreilles, tiens 3 s, laisse tomber d'un coup.",
+        "figureKey": "haussement-epaules"
+      },
+      {
+        "position": 6,
+        "name": "Ouverture à l'encadrement",
+        "durationS": 30,
+        "cue": "Avant-bras contre un montant de porte, avance d'un pas. Poitrine ouverte.",
+        "figureKey": "encadrement-porte"
+      }
+    ]
+  },
+  {
+    "slug": "dos",
+    "title": "Haut du dos",
+    "zone": "dos",
+    "durationS": 240,
+    "summary": "La zone que le renforcement protège le mieux, d'après les essais.",
+    "accent": "navy",
+    "sortOrder": 6,
+    "steps": [
+      {
+        "position": 1,
+        "name": "Serrage d'omoplates",
+        "durationS": 40,
+        "cue": "Serre les omoplates l'une vers l'autre, tiens 5 s, relâche.",
+        "figureKey": "omoplates"
+      },
+      {
+        "position": 2,
+        "name": "Cercles de bras",
+        "durationS": 30,
+        "cue": "Grands cercles vers l'arrière, lentement, amplitude maximale.",
+        "figureKey": "cercle-bras"
+      },
+      {
+        "position": 3,
+        "name": "Ouverture pectorale",
+        "durationS": 40,
+        "cue": "Mains croisées derrière la tête, ouvre les coudes vers l'extérieur.",
+        "figureKey": "ouverture-pectorale"
+      },
+      {
+        "position": 4,
+        "name": "Rotation externe",
+        "durationS": 40,
+        "cue": "Coudes au corps, les avant-bras s'écartent comme deux portes.",
+        "figureKey": "rotation-externe"
+      },
+      {
+        "position": 5,
+        "name": "Extension sur chaise",
+        "durationS": 40,
+        "cue": "Assis, mains derrière la tête, passe le haut du dos par-dessus le dossier.",
+        "figureKey": "extension-chaise"
+      },
+      {
+        "position": 6,
+        "name": "Tirage à vide",
+        "durationS": 50,
+        "cue": "Bras tendus devant, tire les coudes vers l'arrière comme sur une machine.",
+        "figureKey": "tirage-vide"
+      }
+    ]
+  },
+  {
+    "slug": "lombaires",
+    "title": "Lombaires",
+    "zone": "lombaires",
+    "durationS": 240,
+    "summary": "Le bas du dos n'a pas besoin d'être renforcé après huit heures assis. Il a besoin de bouger.",
+    "accent": "sage",
+    "sortOrder": 7,
+    "steps": [
+      {
+        "position": 1,
+        "name": "Chat-vache debout",
+        "durationS": 40,
+        "cue": "Mains sur les cuisses. Arrondis le dos, puis creuse-le, au rythme de ta respiration.",
+        "figureKey": "chat-vache"
+      },
+      {
+        "position": 2,
+        "name": "Inclinaison latérale — droite",
+        "durationS": 30,
+        "cue": "Un bras au-dessus de la tête, penche du côté opposé. Respire dans les côtes.",
+        "figureKey": "inclinaison-laterale"
+      },
+      {
+        "position": 3,
+        "name": "Inclinaison latérale — gauche",
+        "durationS": 30,
+        "cue": "Même chose de l'autre côté.",
+        "figureKey": "inclinaison-laterale"
+      },
+      {
+        "position": 4,
+        "name": "Rotation assise — droite",
+        "durationS": 30,
+        "cue": "Pieds au sol, tourne le buste, attrape le dossier. Le regard suit.",
+        "figureKey": "rotation-assise"
+      },
+      {
+        "position": 5,
+        "name": "Rotation assise — gauche",
+        "durationS": 30,
+        "cue": "Même chose de l'autre côté.",
+        "figureKey": "rotation-assise"
+      },
+      {
+        "position": 6,
+        "name": "Extension debout",
+        "durationS": 40,
+        "cue": "Mains dans le bas du dos, ouvre vers l'arrière. Petite amplitude, sans forcer.",
+        "figureKey": "extension-debout"
+      },
+      {
+        "position": 7,
+        "name": "Bascule du bassin",
+        "durationS": 40,
+        "cue": "Debout, bascule le bassin d'avant en arrière, comme un seau qu'on vide.",
+        "figureKey": "bascule-bassin"
+      }
+    ]
+  },
+  {
+    "slug": "hanches",
+    "title": "Hanches",
+    "zone": "hanches",
+    "durationS": 240,
+    "summary": "Ce qui se raccourcit vraiment quand on reste assis huit heures.",
+    "accent": "blush",
+    "sortOrder": 8,
+    "steps": [
+      {
+        "position": 1,
+        "name": "Fente basse — droite",
+        "durationS": 40,
+        "cue": "Genou arrière au sol ou tendu. Rentre le bassin, puis avance.",
+        "figureKey": "fente"
+      },
+      {
+        "position": 2,
+        "name": "Fente basse — gauche",
+        "durationS": 40,
+        "cue": "Même chose de l'autre côté.",
+        "figureKey": "fente"
+      },
+      {
+        "position": 3,
+        "name": "Figure 4 assise — droite",
+        "durationS": 40,
+        "cue": "Cheville droite sur le genou gauche, penche le buste, dos droit.",
+        "figureKey": "figure4-assise"
+      },
+      {
+        "position": 4,
+        "name": "Figure 4 assise — gauche",
+        "durationS": 40,
+        "cue": "Même chose de l'autre côté.",
+        "figureKey": "figure4-assise"
+      },
+      {
+        "position": 5,
+        "name": "Ischios — droite",
+        "durationS": 30,
+        "cue": "Talon sur une chaise basse, jambe tendue, penche depuis les hanches.",
+        "figureKey": "ischios"
+      },
+      {
+        "position": 6,
+        "name": "Ischios — gauche",
+        "durationS": 30,
+        "cue": "Même chose de l'autre côté.",
+        "figureKey": "ischios"
+      },
+      {
+        "position": 7,
+        "name": "Balancement de hanche",
+        "durationS": 20,
+        "cue": "Debout, jambe libre, balance d'avant en arrière. Amplitude confortable.",
+        "figureKey": "balancement-hanche"
+      }
+    ]
+  },
+  {
+    "slug": "poignets",
+    "title": "Poignets",
+    "zone": "poignets",
+    "durationS": 120,
+    "summary": "Ce que huit heures de clavier et de souris demandent en retour.",
+    "accent": "peach",
+    "sortOrder": 9,
+    "steps": [
+      {
+        "position": 1,
+        "name": "Poignet en flexion — droite",
+        "durationS": 25,
+        "cue": "Bras tendu devant, paume vers le bas, l’autre main tire les doigts vers toi.",
+        "figureKey": "poignet-flexion"
+      },
+      {
+        "position": 2,
+        "name": "Poignet en flexion — gauche",
+        "durationS": 25,
+        "cue": "Même chose de l’autre côté.",
+        "figureKey": "poignet-flexion"
+      },
+      {
+        "position": 3,
+        "name": "Poignet en extension",
+        "durationS": 25,
+        "cue": "Paume vers le haut, l’autre main tire les doigts vers le sol. Change de côté à mi-temps.",
+        "figureKey": "poignet-extension"
+      },
+      {
+        "position": 4,
+        "name": "Doigts écartés",
+        "durationS": 20,
+        "cue": "Écarte les doigts au maximum, tiens 3 s, referme le poing. Dix fois.",
+        "figureKey": "doigts-ecartes"
+      },
+      {
+        "position": 5,
+        "name": "Mains dos à dos",
+        "durationS": 25,
+        "cue": "Dos des mains l’un contre l’autre devant la poitrine, coudes vers l’extérieur.",
+        "figureKey": "priere-inversee"
+      }
+    ]
+  },
+  {
+    "slug": "chevilles",
+    "title": "Chevilles",
+    "zone": "chevilles",
+    "durationS": 120,
+    "summary": "Contre les jambes lourdes de fin de journée. Faisable sous le bureau.",
+    "accent": "pine",
+    "sortOrder": 10,
+    "steps": [
+      {
+        "position": 1,
+        "name": "Cercles de cheville — droite",
+        "durationS": 30,
+        "cue": "Décolle le pied, dessine un cercle large, dans un sens puis dans l’autre.",
+        "figureKey": "cheville-cercle"
+      },
+      {
+        "position": 2,
+        "name": "Cercles de cheville — gauche",
+        "durationS": 30,
+        "cue": "Même chose de l’autre côté.",
+        "figureKey": "cheville-cercle"
+      },
+      {
+        "position": 3,
+        "name": "Talon-pointe",
+        "durationS": 30,
+        "cue": "Assis ou debout, alterne l’appui sur les talons puis sur la pointe. Sans à-coups.",
+        "figureKey": "talon-pointe"
+      },
+      {
+        "position": 4,
+        "name": "Montées sur la pointe",
+        "durationS": 30,
+        "cue": "Debout, monte sur la pointe des pieds, redescends lentement. Vingt fois.",
+        "figureKey": "mollet-releve"
+      }
+    ]
+  },
+  {
+    "slug": "yeux",
+    "title": "Yeux",
+    "zone": "yeux",
+    "durationS": 60,
+    "summary": "Une minute. Le clignement compte plus que le chronomètre.",
+    "accent": "sun",
+    "sortOrder": 11,
+    "steps": [
+      {
+        "position": 1,
+        "name": "Clignements lents",
+        "durationS": 20,
+        "cue": "Vingt clignements francs, paupières complètement fermées à chaque fois.",
+        "figureKey": "clignement"
+      },
+      {
+        "position": 2,
+        "name": "Loin, près",
+        "durationS": 20,
+        "cue": "Fixe le point le plus lointain 3 s, puis ton pouce à 20 cm 3 s. Alterne.",
+        "figureKey": "loin-pres"
+      },
+      {
+        "position": 3,
+        "name": "Paumes",
+        "durationS": 20,
+        "cue": "Paumes en coupe sur les yeux ouverts, sans appuyer. Noir complet, respire.",
+        "figureKey": "paumes"
+      }
+    ]
+  },
+  {
+    "slug": "respiration",
+    "title": "Souffle",
+    "zone": "bien-etre",
+    "durationS": 120,
+    "summary": "Deux minutes pour redescendre. Rien de mystique : l’expiration plus longue, c’est tout.",
+    "accent": "brick",
+    "sortOrder": 12,
+    "steps": [
+      {
+        "position": 1,
+        "name": "Installe-toi",
+        "durationS": 20,
+        "cue": "Assis, dos long, épaules basses. Pose les mains sur les cuisses.",
+        "figureKey": "respiration"
+      },
+      {
+        "position": 2,
+        "name": "Inspire 4, expire 6",
+        "durationS": 60,
+        "cue": "Inspire par le nez sur 4 temps, expire par la bouche sur 6. Sans forcer.",
+        "figureKey": "respiration"
+      },
+      {
+        "position": 3,
+        "name": "Paumes sur les yeux",
+        "durationS": 40,
+        "cue": "Paumes en coupe sur les yeux ouverts, sans appuyer. Noir complet, respire.",
+        "figureKey": "paumes"
       }
     ]
   }
