@@ -1,7 +1,7 @@
 {
-  "version": "1.0.12",
-  "url": "https://app-travail-de-bureau.vercel.app/ota/bundle-1.0.12.zip",
-  "checksum": "ead842baf7d86fad63bf22998785b150b7c76c89d079d0e31f96bac2e0aacf33",
+  "version": "1.0.13",
+  "url": "https://app-travail-de-bureau.vercel.app/ota/bundle-1.0.13.zip",
+  "checksum": "b7800265628df263c379bf1f050064865e9af03378c4b873ee8f5a2930738c6b",
   "minNative": "1.0.0",
-  "notes": "Build the debug APK on every push to main\n\nThe repository's default branch is not main, so the \"Run workflow\"\ndropdown offered another one and the APK published to the debug release\nwas built from a branch without the merge — the plugin was simply not in\nit. Trigger on push to main as well, so the asset at the debug release\nalways matches what main holds. Manual dispatch still works.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
+  "notes": "Debug release: name it Log Off, and move the tag with the build\n\nThe release around the APK was wrong in three ways while the file itself\nwas fine. The debug tag still pointed at 75e86ee from 1 Sep, so the page\noffered source code unrelated to the attached build. The title and body\nstill said \"Relève\", a name the app dropped. And nothing on the page\nmentioned that the debug signing key is regenerated every run, which is\nthe one thing that makes an install fail.\n\nMove the tag to the built commit, title it from versionName, state both\nversion lines and the commit, and lead with the uninstall step. Drop the\nprerelease flag too: this is the only way to install the app, so it\nshould show on the repository home page.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 }
