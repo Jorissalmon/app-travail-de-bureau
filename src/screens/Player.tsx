@@ -21,6 +21,7 @@ import {
   loadCues,
   primeCues,
 } from '@/features/session/cues'
+import { durationFor, loadDurations } from '@/features/session/durations'
 import type { Completion } from '@/lib/types'
 
 /**
@@ -77,19 +78,22 @@ export function Player() {
   }, [])
 
   // Reaching this screen is always a tap, which is the gesture the browser
-  // wants before it will let an AudioContext make a sound.
+  // wants before it will let an AudioContext make a sound. The durations are
+  // loaded here too, before the first step is armed.
+  const [ready, setReady] = useState(false)
   useEffect(() => {
-    void loadCues().then(primeCues)
+    void Promise.all([loadCues().then(primeCues), loadDurations()]).then(() => setReady(true))
   }, [])
 
   // Arm the step: also covers the routine arriving after the first render.
   useEffect(() => {
     const s = steps[stepIndex]
-    if (!s) return
-    setRemaining(s.durationS)
-    deadlineRef.current = Date.now() + s.durationS * 1000
+    if (!s || !routine || !ready) return
+    const seconds = durationFor(routine.slug, s.position, s.durationS)
+    setRemaining(seconds)
+    deadlineRef.current = Date.now() + seconds * 1000
     lastCuedRef.current = null
-  }, [steps, stepIndex])
+  }, [steps, stepIndex, routine, ready])
 
   // Held in a ref so a new goNext identity does not restart the interval and
   // reset its phase on every step.
@@ -150,9 +154,10 @@ export function Player() {
   }, [finished, routine, fromNotification, markDone])
 
   const progress = useMemo(() => {
-    if (!step) return 0
-    return 1 - remaining / step.durationS
-  }, [step, remaining])
+    if (!step || !routine) return 0
+    const total = durationFor(routine.slug, step.position, step.durationS)
+    return 1 - remaining / total
+  }, [step, routine, remaining])
 
   if (!routine || !step) {
     return (
