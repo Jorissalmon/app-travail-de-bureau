@@ -1,7 +1,7 @@
 {
-  "version": "1.0.14",
-  "url": "https://app-travail-de-bureau.vercel.app/ota/bundle-1.0.14.zip",
-  "checksum": "dc15d25cb271a3b5f6746e404b137306db0c867b71bb7a4db6c733d306136de3",
+  "version": "1.0.15",
+  "url": "https://app-travail-de-bureau.vercel.app/ota/bundle-1.0.15.zip",
+  "checksum": "52f3ff05bb433dea35f579898f164436f60e66527a926be788b281eb84792e00",
   "minNative": "1.0.0",
-  "notes": "Stop a missing keystore from failing deep inside Gradle\n\nAPK release run #1 died at `assembleRelease` with a message about a\ntampered keystore. The cause was upstream: `base64 -d` on an unset\nsecret writes an empty file and exits 0, so the decode step passed and\nGradle inherited the problem. Check the four secrets are present and\nthat keytool can actually open the store with that password and alias,\nand name what is missing when it cannot.\n\nThat run also built from the repository's default branch, which is not\nmain, so a signed release would have been published from unrelated code.\nRefuse any ref that is not main or a v* tag.\n\nAlso stop the debug APK rebuilding twice per push: the OTA workflow\ncommits the bundle to main right after, which retriggered it — with a\nfreshly generated debug key, so the two APKs of one push did not even\nshare a signature.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
+  "notes": "Call the app Log Off in the READMEs too\n\nThe app was renamed in f953d58 but both READMEs still said Relève, and\nnow that the debug release shows on the repository home page the two\nsat side by side under different names. The releve_app database role and\nthe schema identifiers keep their name — those are real identifiers, not\nbranding.\n\nDocumentation no longer rebuilds the APK either: a README has no bearing\non what the shell contains, and each rebuild reshuffles the debug key.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 }
