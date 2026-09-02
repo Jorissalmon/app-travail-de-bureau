@@ -39,8 +39,12 @@ export function Alert() {
 
   return (
     <div
-      className="flex min-h-0 flex-1 flex-col"
+      // A fixed height, not flex-1: #root only sets min-height, so a long
+      // routine grew the page and pushed the three actions off the bottom
+      // instead of scrolling the list above them.
+      className="flex min-h-0 flex-col"
       style={{
+        height: '100dvh',
         background: 'var(--bg)',
         paddingTop: 'calc(env(safe-area-inset-top,0px) + 20px)',
         paddingBottom: 'calc(env(safe-area-inset-bottom,0px) + 20px)',

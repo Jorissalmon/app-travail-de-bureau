@@ -23,3 +23,6 @@ android/keystore.properties
 ota/tmp/
 .vercel
 .env*
+
+# Promo screenshots, generated locally
+promo/
