@@ -11,6 +11,7 @@ import { useSessionStore } from '@/stores/session'
 import { useSettingsStore } from '@/stores/settings'
 import { useAuthStore } from '@/stores/auth'
 import { useStatsStore } from '@/stores/stats'
+import { useContentStore } from '@/stores/content'
 import { FAMILIES, ZONES } from '@/content'
 import { useNow } from '@/app/useNow'
 import { dateEyebrow, dayName } from '@/lib/date'
@@ -32,6 +33,7 @@ export function Today() {
   const user = useAuthStore((s) => s.user)
   const stats = useStatsStore((s) => s.stats)
   const loadStats = useStatsStore((s) => s.load)
+  const routines = useContentStore((s) => s.routines)
 
   const [busy, setBusy] = useState(false)
   const [showPermissions, setShowPermissions] = useState(false)
@@ -50,8 +52,9 @@ export function Today() {
         now,
         sessionActive: active,
         standsToday: stats?.standsToday ?? 0,
+        available: routines.map((r) => r.slug),
       }),
-    [now, active, stats],
+    [now, active, stats, routines],
   )
 
   const nextInS = useMemo(() => {
@@ -130,7 +133,7 @@ export function Today() {
         busy={busy}
       />
 
-      <DayCard advice={advice} />
+      {advice && <DayCard advice={advice} />}
 
       <div className="mt-5">
         <SearchField value="" onChange={(v) => navigate(`/library?q=${encodeURIComponent(v)}`)} />

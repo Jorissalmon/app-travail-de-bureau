@@ -18,6 +18,13 @@ export interface DayContext {
   sessionActive: boolean
   /** Stands recorded today, used to vary the suggestion as the day goes on. */
   standsToday: number
+  /**
+   * Slugs the content store actually holds. The database is what the app reads
+   * when online, and it can lag behind the code that names these routines — a
+   * suggestion pointing at a slug that is not there must degrade to one that
+   * is, never to an empty card.
+   */
+  available: string[]
 }
 
 export interface DayAdvice {
@@ -120,13 +127,19 @@ export function nudgeFor(at: Date): string {
   return bandFor(at).nudge
 }
 
-export function adviceFor(ctx: DayContext): DayAdvice {
+export function adviceFor(ctx: DayContext): DayAdvice | null {
   const band = bandFor(ctx.now)
-  const index = Math.max(0, ctx.standsToday) % band.candidates.length
+  const offered = band.candidates.filter((slug) => ctx.available.includes(slug))
+  // Nothing from this band is available: rather than an empty card, fall back
+  // to whatever the content store does have.
+  const pool = offered.length > 0 ? offered : ctx.available
+  if (pool.length === 0) return null
+
+  const index = Math.max(0, ctx.standsToday) % pool.length
   return {
     part: band.part,
     headline: band.headline,
     why: ctx.sessionActive ? band.why : 'Ta session n’est pas lancée : aucun rappel ne partira.',
-    routineSlug: band.candidates[index]!,
+    routineSlug: pool[index]!,
   }
 }

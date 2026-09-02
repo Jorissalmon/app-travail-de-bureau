@@ -8,10 +8,16 @@ function at(hhmm: string): Date {
   return new Date(2026, 8, 2, h!, m!, 0, 0)
 }
 
-const ctx = (now: Date, over: Partial<{ sessionActive: boolean; standsToday: number }> = {}) => ({
+const ALL = LOCAL_ROUTINES.map((r) => r.slug)
+
+const ctx = (
+  now: Date,
+  over: Partial<{ sessionActive: boolean; standsToday: number; available: string[] }> = {},
+) => ({
   now,
   sessionActive: true,
   standsToday: 0,
+  available: ALL,
   ...over,
 })
 
@@ -44,7 +50,8 @@ describe('adviceFor', () => {
     for (let h = 0; h < 24; h++) {
       for (let stands = 0; stands < 8; stands++) {
         const advice = adviceFor(ctx(at(`${String(h).padStart(2, '0')}:15`), { standsToday: stands }))
-        expect(slugs, `${h}h, ${stands} levers`).toContain(advice.routineSlug)
+        expect(advice, `${h}h, ${stands} levers`).not.toBeNull()
+        expect(slugs, `${h}h, ${stands} levers`).toContain(advice!.routineSlug)
       }
     }
   })
@@ -52,14 +59,25 @@ describe('adviceFor', () => {
   it('varies as the day accumulates, instead of repeating one routine', () => {
     const afternoon = at('15:00')
     const suggested = new Set(
-      [0, 1, 2, 3].map((n) => adviceFor(ctx(afternoon, { standsToday: n })).routineSlug),
+      [0, 1, 2, 3].map((n) => adviceFor(ctx(afternoon, { standsToday: n }))!.routineSlug),
     )
     expect(suggested.size).toBeGreaterThan(1)
   })
 
   it('says the session is off rather than giving a reason to move', () => {
     const advice = adviceFor(ctx(at('10:00'), { sessionActive: false }))
-    expect(advice.why).toContain('session')
+    expect(advice!.why).toContain('session')
+  })
+
+  it('falls back when the database has none of the band’s routines', () => {
+    // What actually happened: the code named routines the database did not yet
+    // hold, and the home card silently rendered nothing.
+    const advice = adviceFor(ctx(at('15:00'), { available: ['debout'] }))
+    expect(advice?.routineSlug).toBe('debout')
+  })
+
+  it('gives up only when there is no content at all', () => {
+    expect(adviceFor(ctx(at('15:00'), { available: [] }))).toBeNull()
   })
 
   it('is stable for the same inputs', () => {
