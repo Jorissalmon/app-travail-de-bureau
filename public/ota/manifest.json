@@ -1,0 +1,7 @@
+{
+  "version": "1.0.11",
+  "url": "https://app-travail-de-bureau.vercel.app/ota/bundle-1.0.11.zip",
+  "checksum": "0ca522332b529e78d0c6fd26da94673218b4d3e6a972aef7acb4a37610275c4e",
+  "minNative": "1.0.0",
+  "notes": "Merge branch 'wake-screen-and-pause-during-break'"
+}
