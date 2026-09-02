@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { App } from '@capacitor/app'
 import { Browser } from '@capacitor/browser'
 import { Segmented } from '@/components/Segmented'
 import { Toggle } from '@/components/Toggle'
@@ -39,6 +40,17 @@ export function Settings() {
   const [nativeUpdate, setNativeUpdate] = useState(false)
   useEffect(() => {
     void isNativeUpdatePending().then(setNativeUpdate)
+  }, [])
+
+  // The APK version, which the OTA never changes. It is the only way to tell
+  // whether the shell installed is recent enough for the features that need a
+  // native plugin — the row used to be blank on the device itself.
+  const [nativeVersion, setNativeVersion] = useState<string | null>(null)
+  useEffect(() => {
+    if (!isNative()) return
+    void App.getInfo()
+      .then((info) => setNativeVersion(info.version))
+      .catch(() => setNativeVersion(null))
   }, [])
 
   // The three grants a reminder needs. The sheet only appears when starting a
@@ -215,7 +227,10 @@ export function Settings() {
 
       <SettingsSection title="À propos">
         <SettingRow label="Version du contenu (OTA)" hint={BUNDLE_VERSION} />
-        <SettingRow label="Version de l’application" hint={isNative() ? undefined : 'navigateur'} />
+        <SettingRow
+          label="Version de l’application"
+          hint={isNative() ? (nativeVersion ?? '—') : 'navigateur'}
+        />
         <div className="py-3.5" style={{ borderBottom: '1px solid var(--border)' }}>
           <button
             type="button"

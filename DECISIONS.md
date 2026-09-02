@@ -73,8 +73,13 @@ Chaque écart par rapport au mégaprompt, avec sa raison en une phrase (§15.8).
 - **La page d'alerte s'ouvre seule** — `localNotificationReceived` navigue vers
   `/alerte/:kind` sans attendre de tap, sauf si une routine est déjà à l'écran :
   un rappel n'interrompt jamais l'exercice en cours.
-- **`versionName` natif = `1.0.0`** — aligné sur `ota/version.json` pour que la
-  comparaison `minNative` de l'OTA soit cohérente (§9.3).
+- **`versionCode` 2 / `versionName` `1.1.0`** — le plugin `ScreenWake` ne peut
+  pas être livré par OTA : il faut réinstaller l'APK. Sans incrément, rien ne
+  permettait de savoir laquelle des deux coques était installée. Réglages →
+  À propos affiche désormais cette version (la ligne existait mais restait vide
+  sur l'appareil), à côté de la version du contenu OTA qui, elle, bouge seule.
+  `minNative` reste `1.0.0` : le bundle OTA continue de tourner sur l'ancienne
+  coque, sans le réveil de l'écran (§9.3).
 
 ## À la charge du propriétaire (secrets, hors dépôt)
 
