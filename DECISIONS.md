@@ -73,6 +73,24 @@ Chaque écart par rapport au mégaprompt, avec sa raison en une phrase (§15.8).
 - **La page d'alerte s'ouvre seule** — `localNotificationReceived` navigue vers
   `/alerte/:kind` sans attendre de tap, sauf si une routine est déjà à l'écran :
   un rappel n'interrompt jamais l'exercice en cours.
+- **Un seul rappel armé à la fois, au lieu de la grille de 8 h (§8.2)** — la
+  grille voulait dire qu'un rappel manqué était simplement suivi du suivant à
+  l'heure, et que la journée continuait sans toi. Le moteur n'arme donc plus que
+  la prochaine occurrence ; quand elle tombe sans réponse, **rien** ne suit.
+  `catchUp()` compare l'horloge aux occurrences armées à chaque passage au
+  premier plan et au démarrage : une occurrence dont l'heure est passée devient
+  une attente (`awaiting`), consignée en `expired`, et l'app ouvre la page de
+  l'exercice au lieu de l'accueil. L'attente ne se lève que sur une réponse
+  réelle — Fait, +10 min, routine terminée, journée arrêtée — jamais parce que
+  la page s'est affichée. C'est ce qui rend un rappel manqué impossible à
+  contourner en fermant l'app.
+- **Deux pauses distinctes** — `manual` est l'utilisateur qui s'éloigne du
+  bureau et dure jusqu'à ce qu'il reprenne ; `break` dure le temps d'un exercice
+  à l'écran. Elles sont séparées pour que fermer une routine ne relance pas une
+  journée qu'on avait volontairement mise en attente. Une pause `break` de plus
+  de 20 minutes est tenue pour abandonnée (l'app peut être tuée pendant l'écran
+  d'exercice, et la journée ne repartirait jamais) ; une pause manuelle
+  n'expire pas.
 - **`versionCode` 2 / `versionName` `1.1.0`** — le plugin `ScreenWake` ne peut
   pas être livré par OTA : il faut réinstaller l'APK. Sans incrément, rien ne
   permettait de savoir laquelle des deux coques était installée. Réglages →

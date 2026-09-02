@@ -4,6 +4,8 @@ import {
   EYE_INTERVAL_MIN,
   HORIZON_MINUTES,
   SNOOZE_MINUTES,
+  dueBy,
+  firstOccurrence,
   inQuietWindow,
   occurrenceId,
   onActiveDay,
@@ -254,5 +256,39 @@ describe('planSnooze', () => {
     const now = new Date(2026, 8, 2, 9, 32, 10)
     const later = new Date(2026, 8, 2, 9, 32, 50)
     expect(planSnooze('s1', now).id).toBe(planSnooze('s1', later).id)
+  })
+})
+
+describe('firstOccurrence / dueBy', () => {
+  const at = (min: number) => ({
+    id: min,
+    kind: 'stand' as const,
+    at: new Date(2026, 0, 5, 10, min, 0),
+    index: min,
+  })
+  const now = new Date(2026, 0, 5, 10, 30, 0)
+
+  it('arms the earliest of the plan, not the first written', () => {
+    expect(firstOccurrence([at(50), at(40), at(45)])?.at.getMinutes()).toBe(40)
+  })
+
+  it('arms nothing out of an empty plan', () => {
+    expect(firstOccurrence([])).toBeNull()
+  })
+
+  it('finds the reminder that came due while the app was away', () => {
+    expect(dueBy([at(20), at(40)], now)?.at.getMinutes()).toBe(20)
+  })
+
+  it('reports the latest of several missed, so a snooze wins over what it followed', () => {
+    expect(dueBy([at(10), at(20), at(40)], now)?.at.getMinutes()).toBe(20)
+  })
+
+  it('counts a reminder due this very second as fired', () => {
+    expect(dueBy([at(30)], now)?.at.getMinutes()).toBe(30)
+  })
+
+  it('reports nothing when every armed reminder is still ahead', () => {
+    expect(dueBy([at(40), at(50)], now)).toBeNull()
   })
 })
