@@ -2,10 +2,18 @@ name: APK debug
 
 # Construit un APK de TEST (debug, non signé par ta clé — signé par la clé debug
 # Android auto-générée). Installable par sideload, idéal pour les bêta-testeurs
-# sans avoir à fournir de keystore. Déclenché à la main (onglet Actions) ou par
-# l'API. Publie l'APK dans une Release taguée "debug".
+# sans avoir à fournir de keystore. Publie l'APK dans une Release taguée "debug",
+# donc toujours à la même URL :
+#   https://github.com/Jorissalmon/app-travail-de-bureau/releases/download/debug/app-debug.apk
+#
+# Tourne à chaque push sur main, et pas seulement à la main : la branche par
+# défaut du dépôt n'est pas main, donc le menu « Run workflow » propose une autre
+# branche par défaut et on repartait avec un APK qui ne contenait pas ce qui
+# venait d'être mergé.
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
