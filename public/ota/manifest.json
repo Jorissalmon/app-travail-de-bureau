@@ -1,7 +1,7 @@
 {
-  "version": "1.0.15",
-  "url": "https://app-travail-de-bureau.vercel.app/ota/bundle-1.0.15.zip",
-  "checksum": "52f3ff05bb433dea35f579898f164436f60e66527a926be788b281eb84792e00",
+  "version": "1.0.16",
+  "url": "https://app-travail-de-bureau.vercel.app/ota/bundle-1.0.16.zip",
+  "checksum": "1e330b0a270c2e5aad253f4b8370ff3524e21b60e2eb8e9bd6d57f71d84989d2",
   "minNative": "1.0.0",
-  "notes": "Call the app Log Off in the READMEs too\n\nThe app was renamed in f953d58 but both READMEs still said Relève, and\nnow that the debug release shows on the repository home page the two\nsat side by side under different names. The releve_app database role and\nthe schema identifiers keep their name — those are real identifiers, not\nbranding.\n\nDocumentation no longer rebuilds the APK either: a README has no bearing\non what the shell contains, and each rebuild reshuffles the debug key.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
+  "notes": "Merge branch 'pause-work-and-catch-missed-reminders'"
 }
