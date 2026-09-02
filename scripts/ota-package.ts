@@ -39,7 +39,10 @@ const zipName = `bundle-${version}.zip`
 const zipPath = resolve(outDir, zipName)
 
 // Zip the CONTENTS of dist/ (so index.html is at the archive root, §9.2).
-execFileSync('zip', ['-r', '-q', zipPath, '.'], { cwd: dist })
+// dist/ota holds the bundles Vite copied back out of public/ — zipping those
+// in would make every release carry every release before it, doubling in size
+// each time. They are served from the deployment, never read from a bundle.
+execFileSync('zip', ['-r', '-q', zipPath, '.', '-x', 'ota/*', './ota/*'], { cwd: dist })
 
 const checksum = createHash('sha256').update(readFileSync(zipPath)).digest('hex')
 const base = (process.env.OTA_BASE_URL || 'https://app-travail-de-bureau.vercel.app').replace(
