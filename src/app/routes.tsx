@@ -6,6 +6,7 @@ import { Today } from '@/screens/Today'
 import { Library } from '@/screens/Library'
 import { RoutineDetail } from '@/screens/RoutineDetail'
 import { ExerciseDetail } from '@/screens/ExerciseDetail'
+import { RoutineBuilder } from '@/screens/RoutineBuilder'
 import { Player } from '@/screens/Player'
 import { Alert } from '@/screens/Alert'
 import { Articles } from '@/screens/Articles'
@@ -62,6 +63,7 @@ export function AppRoutes() {
           <Route path="/" element={<Today />} />
           <Route path="/library" element={<Library />} />
           <Route path="/library/:slug" element={<RoutineDetail />} />
+          <Route path="/library/:slug/composer" element={<RoutineBuilder />} />
           <Route path="/library/:slug/:position" element={<ExerciseDetail />} />
           <Route path="/articles" element={<Articles />} />
           <Route path="/articles/:slug" element={<ArticleDetail />} />

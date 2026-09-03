@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { Plus } from 'lucide-react'
 import { SearchField } from '@/components/SearchField'
 import { RoutineCard } from '@/components/RoutineCard'
 import { Pill } from '@/components/Pill'
@@ -10,6 +11,9 @@ import type { Zone } from '@/lib/types'
 /** §11.2 — routines grouped by zone, horizontal zone filter, persistent search. */
 export function Library() {
   const routines = useContentStore((s) => s.routines)
+  const mine = useContentStore((s) => s.mine)
+  const refreshMine = useContentStore((s) => s.refreshMine)
+  const navigate = useNavigate()
   const [params, setParams] = useSearchParams()
 
   const [query, setQuery] = useState(params.get('q') ?? '')
@@ -47,6 +51,26 @@ export function Library() {
     setParams(next, { replace: true })
   }
 
+  // A routine of one's own answers to the search box like any other, but never
+  // to the zone filter: it is not filed under a body part.
+  const mineFiltered = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    if (activeZone) return []
+    if (!q) return mine
+    return mine.filter(
+      (r) =>
+        r.title.toLowerCase().includes(q) ||
+        r.steps.some((s) => s.name.toLowerCase().includes(q)),
+    )
+  }, [mine, query, activeZone])
+
+  async function create() {
+    const { createCustomRoutine } = await import('@/features/routines/custom')
+    const routine = await createCustomRoutine('Ma routine')
+    await refreshMine()
+    navigate(`/library/${routine.slug}/composer`)
+  }
+
   return (
     <div className="gutter pb-8">
       <h1 className="t-screen pt-5 pb-4">Routines</h1>
@@ -70,11 +94,33 @@ export function Library() {
         ))}
       </div>
 
-      {grouped.length === 0 && (
+      {grouped.length === 0 && mineFiltered.length === 0 && (
         <p className="t-meta mt-8">Aucune routine ne correspond à ta recherche.</p>
       )}
 
-      <div className="mt-5 flex flex-col gap-7">
+      {!activeZone && (
+        <section className="mt-6">
+          <h2 className="t-section mb-3">Mes routines</h2>
+          <div className="flex flex-col gap-3">
+            {mineFiltered.map((r) => (
+              <RoutineCard key={r.slug} routine={r} />
+            ))}
+            <button
+              type="button"
+              onClick={() => void create()}
+              className="flex items-center justify-center gap-2 rounded-[20px] py-4"
+              style={{ background: 'var(--surface)', color: 'var(--text-2)' }}
+            >
+              <Plus size={18} />
+              <span className="text-[15px]" style={{ fontWeight: 700 }}>
+                Composer une routine
+              </span>
+            </button>
+          </div>
+        </section>
+      )}
+
+      <div className="mt-7 flex flex-col gap-7">
         {grouped.map((g) => (
           <section key={g.zone}>
             <h2 className="t-section mb-3">{ZONE_LABEL[g.zone]}</h2>

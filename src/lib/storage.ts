@@ -23,6 +23,7 @@ export const KEYS = {
   playerSound: 'player.sound',
   alertMode: 'reminders.alertMode',
   stepDurations: 'player.durations',
+  customRoutines: 'routines.custom',
   bundleVersion: 'ota.bundleVersion',
   pendingNativeUpdate: 'ota.pendingNativeUpdate',
 } as const

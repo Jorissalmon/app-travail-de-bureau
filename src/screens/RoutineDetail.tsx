@@ -6,6 +6,7 @@ import { useContentStore } from '@/stores/content'
 import { durationLabel, mmss } from '@/lib/format'
 import { ZONE_LABEL } from '@/content'
 import { stepTone } from '@/lib/tones'
+import { isCustomSlug } from '@/features/routines/custom'
 import {
   DURATION_STEP_S,
   MAX_DURATION_S,
@@ -48,8 +49,14 @@ export function RoutineDetail() {
     )
   }
 
-  const total = totalFor(routine.slug, routine.steps)
-  const customised = isCustomised(routine.slug)
+  // A routine of one's own already stores its own durations, edited in the
+  // builder. Offering the steppers here too would give the same number two
+  // homes, so this screen only reads them.
+  const mine = isCustomSlug(routine.slug)
+  const total = mine
+    ? routine.steps.reduce((n, s) => n + s.durationS, 0)
+    : totalFor(routine.slug, routine.steps)
+  const customised = !mine && isCustomised(routine.slug)
 
   return (
     <div className="gutter pb-10" data-revision={revision}>
@@ -80,7 +87,9 @@ export function RoutineDetail() {
 
       <ol className="mt-6 flex flex-col gap-2.5">
         {routine.steps.map((step) => {
-          const seconds = durationFor(routine.slug, step.position, step.durationS)
+          const seconds = mine
+            ? step.durationS
+            : durationFor(routine.slug, step.position, step.durationS)
           return (
             <li
               key={step.position}
@@ -103,35 +112,44 @@ export function RoutineDetail() {
                   {step.cue}
                 </p>
               </button>
-              <div className="flex shrink-0 items-center gap-1">
-                <button
-                  type="button"
-                  className="tap rounded-full"
-                  style={{ width: 34, height: 34, minWidth: 34, minHeight: 34, background: 'var(--surface-2)' }}
-                  aria-label={`Raccourcir ${step.name}`}
-                  disabled={seconds <= MIN_DURATION_S}
-                  onClick={() => void bump(step.position, seconds, -DURATION_STEP_S)}
-                >
-                  <Minus size={16} color="var(--text)" />
-                </button>
+              {mine ? (
                 <span
-                  className="num text-center text-[14px]"
+                  className="num shrink-0 text-center text-[14px]"
                   style={{ width: 44, color: 'var(--text-2)' }}
-                  aria-label={`${seconds} secondes`}
                 >
                   {mmss(seconds)}
                 </span>
-                <button
-                  type="button"
-                  className="tap rounded-full"
-                  style={{ width: 34, height: 34, minWidth: 34, minHeight: 34, background: 'var(--surface-2)' }}
-                  aria-label={`Allonger ${step.name}`}
-                  disabled={seconds >= MAX_DURATION_S}
-                  onClick={() => void bump(step.position, seconds, DURATION_STEP_S)}
-                >
-                  <Plus size={16} color="var(--text)" />
-                </button>
-              </div>
+              ) : (
+                <div className="flex shrink-0 items-center gap-1">
+                  <button
+                    type="button"
+                    className="tap rounded-full"
+                    style={{ width: 34, height: 34, minWidth: 34, minHeight: 34, background: 'var(--surface-2)' }}
+                    aria-label={`Raccourcir ${step.name}`}
+                    disabled={seconds <= MIN_DURATION_S}
+                    onClick={() => void bump(step.position, seconds, -DURATION_STEP_S)}
+                  >
+                    <Minus size={16} color="var(--text)" />
+                  </button>
+                  <span
+                    className="num text-center text-[14px]"
+                    style={{ width: 44, color: 'var(--text-2)' }}
+                    aria-label={`${seconds} secondes`}
+                  >
+                    {mmss(seconds)}
+                  </span>
+                  <button
+                    type="button"
+                    className="tap rounded-full"
+                    style={{ width: 34, height: 34, minWidth: 34, minHeight: 34, background: 'var(--surface-2)' }}
+                    aria-label={`Allonger ${step.name}`}
+                    disabled={seconds >= MAX_DURATION_S}
+                    onClick={() => void bump(step.position, seconds, DURATION_STEP_S)}
+                  >
+                    <Plus size={16} color="var(--text)" />
+                  </button>
+                </div>
+              )}
             </li>
           )
         })}
@@ -147,9 +165,19 @@ export function RoutineDetail() {
         </button>
       )}
 
+      {mine && (
+        <button
+          type="button"
+          className="btn btn-secondary btn-block mt-5"
+          onClick={() => navigate(`/library/${routine.slug}/composer`)}
+        >
+          Modifier cette routine
+        </button>
+      )}
+
       <button
         type="button"
-        className="btn btn-accent btn-block mt-7"
+        className="btn btn-accent btn-block mt-3"
         onClick={() => navigate(`/player/${routine.slug}`)}
       >
         Commencer · {durationLabel(total)}

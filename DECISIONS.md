@@ -210,6 +210,26 @@ Chaque écart par rapport au mégaprompt, avec sa raison en une phrase (§15.8).
   annuler l'intervalle armé par l'autre. `alert.test.ts` le vérifie avec des
   horloges factices et un seul exemplaire du module.
 
+- **Routines composées par l'utilisateur, sur l'appareil** — mêmes raisons que
+  les durées : `Settings` est remplacé en entier par `/api/me`, et une table
+  dédiée coûterait migration, endpoints, synchronisation et règles de conflit
+  pour un usage à un seul téléphone. Seuls les **choix** sont stockés (quel
+  exercice, dans quel ordre, combien de temps) ; le nom, la consigne et
+  l'illustration sont reconstruits depuis le catalogue à l'affichage, donc une
+  correction de contenu atteint aussi les routines déjà composées. Le format
+  stocké est transposable tel quel le jour où l'on voudra synchroniser.
+- **Une routine perso est un `Routine` comme les autres** — `materialise()` la
+  reconstruit dans la forme livrée, et `routineBySlug` la cherche en premier
+  (son slug est préfixé `perso-`, donc aucune collision possible). La
+  bibliothèque, l'écran de détail, le lecteur et la fiche d'exercice n'ont donc
+  rien à savoir de son origine. Elle n'est en revanche pas rangée dans une zone
+  du corps : elle a sa propre section dans la bibliothèque, ce qui évite
+  d'ajouter une valeur au type `Zone` et une carte à l'accueil.
+- **Les durées d'une routine perso ne s'éditent qu'au compositeur** — l'écran de
+  détail masque ses boutons -/+ pour elles. Sinon la même durée aurait deux
+  domiciles : les surcharges de `durations.ts`, indexées par slug et position,
+  et la valeur stockée dans la routine elle-même.
+
 ## À la charge du propriétaire (secrets, hors dépôt)
 
 - Créer le rôle `releve_app` + la base `releve`, appliquer les migrations
