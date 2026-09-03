@@ -6,10 +6,12 @@ import { uuid } from '@/lib/uuid'
 import type { ReminderKind, WorkSession } from '@/lib/types'
 import {
   type Occurrence,
+  allowedAt,
   dueBy,
   firstOccurrence,
   pendingAfter,
   planOccurrences,
+  planResume,
   planSnooze,
 } from '@/features/reminders/schedule'
 import {
@@ -58,6 +60,15 @@ interface ActiveSession {
 export interface Pause {
   at: string
   reason: 'manual' | 'break'
+  /**
+   * What was left on the clock when the pause started, and for which reminder.
+   * Resuming gives exactly that back rather than restarting a whole interval:
+   * a meeting must not cost the twenty minutes already waited, nor hand you a
+   * reminder the second you sit back down. Null when nothing was armed — a
+   * quiet window, say — and the clock is simply replanned on resume.
+   */
+  heldMs?: number | null
+  heldKind?: ReminderKind | null
 }
 
 /** A reminder that fired and has not been answered. Nothing is armed while it stands. */
@@ -87,6 +98,13 @@ interface SessionState {
   occurrences: Occurrence[]
   pause: Pause | null
   awaiting: Awaiting | null
+  /**
+   * The prompt was closed without answering. Not persisted and reset by every
+   * catchUp, so it holds until the app next comes to the foreground and no
+   * further: closing it buys quiet for now, it does not settle the exercise.
+   */
+  promptDismissed: boolean
+  dismissPrompt: () => void
   ready: boolean
   /** Load persisted session on boot. */
   hydrate: () => Promise<void>
@@ -109,6 +127,11 @@ interface SessionState {
   routineDone: () => Promise<void>
   /** Start the clock again once the exercise is over. */
   resumeFromBreak: () => Promise<void>
+  /**
+   * Record that a reminder of this kind is owed, whatever the app was doing.
+   * Reached by a notification tap and by a launch from the lock screen.
+   */
+  noteAwaiting: (kind: ReminderKind) => Promise<void>
   /** Notification action handlers (§8.4). */
   markDone: (firedAt: Date) => Promise<void>
   snooze: (firedAt: Date) => Promise<void>
@@ -158,7 +181,10 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   occurrences: [],
   pause: null,
   awaiting: null,
+  promptDismissed: false,
   ready: false,
+
+  dismissPrompt: () => set({ promptDismissed: true }),
 
   hydrate: async () => {
     const stored = await getJSON<StoredState | null>(KEYS.session, null)
@@ -241,6 +267,9 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   catchUp: async () => {
     const { session, occurrences, awaiting } = get()
     let { pause } = get()
+    // Every look at the clock puts the prompt back in front. This is the whole
+    // of "closed, but it comes back".
+    set({ promptDismissed: false })
     if (!session) return
     const now = new Date()
 
@@ -288,35 +317,79 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   },
 
   pauseWork: async () => {
-    const { session, pause } = get()
+    const { session, pause, awaiting, occurrences } = get()
     if (!session || pause) return
+    const now = new Date()
     await cancelAll()
-    const next: Pause = { at: new Date().toISOString(), reason: 'manual' }
-    // An exercise waiting to be done is dropped with the pause: on coming back
-    // the clock restarts, and being asked for a break from an hour ago is noise.
-    set({ occurrences: [], pause: next, awaiting: null })
-    await persist(session, [], next, null)
+
+    // Freeze what was left rather than the wall-clock instant: the day resumes
+    // where it stopped. An exercise already owed is held too — a meeting
+    // landing at the wrong moment must not make it disappear.
+    const armed = firstOccurrence(pendingAfter(occurrences, now))
+    const next: Pause = {
+      at: now.toISOString(),
+      reason: 'manual',
+      heldMs: armed ? Math.max(0, armed.at.getTime() - now.getTime()) : null,
+      heldKind: armed?.kind ?? null,
+    }
+    set({ occurrences: [], pause: next })
+    await persist(session, [], next, awaiting)
   },
 
   resumeWork: async () => {
     const { session, pause } = get()
     if (!session || pause?.reason !== 'manual') return
-    const armed = await armFrom(session.id, new Date())
-    set({ occurrences: armed, pause: null })
-    await persist(session, armed)
+    const now = new Date()
+
+    // The time held can land somewhere a reminder may not: a pause across
+    // lunch, or into the evening. Fall back to a fresh plan rather than firing
+    // inside a window the user excluded.
+    const settings = useSettingsStore.getState().settings
+    const held =
+      pause.heldMs != null && pause.heldKind
+        ? new Date(now.getTime() + pause.heldMs)
+        : null
+    let armed: Occurrence[]
+    if (held && pause.heldKind && allowedAt(held, settings)) {
+      armed = [planResume(session.id, pause.heldKind, held)]
+      await cancelAll()
+      await scheduleAll(armed, scheduleContext())
+    } else {
+      armed = await armFrom(session.id, now)
+    }
+
+    // Coming back to the desk puts an exercise held by the pause back in front.
+    set({ occurrences: armed, pause: null, promptDismissed: false })
+    await persist(session, armed, null, get().awaiting)
   },
 
   pauseForBreak: async () => {
     const { session, pause, awaiting } = get()
     // A manual pause outranks this one and must survive the exercise.
     if (!session || pause) return
+    const now = new Date()
     await cancelAll()
-    const next: Pause = { at: new Date().toISOString(), reason: 'break' }
+    const armed = firstOccurrence(pendingAfter(get().occurrences, now))
+    const next: Pause = {
+      at: now.toISOString(),
+      reason: 'break',
+      heldMs: armed ? Math.max(0, armed.at.getTime() - now.getTime()) : null,
+      heldKind: armed?.kind ?? null,
+    }
     // An owed exercise is NOT cleared by merely putting it on screen. Walking
     // away from the page leaves it owed, and the app asks again next time —
     // which is the whole point of noticing the reminder was missed.
     set({ occurrences: [], pause: next })
     await persist(session, [], next, awaiting)
+  },
+
+  noteAwaiting: async (kind) => {
+    const { session, awaiting, pause } = get()
+    if (!session || awaiting) return
+    await cancelAll()
+    const next: Awaiting = { kind, firedAt: new Date().toISOString() }
+    set({ occurrences: [], awaiting: next, promptDismissed: false })
+    await persist(session, [], pause, next)
   },
 
   routineDone: async () => {

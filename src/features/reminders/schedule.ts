@@ -55,6 +55,11 @@ export function onActiveDay(d: Date, weekdays: number[]): boolean {
   return weekdays.includes(isoWeekday(d))
 }
 
+/** True when a reminder may land at `d`: an active day, outside quiet hours. */
+export function allowedAt(d: Date, settings: Settings): boolean {
+  return allowed(d, settings)
+}
+
 function allowed(d: Date, settings: Settings): boolean {
   // Both checks read the wall clock of the occurrence itself, so a DST shift
   // between now and then is applied by the platform, not guessed here.
@@ -156,6 +161,20 @@ export function planSnooze(sessionId: string, from: Date): Occurrence {
   const at = addMinutes(from, SNOOZE_MINUTES)
   const index = Math.floor(at.getTime() / 60_000)
   return { id: occurrenceId(sessionId, 'stand', index), kind: 'stand', at, index }
+}
+
+/**
+ * The occurrence a pause gives back. Pausing freezes how long was left before
+ * the next reminder, and resuming puts that same amount of time back on the
+ * clock — a meeting must not cost you the twenty minutes you had already
+ * waited, nor hand you a reminder the moment you sit down.
+ *
+ * The index is derived from the minute it lands on, like a snooze, so two
+ * resumes in one session cannot collide on an id.
+ */
+export function planResume(sessionId: string, kind: ReminderKind, at: Date): Occurrence {
+  const index = Math.floor(at.getTime() / 60_000)
+  return { id: occurrenceId(sessionId, kind, index), kind, at, index }
 }
 
 /** Occurrences still in the future. */

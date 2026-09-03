@@ -4,12 +4,14 @@ import {
   EYE_INTERVAL_MIN,
   HORIZON_MINUTES,
   SNOOZE_MINUTES,
+  allowedAt,
   dueBy,
   firstOccurrence,
   inQuietWindow,
   occurrenceId,
   onActiveDay,
   planOccurrences,
+  planResume,
   planSnooze,
 } from './schedule'
 
@@ -290,5 +292,47 @@ describe('firstOccurrence / dueBy', () => {
 
   it('reports nothing when every armed reminder is still ahead', () => {
     expect(dueBy([at(40), at(50)], now)).toBeNull()
+  })
+})
+
+describe('planResume', () => {
+  it('lands exactly where the pause put it, keeping the kind', () => {
+    const at = new Date(2026, 0, 5, 14, 12, 0)
+    const occ = planResume('s1', 'eyes', at)
+    expect(occ.kind).toBe('eyes')
+    expect(occ.at.getTime()).toBe(at.getTime())
+  })
+
+  it('gives the same id for the same minute, so a replayed resume is idempotent', () => {
+    const at = new Date(2026, 0, 5, 14, 12, 0)
+    expect(planResume('s1', 'stand', at).id).toBe(planResume('s1', 'stand', at).id)
+  })
+
+  it('separates two resumes a minute apart', () => {
+    const a = planResume('s1', 'stand', new Date(2026, 0, 5, 14, 12, 0))
+    const b = planResume('s1', 'stand', new Date(2026, 0, 5, 14, 13, 0))
+    expect(a.id).not.toBe(b.id)
+  })
+
+  it('separates the kinds, so eyes and stand cannot cancel each other', () => {
+    const at = new Date(2026, 0, 5, 14, 12, 0)
+    expect(planResume('s1', 'eyes', at).id).not.toBe(planResume('s1', 'stand', at).id)
+  })
+})
+
+describe('allowedAt', () => {
+  const quiet: Settings = { ...base, quietStart: '12:00', quietEnd: '13:00' }
+
+  it('refuses an instant inside the quiet window', () => {
+    expect(allowedAt(new Date(2026, 0, 5, 12, 30), quiet)).toBe(false)
+  })
+
+  it('accepts an instant outside it', () => {
+    expect(allowedAt(new Date(2026, 0, 5, 14, 30), quiet)).toBe(true)
+  })
+
+  it('refuses a day the user excluded', () => {
+    // 2026-01-10 is a Saturday; the default weekdays are Monday to Friday.
+    expect(allowedAt(new Date(2026, 0, 10, 10, 0), base)).toBe(false)
   })
 })

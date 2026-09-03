@@ -132,6 +132,7 @@ export function Today() {
         elapsedS={elapsedS}
         nextInS={nextInS}
         pauseReason={pause?.reason ?? null}
+        heldS={pause?.heldMs != null ? Math.round(pause.heldMs / 1000) : null}
         awaiting={awaiting !== null}
         intervalS={intervalMin * 60}
         onStart={handleStart}

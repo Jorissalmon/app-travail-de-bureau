@@ -5,7 +5,6 @@ import { useSessionStore } from '@/stores/session'
 import { flushEvents } from './events'
 import { navigateTo } from './deeplink'
 import { onWakeAlert } from './screenwake'
-import { alertRoute } from './kinds'
 
 /**
  * Wires the native listeners for the reminder engine (§8.4). Registered from
@@ -14,15 +13,6 @@ import { alertRoute } from './kinds'
  */
 
 let installed = false
-
-/**
- * A routine already on screen is never interrupted: the reminder that just
- * fired waits in the shade rather than replacing the exercise being done.
- * HashRouter, so the current route is the hash.
- */
-function inPlayer(): boolean {
-  return window.location.hash.startsWith('#/player/')
-}
 
 export function installReminderListeners(): void {
   if (installed || !isNative()) return
@@ -77,17 +67,16 @@ export function installReminderListeners(): void {
 }
 
 /**
- * Reconcile with the clock, then land on the exercise if one is owed. This is
- * what makes a missed notification unmissable: the reminder fired while the app
- * was closed, nothing else was armed behind it, and opening the app puts the
- * break on screen instead of the home page.
+ * Reconcile with the clock. This is what makes a missed notification
+ * unmissable: the reminder fired while the app was closed, nothing else was
+ * armed behind it, and the exercise now reads as owed — which is enough for the
+ * prompt to come up over whichever tab is open, and for a prompt closed earlier
+ * to come back.
  *
  * Called on boot as well as on every foreground, since a cold start has no
- * state change to listen for.
+ * state change to listen for. It does not navigate: the break is drawn over the
+ * app, not somewhere the app has to be sent.
  */
 export async function catchUpAndRoute(): Promise<void> {
-  const store = useSessionStore.getState()
-  await store.catchUp()
-  const { awaiting } = useSessionStore.getState()
-  if (awaiting && !inPlayer()) navigateTo(alertRoute(awaiting.kind))
+  await useSessionStore.getState().catchUp()
 }

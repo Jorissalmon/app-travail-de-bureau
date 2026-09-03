@@ -84,6 +84,21 @@ Chaque écart par rapport au mégaprompt, avec sa raison en une phrase (§15.8).
   réelle — Fait, +10 min, routine terminée, journée arrêtée — jamais parce que
   la page s'est affichée. C'est ce qui rend un rappel manqué impossible à
   contourner en fermant l'app.
+- **La pause rend le temps qu'elle a gelé** — mettre en pause enregistre ce
+  qu'il restait avant le prochain rappel (`heldMs`/`heldKind`) ; reprendre le
+  remet tel quel plutôt que de relancer un intervalle entier. Une réunion ne
+  coûte pas les vingt minutes déjà attendues, et ne déclenche pas un rappel à
+  la seconde où on se rassoit. Si l'instant rendu tombe dans une plage calme ou
+  un jour exclu, on replanifie normalement.
+- **L'exercice dû est une pop-up, pas une mention** — `BreakOverlay` est monté
+  dans `AppLayout`, donc il s'impose par-dessus n'importe quel onglet, pour se
+  lever, bouger ou cligner des yeux indifféremment. La route `/alerte/:kind` ne
+  dessine plus rien : elle enregistre l'exercice dû et s'efface, pour qu'il n'y
+  ait qu'une seule présentation d'une pause. Le lecteur et l'écran de connexion
+  sont hors de `AppLayout`, donc jamais recouverts. La pop-up se ferme sans
+  répondre, mais revient au passage au premier plan suivant (`catchUp` remet
+  `promptDismissed` à faux) ; une pause la met en attente avec le reste et la
+  reprise la rappelle.
 - **Deux pauses distinctes** — `manual` est l'utilisateur qui s'éloigne du
   bureau et dure jusqu'à ce qu'il reprenne ; `break` dure le temps d'un exercice
   à l'écran. Elles sont séparées pour que fermer une routine ne relance pas une
@@ -103,6 +118,11 @@ Chaque écart par rapport au mégaprompt, avec sa raison en une phrase (§15.8).
   confondre voulait dire qu'un tag `v1.1.0` rendait tout bundle OTA ultérieur
   (1.0.11, 1.0.12…) plus ancien que l'APK : plus aucune mise à jour ne serait
   jamais descendue.
+- **Pas de `script-shell` dans `.npmrc`** — un `script-shell=bash` corrigeait
+  `pnpm apk` (cmd.exe ne résout pas `./gradlew`) mais cassait **tous** les autres
+  scripts, `pnpm dev` compris : `bash` n'est pas sur le PATH d'une session
+  PowerShell. `scripts/gradle.ts` lance le wrapper Gradle avec le nom qui
+  convient à la plateforme, sans shell du tout.
 - **Bundle OTA écrit avec `jszip`, plus avec le binaire `zip`** — `zip` n'existe
   pas sur une installation Windows standard, donc `pnpm ota:local` ne pouvait pas
   tourner sur la machine où l'app est développée et l'étape de release n'était

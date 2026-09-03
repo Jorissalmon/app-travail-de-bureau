@@ -17,7 +17,7 @@
     "db:migrate": "node --experimental-strip-types scripts/migrate.ts",
     "ota:local": "node --experimental-strip-types scripts/ota-package.ts",
     "cap:sync": "vite build && cap sync android",
-    "apk": "vite build && cap sync android && cd android && ./gradlew assembleRelease",
+    "apk": "vite build && cap sync android && node --experimental-strip-types scripts/gradle.ts assembleRelease",
     "gen:seed": "node --experimental-strip-types scripts/gen-seed.ts",
     "pretest": "node --experimental-strip-types scripts/gen-seed.ts"
   },

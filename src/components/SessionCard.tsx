@@ -16,6 +16,8 @@ export interface SessionCardProps {
   nextInS: number | null
   /** Why the clock is stopped, or null while it runs. */
   pauseReason?: 'manual' | 'break' | null
+  /** Seconds frozen by the pause, shown so it is plain nothing was lost. */
+  heldS?: number | null
   /** True while a reminder that fired is still waiting to be answered. */
   awaiting?: boolean
   /** Interval in seconds, to size the ring. */
@@ -38,6 +40,7 @@ export function SessionCard({
   onResume,
   busy,
   pauseReason = null,
+  heldS = null,
   awaiting = false,
 }: SessionCardProps) {
   const paused = pauseReason !== null
@@ -48,13 +51,20 @@ export function SessionCard({
 
   // The ring says one thing at a time, in the order that matters: an exercise
   // owed outranks a pause, and both outrank the countdown.
-  const [count, caption] = awaiting
-    ? ['À faire', 'un exercice t’attend']
-    : pauseReason === 'manual'
-      ? ['En pause', 'reprends quand tu es revenu']
-      : pauseReason === 'break'
-        ? ['En pause', 'le temps de l’exercice']
-        : [nextInS === null ? '—' : mmss(nextInS), 'avant le prochain']
+  const [count, caption] =
+    awaiting && pauseReason === 'manual'
+      ? ['En pause', 'un exercice t’attend à la reprise']
+      : awaiting
+        ? ['À faire', 'un exercice t’attend']
+        : pauseReason === 'manual'
+          ? heldS !== null
+            ? // The frozen countdown, not the word "paused": what it says is that
+              // the time already waited is still there and resumes untouched.
+              [mmss(heldS), 'gelé — reprend là où tu t’es arrêté']
+            : ['En pause', 'reprends quand tu es revenu']
+          : pauseReason === 'break'
+            ? ['En pause', 'le temps de l’exercice']
+            : [nextInS === null ? '—' : mmss(nextInS), 'avant le prochain']
 
   if (!active) {
     return (
@@ -68,11 +78,19 @@ export function SessionCard({
         </div>
         <div
           className="relative flex flex-col justify-end p-6"
-          style={{ minHeight: '44vh', background: 'linear-gradient(to top, var(--surface) 40%, transparent)' }}
+          style={{
+            minHeight: '44vh',
+            background: 'linear-gradient(to top, var(--surface) 40%, transparent)',
+          }}
         >
           <p className="t-card-eyebrow">Prêt</p>
           <h2 className="t-hero mt-1 mb-5">Commencer ma journée</h2>
-          <button type="button" className="btn btn-accent btn-block" onClick={onStart} disabled={busy}>
+          <button
+            type="button"
+            className="btn btn-accent btn-block"
+            onClick={onStart}
+            disabled={busy}
+          >
             {busy ? 'Un instant…' : 'Commencer'}
           </button>
         </div>

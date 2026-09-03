@@ -1,7 +1,15 @@
 import { Outlet } from 'react-router-dom'
 import { TabBar } from '@/components/TabBar'
+import { BreakOverlay } from '@/components/BreakOverlay'
 
-/** Shell for the five tabbed screens: scrollable content + bottom tab bar. */
+/**
+ * Shell for the five tabbed screens: scrollable content + bottom tab bar.
+ *
+ * The break prompt lives here rather than on a route, so an owed exercise comes
+ * up over whichever tab is open. The player and the login screen sit outside
+ * this shell, which is exactly right: a reminder never covers an exercise
+ * already under way, nor a screen you are not signed in behind.
+ */
 export function AppLayout() {
   return (
     <div className="flex min-h-0 flex-1 flex-col">
@@ -12,6 +20,7 @@ export function AppLayout() {
         <Outlet />
       </main>
       <TabBar />
+      <BreakOverlay />
     </div>
   )
 }
