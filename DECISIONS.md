@@ -118,6 +118,29 @@ Chaque écart par rapport au mégaprompt, avec sa raison en une phrase (§15.8).
   confondre voulait dire qu'un tag `v1.1.0` rendait tout bundle OTA ultérieur
   (1.0.11, 1.0.12…) plus ancien que l'APK : plus aucune mise à jour ne serait
   jamais descendue.
+- **Frontière d'erreur autour du routeur** — rien n'existait avant : une
+  exception de rendu vidait la page sans message, et le rollback OTA ne s'en
+  protège pas (il ne surveille que les quelques secondes après
+  `notifyAppReady()`, bien avant qu'un plantage comme celui-là puisse
+  survenir). `ErrorBoundary` affiche un écran de secours avec un bouton
+  Recharger, ce qui suffit dans le cas qui compte le plus : un mauvais bundle
+  OTA revient sur la version précédente au prochain démarrage puisque le
+  plugin garde l'ancien bundle jusqu'à confirmation. Un écouteur global
+  `unhandledrejection` journalise ce qui échappe encore, en console
+  uniquement — sans infrastructure de bannière globale pour un seul point
+  d'écoute.
+- **`start()`/`stop()` de session sont vraiment best-effort** — le commentaire
+  du code le disait déjà, l'implémentation ne le tenait qu'à moitié : tout
+  échec serveur qui n'était pas une coupure réseau (401, 500…) relançait
+  l'exception après que l'état local avait déjà été écrit et affiché. Reproduit
+  en local : `start()` plantait sur un 401 alors que la session tournait déjà à
+  l'écran. Les deux ne relancent plus rien, seulement un `console.warn` ; l'UI
+  de `Today.tsx` capte aussi ce qui pourrait encore remonter et l'affiche en
+  ligne plutôt que de laisser le bouton tourner sur un rejet non géré. Pas de
+  file de réessai pour `work_sessions` : la table n'est lue nulle part
+  (`stats.ts` s'appuie sur `reminder_events` et `completions`), et rejouer un
+  `INSERT` sans idempotance dupliquerait des lignes pour un usage qui n'existe
+  pas encore.
 - **Pas de `script-shell` dans `.npmrc`** — un `script-shell=bash` corrigeait
   `pnpm apk` (cmd.exe ne résout pas `./gradlew`) mais cassait **tous** les autres
   scripts, `pnpm dev` compris : `bash` n'est pas sur le PATH d'une session

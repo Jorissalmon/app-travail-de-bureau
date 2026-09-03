@@ -41,6 +41,7 @@ export function Today() {
 
   const [busy, setBusy] = useState(false)
   const [showPermissions, setShowPermissions] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     void loadStats()
@@ -71,14 +72,17 @@ export function Today() {
 
   async function handleStart() {
     setBusy(true)
+    setError(null)
     try {
       await start()
       setShowPermissions(false)
     } catch (e) {
       // Missing grants are not a failure to report, they are a thing to fix:
-      // open the sheet that fixes them (§8.3). Anything else still throws.
-      if (!(e instanceof PermissionsMissingError)) throw e
-      setShowPermissions(true)
+      // open the sheet that fixes them (§8.3). Anything else is shown inline —
+      // never rethrown, or it would leave the button spinning on an unhandled
+      // rejection instead of telling the user what to do next.
+      if (e instanceof PermissionsMissingError) setShowPermissions(true)
+      else setError('La session n’a pas pu démarrer. Réessaie.')
     } finally {
       setBusy(false)
     }
@@ -86,9 +90,12 @@ export function Today() {
 
   async function handleStop() {
     setBusy(true)
+    setError(null)
     try {
       await stop({ via: 'button' })
       void loadStats()
+    } catch {
+      setError('La journée n’a pas pu s’arrêter. Réessaie.')
     } finally {
       setBusy(false)
     }
@@ -141,6 +148,12 @@ export function Today() {
         onResume={() => void resumeWork()}
         busy={busy}
       />
+
+      {error && (
+        <p className="t-meta mt-3" role="alert" style={{ color: 'var(--danger)' }}>
+          {error}
+        </p>
+      )}
 
       {advice && <DayCard advice={advice} />}
 
