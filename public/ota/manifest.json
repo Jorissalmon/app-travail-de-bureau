@@ -1,7 +1,7 @@
 {
-  "version": "1.0.17",
-  "url": "https://app-travail-de-bureau.vercel.app/ota/bundle-1.0.17.zip",
-  "checksum": "ee9709d6635ad64f7578d41f48bc17c50af1425e15d959e49b4e80cb19c814e2",
+  "version": "1.0.18",
+  "url": "https://app-travail-de-bureau.vercel.app/ota/bundle-1.0.18.zip",
+  "checksum": "9cfca52ea2422d45f16b7661401822b302180c7a8b6b629afb4676a0794b5c2f",
   "minNative": "1.0.0",
-  "notes": "Resume where the pause stopped, and put the owed exercise in front\n\nPausing now records what was left on the clock, and resuming gives back\nexactly that instead of restarting a whole interval. A meeting no longer\ncosts the twenty minutes already waited, nor hands you a reminder the\nsecond you sit down. If the time given back would land in a quiet window\nor on an excluded day, the clock is replanned instead.\n\nThe owed exercise stops being a line on the home card saying one is due\n— a line is read and ignored — and becomes the break itself, drawn over\nwhichever tab is open, first movement and three answers included, for a\nstand break, a mobility break or the eyes alike. BreakOverlay lives in\nAppLayout, so it never covers an exercise already under way nor a screen\nyou are not signed in behind. The /alerte/:kind route draws nothing now:\nit records what is owed and steps aside, leaving one presentation of a\nbreak rather than two that drift apart.\n\nIt closes without answering and comes back on the next foreground; the\ncard keeps saying one is due. Pausing the day holds it too, and resuming\nbrings it back — nothing is lost because a meeting landed badly.\n\nAlso drops the .npmrc script-shell added earlier today: it fixed\n`pnpm apk` under cmd.exe but broke every other script, `pnpm dev`\nincluded, because bash is not on the PATH of a PowerShell session.\nscripts/gradle.ts starts the wrapper the platform actually has, with no\nshell at all.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
+  "notes": "Bump the shell to 1.2.0\n\nThe bowl as a res/raw resource, a second notification channel and the\nwakeAlways flag are all native: an APK built before them cannot play the\nsound or take a lit screen. Distinguishable from 1.1.0 in Settings.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 }
