@@ -35,11 +35,19 @@ public class WakeReceiver extends BroadcastReceiver {
     public static final String EXTRA_ROUTE = "wakeRoute";
     public static final String EXTRA_TITLE = "wakeTitle";
     public static final String EXTRA_ID = "wakeId";
+    /** True when the break should take the screen even if it is already on. */
+    public static final String EXTRA_ALWAYS = "wakeAlways";
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        // A phone lying face up on the desk has its screen off most of the time,
+        // and the ordinary notification covers the rest — so by default this
+        // only steps in when nothing else could be seen. When the user has asked
+        // to be alerted rather than merely notified, it takes the screen either
+        // way: a heads-up banner is exactly what gets worked through.
+        boolean always = intent.getBooleanExtra(EXTRA_ALWAYS, false);
         PowerManager power = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        if (power != null && power.isInteractive()) return;
+        if (!always && power != null && power.isInteractive()) return;
 
         NotificationManager manager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

@@ -16,12 +16,24 @@ import { cancelWakeAlerts, scheduleWakeAlerts } from './screenwake'
  */
 
 export const CHANNEL_ID = 'releve_breaks'
+/**
+ * A second channel, identical but for the sound. Android will not let an
+ * existing channel's sound be changed — which is why the "Son" toggle could
+ * never do anything on Android 8+ — so the only way to offer both is to create
+ * both and choose per notification.
+ */
+export const CHANNEL_ID_SOUND = 'releve_breaks_bol'
 export const ACTION_TYPE = 'RELEVE_BREAK'
 
 export interface ScheduleContext {
   /** Opt-in notification sound. Vibration is a channel property, set in
       createChannel, so it is not per-notification here. */
   sound: boolean
+}
+
+/** Which of the two channels a notification should land on. */
+function channelFor(ctx: ScheduleContext): string {
+  return ctx.sound ? CHANNEL_ID_SOUND : CHANNEL_ID
 }
 
 /** Register the notification channel and the three-action type (§8.3 / §8.4). */
@@ -35,7 +47,19 @@ export async function ensureChannelAndActions(): Promise<void> {
     importance: 4, // HIGH
     visibility: 1,
     vibration: true,
-    // No sound by default — open space (§8.3).
+    // No sound — open space (§8.3). This is still the default channel.
+  })
+
+  await LocalNotifications.createChannel({
+    id: CHANNEL_ID_SOUND,
+    name: 'Rappels de pause (avec le bol)',
+    description: 'Les mêmes rappels, annoncés par le bol.',
+    importance: 4, // HIGH
+    visibility: 1,
+    vibration: true,
+    // res/raw/bol.wav — Android plays it itself, so a reminder is audible even
+    // when the app is not running and cannot synthesise anything.
+    sound: 'bol',
   })
 
   await LocalNotifications.registerActionTypes({
@@ -64,7 +88,7 @@ function toSchedule(occ: Occurrence, ctx: ScheduleContext): ScheduleOptions['not
     // at 15 h is not the reason at 9 h. The other two are about a body part,
     // and time does not change what they are for.
     body: occ.kind === 'stand' ? nudgeFor(occ.at) : copy.body,
-    channelId: CHANNEL_ID,
+    channelId: channelFor(ctx),
     actionTypeId: ACTION_TYPE,
     schedule: { at: occ.at, allowWhileIdle: true },
     // Sound is opt-in and off by default (open space, §8.3). Vibration is a
@@ -91,6 +115,8 @@ export async function scheduleAll(occurrences: Occurrence[], ctx: ScheduleContex
       at: o.at.getTime(),
       route: alertRoute(o.kind),
       title: KINDS[o.kind].title,
+      // Asked to be alerted: the break takes the screen whatever its state.
+      always: ctx.sound,
     })),
   )
 }

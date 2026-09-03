@@ -27,6 +27,7 @@ import {
   readPermissions,
 } from '@/features/reminders/permissions'
 import { flushEvents, logEvent, makeEvent } from '@/features/reminders/events'
+import { alertMode } from '@/features/reminders/alert'
 import { useSettingsStore } from './settings'
 
 /**
@@ -141,8 +142,10 @@ interface SessionState {
 const STALE_BREAK_MS = 20 * 60_000
 
 function scheduleContext(): ScheduleContext {
-  const { sound } = useSettingsStore.getState().settings
-  return { sound }
+  // Driven by the device-local alert mode, not by settings.sound: that toggle
+  // could never work on Android 8+, where the channel owns the sound and an
+  // existing channel cannot be changed. One setting, one behaviour.
+  return { sound: alertMode() !== 'silent' }
 }
 
 function serialize(occ: Occurrence[]): SerializableOcc[] {

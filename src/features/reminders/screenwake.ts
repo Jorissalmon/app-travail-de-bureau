@@ -18,6 +18,12 @@ export interface WakeAlert {
   /** Route the app opens on, same value as the notification's `extra.route`. */
   route: string
   title: string
+  /**
+   * Take the screen even when it is already on. Off by default — the ordinary
+   * notification covers a lit screen — and turned on when the user has asked to
+   * be alerted rather than merely notified.
+   */
+  always: boolean
 }
 
 interface ScreenWakePlugin {

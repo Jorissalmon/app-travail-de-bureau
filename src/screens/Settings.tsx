@@ -205,12 +205,9 @@ export function Settings() {
             onChange={(v) => void update({ vibrate: v })}
           />
         </SettingRow>
-        <SettingRow label="Son des notifications" hint="Désactivé par défaut (open space).">
-          <Toggle label="Son" checked={settings.sound} onChange={(v) => void update({ sound: v })} />
-        </SettingRow>
         <SettingRow
           label="Alarme du rappel"
-          hint="Quand un rappel tombe et que l’app est ouverte. « Répété » sonne toutes les 20 s jusqu’à ce que tu répondes, et s’arrête au bout de cinq minutes."
+          hint="Le bol, quand un rappel tombe. Silencieux par défaut (open space). « Répété » sonne toutes les 20 s jusqu’à ce que tu répondes, et s’arrête au bout de cinq minutes."
           stacked
         >
           <Segmented

@@ -230,6 +230,25 @@ Chaque écart par rapport au mégaprompt, avec sa raison en une phrase (§15.8).
   domiciles : les surcharges de `durations.ts`, indexées par slug et position,
   et la valeur stockée dans la routine elle-même.
 
+- **Le bol est aussi une ressource Android (`res/raw/bol.wav`)** — quand l'app
+  ne tourne pas, elle ne peut rien synthétiser : c'est Android qui doit jouer le
+  son. Le fichier est rendu par le même calcul que la synthèse Web Audio, à
+  22,05 kHz (le partiel le plus aigu est à 1069 Hz, très loin de la limite de
+  Nyquist) : 154 Ko au lieu de 344, sans perte audible.
+- **Deux canaux de notification, pas un réglage de son** — Android interdit de
+  modifier le son d'un canal existant, ce qui explique que l'ancien bouton
+  « Son des notifications » ne pouvait rien faire sur Android 8+ : le canal avait
+  été créé muet. Il y a donc désormais un canal muet et un canal « bol », et
+  c'est le mode d'alarme qui décide lequel reçoit la notification. L'ancien
+  bouton a été retiré de Réglages plutôt que laissé à mentir ; le champ
+  `settings.sound` reste en base, inutilisé, une migration pour un booléen ne se
+  justifiant pas.
+- **Le plein écran peut prendre l'écran allumé** — `WakeReceiver` ne s'effaçait
+  que devant un écran déjà allumé, en supposant que la notification suffirait.
+  C'est précisément la bannière qu'on traverse sans la voir quand on travaille.
+  Le drapeau `wakeAlways`, mis quand l'utilisateur a choisi d'être alerté plutôt
+  que notifié, lui fait prendre l'écran dans tous les cas.
+
 ## À la charge du propriétaire (secrets, hors dépôt)
 
 - Créer le rôle `releve_app` + la base `releve`, appliquer les migrations

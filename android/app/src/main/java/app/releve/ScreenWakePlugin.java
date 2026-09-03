@@ -82,7 +82,10 @@ public class ScreenWakePlugin extends Plugin {
                 if (at <= System.currentTimeMillis()) continue;
 
                 PendingIntent pending = pendingFor(
-                        id, item.optString("route", null), item.optString("title", null));
+                        id,
+                        item.optString("route", null),
+                        item.optString("title", null),
+                        item.optBoolean("always", false));
                 if (canScheduleExact(alarms)) {
                     alarms.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, at, pending);
                 } else {
@@ -106,7 +109,7 @@ public class ScreenWakePlugin extends Plugin {
         if (alarms != null) {
             for (String raw : readIds()) {
                 try {
-                    alarms.cancel(pendingFor(Integer.parseInt(raw), null, null));
+                    alarms.cancel(pendingFor(Integer.parseInt(raw), null, null, false));
                 } catch (NumberFormatException ignored) {
                     /* A malformed id can only come from a corrupted store. */
                 }
@@ -162,11 +165,12 @@ public class ScreenWakePlugin extends Plugin {
         return alarms.canScheduleExactAlarms();
     }
 
-    private PendingIntent pendingFor(int id, String route, String title) {
+    private PendingIntent pendingFor(int id, String route, String title, boolean always) {
         Intent intent = new Intent(getContext(), WakeReceiver.class);
         intent.putExtra(WakeReceiver.EXTRA_ID, id);
         intent.putExtra(WakeReceiver.EXTRA_ROUTE, route);
         intent.putExtra(WakeReceiver.EXTRA_TITLE, title);
+        intent.putExtra(WakeReceiver.EXTRA_ALWAYS, always);
         return PendingIntent.getBroadcast(
                 getContext(),
                 id,
