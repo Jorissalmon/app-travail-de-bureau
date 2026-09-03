@@ -157,6 +157,36 @@ Chaque écart par rapport au mégaprompt, avec sa raison en une phrase (§15.8).
   fait tourner l'empaquetage à chaque PR pour que ces trois gardes se déclenchent
   avant `main`, et non après.
 
+- **Fiche d'exercice, une par mouvement distinct plutôt qu'une par occurrence
+  d'étape** — 80 étapes existent dans les 13 routines, mais un mouvement comme
+  la fente revient trois fois. Chaque étape porte désormais un `exerciseKey` qui
+  pointe vers `exercises.json` (42 entrées) : le contenu ne se répète pas, et
+  chaque étape garde sa propre consigne courte (`cue`) au-dessus de la fiche
+  partagée. Confondre par erreur deux mouvements qui partagent une illustration
+  (« Marche » et « Marche sur place », « Regard au loin » et « Loin, près ») les
+  aurait décrits l'un comme l'autre ; les 42 clés ont été établies en relisant
+  chaque étape, pas en dérivant automatiquement de `figureKey`. `content.test.ts`
+  vérifie qu'aucune étape ne pointe vers une clé absente et qu'aucun exercice
+  n'est orphelin.
+- **`exercises` en base, séparée de `/api/routines`** — la fiche complète (pas à
+  pas, astuces, adaptation, muscles, ce qu'il faut éviter) vit dans sa propre
+  table et son propre endpoint `/api/exercises`, plutôt que d'être répétée dans
+  chaque occurrence d'étape de `/api/routines` : l'intégrer partout aurait
+  jusqu'à triplé le même texte sur le réseau et dans le bundle hors-ligne. Le
+  store de contenu suit exactement le patron déjà en place pour les routines et
+  les articles (copie locale, rafraîchissement en arrière-plan, échec silencieux).
+- **`001_init.sql` modifié directement, pas de migration numérotée** — la base
+  n'a jamais été appliquée depuis cette session (voir plus bas) ; ajouter la
+  table `exercises` et la colonne `routine_steps.exercise_key` dans le schéma
+  d'origine plutôt que dans un `003_*.sql` évite une migration inutile sur une
+  base qui n'existe pas encore. `exercises` est upsertée avant les routines dans
+  `gen-seed.ts` : la contrainte de clé étrangère l'exige.
+- **Chaque étape de routine ouvre sa fiche au clic, dans `RoutineDetail`** — et
+  le lecteur (`Player`) l'ouvre en feuille plutôt qu'en page : naviguer aurait
+  démonté le lecteur et perdu l'étape en cours au retour. Le contenu des deux
+  emplacements est le même composant (`ExerciseSections`), pour qu'une correction
+  de texte ne se fasse qu'à un seul endroit.
+
 ## À la charge du propriétaire (secrets, hors dépôt)
 
 - Créer le rôle `releve_app` + la base `releve`, appliquer les migrations

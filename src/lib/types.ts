@@ -69,6 +69,29 @@ export interface RoutineStep {
   durationS: number
   cue: string
   figureKey: string
+  /** Which entry of the exercise library explains this movement in full. */
+  exerciseKey: string
+}
+
+/**
+ * The full explanation of one movement (§ audit — "les exos doivent avoir une
+ * page où on explique ce que c'est"). Keyed by `exerciseKey`, not by routine
+ * step: the same movement recurs across routines (a lunge is a lunge whether
+ * it opens "Debout" or closes "Réveil"), so it is documented once and every
+ * step that uses it points at the same entry.
+ */
+export interface Exercise {
+  key: string
+  title: string
+  /** Numbered how-to, read top to bottom. */
+  steps: string[]
+  tips: string[]
+  /** One way to make it more accessible — a beginner always has exactly one. */
+  easier: string
+  /** Body parts or systems it works, shown as chips. */
+  muscles: string[]
+  /** The one thing that means "stop", plain enough for someone who has never done it. */
+  avoid: string
 }
 
 export interface Routine {

@@ -1,6 +1,7 @@
-import type { AccentKey, Article, Family, Routine, Zone } from '@/lib/types'
+import type { AccentKey, Article, Exercise, Family, Routine, Zone } from '@/lib/types'
 import routinesJson from './routines.json'
 import articlesJson from './articles.json'
+import exercisesJson from './exercises.json'
 
 /**
  * Local copy of the seeded content (§12). Used as the offline fallback on the
@@ -11,6 +12,11 @@ import articlesJson from './articles.json'
 
 export const LOCAL_ROUTINES = routinesJson as Routine[]
 export const LOCAL_ARTICLES = articlesJson as Article[]
+/** The JSON is keyed by exerciseKey; the array form is what the API and the
+    content store both use, so the key lives on the value too (§ audit). */
+export const LOCAL_EXERCISES: Exercise[] = Object.entries(
+  exercisesJson as Record<string, Omit<Exercise, 'key'>>,
+).map(([key, ex]) => ({ key, ...ex }))
 
 export interface ZoneMeta {
   zone: Zone

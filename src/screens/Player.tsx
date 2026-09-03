@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import { Pause, Play, SkipForward, X } from 'lucide-react'
+import { Info, Pause, Play, SkipForward, X } from 'lucide-react'
 import { Haptics, ImpactStyle } from '@capacitor/haptics'
 import { KeepAwake } from '@capacitor-community/keep-awake'
 import { FigureBadge } from '@/components/FigureBadge'
 import { TimerRing } from '@/components/TimerRing'
+import { Sheet } from '@/components/Sheet'
+import { ExerciseSections } from '@/components/ExerciseSections'
 import { useContentStore } from '@/stores/content'
 import { useSettingsStore } from '@/stores/settings'
 import { useSessionStore } from '@/stores/session'
@@ -39,8 +41,10 @@ export function Player() {
   const fromNotification = params.get('from') === 'notification'
 
   const routine = useContentStore((s) => (slug ? s.routineBySlug(slug) : undefined))
+  const exerciseByKey = useContentStore((s) => s.exerciseByKey)
   const vibrate = useSettingsStore((s) => s.settings.vibrate)
   const markDone = useSessionStore((s) => s.markDone)
+  const [showInfo, setShowInfo] = useState(false)
   const pauseForBreak = useSessionStore((s) => s.pauseForBreak)
   const routineDone = useSessionStore((s) => s.routineDone)
   const resumeFromBreak = useSessionStore((s) => s.resumeFromBreak)
@@ -61,6 +65,7 @@ export function Player() {
   const steps = useMemo(() => routine?.steps ?? [], [routine])
   const step = steps[stepIndex]
   const isLast = stepIndex >= steps.length - 1
+  const stepExercise = step ? exerciseByKey(step.exerciseKey) : undefined
 
   const workSeconds = useMemo(
     () => (step && routine ? durationFor(routine.slug, step.position, step.durationS) : 0),
@@ -282,7 +287,18 @@ export function Player() {
           {phase === 'ready' ? remaining : mmss(remaining)}
         </p>
 
-        <h2 className="t-screen mt-6 text-center">{step.name}</h2>
+        <div className="mt-6 flex items-center gap-2">
+          <h2 className="t-screen text-center">{step.name}</h2>
+          <button
+            type="button"
+            aria-label="En savoir plus sur cet exercice"
+            className="tap rounded-full"
+            style={{ width: 30, height: 30, background: 'var(--surface-2)' }}
+            onClick={() => setShowInfo(true)}
+          >
+            <Info size={16} color="var(--text-2)" style={{ margin: 'auto' }} />
+          </button>
+        </div>
         <p className="t-body mt-2 max-w-[32ch] text-center" style={{ color: 'var(--text-2)', fontSize: 17 }}>
           {step.cue}
         </p>
@@ -322,6 +338,13 @@ export function Player() {
           </button>
         )}
       </div>
+
+      {/* A sheet, not a route: the countdown keeps running underneath, exactly
+          like every other sheet in the app. Navigating away would remount the
+          player on return and lose the step you were on. */}
+      <Sheet open={showInfo} onClose={() => setShowInfo(false)} title={step.name}>
+        {stepExercise && <ExerciseSections exercise={stepExercise} />}
+      </Sheet>
     </div>
   )
 }

@@ -88,12 +88,21 @@ export function RoutineDetail() {
               style={{ background: 'var(--surface)' }}
             >
               <FigureBadge figureKey={step.figureKey} tone={stepTone(step.figureKey)} size={44} />
-              <div className="min-w-0 flex-1">
-                <p className="text-[16px]" style={{ fontWeight: 700 }}>
+              {/* Not .tap: that class flex-centers a single icon child, which
+                  squeezed this two-line text block instead of stacking it. */}
+              <button
+                type="button"
+                className="min-w-0 flex-1 text-left"
+                onClick={() => navigate(`/library/${routine.slug}/${step.position}`)}
+                aria-label={`En savoir plus sur ${step.name}`}
+              >
+                <p className="truncate text-[16px]" style={{ fontWeight: 700 }}>
                   {step.name}
                 </p>
-                <p className="t-meta mt-0.5 line-clamp-1">{step.cue}</p>
-              </div>
+                <p className="t-meta mt-0.5 line-clamp-1 underline underline-offset-2">
+                  {step.cue}
+                </p>
+              </button>
               <div className="flex shrink-0 items-center gap-1">
                 <button
                   type="button"
