@@ -17,6 +17,13 @@ import {
   requestPermission,
 } from '@/features/reminders/permissions'
 import { loadCues, setCues } from '@/features/session/cues'
+import {
+  ALERT_MODES,
+  ALERT_MODE_LABEL,
+  type AlertMode,
+  loadAlertMode,
+  setAlertMode,
+} from '@/features/reminders/alert'
 import { isNative } from '@/lib/platform'
 
 const REPO_URL = 'https://github.com/Jorissalmon/app-travail-de-bureau'
@@ -68,6 +75,11 @@ export function Settings() {
   const [playerSound, setPlayerSound] = useState(true)
   useEffect(() => {
     void loadCues().then(setPlayerSound)
+  }, [])
+
+  const [alert, setAlert] = useState<AlertMode>('silent')
+  useEffect(() => {
+    void loadAlertMode().then(setAlert)
   }, [])
 
   function toggleWeekday(n: number) {
@@ -195,6 +207,22 @@ export function Settings() {
         </SettingRow>
         <SettingRow label="Son des notifications" hint="Désactivé par défaut (open space).">
           <Toggle label="Son" checked={settings.sound} onChange={(v) => void update({ sound: v })} />
+        </SettingRow>
+        <SettingRow
+          label="Alarme du rappel"
+          hint="Quand un rappel tombe et que l’app est ouverte. « Répété » sonne toutes les 20 s jusqu’à ce que tu répondes, et s’arrête au bout de cinq minutes."
+          stacked
+        >
+          <Segmented
+            ariaLabel="Insistance de l’alarme"
+            options={ALERT_MODES}
+            value={alert}
+            onChange={(v) => {
+              setAlert(v)
+              void setAlertMode(v)
+            }}
+            format={(v) => ALERT_MODE_LABEL[v]}
+          />
         </SettingRow>
         <SettingRow
           label="Sons du minuteur"

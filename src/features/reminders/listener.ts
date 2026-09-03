@@ -5,6 +5,7 @@ import { useSessionStore } from '@/stores/session'
 import { flushEvents } from './events'
 import { navigateTo } from './deeplink'
 import { onWakeAlert } from './screenwake'
+import { startAlerting } from './alert'
 
 /**
  * Wires the native listeners for the reminder engine (§8.4). Registered from
@@ -78,5 +79,10 @@ export function installReminderListeners(): void {
  * app, not somewhere the app has to be sent.
  */
 export async function catchUpAndRoute(): Promise<void> {
+  const before = useSessionStore.getState().awaiting
   await useSessionStore.getState().catchUp()
+  // Newly owed, not merely still owed: coming back to a prompt that was already
+  // waiting should not set it ringing again.
+  const after = useSessionStore.getState().awaiting
+  if (!before && after) startAlerting()
 }

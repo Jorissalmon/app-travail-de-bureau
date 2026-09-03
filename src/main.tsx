@@ -6,6 +6,8 @@ import { AppRoutes } from '@/app/routes'
 import { StatusBar, Style } from '@capacitor/status-bar'
 import { isNative } from '@/lib/platform'
 import { catchUpAndRoute, installReminderListeners } from '@/features/reminders/listener'
+import { installWebAlarm } from '@/features/reminders/webAlarm'
+import { loadAlertMode } from '@/features/reminders/alert'
 import { ensureChannelAndActions } from '@/features/reminders/notifications'
 import { notifyReady, checkForUpdate } from '@/features/ota/updater'
 import { useAuthStore } from '@/stores/auth'
@@ -27,6 +29,10 @@ async function boot() {
 
   // Listener before render (deep links queue until the router mounts).
   installReminderListeners()
+  // The browser-tab path: harmless and inert on the phone, where Android's own
+  // alarms do the job.
+  installWebAlarm()
+  void loadAlertMode()
 
   if (isNative()) {
     try {
