@@ -21,6 +21,7 @@ export const KEYS = {
   exercises: 'content.exercises',
   scheduled: 'reminders.scheduled',
   playerSound: 'player.sound',
+  alertMode: 'reminders.alertMode',
   stepDurations: 'player.durations',
   bundleVersion: 'ota.bundleVersion',
   pendingNativeUpdate: 'ota.pendingNativeUpdate',

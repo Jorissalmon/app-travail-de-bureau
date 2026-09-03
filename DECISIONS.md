@@ -186,6 +186,29 @@ Chaque écart par rapport au mégaprompt, avec sa raison en une phrase (§15.8).
   démonté le lecteur et perdu l'étape en cours au retour. Le contenu des deux
   emplacements est le même composant (`ExerciseSections`), pour qu'une correction
   de texte ne se fasse qu'à un seul endroit.
+- **Une alarme audible, réglable, silencieuse par défaut** — une notification
+  muette pendant qu'on travaille ne sert à rien, mais l'app a été pensée pour
+  l'open space (§8.3) : le choix est donc explicite et vit sur l'appareil
+  (`silent` / `once` / `repeat`), pas dans `Settings` que `/api/me` remplace en
+  entier. Le son est un **bol** synthétisé : trois sinus, dont deux désaccordés
+  de 0,4 % pour produire le battement lent d'un bol frappé (1,5 Hz mesuré, 1,58
+  théorique), attaque lente de 80 ms et 3,2 s de résonance. Choisi par le
+  propriétaire dans une bibliothèque de sept propositions. Synthétisé et non
+  échantillonné, comme les bips du lecteur : rien à charger, rien dans le bundle.
+- **Le rappel dans un onglet de navigateur** — sur le téléphone c'est Android qui
+  programme l'alarme ; un navigateur n'a pas d'équivalent sans service worker ni
+  service de push, donc l'onglet surveille l'horloge lui-même (toutes les 5 s,
+  en comparant à l'échéance plutôt qu'en décomptant, comme le lecteur). Limite
+  assumée et mesurée : **un onglet en arrière-plan est bridé par Chrome à environ
+  une exécution par minute**, donc un rappel peut arriver jusqu'à une minute en
+  retard. Sur une cadence de trente minutes c'est sans conséquence, et le retour
+  sur l'onglet déclenche une vérification immédiate.
+- **Les timers de l'alarme sont testés hors navigateur** — piloter ça dans le
+  dev-server donnait une alarme qui semblait survivre à la réponse. En réalité
+  Vite sert deux instances d'un module rechargé à chaud, chacune avec ses
+  propres handles de timer, donc le `stopAlerting` de l'une ne pouvait pas
+  annuler l'intervalle armé par l'autre. `alert.test.ts` le vérifie avec des
+  horloges factices et un seul exemplaire du module.
 
 ## À la charge du propriétaire (secrets, hors dépôt)
 

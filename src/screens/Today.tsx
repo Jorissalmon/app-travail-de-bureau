@@ -17,6 +17,8 @@ import { useNow } from '@/app/useNow'
 import { dateEyebrow, dayName } from '@/lib/date'
 import { pendingAfter } from '@/features/reminders/schedule'
 import { PermissionsMissingError } from '@/features/reminders/permissions'
+import { primeAlarm } from '@/features/reminders/alert'
+import { askForTabNotifications } from '@/features/reminders/webAlarm'
 import { standsLine } from '@/lib/format'
 
 /** §11.1 — Aujourd'hui. */
@@ -73,6 +75,10 @@ export function Today() {
   async function handleStart() {
     setBusy(true)
     setError(null)
+    // This tap is the only moment a browser will unlock audio or grant
+    // notifications; half an hour later, at the reminder, it is far too late.
+    primeAlarm()
+    void askForTabNotifications()
     try {
       await start()
       setShowPermissions(false)
