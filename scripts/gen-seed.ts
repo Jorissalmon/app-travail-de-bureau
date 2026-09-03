@@ -17,6 +17,15 @@ interface Step {
   durationS: number
   cue: string
   figureKey: string
+  exerciseKey: string
+}
+interface Exercise {
+  title: string
+  steps: string[]
+  tips: string[]
+  easier: string
+  muscles: string[]
+  avoid: string
 }
 interface Routine {
   slug: string
@@ -47,10 +56,18 @@ const routines: Routine[] = JSON.parse(
 const articles: Article[] = JSON.parse(
   readFileSync(resolve(root, 'src/content/articles.json'), 'utf8'),
 )
+const exercises: Record<string, Exercise> = JSON.parse(
+  readFileSync(resolve(root, 'src/content/exercises.json'), 'utf8'),
+)
 
 /** Single-quote a SQL string literal, doubling embedded quotes. */
 function q(s: string): string {
   return `'${s.replace(/'/g, "''")}'`
+}
+
+/** `ARRAY['a', 'b']`, quoted the same way as a single string. */
+function qArray(items: string[]): string {
+  return `ARRAY[${items.map(q).join(', ')}]`
 }
 
 /** `slug <> ALL (ARRAY['a', 'b'])` — the slugs the JSON no longer defines. */
@@ -75,6 +92,22 @@ lines.push('')
 lines.push('BEGIN;')
 lines.push('')
 
+// Exercises first: routine_steps.exercise_key references them, so the rows
+// they point at must already exist by the time a step is inserted.
+for (const [key, ex] of Object.entries(exercises)) {
+  lines.push(`-- ${key}`)
+  lines.push('INSERT INTO exercises (key, title, steps, tips, easier, muscles, avoid)')
+  lines.push(
+    `VALUES (${q(key)}, ${q(ex.title)}, ${qArray(ex.steps)}, ${qArray(ex.tips)}, ${q(
+      ex.easier,
+    )}, ${qArray(ex.muscles)}, ${q(ex.avoid)})`,
+  )
+  lines.push('ON CONFLICT (key) DO UPDATE SET')
+  lines.push('  title = EXCLUDED.title, steps = EXCLUDED.steps, tips = EXCLUDED.tips,')
+  lines.push('  easier = EXCLUDED.easier, muscles = EXCLUDED.muscles, avoid = EXCLUDED.avoid;')
+}
+lines.push('')
+
 for (const r of routines) {
   lines.push(`-- ${r.slug}`)
   lines.push('INSERT INTO routines (slug, title, zone, duration_s, summary, accent, sort_order)')
@@ -95,7 +128,9 @@ for (const r of routines) {
       r.slug,
     )});`,
   )
-  lines.push('INSERT INTO routine_steps (routine_id, position, name, duration_s, cue, figure_key)')
+  lines.push(
+    'INSERT INTO routine_steps (routine_id, position, name, duration_s, cue, figure_key, exercise_key)',
+  )
   lines.push('VALUES')
   lines.push(
     r.steps
@@ -103,7 +138,7 @@ for (const r of routines) {
         (s) =>
           `  ((SELECT id FROM routines WHERE slug = ${q(r.slug)}), ${s.position}, ${q(s.name)}, ${
             s.durationS
-          }, ${q(s.cue)}, ${q(s.figureKey)})`,
+          }, ${q(s.cue)}, ${q(s.figureKey)}, ${q(s.exerciseKey)})`,
       )
       .join(',\n') + ';',
   )
@@ -132,11 +167,18 @@ lines.push('-- Drop content the JSON no longer defines. Deleting a routine sets'
 lines.push('-- completions.routine_id to NULL (ON DELETE SET NULL); the rows survive.')
 lines.push(`DELETE FROM routines WHERE slug <> ALL (${keepList(routines.map((r) => r.slug))});`)
 lines.push(`DELETE FROM articles WHERE slug <> ALL (${keepList(articles.map((a) => a.slug))});`)
+// Last, and only after routines/steps above have dropped their own stale rows
+// (cascading through routine_steps): nothing still points at an exercise this
+// deletes, or the FK would refuse it.
+lines.push(
+  `DELETE FROM exercises WHERE key <> ALL (${keepList(Object.keys(exercises))});`,
+)
 lines.push('')
 lines.push('COMMIT;')
 lines.push('')
 
 writeFileSync(resolve(root, 'db/002_seed_content.sql'), lines.join('\n'))
 console.log(
-  `db/002_seed_content.sql written: ${routines.length} routines, ${articles.length} articles`,
+  `db/002_seed_content.sql written: ${routines.length} routines, ${articles.length} articles, ` +
+    `${Object.keys(exercises).length} exercises`,
 )

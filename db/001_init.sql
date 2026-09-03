@@ -64,6 +64,20 @@ CREATE TABLE reminder_events (
 CREATE UNIQUE INDEX ON reminder_events (user_id, client_id);
 CREATE INDEX ON reminder_events (user_id, local_date DESC);
 
+-- The full how-to for one movement: instructions, tips, an easier version,
+-- the muscles worked, and the one thing that means "stop". Keyed by a stable
+-- string (not a uuid) because it is a content identifier written by hand in
+-- src/content/exercises.json, the same way a routine's zone or accent is.
+CREATE TABLE exercises (
+  key      text PRIMARY KEY,
+  title    text NOT NULL,
+  steps    text[] NOT NULL,
+  tips     text[] NOT NULL DEFAULT '{}',
+  easier   text NOT NULL,
+  muscles  text[] NOT NULL,
+  avoid    text NOT NULL
+);
+
 CREATE TABLE routines (
   id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   slug        text UNIQUE NOT NULL,
@@ -76,13 +90,16 @@ CREATE TABLE routines (
 );
 
 CREATE TABLE routine_steps (
-  id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  routine_id  uuid NOT NULL REFERENCES routines(id) ON DELETE CASCADE,
-  position    smallint NOT NULL,
-  name        text NOT NULL,
-  duration_s  integer NOT NULL,
-  cue         text NOT NULL,          -- la consigne lue pendant l'étape
-  figure_key  text NOT NULL,          -- clé de l'illustration, voir §10.4
+  id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  routine_id    uuid NOT NULL REFERENCES routines(id) ON DELETE CASCADE,
+  position      smallint NOT NULL,
+  name          text NOT NULL,
+  duration_s    integer NOT NULL,
+  cue           text NOT NULL,          -- la consigne lue pendant l'étape
+  figure_key    text NOT NULL,          -- clé de l'illustration, voir §10.4
+  -- Le même mouvement revient dans plusieurs routines (une fente est une
+  -- fente) ; sa fiche vit une seule fois dans `exercises`, ce champ y pointe.
+  exercise_key  text NOT NULL REFERENCES exercises(key),
   UNIQUE (routine_id, position)
 );
 

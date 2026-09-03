@@ -18,6 +18,7 @@ export const KEYS = {
   completionQueue: 'completions.queue',
   routines: 'content.routines',
   articles: 'content.articles',
+  exercises: 'content.exercises',
   scheduled: 'reminders.scheduled',
   playerSound: 'player.sound',
   stepDurations: 'player.durations',

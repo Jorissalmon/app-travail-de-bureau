@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { LOCAL_ARTICLES, LOCAL_ROUTINES, ZONES } from './index'
+import { LOCAL_ARTICLES, LOCAL_EXERCISES, LOCAL_ROUTINES, ZONES } from './index'
 import { FIGURE_KEYS, isFigureKey } from '@/components/figures/figureKeys'
 import { articleFigures } from '@/lib/markdown'
 import { secondFrame } from '@/components/figures/figureFrames'
@@ -48,6 +48,38 @@ describe('routines', () => {
       for (const s of r.steps) {
         expect(isFigureKey(s.figureKey), `${r.slug} / ${s.name}: "${s.figureKey}"`).toBe(true)
       }
+    }
+  })
+
+  it('only reference an exercise that has a detail entry', () => {
+    const keys = new Set(LOCAL_EXERCISES.map((e) => e.key))
+    for (const r of LOCAL_ROUTINES) {
+      for (const s of r.steps) {
+        expect(keys, `${r.slug} / ${s.name}: "${s.exerciseKey}"`).toContain(s.exerciseKey)
+      }
+    }
+  })
+})
+
+describe('exercises', () => {
+  it('have unique keys', () => {
+    const keys = LOCAL_EXERCISES.map((e) => e.key)
+    expect(new Set(keys).size).toBe(keys.length)
+  })
+
+  it('are all used by at least one routine step', () => {
+    const used = new Set(LOCAL_ROUTINES.flatMap((r) => r.steps.map((s) => s.exerciseKey)))
+    for (const ex of LOCAL_EXERCISES) {
+      expect(used, `"${ex.key}" is never referenced by a step`).toContain(ex.key)
+    }
+  })
+
+  it('give at least one instruction, one adaptation and one muscle worked', () => {
+    for (const ex of LOCAL_EXERCISES) {
+      expect(ex.steps.length, `${ex.key}`).toBeGreaterThan(0)
+      expect(ex.easier.length, `${ex.key}`).toBeGreaterThan(0)
+      expect(ex.muscles.length, `${ex.key}`).toBeGreaterThan(0)
+      expect(ex.avoid.length, `${ex.key}`).toBeGreaterThan(0)
     }
   })
 })

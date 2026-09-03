@@ -1,0 +1,670 @@
+{
+  "marche": {
+    "title": "Marche",
+    "steps": [
+      "Lève-toi et pars marcher — dans le couloir, jusqu'à la machine à café, peu importe où.",
+      "Marche à un rythme normal, bras qui se balancent librement.",
+      "Si tu ne peux pas quitter la pièce, fais des allers-retours sur place."
+    ],
+    "tips": [
+      "Le but n'est pas la distance : c'est de mettre le corps en mouvement et de changer d'air, même trente secondes.",
+      "Regarde ailleurs qu'un écran pendant que tu marches, ça repose aussi les yeux."
+    ],
+    "easier": "Si tu ne peux vraiment pas te lever, reste debout et transfère ton poids d'un pied à l'autre.",
+    "muscles": ["Circulation", "Tout le corps"],
+    "avoid": "Rien de spécifique : c'est l'exercice le plus sûr du lot."
+  },
+  "marche-sur-place": {
+    "title": "Marche sur place",
+    "steps": [
+      "Debout, lève les genoux plus haut qu'une marche normale, l'un après l'autre.",
+      "Laisse les bras accompagner le mouvement, comme en marchant vite.",
+      "Garde un rythme régulier, sans chercher à aller vite."
+    ],
+    "tips": [
+      "C'est un réveil, pas un sprint : le but est de monter légèrement en température, pas d'être essoufflé.",
+      "Pose le pied à plat à chaque fois plutôt que sur la pointe, pour protéger les chevilles."
+    ],
+    "easier": "Réduis la hauteur des genoux et marche à un rythme tranquille.",
+    "muscles": ["Fléchisseurs de hanche", "Mollets", "Circulation"],
+    "avoid": "Un sol glissant ou instable : fais-le sur une surface plane et dégagée."
+  },
+  "extension-debout": {
+    "title": "Extension debout",
+    "steps": [
+      "Debout, pieds écartés de la largeur des hanches.",
+      "Place les mains dans le bas du dos, doigts vers le bas.",
+      "Pousse doucement les hanches vers l'avant et ouvre la poitrine vers le plafond.",
+      "Regarde légèrement vers le haut, sans forcer la nuque, puis reviens au centre."
+    ],
+    "tips": [
+      "Le mouvement part des hanches, pas d'une cambrure forcée du bas du dos.",
+      "Garde les genoux légèrement fléchis plutôt que verrouillés."
+    ],
+    "easier": "Réduis l'amplitude de moitié, ou garde les mains sur les hanches plutôt que dans le dos.",
+    "muscles": ["Abdominaux", "Fléchisseurs de hanche", "Colonne"],
+    "avoid": "Une douleur vive et localisée dans le bas du dos : arrête et reste debout sans extension jusqu'à ce que ça passe."
+  },
+  "fente-basse": {
+    "title": "Fente basse",
+    "steps": [
+      "Fais un grand pas en avant avec une jambe.",
+      "Descends jusqu'à ce que le genou arrière se rapproche du sol, sans forcer.",
+      "Rentre légèrement le bassin, puis pousse la hanche du côté arrière vers l'avant.",
+      "Le genou avant reste au-dessus de la cheville, pas plus loin que les orteils."
+    ],
+    "tips": [
+      "Le bassin reste face à l'avant, il ne part pas de travers.",
+      "Prends appui sur un meuble stable si l'équilibre te manque."
+    ],
+    "easier": "Garde le genou arrière tendu et descends moins bas, ou pose une main sur un support.",
+    "muscles": ["Fléchisseurs de hanche", "Quadriceps", "Fessiers"],
+    "avoid": "Une douleur dans le genou avant : recule le pied avant pour réduire l'angle."
+  },
+  "regard-au-loin": {
+    "title": "Regard au loin",
+    "steps": [
+      "Trouve le point le plus lointain que tu peux voir — par une fenêtre, au bout du couloir.",
+      "Fixe-le quelques secondes, en relâchant les yeux plutôt qu'en les plissant.",
+      "Cligne franchement dix fois, paupières complètement fermées à chaque clignement."
+    ],
+    "tips": [
+      "Un clignement franc mouille toute la surface de l'œil ; un clignement paresseux n'en mouille que la moitié.",
+      "S'il n'y a pas de fenêtre, regarde le point le plus éloigné possible dans la pièce."
+    ],
+    "easier": "Sans point lointain disponible, ferme simplement les yeux quelques secondes à la place.",
+    "muscles": ["Muscles oculaires", "Film lacrymal"],
+    "avoid": "Rien de spécifique."
+  },
+  "bascule-bassin": {
+    "title": "Bascule du bassin",
+    "steps": [
+      "Debout, pieds écartés de la largeur des hanches, genoux souples.",
+      "Bascule le bassin vers l'arrière, comme pour effacer le bas du dos.",
+      "Puis bascule-le vers l'avant, comme un seau qu'on vide devant soi.",
+      "Enchaîne doucement les deux sens, sans à-coups."
+    ],
+    "tips": [
+      "Le mouvement est petit : quelques centimètres suffisent, ce n'est pas un déhanché.",
+      "Pose une main sur le bas-ventre pour mieux sentir le mouvement."
+    ],
+    "easier": "Fais le mouvement assis plutôt que debout, l'amplitude est plus facile à contrôler.",
+    "muscles": ["Abdominaux", "Bas du dos"],
+    "avoid": "Rien de spécifique : c'est un mouvement doux."
+  },
+  "menton-rentre": {
+    "title": "Menton rentré",
+    "steps": [
+      "Assis ou debout, regarde droit devant toi.",
+      "Recule le menton horizontalement, comme pour te faire un double menton.",
+      "Tiens cinq secondes en sentant l'arrière du cou s'allonger, puis relâche.",
+      "Recommence plusieurs fois."
+    ],
+    "tips": [
+      "Le menton recule, il ne descend pas vers la poitrine : le regard reste à l'horizontale.",
+      "C'est l'exercice le plus efficace contre la tête portée en avant devant un écran."
+    ],
+    "easier": "Fais un mouvement plus petit, ou aide-toi d'un doigt posé sur le menton pour guider le recul.",
+    "muscles": ["Fléchisseurs profonds du cou"],
+    "avoid": "Un vertige : arrête et reprends plus lentement, sur une amplitude réduite."
+  },
+  "nuque-diagonale": {
+    "title": "Nuque en diagonale",
+    "steps": [
+      "Assis, dos droit, épaules basses.",
+      "Incline la tête pour amener le menton vers l'aisselle opposée.",
+      "Pose légèrement la main du même côté sur la tête, sans tirer.",
+      "Tiens la position en respirant, puis reviens au centre."
+    ],
+    "tips": [
+      "La main accompagne le poids de la tête, elle ne l'ajoute pas : zéro traction.",
+      "Garde l'épaule du côté étiré basse et détendue."
+    ],
+    "easier": "Fais le mouvement sans la main, juste avec le poids de la tête.",
+    "muscles": ["Trapèze supérieur", "Scalènes"],
+    "avoid": "Une douleur qui descend dans le bras ou des fourmillements : arrête immédiatement."
+  },
+  "rotation-assise": {
+    "title": "Rotation assise",
+    "steps": [
+      "Assis, pieds à plat au sol, dos droit.",
+      "Tourne le buste vers un côté et attrape le dossier de la chaise avec une main.",
+      "Laisse le regard suivre le mouvement, sans forcer la nuque plus loin que le buste.",
+      "Tiens quelques secondes, reviens au centre, puis tourne de l'autre côté."
+    ],
+    "tips": [
+      "La rotation part du buste, les hanches restent face à l'avant.",
+      "Utilise l'appui du dossier pour approfondir légèrement, pas pour te tracter d'un coup."
+    ],
+    "easier": "Croise les bras devant toi et tourne sans t'accrocher au dossier.",
+    "muscles": ["Obliques", "Colonne vertébrale"],
+    "avoid": "Une douleur vive dans le bas du dos : réduis l'amplitude de la rotation."
+  },
+  "ischios-assis": {
+    "title": "Ischio-jambiers, assis",
+    "steps": [
+      "Assis au bord de la chaise, tends une jambe devant toi, talon au sol.",
+      "Garde le dos droit et penche le buste vers l'avant depuis les hanches.",
+      "Arrête-toi dès que tu sens un étirement à l'arrière de la cuisse, sans forcer.",
+      "Tiens la position en respirant calmement."
+    ],
+    "tips": [
+      "Le dos reste droit : c'est le pli des hanches qui crée l'étirement, pas le dos qui s'arrondit.",
+      "Les orteils pointent vers toi pour intensifier légèrement si c'est confortable."
+    ],
+    "easier": "Fléchis un peu le genou de la jambe tendue jusqu'à ce que la tension soit confortable.",
+    "muscles": ["Ischio-jambiers", "Bas du dos"],
+    "avoid": "Une douleur vive à l'arrière du genou : fléchis davantage la jambe."
+  },
+  "figure4-assise": {
+    "title": "Figure 4 assise",
+    "steps": [
+      "Assis, croise une cheville sur le genou opposé, comme le chiffre 4.",
+      "Garde le pied du dessus légèrement fléchi plutôt que pointé.",
+      "Penche le buste vers l'avant en gardant le dos droit, jusqu'à sentir un étirement dans la fesse.",
+      "Tiens la position en respirant, puis change de côté."
+    ],
+    "tips": [
+      "L'étirement se sent dans la fesse et l'extérieur de la hanche, pas dans le genou.",
+      "Plus le buste se penche, plus l'étirement est marqué — avance progressivement."
+    ],
+    "easier": "Reste redressé, sans pencher le buste : le croisement seul suffit pour commencer.",
+    "muscles": ["Piriforme", "Fessiers"],
+    "avoid": "Une douleur dans le genou du dessus : relâche la pression et croise moins fort."
+  },
+  "calin-bras": {
+    "title": "Câlin à un bras",
+    "steps": [
+      "Amène un bras à l'horizontale devant la poitrine.",
+      "Avec l'avant-bras opposé, ramène-le doucement vers toi, coude compris.",
+      "Garde l'épaule qui s'étire basse, loin de l'oreille.",
+      "Tiens quelques secondes, puis change de côté."
+    ],
+    "tips": [
+      "La traction vient de l'avant-bras, pas d'un mouvement brusque du buste.",
+      "Respire normalement pendant l'étirement, ne bloque pas ta respiration."
+    ],
+    "easier": "Réduis la traction : rapproche le bras moins près du corps.",
+    "muscles": ["Deltoïde postérieur", "Haut du dos"],
+    "avoid": "Rien de spécifique : c'est un étirement doux."
+  },
+  "triceps-tete": {
+    "title": "Triceps au-dessus de la tête",
+    "steps": [
+      "Lève un bras, plie le coude pour amener la main entre les omoplates.",
+      "Avec l'autre main, pousse doucement le coude vers l'arrière et vers le bas.",
+      "Tiens la position en sentant l'étirement à l'arrière du bras.",
+      "Relâche, puis change de côté."
+    ],
+    "tips": [
+      "La pression sur le coude est légère et progressive, jamais une secousse.",
+      "Garde le dos droit plutôt que de te cambrer pour compenser."
+    ],
+    "easier": "Contente-toi de plier le bras derrière la tête sans pousser avec l'autre main.",
+    "muscles": ["Triceps", "Épaule"],
+    "avoid": "Une douleur dans l'épaule plutôt que dans le bras : arrête et réduis l'amplitude."
+  },
+  "cercle-bras": {
+    "title": "Cercles de bras",
+    "steps": [
+      "Debout, bras tendus sur les côtés à hauteur d'épaule.",
+      "Dessine de grands cercles vers l'arrière, amplitude maximale.",
+      "Garde les épaules basses, loin des oreilles, pendant tout le mouvement.",
+      "Après plusieurs cercles, tu peux inverser le sens."
+    ],
+    "tips": [
+      "Le mouvement vient de l'épaule entière, pas seulement du poignet.",
+      "Ralentis si tu sens un accrochage ou une gêne à un point précis du cercle."
+    ],
+    "easier": "Réduis l'amplitude du cercle, ou fais le mouvement un bras à la fois.",
+    "muscles": ["Épaules", "Haut du dos"],
+    "avoid": "Un pincement douloureux à un point du cercle : réduis l'amplitude pour l'éviter."
+  },
+  "chat-vache": {
+    "title": "Chat-vache debout",
+    "steps": [
+      "Debout, mains posées sur les cuisses, genoux légèrement fléchis.",
+      "Arrondis le dos vers le haut, menton vers la poitrine, comme un chat qui s'étire.",
+      "Puis creuse le dos, poitrine et regard vers l'avant, comme une vache.",
+      "Enchaîne les deux au rythme de ta respiration : expire en arrondissant, inspire en creusant."
+    ],
+    "tips": [
+      "Le mouvement part du bassin et remonte vertèbre par vertèbre, ce n'est pas juste les épaules qui bougent.",
+      "Fais-le lentement : la respiration donne le tempo, pas l'inverse."
+    ],
+    "easier": "Réduis l'amplitude : un dos qui s'arrondit et se creuse légèrement suffit.",
+    "muscles": ["Colonne vertébrale", "Abdominaux", "Bas du dos"],
+    "avoid": "Rien de spécifique : c'est l'un des mouvements les plus doux pour le dos."
+  },
+  "inclinaison-laterale": {
+    "title": "Inclinaison latérale",
+    "steps": [
+      "Debout ou assis, lève un bras au-dessus de la tête.",
+      "Penche le buste du côté opposé, comme pour dessiner un arc de cercle.",
+      "Respire dans les côtes du côté qui s'étire, sans tourner le buste.",
+      "Reviens au centre, puis change de côté."
+    ],
+    "tips": [
+      "Le mouvement reste dans un seul plan : pas de rotation ni de bascule vers l'avant.",
+      "Sens l'étirement sur tout le côté du buste, des côtes jusqu'à la hanche."
+    ],
+    "easier": "Garde le bras le long du corps plutôt que levé, et penche moins loin.",
+    "muscles": ["Obliques", "Grand dorsal"],
+    "avoid": "Rien de spécifique : réduis l'amplitude si l'équilibre te manque."
+  },
+  "respiration-4-6": {
+    "title": "Respirer, 4 puis 6",
+    "steps": [
+      "Assis, dos long, épaules basses, mains posées sur les cuisses.",
+      "Inspire par le nez en comptant lentement jusqu'à quatre.",
+      "Expire par la bouche en comptant lentement jusqu'à six.",
+      "Répète, sans chercher à forcer l'air ni à retenir ta respiration entre les deux."
+    ],
+    "tips": [
+      "Une expiration plus longue que l'inspiration active naturellement le système qui calme, rien de plus mystique que ça.",
+      "Si compter distrait, remplace les chiffres par le ressenti : une expiration nettement plus longue que l'inspiration."
+    ],
+    "easier": "Réduis à 3 temps d'inspiration pour 4 d'expiration, en gardant l'expiration plus longue.",
+    "muscles": ["Diaphragme"],
+    "avoid": "Un léger vertige si tu forces trop l'air : reviens à une respiration normale un instant."
+  },
+  "nuque-inclinaison": {
+    "title": "Inclinaison de nuque",
+    "steps": [
+      "Assis ou debout, regarde droit devant toi.",
+      "Incline la tête pour amener l'oreille vers l'épaule, sans tourner la tête.",
+      "La main opposée peut se poser légèrement sur la tête, sans jamais tirer.",
+      "Tiens en respirant, puis reviens au centre et change de côté."
+    ],
+    "tips": [
+      "L'épaule du côté qui s'étire reste basse et détendue — ne la remonte pas vers l'oreille.",
+      "Le poids de la tête suffit ; la main ne fait qu'accompagner."
+    ],
+    "easier": "Fais le mouvement sans poser la main, juste avec le poids de la tête.",
+    "muscles": ["Trapèze supérieur", "Sterno-cléido-mastoïdien"],
+    "avoid": "Une douleur qui descend dans le bras ou des fourmillements : arrête immédiatement."
+  },
+  "nuque-rotation": {
+    "title": "Rotation lente de la nuque",
+    "steps": [
+      "Assis ou debout, regarde droit devant toi.",
+      "Tourne lentement la tête d'un côté, comme pour suivre un horizon.",
+      "Reviens au centre, puis tourne lentement de l'autre côté.",
+      "Garde le mouvement lent du début à la fin, sans à-coups."
+    ],
+    "tips": [
+      "Le menton reste à peu près à l'horizontale pendant la rotation.",
+      "Arrête-toi au premier point de tension, n'attends pas la sensation de blocage."
+    ],
+    "easier": "Réduis l'amplitude de la rotation, sans chercher à aller jusqu'au bout du mouvement.",
+    "muscles": ["Muscles rotateurs du cou"],
+    "avoid": "Un vertige ou une douleur vive : arrête et reprends plus lentement, sur une amplitude réduite."
+  },
+  "haussement-epaules": {
+    "title": "Haussements d'épaules",
+    "steps": [
+      "Assis ou debout, bras relâchés le long du corps.",
+      "Monte les deux épaules vers les oreilles, le plus haut possible.",
+      "Tiens trois secondes, en sentant la tension dans le haut du dos.",
+      "Laisse tomber les épaules d'un coup, comme si on lâchait un poids."
+    ],
+    "tips": [
+      "Le relâchement doit être franc et rapide : c'est lui qui fait le plus de bien, pas la montée.",
+      "Respire normalement pendant que tu tiens la position, ne bloque pas ta respiration."
+    ],
+    "easier": "Monte les épaules moins haut, l'essentiel est le contraste tension-relâchement.",
+    "muscles": ["Trapèze supérieur"],
+    "avoid": "Rien de spécifique."
+  },
+  "encadrement-porte": {
+    "title": "Ouverture à l'encadrement",
+    "steps": [
+      "Place un avant-bras contre un montant de porte (ou un angle de mur), coude à hauteur d'épaule.",
+      "Avance d'un petit pas à travers l'encadrement.",
+      "Laisse la poitrine s'ouvrir, sans forcer ni cambrer le bas du dos.",
+      "Tiens la position en respirant, puis change de côté."
+    ],
+    "tips": [
+      "L'étirement se sent devant l'épaule et la poitrine, pas dans le dos.",
+      "Un petit pas suffit : inutile d'avancer beaucoup pour sentir l'ouverture."
+    ],
+    "easier": "Recule légèrement le pied pour réduire l'amplitude de l'étirement.",
+    "muscles": ["Grand pectoral", "Deltoïde antérieur"],
+    "avoid": "Une douleur dans l'épaule plutôt qu'un simple étirement devant : recule le pas."
+  },
+  "nuque-flexion": {
+    "title": "Flexion de la nuque",
+    "steps": [
+      "Assis, croise les mains derrière la tête, coudes relâchés vers l'avant.",
+      "Laisse le poids des bras amener doucement le menton vers la poitrine.",
+      "Ne tire pas avec les mains : elles accompagnent, elles ne forcent pas.",
+      "Tiens quelques secondes en respirant, puis relève lentement la tête."
+    ],
+    "tips": [
+      "C'est le poids naturel des bras qui crée l'étirement, jamais une traction volontaire.",
+      "Arrête dès la première sensation d'étirement franc à l'arrière du cou."
+    ],
+    "easier": "Fais le mouvement sans les mains, juste en laissant la tête descendre par son propre poids.",
+    "muscles": ["Extenseurs du cou"],
+    "avoid": "Toute sensation de traction, de fourmillement ou de vertige : arrête immédiatement."
+  },
+  "omoplates": {
+    "title": "Serrage d'omoplates",
+    "steps": [
+      "Assis ou debout, bras relâchés le long du corps.",
+      "Serre les omoplates l'une vers l'autre, comme pour tenir un crayon entre elles.",
+      "Tiens cinq secondes, épaules basses pendant tout le mouvement.",
+      "Relâche complètement, puis recommence."
+    ],
+    "tips": [
+      "Les épaules ne doivent pas monter vers les oreilles : seul le dos travaille.",
+      "C'est un petit mouvement, presque invisible de l'extérieur — c'est normal."
+    ],
+    "easier": "Serre moins fort, l'essentiel est de sentir le haut du dos s'activer.",
+    "muscles": ["Rhomboïdes", "Trapèze moyen"],
+    "avoid": "Rien de spécifique."
+  },
+  "ouverture-pectorale": {
+    "title": "Ouverture pectorale",
+    "steps": [
+      "Assis ou debout, croise les mains derrière la tête, coudes vers l'avant.",
+      "Ouvre les coudes vers l'extérieur en rapprochant les omoplates.",
+      "Laisse la poitrine s'ouvrir vers l'avant, sans cambrer le bas du dos.",
+      "Tiens quelques secondes, puis relâche."
+    ],
+    "tips": [
+      "Le mouvement vient des omoplates qui se rapprochent, pas d'une cambrure du dos.",
+      "Garde le menton légèrement rentré pendant l'ouverture."
+    ],
+    "easier": "Ouvre les coudes moins loin, l'essentiel est le rapprochement des omoplates.",
+    "muscles": ["Grand pectoral", "Rhomboïdes"],
+    "avoid": "Une gêne dans le bas du dos : réduis l'amplitude et évite de cambrer."
+  },
+  "rotation-externe": {
+    "title": "Rotation externe des épaules",
+    "steps": [
+      "Coudes pliés à 90°, collés au corps.",
+      "Écarte les avant-bras vers l'extérieur, comme deux portes qui s'ouvrent.",
+      "Garde les coudes contre le corps pendant tout le mouvement.",
+      "Reviens lentement, puis recommence."
+    ],
+    "tips": [
+      "Seuls les avant-bras bougent : les coudes restent fixes contre les côtes.",
+      "Garde les épaules basses, sans les hausser pendant le mouvement."
+    ],
+    "easier": "Réduis l'amplitude d'ouverture des avant-bras.",
+    "muscles": ["Infra-épineux", "Petit rond"],
+    "avoid": "Une douleur dans l'épaule : réduis l'amplitude ou arrête."
+  },
+  "extension-chaise": {
+    "title": "Extension sur chaise",
+    "steps": [
+      "Assis, mains croisées derrière la tête, coudes relâchés.",
+      "Fais passer le haut du dos par-dessus le dossier de la chaise, doucement.",
+      "Ouvre la poitrine vers le plafond en gardant le bas du dos stable.",
+      "Reviens lentement à la position de départ."
+    ],
+    "tips": [
+      "Le mouvement se concentre sur le haut du dos, pas sur les lombaires.",
+      "Une chaise avec un dossier bas ou à mi-hauteur fonctionne mieux qu'un dossier haut."
+    ],
+    "easier": "Réduis l'amplitude, ou fais le mouvement sans dossier, juste en ouvrant la poitrine.",
+    "muscles": ["Colonne dorsale", "Grand pectoral"],
+    "avoid": "Une douleur dans le bas du dos plutôt qu'entre les omoplates : arrête et réduis l'amplitude."
+  },
+  "tirage-vide": {
+    "title": "Tirage à vide",
+    "steps": [
+      "Assis ou debout, tends les bras devant toi à hauteur d'épaule.",
+      "Tire les coudes vers l'arrière, comme sur une machine de musculation.",
+      "Serre les omoplates l'une vers l'autre au point le plus tiré.",
+      "Reviens lentement bras tendus, puis recommence."
+    ],
+    "tips": [
+      "Imagine que tu tires une corde tendue : le mouvement est contrôlé, pas relâché d'un coup.",
+      "Garde les épaules basses pendant tout le mouvement."
+    ],
+    "easier": "Réduis l'amplitude du tirage, sans chercher à serrer fort les omoplates.",
+    "muscles": ["Rhomboïdes", "Trapèze moyen", "Deltoïde postérieur"],
+    "avoid": "Rien de spécifique."
+  },
+  "genou-poitrine": {
+    "title": "Genou à la poitrine",
+    "steps": [
+      "Assis, dos long, ramène un genou vers la poitrine avec les deux mains.",
+      "Garde le dos droit plutôt que de t'arrondir vers le genou.",
+      "Tiens la position en respirant, en sentant l'étirement dans la fesse et le bas du dos.",
+      "Relâche doucement, puis change de côté."
+    ],
+    "tips": [
+      "C'est le genou qui vient vers toi, pas le buste qui plonge vers le genou.",
+      "Garde l'autre pied bien à plat au sol pour rester stable."
+    ],
+    "easier": "Ramène le genou moins haut, sans chercher à le rapprocher complètement de la poitrine.",
+    "muscles": ["Fessiers", "Bas du dos"],
+    "avoid": "Une douleur dans le genou plié : relâche la prise des mains."
+  },
+  "ischios": {
+    "title": "Ischio-jambiers, appui surélevé",
+    "steps": [
+      "Pose un talon sur une chaise basse ou un support stable, jambe tendue.",
+      "Garde le dos droit et penche le buste vers l'avant depuis les hanches.",
+      "Arrête-toi dès que tu sens un étirement à l'arrière de la cuisse.",
+      "Tiens la position en respirant, puis change de côté."
+    ],
+    "tips": [
+      "Plus le support est haut, plus l'étirement est marqué — commence bas.",
+      "Le dos reste droit du début à la fin ; c'est le pli des hanches qui étire, pas le dos qui s'arrondit."
+    ],
+    "easier": "Utilise un support plus bas, ou pose simplement le talon au sol, jambe tendue devant toi.",
+    "muscles": ["Ischio-jambiers"],
+    "avoid": "Une perte d'équilibre : prends appui sur un meuble stable à côté de toi."
+  },
+  "balancement-hanche": {
+    "title": "Balancement de hanche",
+    "steps": [
+      "Debout, prends appui sur une jambe, l'autre reste libre.",
+      "Balance la jambe libre d'avant en arrière, sans forcer l'amplitude.",
+      "Garde le buste stable et le bassin face à l'avant pendant le mouvement.",
+      "Après plusieurs balancements, change de jambe d'appui."
+    ],
+    "tips": [
+      "L'amplitude doit rester confortable : ce n'est pas un coup de pied, c'est un balancement.",
+      "Prends appui sur un meuble si l'équilibre te manque."
+    ],
+    "easier": "Réduis l'amplitude du balancement, ou fais-le en te tenant à un support.",
+    "muscles": ["Fléchisseurs de hanche", "Fessiers"],
+    "avoid": "Rien de spécifique, hormis la perte d'équilibre : reste près d'un appui."
+  },
+  "poignet-flexion": {
+    "title": "Poignet en flexion",
+    "steps": [
+      "Tends un bras devant toi, paume vers le bas.",
+      "Avec l'autre main, tire doucement les doigts vers toi, poignet fléchi.",
+      "Tiens la position en sentant l'étirement sur le dessus de l'avant-bras.",
+      "Relâche, puis change de côté."
+    ],
+    "tips": [
+      "La traction est légère et progressive, jamais brusque.",
+      "Garde le coude tendu pour que l'étirement porte sur tout l'avant-bras."
+    ],
+    "easier": "Réduis la traction, l'essentiel est de sentir un étirement léger, pas une tension forte.",
+    "muscles": ["Extenseurs du poignet"],
+    "avoid": "Une douleur vive plutôt qu'un étirement : relâche la traction."
+  },
+  "poignet-extension": {
+    "title": "Poignet en extension",
+    "steps": [
+      "Tends un bras devant toi, paume vers le haut.",
+      "Avec l'autre main, tire doucement les doigts vers le sol, poignet en extension.",
+      "Tiens la position en sentant l'étirement sous l'avant-bras.",
+      "Relâche, puis change de côté à mi-parcours."
+    ],
+    "tips": [
+      "La traction est légère et progressive, jamais brusque.",
+      "Garde le coude tendu pour que l'étirement porte sur tout l'avant-bras."
+    ],
+    "easier": "Réduis la traction, l'essentiel est de sentir un étirement léger, pas une tension forte.",
+    "muscles": ["Fléchisseurs du poignet"],
+    "avoid": "Une douleur vive plutôt qu'un étirement : relâche la traction."
+  },
+  "doigts-ecartes": {
+    "title": "Doigts écartés",
+    "steps": [
+      "Tends les mains devant toi, paumes ouvertes.",
+      "Écarte les doigts au maximum, aussi loin que possible sans forcer.",
+      "Tiens trois secondes, puis referme complètement le poing.",
+      "Répète le cycle plusieurs fois."
+    ],
+    "tips": [
+      "Le contraste ouvert-fermé est ce qui fait du bien après des heures de clavier.",
+      "Fais le mouvement des deux mains en même temps si c'est confortable."
+    ],
+    "easier": "Réduis simplement le nombre de répétitions.",
+    "muscles": ["Muscles de la main"],
+    "avoid": "Rien de spécifique."
+  },
+  "mains-dos-a-dos": {
+    "title": "Mains dos à dos",
+    "steps": [
+      "Devant la poitrine, place le dos des deux mains l'un contre l'autre.",
+      "Écarte les coudes vers l'extérieur en gardant les mains jointes.",
+      "Tiens la position en sentant l'étirement sur le dessus des poignets.",
+      "Relâche doucement."
+    ],
+    "tips": [
+      "Garde les mains l'une contre l'autre pendant tout le mouvement, sans les décoller.",
+      "Un léger étirement suffit, inutile de forcer l'écart des coudes."
+    ],
+    "easier": "Écarte les coudes moins loin, l'amplitude compte moins que la régularité.",
+    "muscles": ["Extenseurs du poignet"],
+    "avoid": "Une douleur vive plutôt qu'un étirement : réduis l'écart des coudes."
+  },
+  "poignet-priere": {
+    "title": "Prière",
+    "steps": [
+      "Joins les paumes devant la poitrine, doigts vers le haut, comme pour prier.",
+      "Descends lentement les mains jointes vers le bas-ventre.",
+      "Garde les paumes bien collées l'une à l'autre pendant toute la descente.",
+      "Remonte, puis recommence."
+    ],
+    "tips": [
+      "Plus les mains descendent bas en gardant les paumes jointes, plus l'étirement est marqué.",
+      "Arrête la descente dès que les paumes commencent à se décoller."
+    ],
+    "easier": "Descends moins bas, ou garde les mains devant la poitrine sans descendre.",
+    "muscles": ["Fléchisseurs du poignet"],
+    "avoid": "Une douleur vive plutôt qu'un étirement : remonte les mains."
+  },
+  "cheville-cercle": {
+    "title": "Cercles de cheville",
+    "steps": [
+      "Assis ou debout en appui sur une jambe, décolle l'autre pied du sol.",
+      "Dessine un grand cercle avec le pied, dans un sens.",
+      "Après plusieurs cercles, inverse le sens.",
+      "Change de pied et recommence."
+    ],
+    "tips": [
+      "Le cercle part de la cheville, pas du genou qui bouge en même temps.",
+      "Fais-le lentement, l'amplitude compte plus que la vitesse."
+    ],
+    "easier": "Réduis la taille du cercle si l'équilibre te manque, ou fais l'exercice assis.",
+    "muscles": ["Cheville", "Circulation"],
+    "avoid": "Rien de spécifique."
+  },
+  "talon-pointe": {
+    "title": "Talon-pointe",
+    "steps": [
+      "Assis ou debout, prends appui sur les talons, pointes des pieds levées.",
+      "Puis prends appui sur la pointe des pieds, talons levés.",
+      "Alterne entre les deux appuis, sans à-coups.",
+      "Garde un rythme régulier."
+    ],
+    "tips": [
+      "Le mouvement pompe la circulation dans le mollet, particulièrement utile en fin de journée assise.",
+      "Debout, garde un appui léger sur un meuble si l'équilibre te manque."
+    ],
+    "easier": "Fais le mouvement assis plutôt que debout.",
+    "muscles": ["Mollets", "Tibia", "Circulation"],
+    "avoid": "Rien de spécifique, hormis l'équilibre en position debout."
+  },
+  "mollet-releve": {
+    "title": "Montées sur la pointe",
+    "steps": [
+      "Debout, pieds à plat, écartés de la largeur des hanches.",
+      "Monte lentement sur la pointe des deux pieds, le plus haut possible.",
+      "Redescends lentement, sans laisser tomber les talons d'un coup.",
+      "Répète le mouvement plusieurs fois."
+    ],
+    "tips": [
+      "La descente lente compte autant que la montée : c'est elle qui travaille le plus.",
+      "Prends appui sur un meuble si l'équilibre te manque."
+    ],
+    "easier": "Réduis la hauteur de la montée, ou fais l'exercice en te tenant à un support.",
+    "muscles": ["Mollets"],
+    "avoid": "Rien de spécifique, hormis l'équilibre : reste près d'un appui."
+  },
+  "clignement": {
+    "title": "Clignements lents",
+    "steps": [
+      "Assis, relâche le visage.",
+      "Ferme complètement les paupières, sans les plisser.",
+      "Rouvre les yeux, puis recommence vingt fois.",
+      "Fais-le à un rythme tranquille, pas précipité."
+    ],
+    "tips": [
+      "Devant un écran, on cligne deux fois moins souvent que la normale — ces vingt clignements francs compensent une partie du déficit.",
+      "Un clignement complet mouille toute la surface de l'œil ; un clignement partiel n'en mouille que la moitié."
+    ],
+    "easier": "Fais-le en dix clignements plutôt que vingt.",
+    "muscles": ["Film lacrymal"],
+    "avoid": "Rien de spécifique."
+  },
+  "loin-pres-alterne": {
+    "title": "Loin, près",
+    "steps": [
+      "Fixe le point le plus lointain visible pendant trois secondes.",
+      "Puis fixe ton pouce tendu devant toi, à une vingtaine de centimètres, pendant trois secondes.",
+      "Alterne entre les deux plusieurs fois, sans précipiter le changement."
+    ],
+    "tips": [
+      "C'est le changement de distance qui travaille les muscles de mise au point de l'œil, pas la fixation elle-même.",
+      "S'il n'y a pas de point lointain, une distance de quelques mètres suffit déjà à créer le contraste."
+    ],
+    "easier": "Réduis le nombre d'allers-retours plutôt que la durée de chaque fixation.",
+    "muscles": ["Muscles de l'accommodation"],
+    "avoid": "Un léger flou passager en alternant : c'est normal, il se dissipe en quelques secondes."
+  },
+  "paumes": {
+    "title": "Paumes sur les yeux",
+    "steps": [
+      "Frotte légèrement tes mains l'une contre l'autre pour les réchauffer, si tu veux.",
+      "Mets les paumes en coupe sur les yeux fermés ou ouverts, sans appuyer sur les globes oculaires.",
+      "Laisse le noir complet s'installer, et respire calmement.",
+      "Retire les mains lentement à la fin."
+    ],
+    "tips": [
+      "Aucune pression sur les yeux : les paumes couvrent, elles n'appuient jamais.",
+      "C'est autant une pause pour les yeux qu'un moment pour ralentir la respiration."
+    ],
+    "easier": "Ferme simplement les yeux sans les mains si tu préfères.",
+    "muscles": ["Muscles oculaires"],
+    "avoid": "Toute pression sur les globes oculaires : les paumes reposent sur les arcades, pas sur les yeux."
+  },
+  "installe-toi": {
+    "title": "S'installer",
+    "steps": [
+      "Assis, dos long, comme si un fil tirait le sommet du crâne vers le haut.",
+      "Laisse les épaules descendre, loin des oreilles.",
+      "Pose les mains sur les cuisses, paumes vers le haut ou vers le bas, comme tu préfères.",
+      "Reste ainsi quelques secondes avant de commencer à respirer plus profondément."
+    ],
+    "tips": [
+      "Cette posture seule, tenue quelques secondes, ralentit déjà un peu le rythme.",
+      "Pas besoin de fermer les yeux si ça ne te met pas à l'aise."
+    ],
+    "easier": "Fais-le tel quel : c'est déjà la version la plus simple.",
+    "muscles": ["Posture"],
+    "avoid": "Rien de spécifique."
+  }
+}

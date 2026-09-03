@@ -13,42 +13,48 @@
         "name": "Marche",
         "durationS": 30,
         "cue": "Lève-toi et marche. Sors de la pièce si tu peux.",
-        "figureKey": "marche"
+        "figureKey": "marche",
+        "exerciseKey": "marche"
       },
       {
         "position": 2,
         "name": "Extension debout",
         "durationS": 30,
         "cue": "Mains dans le bas du dos, ouvre la poitrine, regarde vers le plafond. Doucement.",
-        "figureKey": "extension-debout"
+        "figureKey": "extension-debout",
+        "exerciseKey": "extension-debout"
       },
       {
         "position": 3,
         "name": "Fente basse — droite",
         "durationS": 30,
         "cue": "Un grand pas en avant, genou arrière tendu. Pousse la hanche arrière vers l'avant.",
-        "figureKey": "fente"
+        "figureKey": "fente",
+        "exerciseKey": "fente-basse"
       },
       {
         "position": 4,
         "name": "Fente basse — gauche",
         "durationS": 30,
         "cue": "Même chose de l'autre côté. Le bassin reste droit.",
-        "figureKey": "fente"
+        "figureKey": "fente",
+        "exerciseKey": "fente-basse"
       },
       {
         "position": 5,
         "name": "Regard au loin",
         "durationS": 30,
         "cue": "Cherche le point le plus lointain visible, et cligne lentement dix fois.",
-        "figureKey": "loin-pres"
+        "figureKey": "loin-pres",
+        "exerciseKey": "regard-au-loin"
       },
       {
         "position": 6,
         "name": "Marche",
         "durationS": 30,
         "cue": "Retour au poste en marchant. Rien ne presse.",
-        "figureKey": "marche"
+        "figureKey": "marche",
+        "exerciseKey": "marche"
       }
     ]
   },
@@ -66,21 +72,24 @@
         "name": "Debout",
         "durationS": 20,
         "cue": "Lève-toi, déroule-toi, épaules loin des oreilles.",
-        "figureKey": "extension-debout"
+        "figureKey": "extension-debout",
+        "exerciseKey": "extension-debout"
       },
       {
         "position": 2,
         "name": "Regard au loin",
         "durationS": 20,
         "cue": "Cherche le point le plus lointain visible et cligne dix fois.",
-        "figureKey": "loin-pres"
+        "figureKey": "loin-pres",
+        "exerciseKey": "regard-au-loin"
       },
       {
         "position": 3,
         "name": "Bascule du bassin",
         "durationS": 20,
         "cue": "Debout, bascule le bassin d’avant en arrière, sans forcer.",
-        "figureKey": "bascule-bassin"
+        "figureKey": "bascule-bassin",
+        "exerciseKey": "bascule-bassin"
       }
     ]
   },
@@ -98,49 +107,56 @@
         "name": "Menton rentré",
         "durationS": 30,
         "cue": "Recule le menton comme pour faire un double menton. Tiens 5 s, relâche.",
-        "figureKey": "menton-rentre"
+        "figureKey": "menton-rentre",
+        "exerciseKey": "menton-rentre"
       },
       {
         "position": 2,
         "name": "Nuque en diagonale — droite",
         "durationS": 30,
         "cue": "Menton vers l’aisselle opposée, la main accompagne sans tirer.",
-        "figureKey": "nuque-diagonale"
+        "figureKey": "nuque-diagonale",
+        "exerciseKey": "nuque-diagonale"
       },
       {
         "position": 3,
         "name": "Nuque en diagonale — gauche",
         "durationS": 30,
         "cue": "Même chose de l’autre côté.",
-        "figureKey": "nuque-diagonale"
+        "figureKey": "nuque-diagonale",
+        "exerciseKey": "nuque-diagonale"
       },
       {
         "position": 4,
         "name": "Rotation assise — droite",
         "durationS": 45,
         "cue": "Pieds au sol, tourne le buste, attrape le dossier. Le regard suit.",
-        "figureKey": "rotation-assise"
+        "figureKey": "rotation-assise",
+        "exerciseKey": "rotation-assise"
       },
       {
         "position": 5,
         "name": "Rotation assise — gauche",
         "durationS": 45,
         "cue": "Même chose de l’autre côté.",
-        "figureKey": "rotation-assise"
+        "figureKey": "rotation-assise",
+        "exerciseKey": "rotation-assise"
       },
       {
         "position": 6,
         "name": "Ischio assis — droite",
         "durationS": 40,
         "cue": "Talon au sol, jambe tendue devant, penche le buste depuis les hanches. Dos droit.",
-        "figureKey": "ischios-assis"
+        "figureKey": "ischios-assis",
+        "exerciseKey": "ischios-assis"
       },
       {
         "position": 7,
         "name": "Ischio assis — gauche",
         "durationS": 40,
         "cue": "Même chose de l’autre côté.",
-        "figureKey": "ischios-assis"
+        "figureKey": "ischios-assis",
+        "exerciseKey": "ischios-assis"
       }
     ]
   },
@@ -158,49 +174,56 @@
         "name": "Figure 4 assise — droite",
         "durationS": 45,
         "cue": "Cheville droite sur le genou gauche, penche le buste, dos droit.",
-        "figureKey": "figure4-assise"
+        "figureKey": "figure4-assise",
+        "exerciseKey": "figure4-assise"
       },
       {
         "position": 2,
         "name": "Figure 4 assise — gauche",
         "durationS": 45,
         "cue": "Même chose de l’autre côté.",
-        "figureKey": "figure4-assise"
+        "figureKey": "figure4-assise",
+        "exerciseKey": "figure4-assise"
       },
       {
         "position": 3,
         "name": "Ischio assis — droite",
         "durationS": 40,
         "cue": "Talon au sol, jambe tendue devant, penche depuis les hanches.",
-        "figureKey": "ischios-assis"
+        "figureKey": "ischios-assis",
+        "exerciseKey": "ischios-assis"
       },
       {
         "position": 4,
         "name": "Ischio assis — gauche",
         "durationS": 40,
         "cue": "Même chose de l’autre côté.",
-        "figureKey": "ischios-assis"
+        "figureKey": "ischios-assis",
+        "exerciseKey": "ischios-assis"
       },
       {
         "position": 5,
         "name": "Rotation du torse",
         "durationS": 45,
         "cue": "Pieds au sol, tourne le buste, attrape le dossier. Change de côté à mi-temps.",
-        "figureKey": "rotation-assise"
+        "figureKey": "rotation-assise",
+        "exerciseKey": "rotation-assise"
       },
       {
         "position": 6,
         "name": "Câlin à un bras",
         "durationS": 45,
         "cue": "Bras en travers de la poitrine, l’autre avant-bras le ramène. Change à mi-temps.",
-        "figureKey": "calin-bras"
+        "figureKey": "calin-bras",
+        "exerciseKey": "calin-bras"
       },
       {
         "position": 7,
         "name": "Triceps au-dessus de la tête",
         "durationS": 40,
         "cue": "Coude en l’air, main entre les omoplates, l’autre main pousse le coude. Change à mi-temps.",
-        "figureKey": "triceps-tete"
+        "figureKey": "triceps-tete",
+        "exerciseKey": "triceps-tete"
       }
     ]
   },
@@ -218,63 +241,72 @@
         "name": "Marche sur place",
         "durationS": 40,
         "cue": "Genoux hauts, bras qui accompagnent. Monte en température.",
-        "figureKey": "marche"
+        "figureKey": "marche",
+        "exerciseKey": "marche-sur-place"
       },
       {
         "position": 2,
         "name": "Cercles de bras",
         "durationS": 40,
         "cue": "Vers l'arrière, amplitude maximale, épaules relâchées.",
-        "figureKey": "cercle-bras"
+        "figureKey": "cercle-bras",
+        "exerciseKey": "cercle-bras"
       },
       {
         "position": 3,
         "name": "Chat-vache debout",
         "durationS": 40,
         "cue": "Mains sur les cuisses, arrondis puis creuse.",
-        "figureKey": "chat-vache"
+        "figureKey": "chat-vache",
+        "exerciseKey": "chat-vache"
       },
       {
         "position": 4,
         "name": "Fente basse — droite",
         "durationS": 40,
         "cue": "Pousse la hanche arrière vers l'avant.",
-        "figureKey": "fente"
+        "figureKey": "fente",
+        "exerciseKey": "fente-basse"
       },
       {
         "position": 5,
         "name": "Fente basse — gauche",
         "durationS": 40,
         "cue": "Même chose de l'autre côté.",
-        "figureKey": "fente"
+        "figureKey": "fente",
+        "exerciseKey": "fente-basse"
       },
       {
         "position": 6,
         "name": "Inclinaison latérale — droite",
         "durationS": 30,
         "cue": "Bras au-dessus de la tête, respire dans les côtes.",
-        "figureKey": "inclinaison-laterale"
+        "figureKey": "inclinaison-laterale",
+        "exerciseKey": "inclinaison-laterale"
       },
       {
         "position": 7,
         "name": "Inclinaison latérale — gauche",
         "durationS": 30,
         "cue": "Même chose de l'autre côté.",
-        "figureKey": "inclinaison-laterale"
+        "figureKey": "inclinaison-laterale",
+        "exerciseKey": "inclinaison-laterale"
       },
       {
         "position": 8,
         "name": "Menton rentré",
         "durationS": 20,
         "cue": "Recule le menton, tiens 5 s, relâche.",
-        "figureKey": "menton-rentre"
+        "figureKey": "menton-rentre",
+        "exerciseKey": "menton-rentre"
       },
       {
         "position": 9,
         "name": "Respiration",
         "durationS": 20,
         "cue": "Quatre respirations : inspire sur 4 temps, expire sur 6.",
-        "figureKey": "respiration"
+        "figureKey": "respiration",
+        "exerciseKey": "respiration-4-6"
       }
     ]
   },
@@ -292,49 +324,56 @@
         "name": "Menton rentré",
         "durationS": 30,
         "cue": "Recule le menton comme pour faire un double menton. Tiens 5 s, relâche, recommence.",
-        "figureKey": "menton-rentre"
+        "figureKey": "menton-rentre",
+        "exerciseKey": "menton-rentre"
       },
       {
         "position": 2,
         "name": "Inclinaison — droite",
         "durationS": 30,
         "cue": "Oreille vers l'épaule, la main opposée relâche. Ne tire pas.",
-        "figureKey": "nuque-laterale"
+        "figureKey": "nuque-laterale",
+        "exerciseKey": "nuque-inclinaison"
       },
       {
         "position": 3,
         "name": "Inclinaison — gauche",
         "durationS": 30,
         "cue": "Même chose de l'autre côté.",
-        "figureKey": "nuque-laterale"
+        "figureKey": "nuque-laterale",
+        "exerciseKey": "nuque-inclinaison"
       },
       {
         "position": 4,
         "name": "Rotation lente",
         "durationS": 30,
         "cue": "Tourne la tête d'un côté puis de l'autre, comme si tu suivais un horizon.",
-        "figureKey": "nuque-rotation"
+        "figureKey": "nuque-rotation",
+        "exerciseKey": "nuque-rotation"
       },
       {
         "position": 5,
         "name": "Haussements d'épaules",
         "durationS": 30,
         "cue": "Monte les épaules vers les oreilles, tiens 3 s, laisse tomber d'un coup.",
-        "figureKey": "haussement-epaules"
+        "figureKey": "haussement-epaules",
+        "exerciseKey": "haussement-epaules"
       },
       {
         "position": 6,
         "name": "Ouverture à l'encadrement",
         "durationS": 30,
         "cue": "Avant-bras contre un montant de porte, avance d'un pas. Poitrine ouverte.",
-        "figureKey": "encadrement-porte"
+        "figureKey": "encadrement-porte",
+        "exerciseKey": "encadrement-porte"
       },
       {
         "position": 7,
         "name": "Flexion de la nuque",
         "durationS": 30,
         "cue": "Mains croisées derrière la tête, laisse le poids des bras amener le menton vers la poitrine. Ne tire pas.",
-        "figureKey": "nuque-flexion"
+        "figureKey": "nuque-flexion",
+        "exerciseKey": "nuque-flexion"
       }
     ]
   },
@@ -352,63 +391,72 @@
         "name": "Serrage d'omoplates",
         "durationS": 40,
         "cue": "Serre les omoplates l'une vers l'autre, tiens 5 s, relâche.",
-        "figureKey": "omoplates"
+        "figureKey": "omoplates",
+        "exerciseKey": "omoplates"
       },
       {
         "position": 2,
         "name": "Cercles de bras",
         "durationS": 30,
         "cue": "Grands cercles vers l'arrière, lentement, amplitude maximale.",
-        "figureKey": "cercle-bras"
+        "figureKey": "cercle-bras",
+        "exerciseKey": "cercle-bras"
       },
       {
         "position": 3,
         "name": "Ouverture pectorale",
         "durationS": 40,
         "cue": "Mains croisées derrière la tête, ouvre les coudes vers l'extérieur.",
-        "figureKey": "ouverture-pectorale"
+        "figureKey": "ouverture-pectorale",
+        "exerciseKey": "ouverture-pectorale"
       },
       {
         "position": 4,
         "name": "Rotation externe",
         "durationS": 40,
         "cue": "Coudes au corps, les avant-bras s'écartent comme deux portes.",
-        "figureKey": "rotation-externe"
+        "figureKey": "rotation-externe",
+        "exerciseKey": "rotation-externe"
       },
       {
         "position": 5,
         "name": "Extension sur chaise",
         "durationS": 40,
         "cue": "Assis, mains derrière la tête, passe le haut du dos par-dessus le dossier.",
-        "figureKey": "extension-chaise"
+        "figureKey": "extension-chaise",
+        "exerciseKey": "extension-chaise"
       },
       {
         "position": 6,
         "name": "Tirage à vide",
         "durationS": 50,
         "cue": "Bras tendus devant, tire les coudes vers l'arrière comme sur une machine.",
-        "figureKey": "tirage-vide"
+        "figureKey": "tirage-vide",
+        "exerciseKey": "tirage-vide"
       },
       {
         "position": 7,
         "name": "Câlin à un bras — droite",
         "durationS": 40,
         "cue": "Bras droit en travers de la poitrine, l’avant-bras gauche le ramène vers toi. Épaule basse.",
-        "figureKey": "calin-bras"
+        "figureKey": "calin-bras",
+        "exerciseKey": "calin-bras"
       },
       {
         "position": 8,
         "name": "Câlin à un bras — gauche",
         "durationS": 40,
         "cue": "Même chose de l’autre côté.",
-        "figureKey": "calin-bras"
+        "figureKey": "calin-bras",
+        "exerciseKey": "calin-bras"
       },
       {
         "position": 9,
         "name": "Triceps au-dessus de la tête",
         "durationS": 40,
         "cue": "Coude en l’air, main entre les omoplates, l’autre main pousse doucement le coude. Change à mi-temps.",
-        "figureKey": "triceps-tete"
+        "figureKey": "triceps-tete",
+        "exerciseKey": "triceps-tete"
       }
     ]
   },
@@ -426,63 +474,72 @@
         "name": "Chat-vache debout",
         "durationS": 40,
         "cue": "Mains sur les cuisses. Arrondis le dos, puis creuse-le, au rythme de ta respiration.",
-        "figureKey": "chat-vache"
+        "figureKey": "chat-vache",
+        "exerciseKey": "chat-vache"
       },
       {
         "position": 2,
         "name": "Inclinaison latérale — droite",
         "durationS": 30,
         "cue": "Un bras au-dessus de la tête, penche du côté opposé. Respire dans les côtes.",
-        "figureKey": "inclinaison-laterale"
+        "figureKey": "inclinaison-laterale",
+        "exerciseKey": "inclinaison-laterale"
       },
       {
         "position": 3,
         "name": "Inclinaison latérale — gauche",
         "durationS": 30,
         "cue": "Même chose de l'autre côté.",
-        "figureKey": "inclinaison-laterale"
+        "figureKey": "inclinaison-laterale",
+        "exerciseKey": "inclinaison-laterale"
       },
       {
         "position": 4,
         "name": "Rotation assise — droite",
         "durationS": 30,
         "cue": "Pieds au sol, tourne le buste, attrape le dossier. Le regard suit.",
-        "figureKey": "rotation-assise"
+        "figureKey": "rotation-assise",
+        "exerciseKey": "rotation-assise"
       },
       {
         "position": 5,
         "name": "Rotation assise — gauche",
         "durationS": 30,
         "cue": "Même chose de l'autre côté.",
-        "figureKey": "rotation-assise"
+        "figureKey": "rotation-assise",
+        "exerciseKey": "rotation-assise"
       },
       {
         "position": 6,
         "name": "Extension debout",
         "durationS": 40,
         "cue": "Mains dans le bas du dos, ouvre vers l'arrière. Petite amplitude, sans forcer.",
-        "figureKey": "extension-debout"
+        "figureKey": "extension-debout",
+        "exerciseKey": "extension-debout"
       },
       {
         "position": 7,
         "name": "Bascule du bassin",
         "durationS": 40,
         "cue": "Debout, bascule le bassin d'avant en arrière, comme un seau qu'on vide.",
-        "figureKey": "bascule-bassin"
+        "figureKey": "bascule-bassin",
+        "exerciseKey": "bascule-bassin"
       },
       {
         "position": 8,
         "name": "Genou à la poitrine — droite",
         "durationS": 30,
         "cue": "Assis, ramène un genou vers la poitrine avec les deux mains. Le dos reste long.",
-        "figureKey": "genou-poitrine"
+        "figureKey": "genou-poitrine",
+        "exerciseKey": "genou-poitrine"
       },
       {
         "position": 9,
         "name": "Genou à la poitrine — gauche",
         "durationS": 30,
         "cue": "Même chose de l’autre côté.",
-        "figureKey": "genou-poitrine"
+        "figureKey": "genou-poitrine",
+        "exerciseKey": "genou-poitrine"
       }
     ]
   },
@@ -500,49 +557,56 @@
         "name": "Fente basse — droite",
         "durationS": 40,
         "cue": "Genou arrière au sol ou tendu. Rentre le bassin, puis avance.",
-        "figureKey": "fente"
+        "figureKey": "fente",
+        "exerciseKey": "fente-basse"
       },
       {
         "position": 2,
         "name": "Fente basse — gauche",
         "durationS": 40,
         "cue": "Même chose de l'autre côté.",
-        "figureKey": "fente"
+        "figureKey": "fente",
+        "exerciseKey": "fente-basse"
       },
       {
         "position": 3,
         "name": "Figure 4 assise — droite",
         "durationS": 40,
         "cue": "Cheville droite sur le genou gauche, penche le buste, dos droit.",
-        "figureKey": "figure4-assise"
+        "figureKey": "figure4-assise",
+        "exerciseKey": "figure4-assise"
       },
       {
         "position": 4,
         "name": "Figure 4 assise — gauche",
         "durationS": 40,
         "cue": "Même chose de l'autre côté.",
-        "figureKey": "figure4-assise"
+        "figureKey": "figure4-assise",
+        "exerciseKey": "figure4-assise"
       },
       {
         "position": 5,
         "name": "Ischios — droite",
         "durationS": 30,
         "cue": "Talon sur une chaise basse, jambe tendue, penche depuis les hanches.",
-        "figureKey": "ischios"
+        "figureKey": "ischios",
+        "exerciseKey": "ischios"
       },
       {
         "position": 6,
         "name": "Ischios — gauche",
         "durationS": 30,
         "cue": "Même chose de l'autre côté.",
-        "figureKey": "ischios"
+        "figureKey": "ischios",
+        "exerciseKey": "ischios"
       },
       {
         "position": 7,
         "name": "Balancement de hanche",
         "durationS": 20,
         "cue": "Debout, jambe libre, balance d'avant en arrière. Amplitude confortable.",
-        "figureKey": "balancement-hanche"
+        "figureKey": "balancement-hanche",
+        "exerciseKey": "balancement-hanche"
       }
     ]
   },
@@ -560,42 +624,48 @@
         "name": "Poignet en flexion — droite",
         "durationS": 25,
         "cue": "Bras tendu devant, paume vers le bas, l’autre main tire les doigts vers toi.",
-        "figureKey": "poignet-flexion"
+        "figureKey": "poignet-flexion",
+        "exerciseKey": "poignet-flexion"
       },
       {
         "position": 2,
         "name": "Poignet en flexion — gauche",
         "durationS": 25,
         "cue": "Même chose de l’autre côté.",
-        "figureKey": "poignet-flexion"
+        "figureKey": "poignet-flexion",
+        "exerciseKey": "poignet-flexion"
       },
       {
         "position": 3,
         "name": "Poignet en extension",
         "durationS": 25,
         "cue": "Paume vers le haut, l’autre main tire les doigts vers le sol. Change de côté à mi-temps.",
-        "figureKey": "poignet-extension"
+        "figureKey": "poignet-extension",
+        "exerciseKey": "poignet-extension"
       },
       {
         "position": 4,
         "name": "Doigts écartés",
         "durationS": 20,
         "cue": "Écarte les doigts au maximum, tiens 3 s, referme le poing. Dix fois.",
-        "figureKey": "doigts-ecartes"
+        "figureKey": "doigts-ecartes",
+        "exerciseKey": "doigts-ecartes"
       },
       {
         "position": 5,
         "name": "Mains dos à dos",
         "durationS": 25,
         "cue": "Dos des mains l’un contre l’autre devant la poitrine, coudes vers l’extérieur.",
-        "figureKey": "priere-inversee"
+        "figureKey": "priere-inversee",
+        "exerciseKey": "mains-dos-a-dos"
       },
       {
         "position": 6,
         "name": "Prière",
         "durationS": 30,
         "cue": "Paumes jointes devant la poitrine, descends les mains en gardant les paumes collées.",
-        "figureKey": "poignet-priere"
+        "figureKey": "poignet-priere",
+        "exerciseKey": "poignet-priere"
       }
     ]
   },
@@ -613,28 +683,32 @@
         "name": "Cercles de cheville — droite",
         "durationS": 30,
         "cue": "Décolle le pied, dessine un cercle large, dans un sens puis dans l’autre.",
-        "figureKey": "cheville-cercle"
+        "figureKey": "cheville-cercle",
+        "exerciseKey": "cheville-cercle"
       },
       {
         "position": 2,
         "name": "Cercles de cheville — gauche",
         "durationS": 30,
         "cue": "Même chose de l’autre côté.",
-        "figureKey": "cheville-cercle"
+        "figureKey": "cheville-cercle",
+        "exerciseKey": "cheville-cercle"
       },
       {
         "position": 3,
         "name": "Talon-pointe",
         "durationS": 30,
         "cue": "Assis ou debout, alterne l’appui sur les talons puis sur la pointe. Sans à-coups.",
-        "figureKey": "talon-pointe"
+        "figureKey": "talon-pointe",
+        "exerciseKey": "talon-pointe"
       },
       {
         "position": 4,
         "name": "Montées sur la pointe",
         "durationS": 30,
         "cue": "Debout, monte sur la pointe des pieds, redescends lentement. Vingt fois.",
-        "figureKey": "mollet-releve"
+        "figureKey": "mollet-releve",
+        "exerciseKey": "mollet-releve"
       }
     ]
   },
@@ -652,21 +726,24 @@
         "name": "Clignements lents",
         "durationS": 20,
         "cue": "Vingt clignements francs, paupières complètement fermées à chaque fois.",
-        "figureKey": "clignement"
+        "figureKey": "clignement",
+        "exerciseKey": "clignement"
       },
       {
         "position": 2,
         "name": "Loin, près",
         "durationS": 20,
         "cue": "Fixe le point le plus lointain 3 s, puis ton pouce à 20 cm 3 s. Alterne.",
-        "figureKey": "loin-pres"
+        "figureKey": "loin-pres",
+        "exerciseKey": "loin-pres-alterne"
       },
       {
         "position": 3,
         "name": "Paumes",
         "durationS": 20,
         "cue": "Paumes en coupe sur les yeux ouverts, sans appuyer. Noir complet, respire.",
-        "figureKey": "paumes"
+        "figureKey": "paumes",
+        "exerciseKey": "paumes"
       }
     ]
   },
@@ -684,21 +761,24 @@
         "name": "Installe-toi",
         "durationS": 20,
         "cue": "Assis, dos long, épaules basses. Pose les mains sur les cuisses.",
-        "figureKey": "respiration"
+        "figureKey": "respiration",
+        "exerciseKey": "installe-toi"
       },
       {
         "position": 2,
         "name": "Inspire 4, expire 6",
         "durationS": 60,
         "cue": "Inspire par le nez sur 4 temps, expire par la bouche sur 6. Sans forcer.",
-        "figureKey": "respiration"
+        "figureKey": "respiration",
+        "exerciseKey": "respiration-4-6"
       },
       {
         "position": 3,
         "name": "Paumes sur les yeux",
         "durationS": 40,
         "cue": "Paumes en coupe sur les yeux ouverts, sans appuyer. Noir complet, respire.",
-        "figureKey": "paumes"
+        "figureKey": "paumes",
+        "exerciseKey": "paumes"
       }
     ]
   }
