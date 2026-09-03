@@ -223,7 +223,10 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     set({ session, occurrences, pause: null, awaiting: null })
     await persist(session, occurrences)
 
-    // Tell the server, best-effort. The local session is authoritative.
+    // Tell the server, best-effort — truly best-effort: the local session is
+    // authoritative and already on screen, so no failure here may surface as a
+    // crash on top of it. A 401 or a 500 behaves exactly like being offline; the
+    // retry on the next foreground (below, in catchUp) is what closes the gap.
     try {
       const res = await api.post<{ session: WorkSession }>('/api/sessions', {
         action: 'start',
@@ -236,7 +239,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       set({ session: synced })
       await persist(synced, get().occurrences)
     } catch (e) {
-      if (!isOffline(e)) throw e
+      if (!isOffline(e)) console.warn('[session] start not confirmed by server', e)
     }
   },
 
@@ -259,7 +262,8 @@ export const useSessionStore = create<SessionState>((set, get) => ({
         localDate: localDate(),
       })
     } catch (e) {
-      if (!isOffline(e)) throw e
+      // Same best-effort rule as start(): the day is over locally regardless.
+      if (!isOffline(e)) console.warn('[session] stop not confirmed by server', e)
     }
     void flushEvents()
   },

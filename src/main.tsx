@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { HashRouter } from 'react-router-dom'
 import '@/styles/index.css'
 import { AppRoutes } from '@/app/routes'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { StatusBar, Style } from '@capacitor/status-bar'
 import { isNative } from '@/lib/platform'
 import { catchUpAndRoute, installReminderListeners } from '@/features/reminders/listener'
@@ -22,6 +23,15 @@ import { flushEvents } from '@/features/reminders/events'
  *  3. Render immediately — no blocking network call (§13.2).
  *  4. After paint: hydrate stores, check for an OTA update in the background.
  */
+// A rejection nobody awaited used to vanish with no trace (§ audit) — this is
+// the one that caught 401s from session.start() before the store learned to
+// treat a server failure as best-effort. Logging it is the whole fix: it turns
+// a silent failure into one that shows up in the logs the next time it happens
+// anywhere else, native or web.
+window.addEventListener('unhandledrejection', (event) => {
+  console.error('[unhandled]', event.reason)
+})
+
 async function boot() {
   await notifyReady()
 
@@ -51,7 +61,9 @@ async function boot() {
   createRoot(root).render(
     <StrictMode>
       <HashRouter>
-        <AppRoutes />
+        <ErrorBoundary>
+          <AppRoutes />
+        </ErrorBoundary>
       </HashRouter>
     </StrictMode>,
   )
