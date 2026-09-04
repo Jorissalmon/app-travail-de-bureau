@@ -26,3 +26,6 @@ ota/tmp/
 
 # Promo screenshots, generated locally
 promo/
+
+# Local dev-server config, recreated on demand
+.claude/
