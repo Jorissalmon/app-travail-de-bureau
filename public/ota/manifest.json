@@ -1,7 +1,7 @@
 {
-  "version": "1.0.18",
-  "url": "https://app-travail-de-bureau.vercel.app/ota/bundle-1.0.18.zip",
-  "checksum": "9cfca52ea2422d45f16b7661401822b302180c7a8b6b629afb4676a0794b5c2f",
+  "version": "1.0.19",
+  "url": "https://app-travail-de-bureau.vercel.app/ota/bundle-1.0.19.zip",
+  "checksum": "046ade81935a5e51d29b67297aa6ab8ff8b27605c41062f61a9537a7c39ab6e8",
   "minNative": "1.0.0",
-  "notes": "Bump the shell to 1.2.0\n\nThe bowl as a res/raw resource, a second notification channel and the\nwakeAlways flag are all native: an APK built before them cannot play the\nsound or take a lit screen. Distinguishable from 1.1.0 in Settings.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
+  "notes": "Link each exercise to the evidence, and add five researched articles\n\nThe info sheet explained how to do a movement but never why it was worth\nthe time. Each exercise now carries the article slugs that justify it,\nassigned by subject rather than in bulk — an exercise that links to\neverything links to nothing — and the sheet ends on them, with each\narticle's evidence grade visible before you open it.\n\nFive new articles from a literature search, graded on the same scale as\nthe existing six and each ending on its own limits:\n\n- Daylight (solid): 46 minutes more sleep with a window, measured by\n  actigraphy; 37 minutes in a later controlled trial.\n- Blue-light filtering lenses (not demonstrated): Cochrane 2023, 17\n  randomised trials, 619 people, no effect on eye strain.\n- What actually works at a desk (partial): an overview of systematic\n  reviews finds strong evidence *for* strength training and strong\n  evidence of *no* benefit for participatory ergonomics, multifaceted\n  interventions and stress management.\n- Extending the exhale (partial), and open-plan offices (partial).\n\nThat fourth one corrects something I wrote myself: the breathing\nexercise claimed a longer exhale \"activates the system that calms you\".\nA 2023 randomised trial (100 participants, 12 weeks) finds slow\nbreathing does reduce stress but that extending the exhale brings no\nmeasurable advantage over equal durations. The sheet now says what is\ndemonstrated — slowing down — and what is not.\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
 }
