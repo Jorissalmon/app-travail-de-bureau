@@ -267,7 +267,7 @@ export function pendingAfter(occurrences: Occurrence[], now: Date): Occurrence[]
  */
 export function firstOccurrence(occurrences: Occurrence[]): Occurrence | null {
   if (occurrences.length === 0) return null
-  return [...occurrences].sort((a, b) => a.at.getTime() - b.at.getTime())[0]
+  return [...occurrences].sort((a, b) => a.at.getTime() - b.at.getTime())[0] ?? null
 }
 
 /**
@@ -279,5 +279,37 @@ export function firstOccurrence(occurrences: Occurrence[]): Occurrence | null {
 export function dueBy(occurrences: Occurrence[], now: Date): Occurrence | null {
   const past = occurrences.filter((o) => o.at.getTime() <= now.getTime())
   if (past.length === 0) return null
-  return past.sort((a, b) => b.at.getTime() - a.at.getTime())[0]
+  return past.sort((a, b) => b.at.getTime() - a.at.getTime())[0] ?? null
+}
+
+/**
+ * When the day should next be *offered*, given the auto-start time the user set.
+ *
+ * The reading of "démarrage auto" that matters is a reminder to begin, not a
+ * session that begins without you: an app that starts the clock on its own
+ * would be measuring a chair you are not sitting in, and the whole point of the
+ * numbers is that they are honest. So this plans the instant at which the app
+ * asks, and the tap is still the user's.
+ *
+ * Returns the first `autoStartAt` that falls on an active day and is still
+ * ahead of `now`. Null when the setting is empty — the only way to turn it off.
+ */
+export function nextAutoStart(
+  autoStartAt: string | null,
+  weekdays: number[],
+  now: Date,
+): Date | null {
+  const mins = minutesOfDay(autoStartAt)
+  if (mins === null) return null
+
+  // Seven days covers every weekday selection; the eighth is the same as the
+  // first, so a setting whose day is excluded returns null rather than looping.
+  for (let offset = 0; offset <= 7; offset++) {
+    const at = new Date(now.getFullYear(), now.getMonth(), now.getDate() + offset, 0, 0, 0, 0)
+    at.setMinutes(mins)
+    if (at.getTime() <= now.getTime()) continue
+    if (!onActiveDay(at, weekdays)) continue
+    return at
+  }
+  return null
 }

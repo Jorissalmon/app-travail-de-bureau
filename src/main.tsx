@@ -8,6 +8,7 @@ import { StatusBar, Style } from '@capacitor/status-bar'
 import { isNative } from '@/lib/platform'
 import { catchUpAndRoute, installReminderListeners } from '@/features/reminders/listener'
 import { installWebAlarm } from '@/features/reminders/webAlarm'
+import { installAutoStart } from '@/features/reminders/autostart'
 import { loadAlertMode } from '@/features/reminders/alert'
 import { ensureChannelAndActions } from '@/features/reminders/notifications'
 import { notifyReady, checkForUpdate } from '@/features/ota/updater'
@@ -15,6 +16,7 @@ import { useAuthStore } from '@/stores/auth'
 import { useSettingsStore } from '@/stores/settings'
 import { useContentStore } from '@/stores/content'
 import { useSessionStore } from '@/stores/session'
+import { useOnboardingStore } from '@/stores/onboarding'
 import { flushEvents } from '@/features/reminders/events'
 
 /**
@@ -42,6 +44,9 @@ async function boot() {
   // The browser-tab path: harmless and inert on the phone, where Android's own
   // alarms do the job.
   installWebAlarm()
+  // The morning invitation, which watches the setting and the session and arms
+  // itself. Inert in a browser, which cannot schedule anything.
+  installAutoStart()
   void loadAlertMode()
 
   if (isNative()) {
@@ -61,6 +66,7 @@ async function boot() {
   void useSessionStore.getState().hydrate().then(catchUpAndRoute)
   void useContentStore.getState().load()
   void useAuthStore.getState().bootstrap()
+  void useOnboardingStore.getState().load()
 
   const root = document.getElementById('root')
   if (!root) throw new Error('#root missing')

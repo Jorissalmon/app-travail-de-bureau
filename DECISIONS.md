@@ -306,6 +306,63 @@ Chaque écart par rapport au mégaprompt, avec sa raison en une phrase (§15.8).
   frontière d'erreur ajoutée plus tôt a transformé la boucle en écran de secours
   plutôt qu'en page noire.
 
+- **« Démarrage auto » invite, il ne démarre pas** — le réglage existait,
+  s'enregistrait, se synchronisait, et **aucune ligne hors de l'écran de
+  réglages ne lisait `autoStartAt`** : régler 09:00 ne déclenchait rien. Ce qui
+  l'implémente est une notification unique à l'heure dite, les jours actifs,
+  dont la première action démarre la journée — pas un démarrage silencieux. Une
+  session ouverte sans toi mesurerait une assise que tu n'as pas faite, et la
+  seule chose qui rende la plus longue assise, le taux de réponse et la série
+  dignes d'être affichés, c'est qu'aucun des trois n'est inventé. Une seule
+  invitation est armée à la fois, sous un id réservé (`AUTO_START_ID`) que
+  `cancelAll()` épargne : la fin d'une journée ne doit pas emporter le matin
+  suivant. Elle se réarme au premier plan, au changement de réglage et à la fin
+  d'une session. Limite assumée, la même que pour tout le moteur : l'app ne
+  tourne pas en arrière-plan, donc une semaine sans ouvrir l'app laisse
+  l'invitation déjà armée, pas sept.
+- **La journée se termine toute seule, à une limite que l'utilisateur a posée**
+  — rien ne fermait une session hors du bouton « Terminer » et de l'action de
+  notification : une journée oubliée le vendredi soir tournait tout le week-end,
+  et la plus longue assise affichait soixante heures parce que c'est
+  littéralement ce qui s'était passé du point de vue de l'app. `dayEndAt()`
+  prend la première des deux bornes : le début de la plage silencieuse — l'heure
+  où l'utilisateur a lui-même dit qu'aucun rappel ne devait tomber — et la fin
+  du jour. Ni l'une ni l'autre n'est une supposition sur l'heure à laquelle il a
+  quitté son bureau ; ce sont des lignes qu'il a tracées. La borne est appliquée
+  à chaque regard sur l'horloge (`catchUp`, et le tic de l'onglet), pas par une
+  alarme : Android ne réveille pas l'app pour exécuter du JavaScript.
+- **Passé minuit, on demande au lieu de deviner** — fermer à la borne le jour
+  même, c'est répéter la règle de l'utilisateur ; le faire le lendemain matin,
+  ce serait écrire une heure qu'on ne connaît pas. Une session qui a survécu à
+  son jour devient donc un `pendingClose` — la session locale est close
+  immédiatement, mais l'heure de fin reste due — et une pop-up demande « tu as
+  fini vers quelle heure ? », la proposition de l'app déjà dans la case. Elle se
+  ferme sans répondre et revient au premier plan suivant, exactement comme la
+  pop-up d'exercice. La réponse est bornée des deux côtés (jamais avant le
+  début, jamais après la borne) et vit sous sa propre clé de stockage : elle
+  survit à la session qu'elle décrit.
+- **Une première ouverture, qui n'existait pas** — `grep -rn "onboarding"` ne
+  renvoyait rien : la première ouverture était un formulaire de connexion avec
+  code d'invitation, puis un écran avec un bouton. Quatre écrans avant les
+  onglets : ce que fait l'app et ce qu'elle ne mesure pas, l'ouverture de
+  « Pourquoi trente minutes » **lue depuis le store de contenu** (une correction
+  de l'article atteint donc l'accueil, les deux ne peuvent pas diverger), les
+  quatre autorisations Android, et le lieu de travail. Le drapeau est local à
+  l'appareil et non dans `Settings`, que `/api/me` remplace en entier : un
+  second téléphone refait l'introduction, ce qui est juste. La liste des
+  autorisations est désormais un composant partagé (`PermissionsList`) entre la
+  fiche d'avant-session et l'accueil, pour que les deux ne racontent jamais deux
+  histoires des mêmes quatre interrupteurs.
+- **`pnpm typecheck` ne vérifiait rien** — `tsconfig.json` a `"files": []` et
+  deux `references`, et `tsc --noEmit` sur un fichier de références sans
+  `composite` ne compile aucun projet : la commande sortait en 0 sur `src/`
+  jamais lu. La CI était donc verte sur trois erreurs de type réelles, dont
+  `armFrom(session.id, now)` dans `resumeWork` — l'horloge passée à la place des
+  ancrages, deux arguments sur trois — qui lançait un `TypeError` dans
+  `planNext` dès qu'une reprise de pause tombait dans une plage calme ou un jour
+  exclu. Le script cible maintenant les deux projets explicitement, et `build`
+  l'appelle au lieu de refaire le même `tsc --noEmit` inerte.
+
 ## À la charge du propriétaire (secrets, hors dépôt)
 
 - Créer le rôle `releve_app` + la base `releve`, appliquer les migrations

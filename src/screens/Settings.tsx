@@ -190,7 +190,7 @@ export function Settings() {
 
         <TimeRow
           label="Démarrage auto"
-          hint="Laisse vide pour démarrer à la main."
+          hint="Une notification à cette heure-là, les jours actifs : un appui démarre la journée. L’app ne la démarre jamais toute seule — elle mesurerait une assise que tu n’as pas faite. Laisse vide pour n’avoir aucun rappel du matin."
           value={settings.autoStartAt}
           onChange={(autoStartAt) => void update({ autoStartAt })}
         />
@@ -343,7 +343,10 @@ function TimeRangeRow({
   return (
     <div className="py-3.5" style={{ borderBottom: '1px solid var(--border)' }}>
       <p className="text-[16px]">{label}</p>
-      <p className="t-meta mt-0.5">Aucun rappel pendant cette plage.</p>
+      <p className="t-meta mt-0.5">
+        Aucun rappel pendant cette plage — et la journée se termine toute seule quand elle
+        commence, plutôt que de courir toute la nuit.
+      </p>
       <div className="mt-3 flex items-center gap-2">
         <input
           type="time"

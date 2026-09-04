@@ -14,6 +14,9 @@ export const KEYS = {
   user: 'auth.user',
   settings: 'settings',
   session: 'session.active',
+  /** A day that outlived itself and still owes an answer about when it ended. */
+  dayClose: 'session.pendingClose',
+  onboarded: 'onboarding.done',
   eventQueue: 'events.queue',
   completionQueue: 'completions.queue',
   routines: 'content.routines',

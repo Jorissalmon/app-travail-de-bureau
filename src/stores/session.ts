@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { api, isOffline } from '@/lib/api'
-import { KEYS, getJSON, setJSON } from '@/lib/storage'
+import { KEYS, getJSON, remove, setJSON } from '@/lib/storage'
 import { localDate } from '@/lib/date'
 import { uuid } from '@/lib/uuid'
 import type { ReminderKind, WorkSession } from '@/lib/types'
@@ -29,6 +29,7 @@ import {
 } from '@/features/reminders/permissions'
 import { flushEvents, logEvent, makeEvent } from '@/features/reminders/events'
 import { alertMode } from '@/features/reminders/alert'
+import { dayEndAt, overrunKind } from '@/features/session/dayend'
 import { useSettingsStore } from './settings'
 
 /**
@@ -79,6 +80,21 @@ export interface Awaiting {
   firedAt: string
 }
 
+/**
+ * A day that ran past its own end without anyone closing it, waiting on the one
+ * thing the app cannot know: what time you actually stopped.
+ *
+ * It is kept apart from the active session — the session is already over by the
+ * time this exists — and under its own storage key, because it outlives the
+ * session it describes and is answered on its own schedule.
+ */
+export interface PendingClose {
+  startedAt: string
+  localDate: string
+  /** The boundary the day would have closed at: the app's own best answer. */
+  suggestedEnd: string
+}
+
 interface StoredState {
   session: ActiveSession | null
   occurrences: SerializableOcc[]
@@ -109,6 +125,8 @@ interface SessionState {
   anchors: Anchors
   pause: Pause | null
   awaiting: Awaiting | null
+  /** A closed-by-itself day still owing the hour it really ended at. */
+  pendingClose: PendingClose | null
   /**
    * The prompt was closed without answering. Not persisted and reset by every
    * catchUp, so it holds until the app next comes to the foreground and no
@@ -116,11 +134,25 @@ interface SessionState {
    */
   promptDismissed: boolean
   dismissPrompt: () => void
+  /** Same rule for the end-of-day question: closed now, asked again later. */
+  closeDismissed: boolean
+  dismissClosePrompt: () => void
   ready: boolean
   /** Load persisted session on boot. */
   hydrate: () => Promise<void>
   start: () => Promise<void>
-  stop: (opts?: { via?: 'button' | 'notification' }) => Promise<void>
+  /**
+   * End the day. `at` is when it ended, which is not always now: a day closed
+   * at its boundary ended there, not at the moment the app noticed.
+   */
+  stop: (opts?: { via?: 'button' | 'notification' | 'auto'; at?: Date }) => Promise<void>
+  /**
+   * Close a session that has outlived its own day, if there is one. Returns
+   * true when it acted, so the caller knows there is nothing left to reconcile.
+   */
+  closeOverrun: () => Promise<boolean>
+  /** Answer the end-of-day question with the hour the user gives. */
+  confirmClose: (at: Date) => Promise<void>
   /**
    * Look at the clock: pick up a reminder that fired while the app was not
    * running, and arm one if nothing is. Called on boot and on every foreground.
@@ -211,15 +243,21 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   anchors: { stand: new Date(), eyes: new Date() },
   pause: null,
   awaiting: null,
+  pendingClose: null,
   promptDismissed: false,
+  closeDismissed: false,
   ready: false,
 
   dismissPrompt: () => set({ promptDismissed: true }),
+  dismissClosePrompt: () => set({ closeDismissed: true }),
 
   hydrate: async () => {
+    // Read first: a day awaiting its closing hour has to survive a restart, or
+    // the question would be lost exactly when it is asked — the next morning.
+    const pendingClose = await getJSON<PendingClose | null>(KEYS.dayClose, null)
     const stored = await getJSON<StoredState | null>(KEYS.session, null)
     if (!stored?.session) {
-      set({ ready: true })
+      set({ pendingClose, ready: true })
       return
     }
     const started = new Date(stored.session.startedAt)
@@ -235,6 +273,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       // was a bare instant and only ever meant an exercise was on screen.
       pause: stored.pause ?? (stored.pausedAt ? { at: stored.pausedAt, reason: 'break' } : null),
       awaiting: stored.awaiting ?? null,
+      pendingClose,
       ready: true,
     })
   },
@@ -280,7 +319,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     }
   },
 
-  stop: async ({ via = 'button' } = {}) => {
+  stop: async ({ via = 'button', at = new Date() } = {}) => {
     const { session } = get()
     await cancelAll()
     set({ session: null, occurrences: [], pause: null, awaiting: null })
@@ -295,8 +334,10 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     try {
       await api.post('/api/sessions', {
         action: 'stop',
-        at: new Date().toISOString(),
-        localDate: localDate(),
+        // The day ended when it ended. Closing one at its boundary hours later
+        // must not record the hour the app happened to look at the clock.
+        at: at.toISOString(),
+        localDate: localDate(at),
       })
     } catch (e) {
       // Same best-effort rule as start(): the day is over locally regardless.
@@ -305,13 +346,83 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     void flushEvents()
   },
 
+  closeOverrun: async () => {
+    const { session } = get()
+    if (!session) return false
+    // The boundary is read from the quiet window the user set. On a cold start
+    // this runs beside the settings load, and acting on the defaults would ask
+    // about midnight when they had said nine in the evening.
+    if (!useSettingsStore.getState().loaded) await useSettingsStore.getState().load()
+    const settings = useSettingsStore.getState().settings
+    const startedAt = new Date(session.startedAt)
+    const kind = overrunKind(startedAt, settings, new Date())
+    if (kind === 'none') return false
+
+    const endAt = dayEndAt(startedAt, settings)
+
+    // Still on the day it belongs to: the boundary is the user's own rule —
+    // the hour they said no reminder may land, or the end of the day itself —
+    // so stating it back to them is not a guess.
+    if (kind === 'close') {
+      await get().stop({ via: 'auto', at: endAt })
+      return true
+    }
+
+    // It survived into another day. The boundary is all the app has, and the
+    // whole worth of the numbers is that they are not built on a guess: end the
+    // session locally, and hold the question until it is answered.
+    await cancelAll()
+    const pendingClose: PendingClose = {
+      startedAt: session.startedAt,
+      localDate: session.localDate,
+      suggestedEnd: endAt.toISOString(),
+    }
+    set({
+      session: null,
+      occurrences: [],
+      pause: null,
+      awaiting: null,
+      pendingClose,
+      closeDismissed: false,
+    })
+    await persist(null, [])
+    await setJSON(KEYS.dayClose, pendingClose)
+    return true
+  },
+
+  confirmClose: async (at) => {
+    const pending = get().pendingClose
+    if (!pending) return
+    set({ pendingClose: null, closeDismissed: false })
+    await remove(KEYS.dayClose)
+    try {
+      await api.post('/api/sessions', {
+        action: 'stop',
+        at: at.toISOString(),
+        localDate: pending.localDate,
+      })
+    } catch (e) {
+      if (!isOffline(e)) console.warn('[session] close not confirmed by server', e)
+    }
+    void flushEvents()
+  },
+
   catchUp: async () => {
     const { session, occurrences, awaiting } = get()
     let { pause } = get()
-    // Every look at the clock puts the prompt back in front. This is the whole
-    // of "closed, but it comes back".
-    set({ promptDismissed: false })
+    // Every look at the clock puts the prompts back in front — the owed
+    // exercise and the unanswered end of day alike. This is the whole of
+    // "closed, but it comes back".
+    set({ promptDismissed: false, closeDismissed: false })
     if (!session) return
+
+    // Before anything else: a day that should already be over is not a day to
+    // arm the next reminder on. Nothing but the button and a notification
+    // action used to end one, so a session forgotten on a Friday evening ran
+    // the whole weekend — and the longest sitting, the streak and the response
+    // rate were all computed from it.
+    if (await get().closeOverrun()) return
+
     const now = new Date()
 
     // A break pause ends when the exercise screen is left, but the app can be
@@ -397,7 +508,11 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       await cancelAll()
       await scheduleAll(armed, scheduleContext())
     } else {
-      armed = await armFrom(session.id, now)
+      // Anchors, then the clock — passing the clock as the anchors threw a
+      // TypeError inside planNext, so resuming from a pause into a quiet window
+      // or an excluded day crashed instead of replanning. Never seen because
+      // `pnpm typecheck` compiled nothing (see package.json).
+      armed = await armFrom(session.id, get().anchors, now)
     }
 
     // Coming back to the desk puts an exercise held by the pause back in front.

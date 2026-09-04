@@ -14,6 +14,7 @@ import {
   planOccurrences,
   planResume,
   planSnooze,
+  nextAutoStart,
 } from './schedule'
 
 const base: Settings = {
@@ -396,5 +397,44 @@ describe('planNext — chaque cadence garde son propre ancrage', () => {
     const withMobility: Settings = { ...base, mobilityTimes: ['09:10'] }
     const next = planNext('s', { stand: t(9, 0), eyes: t(9, 0) }, withMobility, t(9, 0))
     expect(next?.kind).toBe('mobility')
+  })
+})
+
+describe('nextAutoStart', () => {
+  // 2026-03-10 is a Tuesday, 2026-03-14 a Saturday.
+  const weekdays = [1, 2, 3, 4, 5]
+
+  it('is null when no time is set — that is how it stays off', () => {
+    expect(nextAutoStart(null, weekdays, new Date('2026-03-10T07:00:00'))).toBeNull()
+  })
+
+  it('picks today when the hour is still ahead', () => {
+    expect(nextAutoStart('09:00', weekdays, new Date('2026-03-10T07:00:00'))).toEqual(
+      new Date('2026-03-10T09:00:00'),
+    )
+  })
+
+  it('rolls to tomorrow once the hour has passed', () => {
+    expect(nextAutoStart('09:00', weekdays, new Date('2026-03-10T09:00:00'))).toEqual(
+      new Date('2026-03-11T09:00:00'),
+    )
+  })
+
+  it('skips the days the user excluded', () => {
+    // Friday evening: the next active day is Monday, not Saturday.
+    expect(nextAutoStart('09:00', weekdays, new Date('2026-03-13T18:00:00'))).toEqual(
+      new Date('2026-03-16T09:00:00'),
+    )
+  })
+
+  it('treats an empty weekday list as every day, like the reminder planner', () => {
+    expect(nextAutoStart('09:00', [], new Date('2026-03-13T18:00:00'))).toEqual(
+      new Date('2026-03-14T09:00:00'),
+    )
+  })
+
+  it('is null when no selected day exists', () => {
+    expect(nextAutoStart('09:00', [], new Date('2026-03-10T07:00:00'))).not.toBeNull()
+    expect(nextAutoStart('09:00', [8], new Date('2026-03-10T07:00:00'))).toBeNull()
   })
 })
