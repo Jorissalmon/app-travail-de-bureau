@@ -22,6 +22,7 @@ export const KEYS = {
   scheduled: 'reminders.scheduled',
   playerSound: 'player.sound',
   alertMode: 'reminders.alertMode',
+  place: 'place',
   stepDurations: 'player.durations',
   customRoutines: 'routines.custom',
   bundleVersion: 'ota.bundleVersion',

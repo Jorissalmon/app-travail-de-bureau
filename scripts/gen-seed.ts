@@ -27,6 +27,7 @@ interface Exercise {
   muscles: string[]
   avoid: string
   articles: string[]
+  discreet: boolean
 }
 interface Routine {
   slug: string
@@ -97,16 +98,18 @@ lines.push('')
 // they point at must already exist by the time a step is inserted.
 for (const [key, ex] of Object.entries(exercises)) {
   lines.push(`-- ${key}`)
-  lines.push('INSERT INTO exercises (key, title, steps, tips, easier, muscles, avoid, articles)')
+  lines.push(
+    'INSERT INTO exercises (key, title, steps, tips, easier, muscles, avoid, articles, discreet)',
+  )
   lines.push(
     `VALUES (${q(key)}, ${q(ex.title)}, ${qArray(ex.steps)}, ${qArray(ex.tips)}, ${q(
       ex.easier,
-    )}, ${qArray(ex.muscles)}, ${q(ex.avoid)}, ${qArray(ex.articles)})`,
+    )}, ${qArray(ex.muscles)}, ${q(ex.avoid)}, ${qArray(ex.articles)}, ${ex.discreet})`,
   )
   lines.push('ON CONFLICT (key) DO UPDATE SET')
   lines.push('  title = EXCLUDED.title, steps = EXCLUDED.steps, tips = EXCLUDED.tips,')
   lines.push('  easier = EXCLUDED.easier, muscles = EXCLUDED.muscles, avoid = EXCLUDED.avoid,')
-  lines.push('  articles = EXCLUDED.articles;')
+  lines.push('  articles = EXCLUDED.articles, discreet = EXCLUDED.discreet;')
 }
 lines.push('')
 

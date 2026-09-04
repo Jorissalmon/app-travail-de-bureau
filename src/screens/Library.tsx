@@ -6,11 +6,13 @@ import { RoutineCard } from '@/components/RoutineCard'
 import { Pill } from '@/components/Pill'
 import { useContentStore } from '@/stores/content'
 import { ZONES, ZONE_LABEL } from '@/content'
+import { place, suitsPlace } from '@/features/place/place'
 import type { Zone } from '@/lib/types'
 
 /** §11.2 — routines grouped by zone, horizontal zone filter, persistent search. */
 export function Library() {
-  const routines = useContentStore((s) => s.routines)
+  const routines = useContentStore((s) => s.adapted)
+  const exerciseByKey = useContentStore((s) => s.exerciseByKey)
   const mine = useContentStore((s) => s.mine)
   const refreshMine = useContentStore((s) => s.refreshMine)
   const navigate = useNavigate()
@@ -126,7 +128,15 @@ export function Library() {
             <h2 className="t-section mb-3">{ZONE_LABEL[g.zone]}</h2>
             <div className="flex flex-col gap-3">
               {g.routines.map((r) => (
-                <RoutineCard key={r.slug} routine={r} />
+                <div key={r.slug}>
+                  <RoutineCard routine={r} />
+                  {/* Shown, not hidden: you may well be at home tomorrow. */}
+                  {!suitsPlace(r, place(), exerciseByKey) && (
+                    <p className="t-meta mt-1.5 ml-1">
+                      Plutôt à la maison — trop de mouvements peu discrets pour un open space.
+                    </p>
+                  )}
+                </div>
               ))}
             </div>
           </section>

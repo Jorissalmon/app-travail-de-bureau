@@ -21,7 +21,8 @@
       "debout-nest-pas-actif",
       "ce-que-les-pauses-changent",
       "lumiere-du-jour"
-    ]
+    ],
+    "discreet": true
   },
   "marche-sur-place": {
     "title": "Marche sur place",
@@ -45,7 +46,8 @@
       "pourquoi-30-minutes",
       "debout-nest-pas-actif",
       "ce-que-les-pauses-changent"
-    ]
+    ],
+    "discreet": false
   },
   "extension-debout": {
     "title": "Extension debout",
@@ -70,7 +72,8 @@
       "pourquoi-30-minutes",
       "debout-nest-pas-actif",
       "ce-que-les-pauses-changent"
-    ]
+    ],
+    "discreet": true
   },
   "fente-basse": {
     "title": "Fente basse",
@@ -94,7 +97,8 @@
     "articles": [
       "pourquoi-30-minutes",
       "debout-nest-pas-actif"
-    ]
+    ],
+    "discreet": false
   },
   "regard-au-loin": {
     "title": "Regard au loin",
@@ -117,7 +121,8 @@
       "vingt-vingt-vingt",
       "lumiere-bleue",
       "lumiere-du-jour"
-    ]
+    ],
+    "discreet": true
   },
   "bascule-bassin": {
     "title": "Bascule du bassin",
@@ -139,7 +144,8 @@
     "avoid": "Rien de spécifique : c'est un mouvement doux.",
     "articles": [
       "pourquoi-30-minutes"
-    ]
+    ],
+    "discreet": true
   },
   "menton-rentre": {
     "title": "Menton rentré",
@@ -161,7 +167,8 @@
     "articles": [
       "muscler-le-haut-du-dos",
       "regler-son-poste"
-    ]
+    ],
+    "discreet": true
   },
   "nuque-diagonale": {
     "title": "Nuque en diagonale",
@@ -184,7 +191,8 @@
     "articles": [
       "muscler-le-haut-du-dos",
       "regler-son-poste"
-    ]
+    ],
+    "discreet": true
   },
   "rotation-assise": {
     "title": "Rotation assise",
@@ -207,7 +215,8 @@
     "articles": [
       "regler-son-poste",
       "ergonomie-ce-qui-marche"
-    ]
+    ],
+    "discreet": true
   },
   "ischios-assis": {
     "title": "Ischio-jambiers, assis",
@@ -230,7 +239,8 @@
     "articles": [
       "regler-son-poste",
       "ergonomie-ce-qui-marche"
-    ]
+    ],
+    "discreet": true
   },
   "figure4-assise": {
     "title": "Figure 4 assise",
@@ -253,7 +263,8 @@
     "articles": [
       "pourquoi-30-minutes",
       "regler-son-poste"
-    ]
+    ],
+    "discreet": true
   },
   "calin-bras": {
     "title": "Câlin à un bras",
@@ -276,7 +287,8 @@
     "articles": [
       "muscler-le-haut-du-dos",
       "ergonomie-ce-qui-marche"
-    ]
+    ],
+    "discreet": true
   },
   "triceps-tete": {
     "title": "Triceps au-dessus de la tête",
@@ -299,7 +311,8 @@
     "articles": [
       "muscler-le-haut-du-dos",
       "ergonomie-ce-qui-marche"
-    ]
+    ],
+    "discreet": true
   },
   "cercle-bras": {
     "title": "Cercles de bras",
@@ -322,7 +335,8 @@
     "articles": [
       "muscler-le-haut-du-dos",
       "ergonomie-ce-qui-marche"
-    ]
+    ],
+    "discreet": false
   },
   "chat-vache": {
     "title": "Chat-vache debout",
@@ -346,7 +360,8 @@
     "articles": [
       "pourquoi-30-minutes",
       "ergonomie-ce-qui-marche"
-    ]
+    ],
+    "discreet": false
   },
   "inclinaison-laterale": {
     "title": "Inclinaison latérale",
@@ -368,7 +383,8 @@
     "avoid": "Rien de spécifique : réduis l'amplitude si l'équilibre te manque.",
     "articles": [
       "pourquoi-30-minutes"
-    ]
+    ],
+    "discreet": false
   },
   "respiration-4-6": {
     "title": "Respirer, 4 puis 6",
@@ -390,7 +406,8 @@
     "articles": [
       "expiration-plus-longue",
       "open-space"
-    ]
+    ],
+    "discreet": true
   },
   "nuque-inclinaison": {
     "title": "Inclinaison de nuque",
@@ -413,7 +430,8 @@
     "articles": [
       "muscler-le-haut-du-dos",
       "regler-son-poste"
-    ]
+    ],
+    "discreet": true
   },
   "nuque-rotation": {
     "title": "Rotation lente de la nuque",
@@ -435,7 +453,8 @@
     "articles": [
       "muscler-le-haut-du-dos",
       "regler-son-poste"
-    ]
+    ],
+    "discreet": true
   },
   "haussement-epaules": {
     "title": "Haussements d'épaules",
@@ -457,7 +476,8 @@
     "articles": [
       "muscler-le-haut-du-dos",
       "open-space"
-    ]
+    ],
+    "discreet": true
   },
   "encadrement-porte": {
     "title": "Ouverture à l'encadrement",
@@ -480,7 +500,8 @@
     "articles": [
       "muscler-le-haut-du-dos",
       "ergonomie-ce-qui-marche"
-    ]
+    ],
+    "discreet": false
   },
   "nuque-flexion": {
     "title": "Flexion de la nuque",
@@ -502,7 +523,8 @@
     "articles": [
       "muscler-le-haut-du-dos",
       "regler-son-poste"
-    ]
+    ],
+    "discreet": true
   },
   "omoplates": {
     "title": "Serrage d'omoplates",
@@ -525,7 +547,8 @@
     "articles": [
       "muscler-le-haut-du-dos",
       "ergonomie-ce-qui-marche"
-    ]
+    ],
+    "discreet": true
   },
   "ouverture-pectorale": {
     "title": "Ouverture pectorale",
@@ -548,7 +571,8 @@
     "articles": [
       "muscler-le-haut-du-dos",
       "ergonomie-ce-qui-marche"
-    ]
+    ],
+    "discreet": true
   },
   "rotation-externe": {
     "title": "Rotation externe des épaules",
@@ -571,7 +595,8 @@
     "articles": [
       "muscler-le-haut-du-dos",
       "ergonomie-ce-qui-marche"
-    ]
+    ],
+    "discreet": true
   },
   "extension-chaise": {
     "title": "Extension sur chaise",
@@ -594,7 +619,8 @@
     "articles": [
       "muscler-le-haut-du-dos",
       "ergonomie-ce-qui-marche"
-    ]
+    ],
+    "discreet": true
   },
   "tirage-vide": {
     "title": "Tirage à vide",
@@ -618,7 +644,8 @@
     "articles": [
       "muscler-le-haut-du-dos",
       "ergonomie-ce-qui-marche"
-    ]
+    ],
+    "discreet": true
   },
   "genou-poitrine": {
     "title": "Genou à la poitrine",
@@ -641,7 +668,8 @@
     "articles": [
       "pourquoi-30-minutes",
       "regler-son-poste"
-    ]
+    ],
+    "discreet": true
   },
   "ischios": {
     "title": "Ischio-jambiers, appui surélevé",
@@ -662,7 +690,8 @@
     "avoid": "Une perte d'équilibre : prends appui sur un meuble stable à côté de toi.",
     "articles": [
       "pourquoi-30-minutes"
-    ]
+    ],
+    "discreet": false
   },
   "balancement-hanche": {
     "title": "Balancement de hanche",
@@ -684,7 +713,8 @@
     "avoid": "Rien de spécifique, hormis la perte d'équilibre : reste près d'un appui.",
     "articles": [
       "pourquoi-30-minutes"
-    ]
+    ],
+    "discreet": false
   },
   "poignet-flexion": {
     "title": "Poignet en flexion",
@@ -705,7 +735,8 @@
     "avoid": "Une douleur vive plutôt qu'un étirement : relâche la traction.",
     "articles": [
       "regler-son-poste"
-    ]
+    ],
+    "discreet": true
   },
   "poignet-extension": {
     "title": "Poignet en extension",
@@ -726,7 +757,8 @@
     "avoid": "Une douleur vive plutôt qu'un étirement : relâche la traction.",
     "articles": [
       "regler-son-poste"
-    ]
+    ],
+    "discreet": true
   },
   "doigts-ecartes": {
     "title": "Doigts écartés",
@@ -747,7 +779,8 @@
     "avoid": "Rien de spécifique.",
     "articles": [
       "regler-son-poste"
-    ]
+    ],
+    "discreet": true
   },
   "mains-dos-a-dos": {
     "title": "Mains dos à dos",
@@ -768,7 +801,8 @@
     "avoid": "Une douleur vive plutôt qu'un étirement : réduis l'écart des coudes.",
     "articles": [
       "regler-son-poste"
-    ]
+    ],
+    "discreet": true
   },
   "poignet-priere": {
     "title": "Prière",
@@ -789,7 +823,8 @@
     "avoid": "Une douleur vive plutôt qu'un étirement : remonte les mains.",
     "articles": [
       "regler-son-poste"
-    ]
+    ],
+    "discreet": true
   },
   "cheville-cercle": {
     "title": "Cercles de cheville",
@@ -812,7 +847,8 @@
     "articles": [
       "pourquoi-30-minutes",
       "debout-nest-pas-actif"
-    ]
+    ],
+    "discreet": true
   },
   "talon-pointe": {
     "title": "Talon-pointe",
@@ -836,7 +872,8 @@
     "articles": [
       "pourquoi-30-minutes",
       "debout-nest-pas-actif"
-    ]
+    ],
+    "discreet": true
   },
   "mollet-releve": {
     "title": "Montées sur la pointe",
@@ -857,7 +894,8 @@
     "avoid": "Rien de spécifique, hormis l'équilibre : reste près d'un appui.",
     "articles": [
       "debout-nest-pas-actif"
-    ]
+    ],
+    "discreet": true
   },
   "clignement": {
     "title": "Clignements lents",
@@ -879,7 +917,8 @@
     "articles": [
       "vingt-vingt-vingt",
       "lumiere-bleue"
-    ]
+    ],
+    "discreet": true
   },
   "loin-pres-alterne": {
     "title": "Loin, près",
@@ -900,7 +939,8 @@
     "articles": [
       "vingt-vingt-vingt",
       "lumiere-bleue"
-    ]
+    ],
+    "discreet": true
   },
   "paumes": {
     "title": "Paumes sur les yeux",
@@ -922,7 +962,8 @@
     "articles": [
       "vingt-vingt-vingt",
       "lumiere-bleue"
-    ]
+    ],
+    "discreet": true
   },
   "installe-toi": {
     "title": "S'installer",
@@ -944,6 +985,7 @@
     "articles": [
       "expiration-plus-longue",
       "open-space"
-    ]
+    ],
+    "discreet": true
   }
 }
