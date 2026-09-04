@@ -78,6 +78,13 @@ export interface Pause {
 export interface Awaiting {
   kind: ReminderKind
   firedAt: string
+  /**
+   * Whether an `expired` event has already been written for it. False for one
+   * recorded by a notification tap, which is engagement, not a miss — if it is
+   * then abandoned, the miss is written when it ages out. Absent on state
+   * carried over by an OTA update, where the only path that existed did log.
+   */
+  logged?: boolean
 }
 
 /**
@@ -423,6 +430,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     // rate were all computed from it.
     if (await get().closeOverrun()) return
 
+    const settings = useSettingsStore.getState().settings
     const now = new Date()
 
     // A break pause ends when the exercise screen is left, but the app can be
@@ -435,16 +443,43 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     }
     if (pause) return
 
-    // Already holding an unanswered reminder: nothing to arm, and the caller
-    // routes to it. This is the state a missed notification leaves behind.
-    if (awaiting) return
+    // An owed exercise is a debt, not a life sentence.
+    //
+    // Nothing else is armed while one stands, and that is deliberate: it is
+    // what makes a missed reminder impossible to shrug off by closing the app.
+    // But holding it for ever meant ignoring one reminder during a meeting
+    // killed the rest of the day — no reminder until the exercise was answered,
+    // and a pop-up ambushing you at every foreground. That is, word for word,
+    // the reason people give for deleting this kind of app: a reminder that
+    // lands at the wrong moment, and an app that then nags rather than waits.
+    // Past one interval the debt lapses, the miss stays on the record, and the
+    // day starts again.
+    if (awaiting) {
+      const lapse = Math.max(15, settings.intervalMin) * 60_000
+      if (now.getTime() - Date.parse(awaiting.firedAt) < lapse) return
+      if (awaiting.logged === false) {
+        await logEvent(
+          makeEvent({
+            kind: awaiting.kind,
+            action: 'expired',
+            sessionId: session.id,
+            firedAt: new Date(awaiting.firedAt),
+          }),
+        )
+      }
+      set({ awaiting: null })
+    }
 
     const missed = dueBy(occurrences, now)
     if (missed) {
       // It fired while the app was not looking. Freeze here rather than arming
       // the next one: the day should not move on without the exercise.
       await cancelAll()
-      const next: Awaiting = { kind: missed.kind, firedAt: missed.at.toISOString() }
+      const next: Awaiting = {
+        kind: missed.kind,
+        firedAt: missed.at.toISOString(),
+        logged: true,
+      }
       await logEvent(
         makeEvent({
           kind: missed.kind,
@@ -544,7 +579,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     const { session, awaiting, pause } = get()
     if (!session || awaiting) return
     await cancelAll()
-    const next: Awaiting = { kind, firedAt: new Date().toISOString() }
+    const next: Awaiting = { kind, firedAt: new Date().toISOString(), logged: false }
     set({ occurrences: [], awaiting: next, promptDismissed: false })
     await persist(session, [], pause, next)
   },

@@ -2,10 +2,8 @@ package app.releve;
 
 import android.app.AlarmManager;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
@@ -17,11 +15,10 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Mirrors each scheduled reminder with an alarm whose only job is to wake the
@@ -31,9 +28,6 @@ import java.util.Set;
  */
 @CapacitorPlugin(name = "ScreenWake")
 public class ScreenWakePlugin extends Plugin {
-
-    private static final String PREFS = "releve_screen_wake";
-    private static final String KEY_IDS = "ids";
 
     @Override
     public void load() {
@@ -73,49 +67,28 @@ public class ScreenWakePlugin extends Plugin {
             return;
         }
 
-        Set<String> stored = new HashSet<>(readIds());
         try {
+            JSONArray stored = WakeAlarms.read(getContext());
             List<JSONObject> items = alerts.toList();
             for (JSONObject item : items) {
-                int id = item.getInt("id");
-                long at = item.getLong("at");
-                if (at <= System.currentTimeMillis()) continue;
-
-                PendingIntent pending = pendingFor(
-                        id,
-                        item.optString("route", null),
-                        item.optString("title", null),
-                        item.optBoolean("always", false));
-                if (canScheduleExact(alarms)) {
-                    alarms.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, at, pending);
-                } else {
-                    alarms.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, at, pending);
-                }
-                stored.add(String.valueOf(id));
+                if (item.optLong("at", 0L) <= System.currentTimeMillis()) continue;
+                WakeAlarms.arm(getContext(), alarms, item);
+                // The whole payload is kept, not just the id: it is what lets
+                // BootReceiver put the alarm back after a restart.
+                stored = WakeAlarms.merge(stored, item);
             }
+            WakeAlarms.write(getContext(), stored);
         } catch (Exception e) {
             call.reject("Programmation impossible : " + e.getMessage());
             return;
         }
 
-        writeIds(stored);
         call.resolve();
     }
 
     @PluginMethod
     public void cancelAll(PluginCall call) {
-        AlarmManager alarms =
-                (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-        if (alarms != null) {
-            for (String raw : readIds()) {
-                try {
-                    alarms.cancel(pendingFor(Integer.parseInt(raw), null, null, false));
-                } catch (NumberFormatException ignored) {
-                    /* A malformed id can only come from a corrupted store. */
-                }
-            }
-        }
-        writeIds(new HashSet<>());
+        WakeAlarms.cancelAll(getContext());
 
         NotificationManager manager =
                 (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
@@ -160,24 +133,6 @@ public class ScreenWakePlugin extends Plugin {
         return manager != null && manager.canUseFullScreenIntent();
     }
 
-    private boolean canScheduleExact(AlarmManager alarms) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return true;
-        return alarms.canScheduleExactAlarms();
-    }
-
-    private PendingIntent pendingFor(int id, String route, String title, boolean always) {
-        Intent intent = new Intent(getContext(), WakeReceiver.class);
-        intent.putExtra(WakeReceiver.EXTRA_ID, id);
-        intent.putExtra(WakeReceiver.EXTRA_ROUTE, route);
-        intent.putExtra(WakeReceiver.EXTRA_TITLE, title);
-        intent.putExtra(WakeReceiver.EXTRA_ALWAYS, always);
-        return PendingIntent.getBroadcast(
-                getContext(),
-                id,
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-    }
-
     /**
      * Retained, because a cold start from the lock screen reaches load() long
      * before the web layer has had a chance to add its listener.
@@ -192,15 +147,4 @@ public class ScreenWakePlugin extends Plugin {
         notifyListeners("wakeAlert", data, true);
     }
 
-    private SharedPreferences prefs() {
-        return getContext().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
-    }
-
-    private Set<String> readIds() {
-        return new HashSet<>(prefs().getStringSet(KEY_IDS, new HashSet<>()));
-    }
-
-    private void writeIds(Set<String> ids) {
-        prefs().edit().putStringSet(KEY_IDS, new HashSet<>(ids)).apply();
-    }
 }

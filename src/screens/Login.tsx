@@ -5,15 +5,24 @@ import { HttpError } from '@/lib/api'
 import { useAuthStore } from '@/stores/auth'
 
 /**
- * §11.7 — one screen, black ground, the wordmark, two fields, one accent
- * button, and a discreet "créer un compte" that unfolds the invite-code field.
- * No illustration, no marketing slogan.
+ * §11.7 — one screen, black ground, the wordmark, no illustration, no
+ * marketing slogan.
+ *
+ * What changed is what it leads with. It used to open on a login form with an
+ * invite code, which meant the very first thing the app ever asked was for an
+ * account — before it had said what it does, before a single reminder had
+ * fired, and, for a new phone with the database asleep, before it would open at
+ * all. An account synchronises two devices; it has never been what makes you
+ * stand up. So the accent button starts the app, and the form is one tap behind
+ * it for whoever actually wants to sync.
  */
 export function Login() {
   const navigate = useNavigate()
   const login = useAuthStore((s) => s.login)
   const register = useAuthStore((s) => s.register)
+  const startWithoutAccount = useAuthStore((s) => s.startWithoutAccount)
 
+  const [showForm, setShowForm] = useState(false)
   const [mode, setMode] = useState<'login' | 'register'>('login')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -21,6 +30,17 @@ export function Login() {
   const [inviteCode, setInviteCode] = useState('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  async function start() {
+    setBusy(true)
+    setError(null)
+    try {
+      await startWithoutAccount()
+      navigate('/', { replace: true })
+    } finally {
+      setBusy(false)
+    }
+  }
 
   async function submit(e: React.FormEvent) {
     e.preventDefault()
@@ -61,66 +81,108 @@ export function Login() {
         </h1>
         <p className="t-meta mb-9">Lève-toi. L’app s’occupe du reste.</p>
 
-        <form onSubmit={submit} className="flex flex-col gap-3">
-          {mode === 'register' && (
-            <Field
-              label="Nom"
-              value={displayName}
-              onChange={setDisplayName}
-              autoComplete="name"
-              required
-            />
-          )}
-          <Field
-            label="E-mail"
-            type="email"
-            value={email}
-            onChange={setEmail}
-            autoComplete="email"
-            inputMode="email"
-            required
-          />
-          <Field
-            label="Mot de passe"
-            type="password"
-            value={password}
-            onChange={setPassword}
-            autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
-            required
-          />
-          {mode === 'register' && (
-            <Field
-              label="Code d’invitation"
-              value={inviteCode}
-              onChange={setInviteCode}
-              autoComplete="off"
-              required
-            />
-          )}
-
-          {error && (
-            <p className="t-meta" role="alert" style={{ color: 'var(--danger)' }}>
-              {error}
+        {!showForm && (
+          <div className="flex flex-col gap-3">
+            <button
+              type="button"
+              className="btn btn-accent btn-block"
+              disabled={busy}
+              onClick={() => void start()}
+            >
+              Commencer
+            </button>
+            <p className="t-meta">
+              Aucun compte n’est nécessaire. Tes réglages, tes routines et tes chiffres restent sur
+              ce téléphone. Un compte, plus tard, ne sert qu’à les retrouver sur un autre appareil.
             </p>
-          )}
+            <button
+              type="button"
+              className="tap mx-auto mt-4 block"
+              onClick={() => setShowForm(true)}
+            >
+              <span className="t-meta underline underline-offset-4">
+                J’ai déjà un compte, ou j’en veux un
+              </span>
+            </button>
+          </div>
+        )}
 
-          <button type="submit" className="btn btn-accent btn-block mt-2" disabled={busy}>
-            {busy ? 'Un instant…' : mode === 'login' ? 'Se connecter' : 'Créer mon compte'}
-          </button>
-        </form>
+        {showForm && (
+          <>
+            <form onSubmit={submit} className="flex flex-col gap-3">
+              {mode === 'register' && (
+                <Field
+                  label="Nom"
+                  value={displayName}
+                  onChange={setDisplayName}
+                  autoComplete="name"
+                  required
+                />
+              )}
+              <Field
+                label="E-mail"
+                type="email"
+                value={email}
+                onChange={setEmail}
+                autoComplete="email"
+                inputMode="email"
+                required
+              />
+              <Field
+                label="Mot de passe"
+                type="password"
+                value={password}
+                onChange={setPassword}
+                autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
+                required
+              />
+              {mode === 'register' && (
+                <Field
+                  label="Code d’invitation"
+                  value={inviteCode}
+                  onChange={setInviteCode}
+                  autoComplete="off"
+                  required
+                />
+              )}
 
-        <button
-          type="button"
-          className="tap mx-auto mt-5 block"
-          onClick={() => {
-            setMode((m) => (m === 'login' ? 'register' : 'login'))
-            setError(null)
-          }}
-        >
-          <span className="t-meta underline underline-offset-4">
-            {mode === 'login' ? 'Créer un compte' : 'J’ai déjà un compte'}
-          </span>
-        </button>
+              {error && (
+                <p className="t-meta" role="alert" style={{ color: 'var(--danger)' }}>
+                  {error}
+                </p>
+              )}
+
+              <button type="submit" className="btn btn-accent btn-block mt-2" disabled={busy}>
+                {busy ? 'Un instant…' : mode === 'login' ? 'Se connecter' : 'Créer mon compte'}
+              </button>
+            </form>
+
+            <div className="mt-5 flex flex-col items-center gap-3">
+              <button
+                type="button"
+                className="tap block"
+                onClick={() => {
+                  setMode((m) => (m === 'login' ? 'register' : 'login'))
+                  setError(null)
+                }}
+              >
+                <span className="t-meta underline underline-offset-4">
+                  {mode === 'login' ? 'Créer un compte' : 'J’ai déjà un compte'}
+                </span>
+              </button>
+              <button
+                type="button"
+                className="tap block"
+                onClick={() => {
+                  setShowForm(false)
+                  setError(null)
+                }}
+              >
+                <span className="t-meta underline underline-offset-4">Continuer sans compte</span>
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   )

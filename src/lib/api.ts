@@ -19,6 +19,22 @@ export class HttpError extends Error {
   }
 }
 
+/**
+ * Raised in place of a request when the device has no account at all.
+ *
+ * Its status is 0, so `isOffline()` reports it as a network failure and every
+ * caller already written to sync opportunistically stays silent — which is
+ * exactly the behaviour local mode needs. Without it, a device with no tokens
+ * ran the whole refresh dance on every call and ended up firing the auth-lost
+ * listener, kicking someone who never wanted an account to the login screen.
+ */
+export class NoAccountError extends HttpError {
+  constructor() {
+    super(0, 'no_account', 'Aucun compte sur cet appareil.')
+    this.name = 'NoAccountError'
+  }
+}
+
 /** Raised when refreshing failed and the user has to sign in again. */
 export class AuthExpiredError extends HttpError {
   constructor() {
@@ -119,6 +135,11 @@ async function raw(path: string, opts: RequestOptions, token: string | null): Pr
 }
 
 export async function request<T>(path: string, opts: RequestOptions = {}): Promise<T> {
+  // Nothing to authenticate with, and nothing to refresh: do not touch the
+  // network at all. Signing in and registering are exempt — they are how an
+  // account comes to exist in the first place.
+  if (!opts.anonymous && !(await hasSessionTokens())) throw new NoAccountError()
+
   let token = opts.anonymous ? null : await getRaw(KEYS.accessToken)
 
   let res = await raw(path, opts, token)

@@ -363,6 +363,73 @@ Chaque écart par rapport au mégaprompt, avec sa raison en une phrase (§15.8).
   exclu. Le script cible maintenant les deux projets explicitement, et `build`
   l'appelle au lieu de refaire le même `tsc --noEmit` inerte.
 
+## Adoption — ce que les forums reprochent à ce genre d'app
+
+Cinq changements dictés par une revue de ce que les gens disent des rappels de
+pause : ce qui les fait désinstaller, et ce qui les fait rester. Les sources
+sont dans le rapport de session ; ce qui suit, c'est ce qu'on en a fait.
+
+- **L'exercice dû se périme au bout d'un intervalle** — le reproche numéro un
+  fait à ce genre d'app est le rappel qui tombe pendant une réunion, et
+  l'app qui insiste ensuite. Log Off y était plus exposée que les autres : un
+  rappel sans réponse gelait **tout** (rien d'autre n'était armé) et
+  ré-ouvrait sa pop-up à chaque passage au premier plan. Ignorer un rappel à
+  14 h coûtait donc l'après-midi entière. La dette reste — c'est ce qui rend
+  un rappel manqué impossible à contourner en fermant l'app — mais elle
+  s'éteint au bout d'un intervalle : le manqué est consigné (`expired`), il
+  compte contre le taux de réponse, et la journée repart. Un `awaiting` créé
+  par un tap sur la notification est marqué `logged: false` et n'était jusque-là
+  jamais consigné du tout : sa péremption écrit désormais le manqué.
+- **« Je suis en réunion » sur la pop-up** — « +10 min » n'est pas la bonne
+  durée pour une réunion, et fermer la pop-up ne disait rien à l'app. Le
+  bouton réutilise la pause manuelle, déjà construite et déjà juste : l'horloge
+  gèle, l'exercice reste dû, et les deux reviennent quand on se rassoit.
+- **La série ne casse plus tous les samedis** — `computeStreak` remontait les
+  jours un par un et s'arrêtait au premier jour sous le seuil. Avec des jours
+  actifs du lundi au vendredi, le samedi remettait donc le compteur à zéro
+  **chaque semaine** : la série affichée ne pouvait structurellement pas
+  dépasser cinq, et valait 1 ou 2 la plupart du temps. Les jours que
+  l'utilisateur n'a pas cochés sont maintenant sautés, ni comptés ni
+  bloquants. Un seul jour travaillé manqué est par ailleurs pardonné (le
+  deuxième arrête la série) : la littérature sur l'abandon est unanime sur le
+  fait que le jour où une longue série casse est le jour où l'app est
+  supprimée. Le jour pardonné **n'est pas compté** — le nombre reste
+  exactement « les jours où tu as bougé », l'app ne le gonfle pas.
+  `/api/stats` lit désormais `settings.weekdays` pour ça.
+- **On peut se servir de l'app sans compte** — forcer la création d'un compte
+  avant d'avoir prouvé quoi que ce soit est l'erreur d'accueil la plus chère
+  qui existe, et ici elle était doublée d'un code d'invitation et d'une base
+  Neon en veille : téléphone neuf, serveur endormi, l'app ne s'ouvrait pas du
+  tout. Or tout ce qui compte était déjà local — le contenu est embarqué, la
+  copie des réglages sur l'appareil est ce que lit le moteur de rappels. Il ne
+  manquait que les chiffres. L'écran de connexion mène donc par un bouton
+  « Commencer » ; le compte est une case en dessous, et ne sert qu'à
+  synchroniser deux appareils. `NoAccountError` (statut 0, donc lu comme
+  « hors ligne » par tous les appels déjà écrits pour l'être) coupe court à
+  toute requête quand il n'y a pas de jeton : sans ça, un appareil sans compte
+  déclenchait la danse du refresh puis l'écouteur `authLost`, et renvoyait vers
+  la connexion quelqu'un qui n'en voulait pas.
+- **Le suivi se calcule sur l'appareil** — la file d'événements est un tampon de
+  synchronisation : un flush réussi la vide, ce qui est correct pour un tampon
+  et inutilisable comme archive. Les mêmes entrées sont donc aussi écrites dans
+  un **journal** gardé 45 jours, et `buildLocalStats` applique dessus exactement
+  les mêmes règles pures que le serveur. L'écran Suivi s'affiche donc avant
+  toute requête, s'affiche hors ligne, et s'affiche pour qui n'a pas de compte.
+  La copie serveur reprend la main dès qu'elle arrive : elle a tout l'historique,
+  le journal n'en a que six semaines.
+- **Les alarmes de réveil d'écran survivent au redémarrage** — Android vide les
+  alarmes en attente à chaque redémarrage. Les notifications, elles, revenaient
+  (le plugin déclare son propre récepteur de démarrage) ; l'alarme qui rallume
+  l'écran, non — jusqu'à la prochaine ouverture manuelle. Le plugin ne stockait
+  qu'un ensemble d'ids, de quoi annuler mais pas de quoi reconstruire. Il garde
+  maintenant la charge utile complète, et `BootReceiver` la rejoue
+  (`BOOT_COMPLETED`, `QUICKBOOT_POWERON`, `MY_PACKAGE_REPLACED`), tout enveloppé
+  dans un try/catch : un récepteur qui lève au démarrage affiche un plantage à
+  l'utilisateur, ce qui serait un bien pire marché qu'un réveil d'écran manqué.
+  Coque `1.3.0` / `versionCode 4` — ça ne peut pas descendre par OTA.
+  **Non vérifié à l'exécution** : pas de SDK Android dans l'environnement de
+  développement distant, seul `apk.yml` compilera ce code.
+
 ## À la charge du propriétaire (secrets, hors dépôt)
 
 - Créer le rôle `releve_app` + la base `releve`, appliquer les migrations

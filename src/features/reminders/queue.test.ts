@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { QUEUE_CAP, enqueueEvents, removeConfirmed } from './queue'
+import { QUEUE_CAP, enqueueEvents, prune, removeConfirmed } from './queue'
 import type { ReminderEvent } from '@/lib/types'
 
 function ev(clientId: string, action: ReminderEvent['action'] = 'done'): ReminderEvent {
@@ -54,5 +54,25 @@ describe('removeConfirmed', () => {
   it('is a no-op when nothing matches', () => {
     const q = removeConfirmed([ev('a')], ['z'])
     expect(q).toHaveLength(1)
+  })
+})
+
+describe('prune', () => {
+  const today = '2026-09-01'
+  const at = (localDate: string) => ({ clientId: localDate, localDate })
+
+  it('keeps what is inside the window and drops what is past it', () => {
+    const entries = [at('2026-07-01'), at('2026-08-20'), at(today)]
+    expect(prune(entries, today, 45).map((e) => e.localDate)).toEqual(['2026-08-20', today])
+  })
+
+  it('keeps an entry dated in the future rather than erasing it', () => {
+    // A clock set wrong, or a trip east: not a reason to lose the record.
+    expect(prune([at('2026-09-20')], today, 45)).toHaveLength(1)
+  })
+
+  it('is exact at the edge: the 45th day back is out, the 44th is in', () => {
+    expect(prune([at('2026-07-19')], today, 45)).toHaveLength(1) // 44 jours
+    expect(prune([at('2026-07-18')], today, 45)).toHaveLength(0) // 45 jours
   })
 })

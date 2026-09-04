@@ -19,8 +19,9 @@ import { Splash } from '@/screens/Splash'
 import { Onboarding } from '@/screens/Onboarding'
 
 /**
- * Every screen requires auth except /login itself (§C3). While auth is still
- * resolving we show a splash rather than flashing the login screen.
+ * Every screen needs either an account or the deliberate choice to do without
+ * one (§C3). While that is still resolving we show a splash rather than
+ * flashing the login screen.
  */
 function RequireAuth({ children }: { children: React.ReactNode }) {
   const status = useAuthStore((s) => s.status)

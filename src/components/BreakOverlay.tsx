@@ -28,6 +28,7 @@ export function BreakOverlay() {
   const dismiss = useSessionStore((s) => s.dismissPrompt)
   const markDone = useSessionStore((s) => s.markDone)
   const snooze = useSessionStore((s) => s.snooze)
+  const pauseWork = useSessionStore((s) => s.pauseWork)
   const navigate = useNavigate()
   const [busy, setBusy] = useState(false)
 
@@ -118,6 +119,22 @@ export function BreakOverlay() {
               Déjà fait
             </button>
           </div>
+          {/* The answer that was missing. A break landing mid-meeting is the
+              single most cited reason people turn this kind of app off — and
+              "+10 min" is the wrong length for a meeting. This holds the day
+              instead: the clock freezes, the exercise stays owed, and both come
+              back the moment you sit down again. */}
+          <button
+            type="button"
+            className="btn btn-secondary btn-block"
+            disabled={busy}
+            onClick={() => {
+              stopAlerting()
+              void act(() => pauseWork())
+            }}
+          >
+            Je suis en réunion
+          </button>
         </div>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { App } from '@capacitor/app'
 import { Browser } from '@capacitor/browser'
 import { Segmented } from '@/components/Segmented'
@@ -41,10 +42,12 @@ const WEEKDAYS = [
 
 /** §11.6 — Profil: Session · Rappels · Compte · À propos. */
 export function Settings() {
+  const navigate = useNavigate()
   const settings = useSettingsStore((s) => s.settings)
   const update = useSettingsStore((s) => s.update)
   const user = useAuthStore((s) => s.user)
   const logout = useAuthStore((s) => s.logout)
+  const authStatus = useAuthStore((s) => s.status)
 
   const [nativeUpdate, setNativeUpdate] = useState(false)
   useEffect(() => {
@@ -261,17 +264,38 @@ export function Settings() {
       </SettingsSection>
 
       <SettingsSection title="Compte">
-        <SettingRow label="E-mail" hint={user?.email ?? '—'} />
-        <div className="py-3.5">
-          <button
-            type="button"
-            onClick={() => void logout()}
-            className="text-[16px]"
-            style={{ color: 'var(--danger)' }}
-          >
-            Se déconnecter
-          </button>
-        </div>
+        {authStatus === 'local' ? (
+          <>
+            <SettingRow
+              label="Aucun compte"
+              hint="Tes réglages, tes routines et tes chiffres vivent sur ce téléphone, et nulle part ailleurs. Un compte sert à les retrouver sur un autre appareil — rien d’autre en dépend."
+            />
+            <div className="py-3.5">
+              <button
+                type="button"
+                onClick={() => navigate('/login')}
+                className="text-[16px] underline underline-offset-4"
+                style={{ color: 'var(--accent)' }}
+              >
+                Créer un compte pour synchroniser
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <SettingRow label="E-mail" hint={user?.email ?? '—'} />
+            <div className="py-3.5">
+              <button
+                type="button"
+                onClick={() => void logout()}
+                className="text-[16px]"
+                style={{ color: 'var(--danger)' }}
+              >
+                Se déconnecter
+              </button>
+            </div>
+          </>
+        )}
       </SettingsSection>
 
       <SettingsSection title="À propos">

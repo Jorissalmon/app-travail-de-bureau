@@ -74,11 +74,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     `
     const minutesMoved = Math.round(Number(movedRows[0]?.secs ?? 0) / 60)
 
+    // The streak has to know which days the user actually works. Without it a
+    // Monday-to-Friday user reset to zero every Saturday and could never see a
+    // number above five.
+    const settingsRows = await sql`
+      SELECT weekdays FROM settings WHERE user_id = ${sub} LIMIT 1
+    `
+    const weekdays = (settingsRows[0]?.weekdays as number[] | undefined)?.map(Number) ?? []
+
     json(res, 200, {
       standsToday,
       remindersToday,
       standsByDay: fillDays(days, today, span),
-      streak: computeStreak(days, today),
+      streak: computeStreak(days, today, { weekdays }),
       minutesMoved,
       adherence,
     })
