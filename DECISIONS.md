@@ -281,6 +281,31 @@ Chaque écart par rapport au mégaprompt, avec sa raison en une phrase (§15.8).
   n'apporte aucun avantage mesurable par rapport à des durées égales. La fiche
   dit désormais ce qui est démontré — ralentir — et ce qui ne l'est pas.
 
+- **Bureau ou maison : on filtre les mouvements, pas les routines** — huit des
+  42 exercices ne se font pas en open space (fente, cercles de bras, étirement à
+  l'encadrement de porte…), et chacun porte un `discreet`. Au bureau, une
+  routine est servie sans ses mouvements peu discrets, positions renumérotées et
+  durée recalculée. Écarter la routine entière aurait été plus simple mais
+  absurde : « Nuque & trapèzes » est exactement ce qu'il faut au bureau et ne
+  contenait qu'un seul étirement à la porte.
+- **Sauf quand rogner reviendrait à la vider** — en dessous de la moitié des
+  étapes conservées, la routine est laissée entière et signalée « plutôt à la
+  maison ». « Réveil » ne garde que deux mouvements sur neuf : servir cinq
+  minutes de réveil en quarante secondes serait pire qu'un badge honnête. Les
+  routines concernées restent visibles, on peut être chez soi demain.
+- **Rien ne disparaît en silence** — la fiche de routine dit combien de
+  mouvements sont masqués et pourquoi, et `hiddenAtOffice` compte à partir de ce
+  qui a réellement été retiré, jamais de ce qui aurait pu l'être.
+- **Les routines composées par l'utilisateur ne sont pas adaptées** — il a choisi
+  ses mouvements ; les lui retirer en silence serait pire que de les proposer au
+  mauvais endroit.
+- **L'adaptation est calculée dans le store, jamais dans un sélecteur** —
+  `adaptToPlace` construit un nouvel objet quand il rogne, et un sélecteur
+  zustand qui renvoie une identité neuve à chaque rendu part en boucle infinie.
+  Ça a réellement fait planter l'écran de routine avant d'être corrigé ; la
+  frontière d'erreur ajoutée plus tôt a transformé la boucle en écran de secours
+  plutôt qu'en page noire.
+
 ## À la charge du propriétaire (secrets, hors dépôt)
 
 - Créer le rôle `releve_app` + la base `releve`, appliquer les migrations

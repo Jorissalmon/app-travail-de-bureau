@@ -94,6 +94,8 @@ export interface Exercise {
   avoid: string
   /** Article slugs that explain why this movement is worth the time. */
   articles: string[]
+  /** Doable at a desk in an open space without drawing looks. */
+  discreet: boolean
 }
 
 export interface Routine {

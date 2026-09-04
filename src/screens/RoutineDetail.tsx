@@ -7,6 +7,7 @@ import { durationLabel, mmss } from '@/lib/format'
 import { ZONE_LABEL } from '@/content'
 import { stepTone } from '@/lib/tones'
 import { isCustomSlug } from '@/features/routines/custom'
+import { hiddenAtOffice, place } from '@/features/place/place'
 import {
   DURATION_STEP_S,
   MAX_DURATION_S,
@@ -24,6 +25,8 @@ export function RoutineDetail() {
   const { slug } = useParams()
   const navigate = useNavigate()
   const routine = useContentStore((s) => (slug ? s.routineBySlug(slug) : undefined))
+  const rawRoutine = useContentStore((s) => s.routines.find((r) => r.slug === slug))
+  const exerciseByKey = useContentStore((s) => s.exerciseByKey)
 
   // Bumped on every override change: the durations live in a module, not in
   // state, so the render needs telling that they moved.
@@ -84,6 +87,19 @@ export function RoutineDetail() {
       <p className="t-body mt-4" style={{ color: 'var(--text-2)' }}>
         {routine.summary}
       </p>
+
+      {/* Nothing disappears silently: if the office set is shorter, it says so
+          and says why. */}
+      {rawRoutine && hiddenAtOffice(rawRoutine, place(), exerciseByKey) > 0 && (
+        <p
+          className="t-meta mt-3 rounded-[14px] p-3"
+          style={{ background: 'var(--surface)' }}
+        >
+          {hiddenAtOffice(rawRoutine, place(), exerciseByKey) === 1
+            ? 'Un mouvement est masqué : il ne se fait pas en open space. Passe en « À la maison » dans les réglages pour le retrouver.'
+            : `${hiddenAtOffice(rawRoutine, place(), exerciseByKey)} mouvements sont masqués : ils ne se font pas en open space. Passe en « À la maison » dans les réglages pour les retrouver.`}
+        </p>
+      )}
 
       <ol className="mt-6 flex flex-col gap-2.5">
         {routine.steps.map((step) => {

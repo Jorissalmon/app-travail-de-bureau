@@ -17,6 +17,8 @@ import {
   requestPermission,
 } from '@/features/reminders/permissions'
 import { loadCues, setCues } from '@/features/session/cues'
+import { PLACES, PLACE_LABEL, type Place, loadPlace, setPlace } from '@/features/place/place'
+import { useContentStore } from '@/stores/content'
 import {
   ALERT_MODES,
   ALERT_MODE_LABEL,
@@ -82,6 +84,12 @@ export function Settings() {
     void loadAlertMode().then(setAlert)
   }, [])
 
+  const refreshPlace = useContentStore((s) => s.refreshPlace)
+  const [where, setWhere] = useState<Place>('bureau')
+  useEffect(() => {
+    void loadPlace().then(setWhere)
+  }, [])
+
   function toggleWeekday(n: number) {
     const set = new Set(settings.weekdays)
     if (set.has(n)) set.delete(n)
@@ -112,6 +120,22 @@ export function Settings() {
       )}
 
       <SettingsSection title="Session">
+        <SettingRow
+          label="Où tu travailles"
+          hint="Au bureau, l’app retire des routines les mouvements qu’on ne fait pas en open space — une fente, un étirement à l’encadrement de porte. À la maison, tout est proposé."
+          stacked
+        >
+          <Segmented
+            ariaLabel="Lieu de travail"
+            options={PLACES}
+            value={where}
+            onChange={(v) => {
+              setWhere(v)
+              void setPlace(v).then(refreshPlace)
+            }}
+            format={(v) => PLACE_LABEL[v]}
+          />
+        </SettingRow>
         <SettingRow label="Intervalle des rappels" hint="30 minutes est l’intervalle recommandé." stacked>
           <Segmented
             ariaLabel="Intervalle des rappels en minutes"

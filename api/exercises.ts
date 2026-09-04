@@ -15,7 +15,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     methods(req, 'GET')
     const sql = db()
     const rows = await sql`
-      SELECT key, title, steps, tips, easier, muscles, avoid, articles
+      SELECT key, title, steps, tips, easier, muscles, avoid, articles, discreet
       FROM exercises ORDER BY key
     `
     const out = rows.map((r) => ({
@@ -27,6 +27,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       muscles: r.muscles,
       avoid: r.avoid,
       articles: r.articles,
+      discreet: r.discreet,
     }))
 
     // Content changes rarely, same cache policy as /api/routines.
