@@ -74,6 +74,21 @@ describe('exercises', () => {
     }
   })
 
+  it('only link to articles that exist', () => {
+    const slugs = new Set(LOCAL_ARTICLES.map((a) => a.slug))
+    for (const ex of LOCAL_EXERCISES) {
+      for (const slug of ex.articles) {
+        expect(slugs, `${ex.key} -> "${slug}"`).toContain(slug)
+      }
+    }
+  })
+
+  it('each point at least one article, so the sheet never ends on a dead section', () => {
+    for (const ex of LOCAL_EXERCISES) {
+      expect(ex.articles.length, `${ex.key}`).toBeGreaterThan(0)
+    }
+  })
+
   it('give at least one instruction, one adaptation and one muscle worked', () => {
     for (const ex of LOCAL_EXERCISES) {
       expect(ex.steps.length, `${ex.key}`).toBeGreaterThan(0)

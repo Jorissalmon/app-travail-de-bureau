@@ -1,4 +1,8 @@
+import { useNavigate } from 'react-router-dom'
+import { ChevronRight } from 'lucide-react'
 import { Pill } from './Pill'
+import { EvidencePill } from './EvidencePill'
+import { useContentStore } from '@/stores/content'
 import type { Exercise } from '@/lib/types'
 
 /**
@@ -8,6 +12,12 @@ import type { Exercise } from '@/lib/types'
  * (§ audit) — the content is identical, only the frame around it differs.
  */
 export function ExerciseSections({ exercise }: { exercise: Exercise }) {
+  const articleBySlug = useContentStore((s) => s.articleBySlug)
+  const navigate = useNavigate()
+  const linked = (exercise.articles ?? [])
+    .map((slug) => articleBySlug(slug))
+    .filter((a): a is NonNullable<typeof a> => a !== undefined)
+
   return (
     <>
       <section>
@@ -73,6 +83,35 @@ export function ExerciseSections({ exercise }: { exercise: Exercise }) {
           {exercise.avoid}
         </p>
       </section>
+
+      {linked.length > 0 && (
+        <section className="mt-7">
+          <h2 className="t-section mb-3">Pourquoi ça vaut le coup</h2>
+          <ul className="flex flex-col gap-2">
+            {linked.map((article) => (
+              <li key={article.slug}>
+                <button
+                  type="button"
+                  className="flex w-full items-center gap-3 rounded-[16px] p-3 text-left"
+                  style={{ background: 'var(--surface)' }}
+                  onClick={() => navigate(`/articles/${article.slug}`)}
+                >
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-[15px]" style={{ fontWeight: 700 }}>
+                      {article.title}
+                    </span>
+                    <span className="mt-1.5 flex items-center gap-2">
+                      <EvidencePill evidence={article.evidence} />
+                      <span className="t-meta">{article.readMin} min</span>
+                    </span>
+                  </span>
+                  <ChevronRight size={18} color="var(--text-2)" className="shrink-0" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </>
   )
 }

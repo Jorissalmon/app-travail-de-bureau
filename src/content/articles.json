@@ -70,5 +70,65 @@
     "sourceUrl": "https://www.inrs.fr/risques/travail-ecran/prevention-risques.html",
     "sortOrder": 6,
     "bodyMd": "Avant toute app, il y a le poste. Les repères de l'INRS, à appliquer une fois :\n\n- **Distance œil–écran** : 50 à 70 cm, soit environ la longueur du bras.\n- **Hauteur** : le haut de l'écran au niveau des yeux ou légèrement en dessous. Jamais au-dessus.\n- **Clavier** : à 10 à 15 cm du bord du bureau, pour que les avant-bras reposent.\n- **Genoux** : angle droit ou légèrement ouvert, cuisses horizontales.\n- **Fenêtres** : écran perpendiculaire à la fenêtre, à plus de 150 cm.\n- **Éclairage** : 300 à 500 lux sur un écran à fond clair, température 3000 à 4000 K.\n- **Pauses actives** : idéalement toutes les 30 minutes.\n\n::figure menton-rentre | Écran au niveau des yeux : le menton reste rentré, la nuque n’a rien à compenser.\n\nUne note pour les yeux secs en particulier : baisser l'écran fait tomber la paupière plus bas, réduit la surface de l'œil exposée à l'air, et donc l'évaporation. C'est le réglage qui a le plus d'effet, il est gratuit, et il prend trente secondes.\n\nL'autre coupable classique n'est pas l'écran mais la ventilation : une bouche de clim qui souffle vers le visage assèche l'œil bien plus vite que huit heures de tableur."
+  },
+  {
+    "slug": "lumiere-du-jour",
+    "title": "La fenêtre compte plus que la lampe",
+    "dek": "Quarante-six minutes de sommeil en plus, mesurées au poignet, selon l’endroit où tu es assis.",
+    "tag": "preuve",
+    "evidence": "solide",
+    "readMin": 3,
+    "sourceLabel": "Boubekri et al., Journal of Clinical Sleep Medicine, 2014",
+    "sourceUrl": "https://jcsm.aasm.org/doi/10.5664/jcsm.3780",
+    "sortOrder": 7,
+    "bodyMd": "C’est le réglage de poste le mieux démontré, et il ne coûte rien : être assis près d’une fenêtre.\n\nDes chercheurs ont comparé des employés de bureau avec et sans fenêtre, actigraphie au poignet à l’appui. Ceux qui avaient une fenêtre recevaient **173 % de lumière en plus** pendant les heures de travail et dormaient **46 minutes de plus par nuit**. Un essai contrôlé plus récent, en optimisant la lumière du jour et la vue, retrouve 37 minutes de sommeil supplémentaires et de meilleurs scores aux tâches de décision complexe.\n\n::figure marche | Sortir de la pièce à la pause fait plus pour ton horloge interne que n’importe quelle lampe de bureau.\n\nL’ordre de grandeur explique le reste : un extérieur ensoleillé, c’est 10 000 lux et plus. Un bureau éclairé correctement, 300 à 500. Il y a un facteur vingt entre les deux, et c’est la lumière du matin qui cale l’horloge circadienne.\n\nCe qu’on peut en faire, dans l’ordre d’efficacité : **se mettre près d’une fenêtre** si le choix existe ; **sortir dehors** à la pause plutôt que d’aller au distributeur ; et à défaut, **s’approcher de la fenêtre** quelques minutes. Les études portent sur l’exposition, pas sur la source : ce qui compte est le nombre de lux qui atteint l’œil.\n\nÀ garder en tête : l’étude fondatrice compte 49 participants et ne peut pas exclure qu’un bureau avec fenêtre soit aussi un meilleur poste à d’autres égards. L’essai contrôlé qui a suivi, lui, rend le lien beaucoup plus crédible."
+  },
+  {
+    "slug": "lumiere-bleue",
+    "title": "Les verres anti-lumière bleue ne font rien",
+    "dek": "Dix-sept essais randomisés, 619 personnes, et aucun effet sur la fatigue visuelle.",
+    "tag": "preuve",
+    "evidence": "non-demontree",
+    "readMin": 2,
+    "sourceLabel": "Singh et al., Cochrane Database of Systematic Reviews, 2023",
+    "sourceUrl": "https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD013244.pub2/full",
+    "sortOrder": 8,
+    "bodyMd": "C’est l’accessoire le plus vendu du travail sur écran, et la revue Cochrane de 2023 est sans ambiguïté.\n\nDix-sept essais randomisés, 619 participants. Les verres filtrant la lumière bleue **ne font pas mieux** que des verres ordinaires sur la fatigue visuelle liée à l’écran. Aucun effet non plus sur l’acuité visuelle corrigée, et des résultats non concluants sur la qualité du sommeil.\n\n::figure clignement | La fatigue visuelle est réelle. Ce n’est simplement pas la lumière bleue qui la cause.\n\nLes auteurs relèvent même quelques effets indésirables rapportés : maux de tête, inconfort, humeur en baisse. Rien de grave, mais rien qui justifie l’achat.\n\nCe qui n’est pas remis en cause, c’est l’inconfort lui-même. Devant un écran, le taux de clignement s’effondre et l’œil sèche — c’est un problème de film lacrymal, pas de longueur d’onde. D’où l’ordre des priorités : baisser l’écran sous la ligne du regard, écarter la ventilation qui souffle au visage, cligner franchement.\n\n::figure paumes | Fermer complètement les paupières refait le film lacrymal. Un filtre sur un verre, non.\n\nLa revue note qu’il manque encore des essais longs et de meilleure qualité. Mais en l’état, personne ne peut affirmer que ces verres servent à quelque chose."
+  },
+  {
+    "slug": "ergonomie-ce-qui-marche",
+    "title": "Ce qui marche vraiment, au bureau",
+    "dek": "Une revue de revues sépare les interventions qui tiennent de celles qui ne tiennent pas. Le tri est brutal.",
+    "tag": "preuve",
+    "evidence": "partielle",
+    "readMin": 4,
+    "sourceLabel": "Overview of systematic reviews, Applied Ergonomics, 2019",
+    "sourceUrl": "https://www.sciencedirect.com/science/article/abs/pii/S0169814119300319",
+    "sortOrder": 9,
+    "bodyMd": "Quand on empile les revues systématiques sur la prévention des troubles musculo-squelettiques au bureau, un classement apparaît — et il ne ressemble pas à ce que vend le marché du bien-être au travail.\n\n**Preuve forte d’un effet positif : le renforcement musculaire.** C’est la seule intervention qui sort nettement du lot. Les essais convergent : entraînement en résistance, même bref, même à faible dose.\n\n::figure omoplates | Le renforcement du haut du dos est l’intervention la mieux démontrée de toutes.\n\n**Preuve forte d’absence d’effet** — c’est-à-dire qu’on a cherché et qu’on n’a pas trouvé : l’ergonomie participative, les interventions multi-facettes, et les programmes de gestion du stress. Ce sont pourtant les trois formats les plus vendus aux entreprises.\n\n**Preuve limitée : l’ergonomie de poste elle-même.** Régler la hauteur du siège et de l’écran n’est pas inutile — les essais sur poste informatique montrent des gains de posture et parfois de douleur lombaire — mais l’effet est plus petit et moins reproductible qu’on ne le raconte. Une autre revue, portant sur 31 études d’interventions ergonomiques de bureau, va jusqu’à conclure à un effet nul voire défavorable.\n\n::figure extension-debout | Bouger reste plus efficace que d’être assis parfaitement.\n\nLa lecture honnête de tout ça : **un bon réglage de poste vaut mieux qu’un mauvais, mais il ne remplace pas le mouvement.** Passer une heure à régler son siège puis ne plus bouger de la journée, c’est optimiser la mauvaise variable.\n\nÀ garder en tête : ces revues agrègent des études de qualité inégale, avec des mesures auto-rapportées et des durées de suivi courtes. « Preuve forte d’absence d’effet » veut dire que les essais menés n’ont rien montré, pas qu’un effet est impossible."
+  },
+  {
+    "slug": "expiration-plus-longue",
+    "title": "Respirer lentement suffit",
+    "dek": "L’expiration allongée est partout. Un essai à cent participants ne lui trouve pas d’avantage.",
+    "tag": "preuve",
+    "evidence": "partielle",
+    "readMin": 3,
+    "sourceLabel": "Slow breathing for reducing stress: the effect of extending exhale, Vanderbilt, 2023",
+    "sourceUrl": "https://pubmed.ncbi.nlm.nih.gov/36871835/",
+    "sortOrder": 10,
+    "bodyMd": "Toutes les applications de respiration répètent la même chose : allonge l’expiration, c’est elle qui active le système parasympathique. C’est joliment mécaniste, et un essai randomisé de 2023 vient nuancer sérieusement l’affaire.\n\nCent participants, douze semaines, en simple aveugle. Deux groupes : respiration lente avec **expiration plus longue** que l’inspiration, ou respiration lente à durées **égales**. Résultat : la respiration lente réduit significativement le stress psychologique — dans les deux groupes. Allonger l’expiration n’apporte **aucun bénéfice supplémentaire** mesurable.\n\n::figure respiration | Ce qui compte, c’est de ralentir. Le rapport entre inspiration et expiration, beaucoup moins.\n\nUne étude de Stanford, la même année, compare de son côté cinq minutes quotidiennes de plusieurs techniques : le soupir cyclique — deux inspirations puis une longue expiration — améliore l’humeur un peu mieux que la méditation de pleine conscience. Les deux résultats ne se contredisent pas vraiment : ralentir marche, et le détail du rythme compte moins qu’on ne le dit.\n\nCe que l’app en tire : la routine « Souffle » propose toujours quatre temps d’inspiration pour six d’expiration, parce qu’un rythme compté est plus facile à tenir qu’une consigne vague. Mais si compter te gêne, **respire simplement plus lentement** — tu ne perds rien de démontré.\n\nÀ garder en tête : essai unique sur un critère auto-rapporté, et douze semaines c’est court. La conclusion prudente est qu’on ne sait pas si le rapport compte, pas qu’il est certainement inutile."
+  },
+  {
+    "slug": "open-space",
+    "title": "L’open space, et ce qu’on peut y faire",
+    "dek": "Trente et une études passées en revue : aucune ne trouve de gain de productivité. Voilà ce qui reste sous ton contrôle.",
+    "tag": "pratique",
+    "evidence": "partielle",
+    "readMin": 3,
+    "sourceLabel": "Revue de littérature, Indoor and Built Environment / SAGE, 2023",
+    "sourceUrl": "https://journals.sagepub.com/doi/10.1177/1351010X231152841",
+    "sortOrder": 11,
+    "bodyMd": "Une revue qui a passé au crible plus de dix mille publications pour en retenir trente et une arrive à un constat net : **aucune étude ne met en évidence de gain de productivité lié à l’aménagement en open space.** Le bénéfice annoncé — la collaboration — n’apparaît pas dans les mesures.\n\nLe coupable principal est identifié, et ce n’est pas le bruit en général : c’est **la parole intelligible**. Une conversation qu’on comprend capte l’attention bien plus qu’un bruit de fond continu. Les sources les plus citées de perte de productivité sont les discussions de collègues, les téléphones qui sonnent, et les interruptions.\n\n::figure paumes | Une pause pour les yeux est aussi une pause pour l’attention.\n\nCe qui reste sous ton contrôle, du plus au moins efficace :\n\n**Éloigner la parole.** Changer de place, même de quelques mètres, ou trouver une salle pour les tâches qui demandent de la concentration. C’est la seule action qui s’attaque à la cause.\n\n**Masquer plutôt que couvrir.** Un bruit de fond continu et sans paroles — ventilation, bruit rose — rend la parole voisine moins intelligible. La musique avec paroles fait l’inverse.\n\n**Le casque, avec une réserve.** Il fonctionne, mais une étude relève que les personnes qui recourent en permanence au casque ou à la radio pour tenir rapportent davantage de symptômes dépressifs. C’est un outil, pas un mode de vie.\n\n::figure haussement-epaules | Le bruit fait monter les épaules toute la journée sans qu’on s’en aperçoive.\n\nÀ garder en tête : ces travaux mesurent surtout des performances cognitives en laboratoire et du ressenti auto-rapporté. Le constat « aucun gain de productivité » est solide ; le classement des parades l’est moins."
   }
 ]

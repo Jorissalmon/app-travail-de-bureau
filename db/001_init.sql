@@ -75,7 +75,8 @@ CREATE TABLE exercises (
   tips     text[] NOT NULL DEFAULT '{}',
   easier   text NOT NULL,
   muscles  text[] NOT NULL,
-  avoid    text NOT NULL
+  avoid    text NOT NULL,
+  articles text[] NOT NULL DEFAULT '{}'
 );
 
 CREATE TABLE routines (

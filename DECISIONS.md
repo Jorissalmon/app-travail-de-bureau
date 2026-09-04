@@ -264,6 +264,23 @@ Chaque écart par rapport au mégaprompt, avec sa raison en une phrase (§15.8).
   la carte d'accueil restait alors le seul endroit à dire qu'un exercice était
   dû, sans offrir aucun moyen de le faire.
 
+- **Chaque fiche d'exercice renvoie aux articles qui la justifient** — champ
+  `articles` sur l'exercice, attribué par sujet plutôt qu'en masse : un exercice
+  qui renvoie à tout ne renvoie à rien. `content.test.ts` vérifie que chaque
+  lien pointe vers un article existant et qu'aucune fiche ne se termine sur une
+  section vide.
+- **Cinq articles issus d'une recherche de littérature** — lumière du jour
+  (solide), verres anti-lumière bleue (non démontrée, Cochrane 2023 : 17 essais,
+  619 participants, aucun effet), tri des interventions au bureau (partielle),
+  expiration allongée (partielle), open space (partielle). Gradués selon la même
+  échelle que les six premiers, et chacun se termine sur ses propres limites.
+- **Une affirmation corrigée dans mes propres fiches** — j'avais écrit qu'une
+  expiration plus longue « active naturellement le système qui calme ». Un essai
+  randomisé de 2023 (Vanderbilt, 100 participants, 12 semaines) trouve que la
+  respiration lente réduit bien le stress, mais qu'allonger l'expiration
+  n'apporte aucun avantage mesurable par rapport à des durées égales. La fiche
+  dit désormais ce qui est démontré — ralentir — et ce qui ne l'est pas.
+
 ## À la charge du propriétaire (secrets, hors dépôt)
 
 - Créer le rôle `releve_app` + la base `releve`, appliquer les migrations

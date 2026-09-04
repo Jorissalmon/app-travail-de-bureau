@@ -92,6 +92,8 @@ export interface Exercise {
   muscles: string[]
   /** The one thing that means "stop", plain enough for someone who has never done it. */
   avoid: string
+  /** Article slugs that explain why this movement is worth the time. */
+  articles: string[]
 }
 
 export interface Routine {

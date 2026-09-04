@@ -11,8 +11,17 @@
       "Regarde ailleurs qu'un écran pendant que tu marches, ça repose aussi les yeux."
     ],
     "easier": "Si tu ne peux vraiment pas te lever, reste debout et transfère ton poids d'un pied à l'autre.",
-    "muscles": ["Circulation", "Tout le corps"],
-    "avoid": "Rien de spécifique : c'est l'exercice le plus sûr du lot."
+    "muscles": [
+      "Circulation",
+      "Tout le corps"
+    ],
+    "avoid": "Rien de spécifique : c'est l'exercice le plus sûr du lot.",
+    "articles": [
+      "pourquoi-30-minutes",
+      "debout-nest-pas-actif",
+      "ce-que-les-pauses-changent",
+      "lumiere-du-jour"
+    ]
   },
   "marche-sur-place": {
     "title": "Marche sur place",
@@ -26,8 +35,17 @@
       "Pose le pied à plat à chaque fois plutôt que sur la pointe, pour protéger les chevilles."
     ],
     "easier": "Réduis la hauteur des genoux et marche à un rythme tranquille.",
-    "muscles": ["Fléchisseurs de hanche", "Mollets", "Circulation"],
-    "avoid": "Un sol glissant ou instable : fais-le sur une surface plane et dégagée."
+    "muscles": [
+      "Fléchisseurs de hanche",
+      "Mollets",
+      "Circulation"
+    ],
+    "avoid": "Un sol glissant ou instable : fais-le sur une surface plane et dégagée.",
+    "articles": [
+      "pourquoi-30-minutes",
+      "debout-nest-pas-actif",
+      "ce-que-les-pauses-changent"
+    ]
   },
   "extension-debout": {
     "title": "Extension debout",
@@ -42,8 +60,17 @@
       "Garde les genoux légèrement fléchis plutôt que verrouillés."
     ],
     "easier": "Réduis l'amplitude de moitié, ou garde les mains sur les hanches plutôt que dans le dos.",
-    "muscles": ["Abdominaux", "Fléchisseurs de hanche", "Colonne"],
-    "avoid": "Une douleur vive et localisée dans le bas du dos : arrête et reste debout sans extension jusqu'à ce que ça passe."
+    "muscles": [
+      "Abdominaux",
+      "Fléchisseurs de hanche",
+      "Colonne"
+    ],
+    "avoid": "Une douleur vive et localisée dans le bas du dos : arrête et reste debout sans extension jusqu'à ce que ça passe.",
+    "articles": [
+      "pourquoi-30-minutes",
+      "debout-nest-pas-actif",
+      "ce-que-les-pauses-changent"
+    ]
   },
   "fente-basse": {
     "title": "Fente basse",
@@ -58,8 +85,16 @@
       "Prends appui sur un meuble stable si l'équilibre te manque."
     ],
     "easier": "Garde le genou arrière tendu et descends moins bas, ou pose une main sur un support.",
-    "muscles": ["Fléchisseurs de hanche", "Quadriceps", "Fessiers"],
-    "avoid": "Une douleur dans le genou avant : recule le pied avant pour réduire l'angle."
+    "muscles": [
+      "Fléchisseurs de hanche",
+      "Quadriceps",
+      "Fessiers"
+    ],
+    "avoid": "Une douleur dans le genou avant : recule le pied avant pour réduire l'angle.",
+    "articles": [
+      "pourquoi-30-minutes",
+      "debout-nest-pas-actif"
+    ]
   },
   "regard-au-loin": {
     "title": "Regard au loin",
@@ -73,8 +108,16 @@
       "S'il n'y a pas de fenêtre, regarde le point le plus éloigné possible dans la pièce."
     ],
     "easier": "Sans point lointain disponible, ferme simplement les yeux quelques secondes à la place.",
-    "muscles": ["Muscles oculaires", "Film lacrymal"],
-    "avoid": "Rien de spécifique."
+    "muscles": [
+      "Muscles oculaires",
+      "Film lacrymal"
+    ],
+    "avoid": "Rien de spécifique.",
+    "articles": [
+      "vingt-vingt-vingt",
+      "lumiere-bleue",
+      "lumiere-du-jour"
+    ]
   },
   "bascule-bassin": {
     "title": "Bascule du bassin",
@@ -89,8 +132,14 @@
       "Pose une main sur le bas-ventre pour mieux sentir le mouvement."
     ],
     "easier": "Fais le mouvement assis plutôt que debout, l'amplitude est plus facile à contrôler.",
-    "muscles": ["Abdominaux", "Bas du dos"],
-    "avoid": "Rien de spécifique : c'est un mouvement doux."
+    "muscles": [
+      "Abdominaux",
+      "Bas du dos"
+    ],
+    "avoid": "Rien de spécifique : c'est un mouvement doux.",
+    "articles": [
+      "pourquoi-30-minutes"
+    ]
   },
   "menton-rentre": {
     "title": "Menton rentré",
@@ -105,8 +154,14 @@
       "C'est l'exercice le plus efficace contre la tête portée en avant devant un écran."
     ],
     "easier": "Fais un mouvement plus petit, ou aide-toi d'un doigt posé sur le menton pour guider le recul.",
-    "muscles": ["Fléchisseurs profonds du cou"],
-    "avoid": "Un vertige : arrête et reprends plus lentement, sur une amplitude réduite."
+    "muscles": [
+      "Fléchisseurs profonds du cou"
+    ],
+    "avoid": "Un vertige : arrête et reprends plus lentement, sur une amplitude réduite.",
+    "articles": [
+      "muscler-le-haut-du-dos",
+      "regler-son-poste"
+    ]
   },
   "nuque-diagonale": {
     "title": "Nuque en diagonale",
@@ -121,8 +176,15 @@
       "Garde l'épaule du côté étiré basse et détendue."
     ],
     "easier": "Fais le mouvement sans la main, juste avec le poids de la tête.",
-    "muscles": ["Trapèze supérieur", "Scalènes"],
-    "avoid": "Une douleur qui descend dans le bras ou des fourmillements : arrête immédiatement."
+    "muscles": [
+      "Trapèze supérieur",
+      "Scalènes"
+    ],
+    "avoid": "Une douleur qui descend dans le bras ou des fourmillements : arrête immédiatement.",
+    "articles": [
+      "muscler-le-haut-du-dos",
+      "regler-son-poste"
+    ]
   },
   "rotation-assise": {
     "title": "Rotation assise",
@@ -137,8 +199,15 @@
       "Utilise l'appui du dossier pour approfondir légèrement, pas pour te tracter d'un coup."
     ],
     "easier": "Croise les bras devant toi et tourne sans t'accrocher au dossier.",
-    "muscles": ["Obliques", "Colonne vertébrale"],
-    "avoid": "Une douleur vive dans le bas du dos : réduis l'amplitude de la rotation."
+    "muscles": [
+      "Obliques",
+      "Colonne vertébrale"
+    ],
+    "avoid": "Une douleur vive dans le bas du dos : réduis l'amplitude de la rotation.",
+    "articles": [
+      "regler-son-poste",
+      "ergonomie-ce-qui-marche"
+    ]
   },
   "ischios-assis": {
     "title": "Ischio-jambiers, assis",
@@ -153,8 +222,15 @@
       "Les orteils pointent vers toi pour intensifier légèrement si c'est confortable."
     ],
     "easier": "Fléchis un peu le genou de la jambe tendue jusqu'à ce que la tension soit confortable.",
-    "muscles": ["Ischio-jambiers", "Bas du dos"],
-    "avoid": "Une douleur vive à l'arrière du genou : fléchis davantage la jambe."
+    "muscles": [
+      "Ischio-jambiers",
+      "Bas du dos"
+    ],
+    "avoid": "Une douleur vive à l'arrière du genou : fléchis davantage la jambe.",
+    "articles": [
+      "regler-son-poste",
+      "ergonomie-ce-qui-marche"
+    ]
   },
   "figure4-assise": {
     "title": "Figure 4 assise",
@@ -169,8 +245,15 @@
       "Plus le buste se penche, plus l'étirement est marqué — avance progressivement."
     ],
     "easier": "Reste redressé, sans pencher le buste : le croisement seul suffit pour commencer.",
-    "muscles": ["Piriforme", "Fessiers"],
-    "avoid": "Une douleur dans le genou du dessus : relâche la pression et croise moins fort."
+    "muscles": [
+      "Piriforme",
+      "Fessiers"
+    ],
+    "avoid": "Une douleur dans le genou du dessus : relâche la pression et croise moins fort.",
+    "articles": [
+      "pourquoi-30-minutes",
+      "regler-son-poste"
+    ]
   },
   "calin-bras": {
     "title": "Câlin à un bras",
@@ -185,8 +268,15 @@
       "Respire normalement pendant l'étirement, ne bloque pas ta respiration."
     ],
     "easier": "Réduis la traction : rapproche le bras moins près du corps.",
-    "muscles": ["Deltoïde postérieur", "Haut du dos"],
-    "avoid": "Rien de spécifique : c'est un étirement doux."
+    "muscles": [
+      "Deltoïde postérieur",
+      "Haut du dos"
+    ],
+    "avoid": "Rien de spécifique : c'est un étirement doux.",
+    "articles": [
+      "muscler-le-haut-du-dos",
+      "ergonomie-ce-qui-marche"
+    ]
   },
   "triceps-tete": {
     "title": "Triceps au-dessus de la tête",
@@ -201,8 +291,15 @@
       "Garde le dos droit plutôt que de te cambrer pour compenser."
     ],
     "easier": "Contente-toi de plier le bras derrière la tête sans pousser avec l'autre main.",
-    "muscles": ["Triceps", "Épaule"],
-    "avoid": "Une douleur dans l'épaule plutôt que dans le bras : arrête et réduis l'amplitude."
+    "muscles": [
+      "Triceps",
+      "Épaule"
+    ],
+    "avoid": "Une douleur dans l'épaule plutôt que dans le bras : arrête et réduis l'amplitude.",
+    "articles": [
+      "muscler-le-haut-du-dos",
+      "ergonomie-ce-qui-marche"
+    ]
   },
   "cercle-bras": {
     "title": "Cercles de bras",
@@ -217,8 +314,15 @@
       "Ralentis si tu sens un accrochage ou une gêne à un point précis du cercle."
     ],
     "easier": "Réduis l'amplitude du cercle, ou fais le mouvement un bras à la fois.",
-    "muscles": ["Épaules", "Haut du dos"],
-    "avoid": "Un pincement douloureux à un point du cercle : réduis l'amplitude pour l'éviter."
+    "muscles": [
+      "Épaules",
+      "Haut du dos"
+    ],
+    "avoid": "Un pincement douloureux à un point du cercle : réduis l'amplitude pour l'éviter.",
+    "articles": [
+      "muscler-le-haut-du-dos",
+      "ergonomie-ce-qui-marche"
+    ]
   },
   "chat-vache": {
     "title": "Chat-vache debout",
@@ -233,8 +337,16 @@
       "Fais-le lentement : la respiration donne le tempo, pas l'inverse."
     ],
     "easier": "Réduis l'amplitude : un dos qui s'arrondit et se creuse légèrement suffit.",
-    "muscles": ["Colonne vertébrale", "Abdominaux", "Bas du dos"],
-    "avoid": "Rien de spécifique : c'est l'un des mouvements les plus doux pour le dos."
+    "muscles": [
+      "Colonne vertébrale",
+      "Abdominaux",
+      "Bas du dos"
+    ],
+    "avoid": "Rien de spécifique : c'est l'un des mouvements les plus doux pour le dos.",
+    "articles": [
+      "pourquoi-30-minutes",
+      "ergonomie-ce-qui-marche"
+    ]
   },
   "inclinaison-laterale": {
     "title": "Inclinaison latérale",
@@ -249,8 +361,14 @@
       "Sens l'étirement sur tout le côté du buste, des côtes jusqu'à la hanche."
     ],
     "easier": "Garde le bras le long du corps plutôt que levé, et penche moins loin.",
-    "muscles": ["Obliques", "Grand dorsal"],
-    "avoid": "Rien de spécifique : réduis l'amplitude si l'équilibre te manque."
+    "muscles": [
+      "Obliques",
+      "Grand dorsal"
+    ],
+    "avoid": "Rien de spécifique : réduis l'amplitude si l'équilibre te manque.",
+    "articles": [
+      "pourquoi-30-minutes"
+    ]
   },
   "respiration-4-6": {
     "title": "Respirer, 4 puis 6",
@@ -261,12 +379,18 @@
       "Répète, sans chercher à forcer l'air ni à retenir ta respiration entre les deux."
     ],
     "tips": [
-      "Une expiration plus longue que l'inspiration active naturellement le système qui calme, rien de plus mystique que ça.",
-      "Si compter distrait, remplace les chiffres par le ressenti : une expiration nettement plus longue que l'inspiration."
+      "Ce qui est démontré, c’est de ralentir. Qu’il faille allonger l’expiration plus que l’inspiration ne l’est pas : un essai randomisé n’a trouvé aucun avantage à le faire.",
+      "Le compte sert surtout à tenir un rythme régulier. Si compter te gêne, respire simplement plus lentement."
     ],
-    "easier": "Réduis à 3 temps d'inspiration pour 4 d'expiration, en gardant l'expiration plus longue.",
-    "muscles": ["Diaphragme"],
-    "avoid": "Un léger vertige si tu forces trop l'air : reviens à une respiration normale un instant."
+    "easier": "Laisse tomber les chiffres et respire seulement plus lentement que d’habitude : c’est le ralentissement qui compte.",
+    "muscles": [
+      "Diaphragme"
+    ],
+    "avoid": "Un léger vertige si tu forces trop l'air : reviens à une respiration normale un instant.",
+    "articles": [
+      "expiration-plus-longue",
+      "open-space"
+    ]
   },
   "nuque-inclinaison": {
     "title": "Inclinaison de nuque",
@@ -281,8 +405,15 @@
       "Le poids de la tête suffit ; la main ne fait qu'accompagner."
     ],
     "easier": "Fais le mouvement sans poser la main, juste avec le poids de la tête.",
-    "muscles": ["Trapèze supérieur", "Sterno-cléido-mastoïdien"],
-    "avoid": "Une douleur qui descend dans le bras ou des fourmillements : arrête immédiatement."
+    "muscles": [
+      "Trapèze supérieur",
+      "Sterno-cléido-mastoïdien"
+    ],
+    "avoid": "Une douleur qui descend dans le bras ou des fourmillements : arrête immédiatement.",
+    "articles": [
+      "muscler-le-haut-du-dos",
+      "regler-son-poste"
+    ]
   },
   "nuque-rotation": {
     "title": "Rotation lente de la nuque",
@@ -297,8 +428,14 @@
       "Arrête-toi au premier point de tension, n'attends pas la sensation de blocage."
     ],
     "easier": "Réduis l'amplitude de la rotation, sans chercher à aller jusqu'au bout du mouvement.",
-    "muscles": ["Muscles rotateurs du cou"],
-    "avoid": "Un vertige ou une douleur vive : arrête et reprends plus lentement, sur une amplitude réduite."
+    "muscles": [
+      "Muscles rotateurs du cou"
+    ],
+    "avoid": "Un vertige ou une douleur vive : arrête et reprends plus lentement, sur une amplitude réduite.",
+    "articles": [
+      "muscler-le-haut-du-dos",
+      "regler-son-poste"
+    ]
   },
   "haussement-epaules": {
     "title": "Haussements d'épaules",
@@ -313,8 +450,14 @@
       "Respire normalement pendant que tu tiens la position, ne bloque pas ta respiration."
     ],
     "easier": "Monte les épaules moins haut, l'essentiel est le contraste tension-relâchement.",
-    "muscles": ["Trapèze supérieur"],
-    "avoid": "Rien de spécifique."
+    "muscles": [
+      "Trapèze supérieur"
+    ],
+    "avoid": "Rien de spécifique.",
+    "articles": [
+      "muscler-le-haut-du-dos",
+      "open-space"
+    ]
   },
   "encadrement-porte": {
     "title": "Ouverture à l'encadrement",
@@ -329,8 +472,15 @@
       "Un petit pas suffit : inutile d'avancer beaucoup pour sentir l'ouverture."
     ],
     "easier": "Recule légèrement le pied pour réduire l'amplitude de l'étirement.",
-    "muscles": ["Grand pectoral", "Deltoïde antérieur"],
-    "avoid": "Une douleur dans l'épaule plutôt qu'un simple étirement devant : recule le pas."
+    "muscles": [
+      "Grand pectoral",
+      "Deltoïde antérieur"
+    ],
+    "avoid": "Une douleur dans l'épaule plutôt qu'un simple étirement devant : recule le pas.",
+    "articles": [
+      "muscler-le-haut-du-dos",
+      "ergonomie-ce-qui-marche"
+    ]
   },
   "nuque-flexion": {
     "title": "Flexion de la nuque",
@@ -345,8 +495,14 @@
       "Arrête dès la première sensation d'étirement franc à l'arrière du cou."
     ],
     "easier": "Fais le mouvement sans les mains, juste en laissant la tête descendre par son propre poids.",
-    "muscles": ["Extenseurs du cou"],
-    "avoid": "Toute sensation de traction, de fourmillement ou de vertige : arrête immédiatement."
+    "muscles": [
+      "Extenseurs du cou"
+    ],
+    "avoid": "Toute sensation de traction, de fourmillement ou de vertige : arrête immédiatement.",
+    "articles": [
+      "muscler-le-haut-du-dos",
+      "regler-son-poste"
+    ]
   },
   "omoplates": {
     "title": "Serrage d'omoplates",
@@ -361,8 +517,15 @@
       "C'est un petit mouvement, presque invisible de l'extérieur — c'est normal."
     ],
     "easier": "Serre moins fort, l'essentiel est de sentir le haut du dos s'activer.",
-    "muscles": ["Rhomboïdes", "Trapèze moyen"],
-    "avoid": "Rien de spécifique."
+    "muscles": [
+      "Rhomboïdes",
+      "Trapèze moyen"
+    ],
+    "avoid": "Rien de spécifique.",
+    "articles": [
+      "muscler-le-haut-du-dos",
+      "ergonomie-ce-qui-marche"
+    ]
   },
   "ouverture-pectorale": {
     "title": "Ouverture pectorale",
@@ -377,8 +540,15 @@
       "Garde le menton légèrement rentré pendant l'ouverture."
     ],
     "easier": "Ouvre les coudes moins loin, l'essentiel est le rapprochement des omoplates.",
-    "muscles": ["Grand pectoral", "Rhomboïdes"],
-    "avoid": "Une gêne dans le bas du dos : réduis l'amplitude et évite de cambrer."
+    "muscles": [
+      "Grand pectoral",
+      "Rhomboïdes"
+    ],
+    "avoid": "Une gêne dans le bas du dos : réduis l'amplitude et évite de cambrer.",
+    "articles": [
+      "muscler-le-haut-du-dos",
+      "ergonomie-ce-qui-marche"
+    ]
   },
   "rotation-externe": {
     "title": "Rotation externe des épaules",
@@ -393,8 +563,15 @@
       "Garde les épaules basses, sans les hausser pendant le mouvement."
     ],
     "easier": "Réduis l'amplitude d'ouverture des avant-bras.",
-    "muscles": ["Infra-épineux", "Petit rond"],
-    "avoid": "Une douleur dans l'épaule : réduis l'amplitude ou arrête."
+    "muscles": [
+      "Infra-épineux",
+      "Petit rond"
+    ],
+    "avoid": "Une douleur dans l'épaule : réduis l'amplitude ou arrête.",
+    "articles": [
+      "muscler-le-haut-du-dos",
+      "ergonomie-ce-qui-marche"
+    ]
   },
   "extension-chaise": {
     "title": "Extension sur chaise",
@@ -409,8 +586,15 @@
       "Une chaise avec un dossier bas ou à mi-hauteur fonctionne mieux qu'un dossier haut."
     ],
     "easier": "Réduis l'amplitude, ou fais le mouvement sans dossier, juste en ouvrant la poitrine.",
-    "muscles": ["Colonne dorsale", "Grand pectoral"],
-    "avoid": "Une douleur dans le bas du dos plutôt qu'entre les omoplates : arrête et réduis l'amplitude."
+    "muscles": [
+      "Colonne dorsale",
+      "Grand pectoral"
+    ],
+    "avoid": "Une douleur dans le bas du dos plutôt qu'entre les omoplates : arrête et réduis l'amplitude.",
+    "articles": [
+      "muscler-le-haut-du-dos",
+      "ergonomie-ce-qui-marche"
+    ]
   },
   "tirage-vide": {
     "title": "Tirage à vide",
@@ -425,8 +609,16 @@
       "Garde les épaules basses pendant tout le mouvement."
     ],
     "easier": "Réduis l'amplitude du tirage, sans chercher à serrer fort les omoplates.",
-    "muscles": ["Rhomboïdes", "Trapèze moyen", "Deltoïde postérieur"],
-    "avoid": "Rien de spécifique."
+    "muscles": [
+      "Rhomboïdes",
+      "Trapèze moyen",
+      "Deltoïde postérieur"
+    ],
+    "avoid": "Rien de spécifique.",
+    "articles": [
+      "muscler-le-haut-du-dos",
+      "ergonomie-ce-qui-marche"
+    ]
   },
   "genou-poitrine": {
     "title": "Genou à la poitrine",
@@ -441,8 +633,15 @@
       "Garde l'autre pied bien à plat au sol pour rester stable."
     ],
     "easier": "Ramène le genou moins haut, sans chercher à le rapprocher complètement de la poitrine.",
-    "muscles": ["Fessiers", "Bas du dos"],
-    "avoid": "Une douleur dans le genou plié : relâche la prise des mains."
+    "muscles": [
+      "Fessiers",
+      "Bas du dos"
+    ],
+    "avoid": "Une douleur dans le genou plié : relâche la prise des mains.",
+    "articles": [
+      "pourquoi-30-minutes",
+      "regler-son-poste"
+    ]
   },
   "ischios": {
     "title": "Ischio-jambiers, appui surélevé",
@@ -457,8 +656,13 @@
       "Le dos reste droit du début à la fin ; c'est le pli des hanches qui étire, pas le dos qui s'arrondit."
     ],
     "easier": "Utilise un support plus bas, ou pose simplement le talon au sol, jambe tendue devant toi.",
-    "muscles": ["Ischio-jambiers"],
-    "avoid": "Une perte d'équilibre : prends appui sur un meuble stable à côté de toi."
+    "muscles": [
+      "Ischio-jambiers"
+    ],
+    "avoid": "Une perte d'équilibre : prends appui sur un meuble stable à côté de toi.",
+    "articles": [
+      "pourquoi-30-minutes"
+    ]
   },
   "balancement-hanche": {
     "title": "Balancement de hanche",
@@ -473,8 +677,14 @@
       "Prends appui sur un meuble si l'équilibre te manque."
     ],
     "easier": "Réduis l'amplitude du balancement, ou fais-le en te tenant à un support.",
-    "muscles": ["Fléchisseurs de hanche", "Fessiers"],
-    "avoid": "Rien de spécifique, hormis la perte d'équilibre : reste près d'un appui."
+    "muscles": [
+      "Fléchisseurs de hanche",
+      "Fessiers"
+    ],
+    "avoid": "Rien de spécifique, hormis la perte d'équilibre : reste près d'un appui.",
+    "articles": [
+      "pourquoi-30-minutes"
+    ]
   },
   "poignet-flexion": {
     "title": "Poignet en flexion",
@@ -489,8 +699,13 @@
       "Garde le coude tendu pour que l'étirement porte sur tout l'avant-bras."
     ],
     "easier": "Réduis la traction, l'essentiel est de sentir un étirement léger, pas une tension forte.",
-    "muscles": ["Extenseurs du poignet"],
-    "avoid": "Une douleur vive plutôt qu'un étirement : relâche la traction."
+    "muscles": [
+      "Extenseurs du poignet"
+    ],
+    "avoid": "Une douleur vive plutôt qu'un étirement : relâche la traction.",
+    "articles": [
+      "regler-son-poste"
+    ]
   },
   "poignet-extension": {
     "title": "Poignet en extension",
@@ -505,8 +720,13 @@
       "Garde le coude tendu pour que l'étirement porte sur tout l'avant-bras."
     ],
     "easier": "Réduis la traction, l'essentiel est de sentir un étirement léger, pas une tension forte.",
-    "muscles": ["Fléchisseurs du poignet"],
-    "avoid": "Une douleur vive plutôt qu'un étirement : relâche la traction."
+    "muscles": [
+      "Fléchisseurs du poignet"
+    ],
+    "avoid": "Une douleur vive plutôt qu'un étirement : relâche la traction.",
+    "articles": [
+      "regler-son-poste"
+    ]
   },
   "doigts-ecartes": {
     "title": "Doigts écartés",
@@ -521,8 +741,13 @@
       "Fais le mouvement des deux mains en même temps si c'est confortable."
     ],
     "easier": "Réduis simplement le nombre de répétitions.",
-    "muscles": ["Muscles de la main"],
-    "avoid": "Rien de spécifique."
+    "muscles": [
+      "Muscles de la main"
+    ],
+    "avoid": "Rien de spécifique.",
+    "articles": [
+      "regler-son-poste"
+    ]
   },
   "mains-dos-a-dos": {
     "title": "Mains dos à dos",
@@ -537,8 +762,13 @@
       "Un léger étirement suffit, inutile de forcer l'écart des coudes."
     ],
     "easier": "Écarte les coudes moins loin, l'amplitude compte moins que la régularité.",
-    "muscles": ["Extenseurs du poignet"],
-    "avoid": "Une douleur vive plutôt qu'un étirement : réduis l'écart des coudes."
+    "muscles": [
+      "Extenseurs du poignet"
+    ],
+    "avoid": "Une douleur vive plutôt qu'un étirement : réduis l'écart des coudes.",
+    "articles": [
+      "regler-son-poste"
+    ]
   },
   "poignet-priere": {
     "title": "Prière",
@@ -553,8 +783,13 @@
       "Arrête la descente dès que les paumes commencent à se décoller."
     ],
     "easier": "Descends moins bas, ou garde les mains devant la poitrine sans descendre.",
-    "muscles": ["Fléchisseurs du poignet"],
-    "avoid": "Une douleur vive plutôt qu'un étirement : remonte les mains."
+    "muscles": [
+      "Fléchisseurs du poignet"
+    ],
+    "avoid": "Une douleur vive plutôt qu'un étirement : remonte les mains.",
+    "articles": [
+      "regler-son-poste"
+    ]
   },
   "cheville-cercle": {
     "title": "Cercles de cheville",
@@ -569,8 +804,15 @@
       "Fais-le lentement, l'amplitude compte plus que la vitesse."
     ],
     "easier": "Réduis la taille du cercle si l'équilibre te manque, ou fais l'exercice assis.",
-    "muscles": ["Cheville", "Circulation"],
-    "avoid": "Rien de spécifique."
+    "muscles": [
+      "Cheville",
+      "Circulation"
+    ],
+    "avoid": "Rien de spécifique.",
+    "articles": [
+      "pourquoi-30-minutes",
+      "debout-nest-pas-actif"
+    ]
   },
   "talon-pointe": {
     "title": "Talon-pointe",
@@ -585,8 +827,16 @@
       "Debout, garde un appui léger sur un meuble si l'équilibre te manque."
     ],
     "easier": "Fais le mouvement assis plutôt que debout.",
-    "muscles": ["Mollets", "Tibia", "Circulation"],
-    "avoid": "Rien de spécifique, hormis l'équilibre en position debout."
+    "muscles": [
+      "Mollets",
+      "Tibia",
+      "Circulation"
+    ],
+    "avoid": "Rien de spécifique, hormis l'équilibre en position debout.",
+    "articles": [
+      "pourquoi-30-minutes",
+      "debout-nest-pas-actif"
+    ]
   },
   "mollet-releve": {
     "title": "Montées sur la pointe",
@@ -601,8 +851,13 @@
       "Prends appui sur un meuble si l'équilibre te manque."
     ],
     "easier": "Réduis la hauteur de la montée, ou fais l'exercice en te tenant à un support.",
-    "muscles": ["Mollets"],
-    "avoid": "Rien de spécifique, hormis l'équilibre : reste près d'un appui."
+    "muscles": [
+      "Mollets"
+    ],
+    "avoid": "Rien de spécifique, hormis l'équilibre : reste près d'un appui.",
+    "articles": [
+      "debout-nest-pas-actif"
+    ]
   },
   "clignement": {
     "title": "Clignements lents",
@@ -617,8 +872,14 @@
       "Un clignement complet mouille toute la surface de l'œil ; un clignement partiel n'en mouille que la moitié."
     ],
     "easier": "Fais-le en dix clignements plutôt que vingt.",
-    "muscles": ["Film lacrymal"],
-    "avoid": "Rien de spécifique."
+    "muscles": [
+      "Film lacrymal"
+    ],
+    "avoid": "Rien de spécifique.",
+    "articles": [
+      "vingt-vingt-vingt",
+      "lumiere-bleue"
+    ]
   },
   "loin-pres-alterne": {
     "title": "Loin, près",
@@ -632,8 +893,14 @@
       "S'il n'y a pas de point lointain, une distance de quelques mètres suffit déjà à créer le contraste."
     ],
     "easier": "Réduis le nombre d'allers-retours plutôt que la durée de chaque fixation.",
-    "muscles": ["Muscles de l'accommodation"],
-    "avoid": "Un léger flou passager en alternant : c'est normal, il se dissipe en quelques secondes."
+    "muscles": [
+      "Muscles de l'accommodation"
+    ],
+    "avoid": "Un léger flou passager en alternant : c'est normal, il se dissipe en quelques secondes.",
+    "articles": [
+      "vingt-vingt-vingt",
+      "lumiere-bleue"
+    ]
   },
   "paumes": {
     "title": "Paumes sur les yeux",
@@ -648,8 +915,14 @@
       "C'est autant une pause pour les yeux qu'un moment pour ralentir la respiration."
     ],
     "easier": "Ferme simplement les yeux sans les mains si tu préfères.",
-    "muscles": ["Muscles oculaires"],
-    "avoid": "Toute pression sur les globes oculaires : les paumes reposent sur les arcades, pas sur les yeux."
+    "muscles": [
+      "Muscles oculaires"
+    ],
+    "avoid": "Toute pression sur les globes oculaires : les paumes reposent sur les arcades, pas sur les yeux.",
+    "articles": [
+      "vingt-vingt-vingt",
+      "lumiere-bleue"
+    ]
   },
   "installe-toi": {
     "title": "S'installer",
@@ -664,7 +937,13 @@
       "Pas besoin de fermer les yeux si ça ne te met pas à l'aise."
     ],
     "easier": "Fais-le tel quel : c'est déjà la version la plus simple.",
-    "muscles": ["Posture"],
-    "avoid": "Rien de spécifique."
+    "muscles": [
+      "Posture"
+    ],
+    "avoid": "Rien de spécifique.",
+    "articles": [
+      "expiration-plus-longue",
+      "open-space"
+    ]
   }
 }
