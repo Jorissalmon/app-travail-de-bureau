@@ -430,6 +430,39 @@ sont dans le rapport de session ; ce qui suit, c'est ce qu'on en a fait.
   **Non vérifié à l'exécution** : pas de SDK Android dans l'environnement de
   développement distant, seul `apk.yml` compilera ce code.
 
+## Fluidité et écriture
+
+- **La feuille modale n'avait pas de hauteur** — le sélecteur d'exercices
+  contient 42 entrées, la feuille grandissait avec, et comme elle est ancrée en
+  bas d'un conteneur fixe, le débordement partait par le haut sans rien à faire
+  défiler : les dernières entrées étaient littéralement inatteignables. Mesuré
+  après correction : 656 px visibles pour 4 128 px de contenu. La feuille est
+  désormais bornée à 86 vh avec un corps défilant, et le glisser-pour-fermer a
+  été déplacé sur la poignée : sur un corps défilant, les deux gestes étaient le
+  même geste, et faire défiler la liste refermait la feuille.
+- **Le compositeur de routine répond à l'instant** — chaque appui écrivait dans
+  le stockage de l'appareil puis reconstruisait toutes les routines avant que
+  quoi que ce soit ne bouge à l'écran. Sur un bouton qu'on presse dix fois de
+  suite, ça se voit. L'écran tient maintenant sa propre copie de la liste, la
+  dessine, et enregistre derrière (`setCustomSteps` écrit la liste entière
+  plutôt qu'une mutation à la fois). Mesuré : dix appuis en 339 ms, aucun perdu.
+  Un champ de recherche a été ajouté au sélecteur, parce que 42 entrées ne se
+  parcourent pas quand on sait déjà ce qu'on cherche.
+- **Chaque page s'ouvre en haut** — le défilement vit sur le `<main>` de
+  `AppLayout` et React Router n'y touche pas, donc ouvrir une fiche depuis le
+  bas de la bibliothèque atterrissait au milieu de l'explication. Remis à zéro
+  en `useLayoutEffect` sur le changement de route, donc avant peinture. Même
+  chose entre les écrans de l'accueil.
+- **Le tiret cadratin ne sert plus d'incise** — c'est la marque la plus
+  reconnaissable d'un texte écrit par une machine, et il y en avait partout :
+  accueil, réglages, pop-up de fin de journée, bibliothèque, suivi, plus 24
+  occurrences dans le contenu embarqué. Réécrits en deux-points, en virgules ou
+  en phrases séparées, sans toucher à un seul chiffre ni à une seule nuance de
+  preuve. Deux exceptions gardées : le tiret comme valeur vide (« — » quand il
+  n'y a rien à afficher) et dans un intitulé de source (« INRS — Travail sur
+  écran »). Les noms d'étapes gauche/droite passent en parenthèses
+  (« Fente basse (droite) »).
+
 ## À la charge du propriétaire (secrets, hors dépôt)
 
 - Créer le rôle `releve_app` + la base `releve`, appliquer les migrations

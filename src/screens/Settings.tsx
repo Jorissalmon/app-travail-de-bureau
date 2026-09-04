@@ -125,7 +125,7 @@ export function Settings() {
       <SettingsSection title="Session">
         <SettingRow
           label="Où tu travailles"
-          hint="Au bureau, l’app retire des routines les mouvements qu’on ne fait pas en open space — une fente, un étirement à l’encadrement de porte. À la maison, tout est proposé."
+          hint="Au bureau, l’app retire des routines les mouvements qu’on ne fait pas en open space : une fente, un étirement à l’encadrement de porte. À la maison, tout est proposé."
           stacked
         >
           <Segmented
@@ -193,7 +193,7 @@ export function Settings() {
 
         <TimeRow
           label="Démarrage auto"
-          hint="Une notification à cette heure-là, les jours actifs : un appui démarre la journée. L’app ne la démarre jamais toute seule — elle mesurerait une assise que tu n’as pas faite. Laisse vide pour n’avoir aucun rappel du matin."
+          hint="Une notification à cette heure-là, les jours actifs. Un appui suffit à démarrer la journée. L’app ne la démarre jamais toute seule, sinon elle compterait une assise que tu n’as pas faite. Laisse vide si tu n’en veux pas."
           value={settings.autoStartAt}
           onChange={(autoStartAt) => void update({ autoStartAt })}
         />
@@ -268,7 +268,7 @@ export function Settings() {
           <>
             <SettingRow
               label="Aucun compte"
-              hint="Tes réglages, tes routines et tes chiffres vivent sur ce téléphone, et nulle part ailleurs. Un compte sert à les retrouver sur un autre appareil — rien d’autre en dépend."
+              hint="Tes réglages, tes routines et tes chiffres vivent sur ce téléphone, et nulle part ailleurs. Un compte sert à les retrouver sur un autre appareil. Rien d’autre n’en dépend."
             />
             <div className="py-3.5">
               <button
@@ -368,8 +368,8 @@ function TimeRangeRow({
     <div className="py-3.5" style={{ borderBottom: '1px solid var(--border)' }}>
       <p className="text-[16px]">{label}</p>
       <p className="t-meta mt-0.5">
-        Aucun rappel pendant cette plage — et la journée se termine toute seule quand elle
-        commence, plutôt que de courir toute la nuit.
+        Aucun rappel pendant cette plage. La journée s’y termine aussi toute seule, au lieu de
+        courir toute la nuit.
       </p>
       <div className="mt-3 flex items-center gap-2">
         <input

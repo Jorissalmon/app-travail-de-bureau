@@ -26,7 +26,7 @@
       },
       {
         "position": 3,
-        "name": "Fente basse — droite",
+        "name": "Fente basse (droite)",
         "durationS": 30,
         "cue": "Un grand pas en avant, genou arrière tendu. Pousse la hanche arrière vers l'avant.",
         "figureKey": "fente",
@@ -34,7 +34,7 @@
       },
       {
         "position": 4,
-        "name": "Fente basse — gauche",
+        "name": "Fente basse (gauche)",
         "durationS": 30,
         "cue": "Même chose de l'autre côté. Le bassin reste droit.",
         "figureKey": "fente",
@@ -112,7 +112,7 @@
       },
       {
         "position": 2,
-        "name": "Nuque en diagonale — droite",
+        "name": "Nuque en diagonale (droite)",
         "durationS": 30,
         "cue": "Menton vers l’aisselle opposée, la main accompagne sans tirer.",
         "figureKey": "nuque-diagonale",
@@ -120,7 +120,7 @@
       },
       {
         "position": 3,
-        "name": "Nuque en diagonale — gauche",
+        "name": "Nuque en diagonale (gauche)",
         "durationS": 30,
         "cue": "Même chose de l’autre côté.",
         "figureKey": "nuque-diagonale",
@@ -128,7 +128,7 @@
       },
       {
         "position": 4,
-        "name": "Rotation assise — droite",
+        "name": "Rotation assise (droite)",
         "durationS": 45,
         "cue": "Pieds au sol, tourne le buste, attrape le dossier. Le regard suit.",
         "figureKey": "rotation-assise",
@@ -136,7 +136,7 @@
       },
       {
         "position": 5,
-        "name": "Rotation assise — gauche",
+        "name": "Rotation assise (gauche)",
         "durationS": 45,
         "cue": "Même chose de l’autre côté.",
         "figureKey": "rotation-assise",
@@ -144,7 +144,7 @@
       },
       {
         "position": 6,
-        "name": "Ischio assis — droite",
+        "name": "Ischio assis (droite)",
         "durationS": 40,
         "cue": "Talon au sol, jambe tendue devant, penche le buste depuis les hanches. Dos droit.",
         "figureKey": "ischios-assis",
@@ -152,7 +152,7 @@
       },
       {
         "position": 7,
-        "name": "Ischio assis — gauche",
+        "name": "Ischio assis (gauche)",
         "durationS": 40,
         "cue": "Même chose de l’autre côté.",
         "figureKey": "ischios-assis",
@@ -171,7 +171,7 @@
     "steps": [
       {
         "position": 1,
-        "name": "Figure 4 assise — droite",
+        "name": "Figure 4 assise (droite)",
         "durationS": 45,
         "cue": "Cheville droite sur le genou gauche, penche le buste, dos droit.",
         "figureKey": "figure4-assise",
@@ -179,7 +179,7 @@
       },
       {
         "position": 2,
-        "name": "Figure 4 assise — gauche",
+        "name": "Figure 4 assise (gauche)",
         "durationS": 45,
         "cue": "Même chose de l’autre côté.",
         "figureKey": "figure4-assise",
@@ -187,7 +187,7 @@
       },
       {
         "position": 3,
-        "name": "Ischio assis — droite",
+        "name": "Ischio assis (droite)",
         "durationS": 40,
         "cue": "Talon au sol, jambe tendue devant, penche depuis les hanches.",
         "figureKey": "ischios-assis",
@@ -195,7 +195,7 @@
       },
       {
         "position": 4,
-        "name": "Ischio assis — gauche",
+        "name": "Ischio assis (gauche)",
         "durationS": 40,
         "cue": "Même chose de l’autre côté.",
         "figureKey": "ischios-assis",
@@ -262,7 +262,7 @@
       },
       {
         "position": 4,
-        "name": "Fente basse — droite",
+        "name": "Fente basse (droite)",
         "durationS": 40,
         "cue": "Pousse la hanche arrière vers l'avant.",
         "figureKey": "fente",
@@ -270,7 +270,7 @@
       },
       {
         "position": 5,
-        "name": "Fente basse — gauche",
+        "name": "Fente basse (gauche)",
         "durationS": 40,
         "cue": "Même chose de l'autre côté.",
         "figureKey": "fente",
@@ -278,7 +278,7 @@
       },
       {
         "position": 6,
-        "name": "Inclinaison latérale — droite",
+        "name": "Inclinaison latérale (droite)",
         "durationS": 30,
         "cue": "Bras au-dessus de la tête, respire dans les côtes.",
         "figureKey": "inclinaison-laterale",
@@ -286,7 +286,7 @@
       },
       {
         "position": 7,
-        "name": "Inclinaison latérale — gauche",
+        "name": "Inclinaison latérale (gauche)",
         "durationS": 30,
         "cue": "Même chose de l'autre côté.",
         "figureKey": "inclinaison-laterale",
@@ -329,7 +329,7 @@
       },
       {
         "position": 2,
-        "name": "Inclinaison — droite",
+        "name": "Inclinaison (droite)",
         "durationS": 30,
         "cue": "Oreille vers l'épaule, la main opposée relâche. Ne tire pas.",
         "figureKey": "nuque-laterale",
@@ -337,7 +337,7 @@
       },
       {
         "position": 3,
-        "name": "Inclinaison — gauche",
+        "name": "Inclinaison (gauche)",
         "durationS": 30,
         "cue": "Même chose de l'autre côté.",
         "figureKey": "nuque-laterale",
@@ -436,7 +436,7 @@
       },
       {
         "position": 7,
-        "name": "Câlin à un bras — droite",
+        "name": "Câlin à un bras (droite)",
         "durationS": 40,
         "cue": "Bras droit en travers de la poitrine, l’avant-bras gauche le ramène vers toi. Épaule basse.",
         "figureKey": "calin-bras",
@@ -444,7 +444,7 @@
       },
       {
         "position": 8,
-        "name": "Câlin à un bras — gauche",
+        "name": "Câlin à un bras (gauche)",
         "durationS": 40,
         "cue": "Même chose de l’autre côté.",
         "figureKey": "calin-bras",
@@ -479,7 +479,7 @@
       },
       {
         "position": 2,
-        "name": "Inclinaison latérale — droite",
+        "name": "Inclinaison latérale (droite)",
         "durationS": 30,
         "cue": "Un bras au-dessus de la tête, penche du côté opposé. Respire dans les côtes.",
         "figureKey": "inclinaison-laterale",
@@ -487,7 +487,7 @@
       },
       {
         "position": 3,
-        "name": "Inclinaison latérale — gauche",
+        "name": "Inclinaison latérale (gauche)",
         "durationS": 30,
         "cue": "Même chose de l'autre côté.",
         "figureKey": "inclinaison-laterale",
@@ -495,7 +495,7 @@
       },
       {
         "position": 4,
-        "name": "Rotation assise — droite",
+        "name": "Rotation assise (droite)",
         "durationS": 30,
         "cue": "Pieds au sol, tourne le buste, attrape le dossier. Le regard suit.",
         "figureKey": "rotation-assise",
@@ -503,7 +503,7 @@
       },
       {
         "position": 5,
-        "name": "Rotation assise — gauche",
+        "name": "Rotation assise (gauche)",
         "durationS": 30,
         "cue": "Même chose de l'autre côté.",
         "figureKey": "rotation-assise",
@@ -527,7 +527,7 @@
       },
       {
         "position": 8,
-        "name": "Genou à la poitrine — droite",
+        "name": "Genou à la poitrine (droite)",
         "durationS": 30,
         "cue": "Assis, ramène un genou vers la poitrine avec les deux mains. Le dos reste long.",
         "figureKey": "genou-poitrine",
@@ -535,7 +535,7 @@
       },
       {
         "position": 9,
-        "name": "Genou à la poitrine — gauche",
+        "name": "Genou à la poitrine (gauche)",
         "durationS": 30,
         "cue": "Même chose de l’autre côté.",
         "figureKey": "genou-poitrine",
@@ -554,7 +554,7 @@
     "steps": [
       {
         "position": 1,
-        "name": "Fente basse — droite",
+        "name": "Fente basse (droite)",
         "durationS": 40,
         "cue": "Genou arrière au sol ou tendu. Rentre le bassin, puis avance.",
         "figureKey": "fente",
@@ -562,7 +562,7 @@
       },
       {
         "position": 2,
-        "name": "Fente basse — gauche",
+        "name": "Fente basse (gauche)",
         "durationS": 40,
         "cue": "Même chose de l'autre côté.",
         "figureKey": "fente",
@@ -570,7 +570,7 @@
       },
       {
         "position": 3,
-        "name": "Figure 4 assise — droite",
+        "name": "Figure 4 assise (droite)",
         "durationS": 40,
         "cue": "Cheville droite sur le genou gauche, penche le buste, dos droit.",
         "figureKey": "figure4-assise",
@@ -578,7 +578,7 @@
       },
       {
         "position": 4,
-        "name": "Figure 4 assise — gauche",
+        "name": "Figure 4 assise (gauche)",
         "durationS": 40,
         "cue": "Même chose de l'autre côté.",
         "figureKey": "figure4-assise",
@@ -586,7 +586,7 @@
       },
       {
         "position": 5,
-        "name": "Ischios — droite",
+        "name": "Ischios (droite)",
         "durationS": 30,
         "cue": "Talon sur une chaise basse, jambe tendue, penche depuis les hanches.",
         "figureKey": "ischios",
@@ -594,7 +594,7 @@
       },
       {
         "position": 6,
-        "name": "Ischios — gauche",
+        "name": "Ischios (gauche)",
         "durationS": 30,
         "cue": "Même chose de l'autre côté.",
         "figureKey": "ischios",
@@ -621,7 +621,7 @@
     "steps": [
       {
         "position": 1,
-        "name": "Poignet en flexion — droite",
+        "name": "Poignet en flexion (droite)",
         "durationS": 25,
         "cue": "Bras tendu devant, paume vers le bas, l’autre main tire les doigts vers toi.",
         "figureKey": "poignet-flexion",
@@ -629,7 +629,7 @@
       },
       {
         "position": 2,
-        "name": "Poignet en flexion — gauche",
+        "name": "Poignet en flexion (gauche)",
         "durationS": 25,
         "cue": "Même chose de l’autre côté.",
         "figureKey": "poignet-flexion",
@@ -680,7 +680,7 @@
     "steps": [
       {
         "position": 1,
-        "name": "Cercles de cheville — droite",
+        "name": "Cercles de cheville (droite)",
         "durationS": 30,
         "cue": "Décolle le pied, dessine un cercle large, dans un sens puis dans l’autre.",
         "figureKey": "cheville-cercle",
@@ -688,7 +688,7 @@
       },
       {
         "position": 2,
-        "name": "Cercles de cheville — gauche",
+        "name": "Cercles de cheville (gauche)",
         "durationS": 30,
         "cue": "Même chose de l’autre côté.",
         "figureKey": "cheville-cercle",

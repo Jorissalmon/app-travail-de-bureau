@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { EvidencePill } from '@/components/EvidencePill'
 import { FigureBadge } from '@/components/FigureBadge'
@@ -42,6 +42,12 @@ export function Onboarding() {
 
   const [step, setStep] = useState(0)
   const [where, setWhere] = useState<Place>('bureau')
+  const body = useRef<HTMLDivElement>(null)
+
+  // Each screen starts at its top, including the long one.
+  useLayoutEffect(() => {
+    body.current?.scrollTo({ top: 0, left: 0 })
+  }, [step])
 
   const intro = useMemo(
     () => (article ? renderMarkdown(opening(article.bodyMd, 3)) : null),
@@ -56,12 +62,12 @@ export function Onboarding() {
         <div className="mt-5 flex flex-col gap-4">
           <p className="t-body" style={{ color: 'var(--text-2)' }}>
             Tu démarres ta journée le matin. Log Off compte les intervalles et te propose de te
-            lever, deux ou trois minutes à chaque fois. Tu réponds — fait, plus tard, ou rien — et
-            l’app note ce qui s’est réellement passé.
+            lever, deux ou trois minutes à chaque fois. Tu réponds ce que tu veux : fait, plus tard,
+            ou rien du tout. L’app note ce qui s’est réellement passé.
           </p>
           <p className="t-body" style={{ color: 'var(--text-2)' }}>
-            Elle ne mesure que ce que tu lui dis. Pas de calories, pas de bénéfice santé estimé, pas
-            de félicitations. Ce que tu verras dans le suivi, c’est ton journal, rien de plus.
+            Elle ne mesure que ce que tu lui dis. Pas de calories, pas de bénéfice santé estimé,
+            pas de félicitations. Ce que tu verras dans le suivi, c’est ton journal, rien de plus.
           </p>
           <div className="flex justify-center pt-2">
             <FigureBadge figureKey="marche" tone="lime" size={150} animated />
@@ -89,8 +95,8 @@ export function Onboarding() {
             </p>
           )}
           <p className="t-meta mt-4">
-            La suite, ses limites, et dix autres articles gradés — jusqu’à « non démontrée » quand
-            c’est le cas — t’attendent dans l’onglet Infos.
+            La suite et ses limites sont dans l’onglet Infos, avec dix autres articles. Chacun
+            annonce son niveau de preuve, y compris quand il est faible.
           </p>
         </div>
       ),
@@ -101,9 +107,9 @@ export function Onboarding() {
       body: (
         <div className="mt-5">
           <p className="t-body" style={{ color: 'var(--text-2)' }}>
-            Sans ces quatre-là, une session tourne sans qu’aucun rappel n’arrive. Autant le régler
+            Sans ces quatre-là, une session tourne sans qu’aucun rappel n’arrive. Autant les régler
             maintenant : une fois refusées, Android ne repose plus la question, et il faut aller les
-            chercher dans ses réglages.
+            chercher soi-même dans ses réglages.
           </p>
           <div className="mt-5">
             <PermissionsList active={step === 2} />
@@ -117,7 +123,7 @@ export function Onboarding() {
       body: (
         <div className="mt-5">
           <p className="t-body" style={{ color: 'var(--text-2)' }}>
-            Au bureau, l’app retire des routines les mouvements qu’on ne fait pas en open space —
+            Au bureau, l’app retire des routines les mouvements qu’on ne fait pas en open space :
             une fente, un étirement à l’encadrement de porte. À la maison, tout est proposé. Ça se
             change à tout moment dans le profil.
           </p>
@@ -163,7 +169,7 @@ export function Onboarding() {
         </button>
       </div>
 
-      <div className="no-scrollbar min-h-0 flex-1 overflow-y-auto pt-6">
+      <div ref={body} className="no-scrollbar min-h-0 flex-1 overflow-y-auto pt-6">
         <h1 className="t-screen">{current?.title}</h1>
         {current?.body}
       </div>

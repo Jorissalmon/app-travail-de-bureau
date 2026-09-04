@@ -2,7 +2,7 @@
   "marche": {
     "title": "Marche",
     "steps": [
-      "Lève-toi et pars marcher — dans le couloir, jusqu'à la machine à café, peu importe où.",
+      "Lève-toi et pars marcher : dans le couloir, jusqu'à la machine à café, peu importe où.",
       "Marche à un rythme normal, bras qui se balancent librement.",
       "Si tu ne peux pas quitter la pièce, fais des allers-retours sur place."
     ],
@@ -103,7 +103,7 @@
   "regard-au-loin": {
     "title": "Regard au loin",
     "steps": [
-      "Trouve le point le plus lointain que tu peux voir — par une fenêtre, au bout du couloir.",
+      "Trouve le point le plus lointain que tu peux voir : par une fenêtre, au bout du couloir.",
       "Fixe-le quelques secondes, en relâchant les yeux plutôt qu'en les plissant.",
       "Cligne franchement dix fois, paupières complètement fermées à chaque clignement."
     ],
@@ -252,7 +252,7 @@
     ],
     "tips": [
       "L'étirement se sent dans la fesse et l'extérieur de la hanche, pas dans le genou.",
-      "Plus le buste se penche, plus l'étirement est marqué — avance progressivement."
+      "Plus le buste se penche, plus l'étirement est marqué. Avance progressivement."
     ],
     "easier": "Reste redressé, sans pencher le buste : le croisement seul suffit pour commencer.",
     "muscles": [
@@ -418,7 +418,7 @@
       "Tiens en respirant, puis reviens au centre et change de côté."
     ],
     "tips": [
-      "L'épaule du côté qui s'étire reste basse et détendue — ne la remonte pas vers l'oreille.",
+      "L'épaule du côté qui s'étire reste basse et détendue. Ne la remonte pas vers l'oreille.",
       "Le poids de la tête suffit ; la main ne fait qu'accompagner."
     ],
     "easier": "Fais le mouvement sans poser la main, juste avec le poids de la tête.",
@@ -536,7 +536,7 @@
     ],
     "tips": [
       "Les épaules ne doivent pas monter vers les oreilles : seul le dos travaille.",
-      "C'est un petit mouvement, presque invisible de l'extérieur — c'est normal."
+      "C'est un petit mouvement, presque invisible de l'extérieur. C'est normal."
     ],
     "easier": "Serre moins fort, l'essentiel est de sentir le haut du dos s'activer.",
     "muscles": [
@@ -680,7 +680,7 @@
       "Tiens la position en respirant, puis change de côté."
     ],
     "tips": [
-      "Plus le support est haut, plus l'étirement est marqué — commence bas.",
+      "Plus le support est haut, plus l'étirement est marqué. Commence bas.",
       "Le dos reste droit du début à la fin ; c'est le pli des hanches qui étire, pas le dos qui s'arrondit."
     ],
     "easier": "Utilise un support plus bas, ou pose simplement le talon au sol, jambe tendue devant toi.",
@@ -906,7 +906,7 @@
       "Fais-le à un rythme tranquille, pas précipité."
     ],
     "tips": [
-      "Devant un écran, on cligne deux fois moins souvent que la normale — ces vingt clignements francs compensent une partie du déficit.",
+      "Devant un écran, on cligne deux fois moins souvent que la normale. Ces vingt clignements francs compensent une partie du déficit.",
       "Un clignement complet mouille toute la surface de l'œil ; un clignement partiel n'en mouille que la moitié."
     ],
     "easier": "Fais-le en dix clignements plutôt que vingt.",

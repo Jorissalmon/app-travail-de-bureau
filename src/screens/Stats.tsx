@@ -144,7 +144,7 @@ export function Stats() {
       {lowAdherence && (
         <p className="t-meta mt-4" style={{ color: 'var(--text-2)' }}>
           Tu réponds à moins de 40 % des rappels. Un intervalle plus long est peut-être plus juste
-          pour toi — tu peux l’allonger dans les{' '}
+          pour toi. Tu peux l’allonger dans les{' '}
           <Link
             to="/settings"
             className="underline underline-offset-4"

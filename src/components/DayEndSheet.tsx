@@ -67,9 +67,9 @@ export function DayEndSheet() {
 
         <h2 className="t-screen pr-8">Ta journée de {dayName(startedAt)} est restée ouverte.</h2>
         <p className="t-body mt-2" style={{ color: 'var(--text-2)' }}>
-          Elle a démarré à {hhmmOf(startedAt)} et personne ne l’a terminée. Plutôt que d’inventer
-          une heure de fin — et de compter une assise que tu n’as pas faite — dis-moi vers quelle
-          heure tu t’es arrêté.
+          Elle a démarré à {hhmmOf(startedAt)} et personne ne l’a terminée. Je préfère te le
+          demander plutôt que d’inventer une heure de fin, et de compter une assise que tu n’as
+          pas faite. Tu t’es arrêté vers quelle heure ?
         </p>
 
         <label className="mt-5 flex items-center justify-between gap-3">
@@ -102,7 +102,7 @@ export function DayEndSheet() {
             disabled={busy}
             onClick={() => void settle(suggested)}
           >
-            Je ne sais plus — prends {hhmmOf(suggested)}
+            Je ne sais plus, prends {hhmmOf(suggested)}
           </button>
         </div>
       </div>
