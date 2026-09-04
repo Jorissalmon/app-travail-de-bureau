@@ -26,6 +26,7 @@ import {
   primeCues,
 } from '@/features/session/cues'
 import { durationFor, loadDurations } from '@/features/session/durations'
+import { stopAlerting } from '@/features/reminders/alert'
 import type { Completion } from '@/lib/types'
 
 /**
@@ -107,6 +108,9 @@ export function Player() {
   // restarts from the moment it is left — done, skipped or closed alike. A
   // no-op when no work session is running (a routine opened from the library).
   useEffect(() => {
+    // Engaging with the reminder is answer enough for the sound to stop: it
+    // exists to get you here, and once you are here it is only noise.
+    stopAlerting()
     void pauseForBreak()
     return () => {
       void resumeFromBreak()

@@ -10,6 +10,7 @@ import {
   inQuietWindow,
   occurrenceId,
   onActiveDay,
+  planNext,
   planOccurrences,
   planResume,
   planSnooze,
@@ -334,5 +335,66 @@ describe('allowedAt', () => {
   it('refuses a day the user excluded', () => {
     // 2026-01-10 is a Saturday; the default weekdays are Monday to Friday.
     expect(allowedAt(new Date(2026, 0, 10, 10, 0), base)).toBe(false)
+  })
+})
+
+describe('planNext — chaque cadence garde son propre ancrage', () => {
+  const withEyes: Settings = { ...base, eyeReminders: true, mobilityTimes: [] }
+  const t = (h: number, m: number) => new Date(2026, 0, 5, h, m, 0) // un lundi
+
+  it('arms the eye reminder first when both start together', () => {
+    const start = t(9, 0)
+    const next = planNext('s', { stand: start, eyes: start }, withEyes, start)
+    expect(next?.kind).toBe('eyes')
+    expect(next?.at.getMinutes()).toBe(20)
+  })
+
+  it('lets the stand reminder through once the eyes have had their turn', () => {
+    // 9 h 20 : les yeux viennent de répondre, donc leur ancrage bouge. Le
+    // debout, lui, reste dû à 9 h 30 comme depuis le début.
+    const next = planNext('s', { stand: t(9, 0), eyes: t(9, 20) }, withEyes, t(9, 20))
+    expect(next?.kind).toBe('stand')
+    expect(next?.at.getHours()).toBe(9)
+    expect(next?.at.getMinutes()).toBe(30)
+  })
+
+  it('never lets the shorter cadence starve the longer one over a morning', () => {
+    // On simule la matinée : à chaque réponse, seul l ancrage du type répondu bouge.
+    const anchors = { stand: t(9, 0), eyes: t(9, 0) }
+    const fired: string[] = []
+    let now = t(9, 0)
+    for (let i = 0; i < 8; i++) {
+      const next = planNext('s', anchors, withEyes, now)
+      if (!next) break
+      fired.push(next.kind)
+      now = next.at
+      if (next.kind === 'stand') anchors.stand = next.at
+      if (next.kind === 'eyes') anchors.eyes = next.at
+    }
+    expect(fired).toContain('stand')
+    expect(fired.filter((k) => k === 'stand').length).toBeGreaterThan(1)
+  })
+
+  it('drops an eye reminder that lands on top of a stand break', () => {
+    // Ancrages tels que les deux tombent à deux minutes d intervalle.
+    const next = planNext('s', { stand: t(9, 0), eyes: t(9, 12) }, withEyes, t(9, 25))
+    expect(next?.kind).toBe('stand')
+  })
+
+  it('plans only the stand reminder when the eyes are switched off', () => {
+    const start = t(9, 0)
+    const next = planNext('s', { stand: start, eyes: start }, { ...base, mobilityTimes: [] }, start)
+    expect(next?.kind).toBe('stand')
+  })
+
+  it('arms nothing inside a quiet window', () => {
+    const quiet: Settings = { ...base, mobilityTimes: [], quietStart: '09:00', quietEnd: '18:00' }
+    expect(planNext('s', { stand: t(9, 0), eyes: t(9, 0) }, quiet, t(9, 0))).toBeNull()
+  })
+
+  it('picks a mobility slot when it comes before the next stand break', () => {
+    const withMobility: Settings = { ...base, mobilityTimes: ['09:10'] }
+    const next = planNext('s', { stand: t(9, 0), eyes: t(9, 0) }, withMobility, t(9, 0))
+    expect(next?.kind).toBe('mobility')
   })
 })

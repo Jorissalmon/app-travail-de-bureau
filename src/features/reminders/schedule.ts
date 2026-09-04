@@ -164,6 +164,85 @@ export function planSnooze(sessionId: string, from: Date): Occurrence {
 }
 
 /**
+ * When each kind of reminder last had its turn. Every kind runs on its own
+ * cadence from its own anchor, which is what keeps them independent.
+ */
+export interface Anchors {
+  stand: Date
+  eyes: Date
+}
+
+/** The first multiple of `everyMin` after `anchor` that is still ahead of `now`. */
+function nextTick(anchor: Date, everyMin: number, now: Date): Date {
+  const step = Math.max(1, everyMin) * 60_000
+  const elapsed = now.getTime() - anchor.getTime()
+  const ticks = Math.max(1, Math.floor(elapsed / step) + 1)
+  return new Date(anchor.getTime() + ticks * step)
+}
+
+/**
+ * The single next reminder to arm, given when each kind last had its turn.
+ *
+ * Arming one reminder at a time made a shorter cadence starve a longer one:
+ * answering the eye reminder used to replan *everything* from that moment, so
+ * the twenty-minute eye cadence beat the thirty-minute stand cadence every
+ * round and the stand reminder could never fire at all. Anchoring each kind
+ * separately is what fixes it — answering the eyes moves only the eye anchor,
+ * and the stand reminder stays due when it was always due.
+ */
+export function planNext(
+  sessionId: string,
+  anchors: Anchors,
+  settings: Settings,
+  now: Date,
+): Occurrence | null {
+  const candidates: Occurrence[] = []
+
+  const stand = nextTick(anchors.stand, settings.intervalMin, now)
+  if (allowed(stand, settings)) {
+    candidates.push({
+      id: occurrenceId(sessionId, 'stand', Math.floor(stand.getTime() / 60_000)),
+      kind: 'stand',
+      at: stand,
+      index: Math.floor(stand.getTime() / 60_000),
+    })
+  }
+
+  if (settings.eyeReminders) {
+    const eyes = nextTick(anchors.eyes, EYE_INTERVAL_MIN, now)
+    // A stand break already involves looking away, so an eye reminder landing
+    // on top of one is dropped rather than stacked (§8.1).
+    const absorbed = Math.abs(eyes.getTime() - stand.getTime()) <= EYE_ABSORB_MIN * 60_000
+    if (!absorbed && allowed(eyes, settings)) {
+      candidates.push({
+        id: occurrenceId(sessionId, 'eyes', Math.floor(eyes.getTime() / 60_000)),
+        kind: 'eyes',
+        at: eyes,
+        index: Math.floor(eyes.getTime() / 60_000),
+      })
+    }
+  }
+
+  // Mobility sits at fixed times of day, so it has no anchor of its own.
+  let mobilityIndex = 0
+  for (const dayOffset of [0, 1]) {
+    for (const hhmm of settings.mobilityTimes) {
+      const at = atLocalTime(now, hhmm, dayOffset)
+      mobilityIndex++
+      if (!at || at <= now || !allowed(at, settings)) continue
+      candidates.push({
+        id: occurrenceId(sessionId, 'mobility', mobilityIndex),
+        kind: 'mobility',
+        at,
+        index: mobilityIndex,
+      })
+    }
+  }
+
+  return firstOccurrence(candidates)
+}
+
+/**
  * The occurrence a pause gives back. Pausing freezes how long was left before
  * the next reminder, and resuming puts that same amount of time back on the
  * clock — a meeting must not cost you the twenty minutes you had already

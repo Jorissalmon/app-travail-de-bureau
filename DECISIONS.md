@@ -249,6 +249,21 @@ Chaque écart par rapport au mégaprompt, avec sa raison en une phrase (§15.8).
   Le drapeau `wakeAlways`, mis quand l'utilisateur a choisi d'être alerté plutôt
   que notifié, lui fait prendre l'écran dans tous les cas.
 
+- **Chaque cadence a son propre ancrage** — armer un seul rappel à la fois avait
+  une conséquence que je n'avais pas vue : répondre replanifiait **tout** depuis
+  cet instant, donc la cadence des yeux (20 min) devançait celle du debout
+  (30 min) à chaque tour, et le rappel debout ne pouvait plus jamais tomber.
+  `planNext` calcule désormais chaque type depuis son propre ancrage, et
+  répondre ne déplace que celui du type répondu. Vérifié sur une matinée
+  simulée : 09:20 yeux, 09:30 debout, 09:40 yeux, 10:00 debout…
+- **Toute interaction délibérée coupe l'alarme** — ouvrir le lecteur, taper la
+  notification ou fermer la pop-up. Le son sert à faire venir ; une fois qu'on
+  est là, il n'est plus que du bruit. L'attente, elle, ne se lève toujours que
+  sur une vraie réponse.
+- **La carte propose « Faire l'exercice »** — la pop-up pouvait être fermée, et
+  la carte d'accueil restait alors le seul endroit à dire qu'un exercice était
+  dû, sans offrir aucun moyen de le faire.
+
 ## À la charge du propriétaire (secrets, hors dépôt)
 
 - Créer le rôle `releve_app` + la base `releve`, appliquer les migrations

@@ -5,12 +5,13 @@ import { localDate } from '@/lib/date'
 import { uuid } from '@/lib/uuid'
 import type { ReminderKind, WorkSession } from '@/lib/types'
 import {
+  type Anchors,
   type Occurrence,
   allowedAt,
   dueBy,
   firstOccurrence,
   pendingAfter,
-  planOccurrences,
+  planNext,
   planResume,
   planSnooze,
 } from '@/features/reminders/schedule'
@@ -81,6 +82,8 @@ export interface Awaiting {
 interface StoredState {
   session: ActiveSession | null
   occurrences: SerializableOcc[]
+  /** ISO instants, one per cadence. See `anchors` on the state. */
+  anchors?: { stand: string; eyes: string }
   pause?: Pause | null
   awaiting?: Awaiting | null
   /** Written by versions before the pause had a reason; read once, then dropped. */
@@ -97,6 +100,13 @@ interface SerializableOcc {
 interface SessionState {
   session: ActiveSession | null
   occurrences: Occurrence[]
+  /**
+   * When each cadence last had its turn. Kept apart so that answering one kind
+   * of reminder does not push the others back: a twenty-minute eye cadence
+   * replanned from every answer used to beat a thirty-minute stand cadence
+   * every single round, and the stand reminder could never fire.
+   */
+  anchors: Anchors
   pause: Pause | null
   awaiting: Awaiting | null
   /**
@@ -160,8 +170,17 @@ async function persist(
   occurrences: Occurrence[],
   pause: Pause | null = null,
   awaiting: Awaiting | null = null,
+  anchors?: Anchors,
 ): Promise<void> {
-  const state: StoredState = { session, occurrences: serialize(occurrences), pause, awaiting }
+  const state: StoredState = {
+    session,
+    occurrences: serialize(occurrences),
+    pause,
+    awaiting,
+    ...(anchors
+      ? { anchors: { stand: anchors.stand.toISOString(), eyes: anchors.eyes.toISOString() } }
+      : {}),
+  }
   await setJSON(KEYS.session, state)
 }
 
@@ -170,18 +189,26 @@ async function persist(
  * Returns what ended up armed, which is nothing when the rest of the horizon
  * falls in a quiet window or on a day the user excluded.
  */
-async function armFrom(sessionId: string, from: Date): Promise<Occurrence[]> {
+async function armFrom(sessionId: string, anchors: Anchors, now: Date): Promise<Occurrence[]> {
   const settings = useSettingsStore.getState().settings
-  const next = firstOccurrence(planOccurrences({ sessionId, from, settings }))
+  const next = planNext(sessionId, anchors, settings, now)
   await cancelAll()
   if (!next) return []
   await scheduleAll([next], scheduleContext())
   return [next]
 }
 
+/** Moving only the cadence that just had its turn is the whole point. */
+function anchorFor(anchors: Anchors, kind: ReminderKind | undefined, at: Date): Anchors {
+  if (kind === 'stand') return { ...anchors, stand: at }
+  if (kind === 'eyes') return { ...anchors, eyes: at }
+  return anchors
+}
+
 export const useSessionStore = create<SessionState>((set, get) => ({
   session: null,
   occurrences: [],
+  anchors: { stand: new Date(), eyes: new Date() },
   pause: null,
   awaiting: null,
   promptDismissed: false,
@@ -195,9 +222,15 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       set({ ready: true })
       return
     }
+    const started = new Date(stored.session.startedAt)
     set({
       session: stored.session,
       occurrences: deserialize(stored.occurrences),
+      // A device updating over the air has no anchors yet: the start of the
+      // session is the honest fallback for both cadences.
+      anchors: stored.anchors
+        ? { stand: new Date(stored.anchors.stand), eyes: new Date(stored.anchors.eyes) }
+        : { stand: started, eyes: started },
       // A device updating over the air carries the older shape, where a pause
       // was a bare instant and only ever meant an exercise was on screen.
       pause: stored.pause ?? (stored.pausedAt ? { at: stored.pausedAt, reason: 'break' } : null),
@@ -222,9 +255,10 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       synced: false,
     }
 
-    const occurrences = await armFrom(id, now)
-    set({ session, occurrences, pause: null, awaiting: null })
-    await persist(session, occurrences)
+    const anchors: Anchors = { stand: now, eyes: now }
+    const occurrences = await armFrom(id, anchors, now)
+    set({ session, occurrences, anchors, pause: null, awaiting: null })
+    await persist(session, occurrences, null, null, anchors)
 
     // Tell the server, best-effort — truly best-effort: the local session is
     // authoritative and already on screen, so no failure here may surface as a
@@ -240,7 +274,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       // Keep local notification ids (they hash the *local* uuid) — do not
       // reschedule against the server id, or the pending ids would drift.
       set({ session: synced })
-      await persist(synced, get().occurrences)
+      await persist(synced, get().occurrences, null, null, get().anchors)
     } catch (e) {
       if (!isOffline(e)) console.warn('[session] start not confirmed by server', e)
     }
@@ -308,8 +342,9 @@ export const useSessionStore = create<SessionState>((set, get) => ({
           firedAt: missed.at,
         }),
       )
-      set({ occurrences: [], awaiting: next })
-      await persist(session, [], null, next)
+      const anchors = anchorFor(get().anchors, missed.kind, missed.at)
+      set({ occurrences: [], awaiting: next, anchors })
+      await persist(session, [], null, next, anchors)
       return
     }
 
@@ -317,9 +352,9 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     // window has passed. Not gated on the platform: scheduling is a no-op in a
     // browser, and the countdown should still behave the same there.
     if (pendingAfter(occurrences, now).length === 0) {
-      const armed = await armFrom(session.id, now)
+      const armed = await armFrom(session.id, get().anchors, now)
       set({ occurrences: armed })
-      await persist(session, armed)
+      await persist(session, armed, null, null, get().anchors)
     }
   },
 
@@ -412,7 +447,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     const now = new Date()
     // Armed from now, not from the start of the break: the point of the pause
     // is that the next reminder is due an interval after the exercise.
-    const armed = await armFrom(session.id, now)
+    const armed = await armFrom(session.id, get().anchors, now)
     // A "+10 min" taken during the pause is already in state and must survive;
     // whichever of the two comes first is the one that stays armed.
     const kept = pendingAfter(occurrences, now)
@@ -439,9 +474,11 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     if (!session) return
     // Answering releases the hold and starts the clock again. The pause is left
     // as it is: this runs from the player, where the break is still on screen.
-    const armed = await armFrom(session.id, new Date())
-    set({ occurrences: armed, awaiting: null })
-    await persist(session, armed, get().pause, null)
+    const now = new Date()
+    const anchors = anchorFor(get().anchors, awaiting?.kind ?? 'stand', now)
+    const armed = await armFrom(session.id, anchors, now)
+    set({ occurrences: armed, awaiting: null, anchors })
+    await persist(session, armed, get().pause, null, anchors)
   },
 
   snooze: async (firedAt) => {

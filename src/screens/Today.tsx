@@ -17,9 +17,10 @@ import { useNow } from '@/app/useNow'
 import { dateEyebrow, dayName } from '@/lib/date'
 import { pendingAfter } from '@/features/reminders/schedule'
 import { PermissionsMissingError } from '@/features/reminders/permissions'
-import { primeAlarm } from '@/features/reminders/alert'
+import { primeAlarm, stopAlerting } from '@/features/reminders/alert'
 import { askForTabNotifications } from '@/features/reminders/webAlarm'
 import { standsLine } from '@/lib/format'
+import { KINDS } from '@/features/reminders/kinds'
 
 /** §11.1 — Aujourd'hui. */
 export function Today() {
@@ -152,6 +153,11 @@ export function Today() {
         onStop={handleStop}
         onPause={() => void pauseWork()}
         onResume={() => void resumeWork()}
+        onDoExercise={() => {
+          if (!awaiting) return
+          stopAlerting()
+          navigate(`/player/${KINDS[awaiting.kind].routineSlug}?from=notification`)
+        }}
         busy={busy}
       />
 

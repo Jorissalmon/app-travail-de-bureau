@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useSessionStore } from '@/stores/session'
 import { isReminderKind } from '@/features/reminders/kinds'
+import { stopAlerting } from '@/features/reminders/alert'
 
 /**
  * Where a tap on a reminder lands (§8.4). It no longer draws anything: the
@@ -16,6 +17,8 @@ export function Alert() {
 
   useEffect(() => {
     const run = async () => {
+      // Tapping the reminder is an answer to the sound, whatever happens next.
+      stopAlerting()
       if (isReminderKind(kind)) await noteAwaiting(kind)
       navigate('/', { replace: true })
     }

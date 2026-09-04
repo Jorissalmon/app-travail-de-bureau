@@ -26,6 +26,8 @@ export interface SessionCardProps {
   onStop: () => void
   onPause: () => void
   onResume: () => void
+  /** Open the exercise that is owed. Only ever called while `awaiting`. */
+  onDoExercise: () => void
   busy?: boolean
 }
 
@@ -38,6 +40,7 @@ export function SessionCard({
   onStop,
   onPause,
   onResume,
+  onDoExercise,
   busy,
   pauseReason = null,
   heldS = null,
@@ -113,7 +116,21 @@ export function SessionCard({
         <span className="t-meta mt-1">{caption}</span>
       </TimerRing>
 
-      <div className="mt-7 flex w-full gap-2.5">
+      {/* An owed exercise needs a way in from here too: the prompt can be
+          closed, and the card was then the only thing left saying one was due
+          — without offering any way to actually do it. */}
+      {awaiting && (
+        <button
+          type="button"
+          className="btn btn-accent btn-block mt-6"
+          onClick={onDoExercise}
+          disabled={busy}
+        >
+          Faire l’exercice
+        </button>
+      )}
+
+      <div className={`${awaiting ? 'mt-2.5' : 'mt-7'} flex w-full gap-2.5`}>
         <button
           type="button"
           className="btn btn-secondary flex-1"

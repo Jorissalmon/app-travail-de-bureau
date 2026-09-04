@@ -5,6 +5,7 @@ import { FigureBadge } from './FigureBadge'
 import { useContentStore } from '@/stores/content'
 import { useSessionStore } from '@/stores/session'
 import { KINDS } from '@/features/reminders/kinds'
+import { stopAlerting } from '@/features/reminders/alert'
 import { durationLabel } from '@/lib/format'
 
 /**
@@ -65,7 +66,10 @@ export function BreakOverlay() {
         <button
           type="button"
           aria-label="Fermer, sans répondre"
-          onClick={dismiss}
+          onClick={() => {
+            stopAlerting()
+            dismiss()
+          }}
           className="tap absolute right-3 top-3"
         >
           <X size={22} color="var(--text-2)" />
