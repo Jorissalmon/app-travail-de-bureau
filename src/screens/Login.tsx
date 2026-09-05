@@ -68,14 +68,18 @@ export function Login() {
 
   return (
     <div
-      className="flex min-h-0 flex-1 flex-col justify-center"
+      className="no-scrollbar flex min-h-0 flex-1 flex-col overflow-y-auto"
       style={{
         background: 'var(--bg)',
         paddingTop: 'calc(env(safe-area-inset-top,0px) + 24px)',
         paddingBottom: 'calc(env(safe-area-inset-bottom,0px) + 24px)',
       }}
     >
-      <div className="gutter mx-auto w-full" style={{ maxWidth: 420 }}>
+      {/* `my-auto` rather than `justify-center` on the parent: centred while it
+          fits, scrollable the moment it does not. A flex container that centres
+          its child clips the top of an overflowing one, and the registration
+          form with its invite code is taller than a 360x640 screen. */}
+      <div className="gutter mx-auto my-auto w-full" style={{ maxWidth: 420 }}>
         <h1 className="mb-3">
           <Wordmark size={38} />
         </h1>

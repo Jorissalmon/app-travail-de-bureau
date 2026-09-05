@@ -452,7 +452,37 @@ sont dans le rapport de session ; ce qui suit, c'est ce qu'on en a fait.
   `AppLayout` et React Router n'y touche pas, donc ouvrir une fiche depuis le
   bas de la bibliothèque atterrissait au milieu de l'explication. Remis à zéro
   en `useLayoutEffect` sur le changement de route, donc avant peinture. Même
-  chose entre les écrans de l'accueil.
+  chose entre les écrans de l'accueil. **Sans effet tant que `#root` n'était pas
+  borné** : voir l'entrée suivante, écrite après coup.
+- **`#root` avait une hauteur minimale, pas une hauteur** — `min-height: 100dvh`
+  laissait la colonne grandir avec son contenu, donc le `flex-1 min-h-0
+  overflow-y-auto` de `<main>` ne recevait jamais de hauteur bornée et ne
+  devenait jamais un conteneur défilant : c'était le document qui défilait.
+  Mesuré sur la bibliothèque en 390x844 : `main` faisait 3 196 px de haut pour
+  autant de contenu, `scrollTop` restait à zéro par construction, et
+  `document.scrollingElement` montait à 3 252. Deux conséquences que je n'avais
+  pas vues en écrivant la remise à zéro du défilement : elle remettait à zéro
+  une valeur qui valait déjà zéro, donc elle ne faisait rien ; et une feuille
+  modale ne pouvait pas contenir son propre défilement de façon fiable, le
+  document restant défilable dessous. `#root` a maintenant `height` et
+  `max-height` à `100dvh` avec `overflow: hidden`.
+- **L'écran de connexion défile** — corollaire du précédent. Une fois `#root`
+  borné, le formulaire d'inscription complet (nom, e-mail, mot de passe, code
+  d'invitation) dépassait un écran de 360x640 de cinq pixels et n'était plus
+  rattrapable, là où le document le rattrapait avant. Il est devenu un conteneur
+  défilant, et le bloc est centré par `my-auto` plutôt que par
+  `justify-center` sur le parent : un conteneur flex qui centre son enfant
+  rogne le haut de celui qui déborde.
+- **Le défilement tactile ne se vérifie pas au script** — la première
+  vérification de la feuille modale appelait `scrollTo()` puis constatait que
+  `scrollTop` avait bougé, ce qui ne prouve que la validité du CSS. Un vrai
+  doigt passe par le compositeur, respecte `touch-action` et les gestionnaires
+  d'événements. Les tests de geste passent désormais par
+  `Input.dispatchTouchEvent` (démarrage, une douzaine de déplacements, fin), et
+  la méthode est elle-même validée sur un cas témoin avant d'être appliquée à
+  l'app. `Input.synthesizeScrollGesture` en mode tactile a été essayé et écarté :
+  il ne pilote pas les conteneurs défilants imbriqués dans cet environnement, et
+  faisait passer pour cassé ce qui fonctionnait.
 - **Le tiret cadratin ne sert plus d'incise** — c'est la marque la plus
   reconnaissable d'un texte écrit par une machine, et il y en avait partout :
   accueil, réglages, pop-up de fin de journée, bibliothèque, suivi, plus 24
