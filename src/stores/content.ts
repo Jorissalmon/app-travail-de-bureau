@@ -91,9 +91,9 @@ export const useContentStore = create<ContentState>((set, get) => ({
     // Refresh in the background; failures are silent (§C5).
     try {
       const [routines, articles, exercises] = await Promise.all([
-        api.get<Routine[]>('/api/routines'),
-        api.get<Article[]>('/api/articles'),
-        api.get<Exercise[]>('/api/exercises'),
+        api.getPublic<Routine[]>('/api/routines'),
+        api.getPublic<Article[]>('/api/articles'),
+        api.getPublic<Exercise[]>('/api/exercises'),
       ])
       if (routines.length) {
         set({ routines })

@@ -493,6 +493,67 @@ sont dans le rapport de session ; ce qui suit, c'est ce qu'on en a fait.
   écran »). Les noms d'étapes gauche/droite passent en parenthèses
   (« Fente basse (droite) »).
 
+## Revue complète du dépôt
+
+- **`/api/events` faisait confiance à l'`session_id` du client, et ça bloquait
+  toute la synchronisation** — `reminder_events.session_id` porte une clé
+  étrangère vers `work_sessions`. Or tant que le serveur n'a pas confirmé un
+  démarrage, l'appareil détient un uuid qu'il a généré lui-même, et un démarrage
+  qui échoue (hors ligne, 500, jeton expiré) le lui laisse pour la journée
+  entière. Insérer cet uuid viole la contrainte, la requête part en 500,
+  `flushEvents` relance l'exception parce que ce n'est pas une coupure réseau,
+  et **la file ne se vide plus jamais** : chaque tentative rejoue le même lot et
+  rebute sur la même ligne. Reproduit dans un navigateur : `/api/sessions`
+  coupé, session `synced: false`, et le `sessionId` local part tel quel dans le
+  POST. L'identifiant est maintenant résolu par sous-requête contre les sessions
+  de cet utilisateur, ce qui corrige aussi le fait que rien n'empêchait un
+  client d'accrocher ses événements à la session de quelqu'un d'autre.
+- **Une ligne refusée ne bloque plus le lot** — le commentaire d'`events.ts`
+  promettait déjà que « la file doit toujours pouvoir se vider », et le code ne
+  le tenait pas : une seule erreur d'insertion faisait échouer la requête
+  entière. Chaque ligne est désormais dans son propre `try`, comptée dans
+  `skipped` et journalisée. Même règle pour `/api/completions`.
+- **Le contenu redevient joignable sans compte** — régression que j'avais
+  introduite avec le mode local : `NoAccountError` coupe court à toute requête
+  sans jeton, y compris vers `/api/routines`, `/api/articles` et
+  `/api/exercises`, qui sont pourtant publiques. Un appareil sans compte ne
+  voyait donc plus aucune correction de contenu. `api.getPublic` passe
+  `anonymous: true` et les rend de nouveau atteignables. Vérifié de bout en
+  bout : sans compte, un article servi par le serveur s'affiche.
+- **L'inscription n'était pas limitée en débit** — la connexion l'est (10
+  tentatives par IP et par quart d'heure), l'inscription ne l'était pas. Le code
+  d'invitation est pourtant la seule chose entre un inconnu et un compte, et il
+  était devinable à pleine vitesse. Cinq tentatives par IP et par quart d'heure.
+- **La fenêtre de limitation ne se vidait jamais** — une entrée par IP, gardée
+  pour la vie de l'instance. Rare en pratique puisqu'une fonction serverless est
+  recyclée souvent, mais sans borne. Balayage des fenêtres expirées au-delà de
+  cinq mille clés.
+
+### Constatés, pas corrigés : ce sont des décisions produit
+
+- **`breakMinutes` est un second réglage mort.** « Durée de pause », proposée de
+  1 à 10 minutes, écrite en base avec sa contrainte `CHECK`, validée par l'API,
+  relue au chargement, et **lue par aucun code**. Exactement le cas de
+  `autoStartAt` avant qu'on le branche. Deux issues cohérentes avec le dépôt :
+  lui donner un effet, ou le retirer de l'écran comme l'a été le bouton « Son
+  des notifications ». Le laisser en l'état est la seule qui ne l'est pas.
+- **La bascule « Vibration » promet plus qu'elle ne fait.** Elle ne pilote que
+  le retour haptique du lecteur (`Player.tsx`). La vibration des notifications
+  est une propriété de canal Android, fixée à `true` à la création et non
+  modifiable ensuite : c'est la même impasse que le son. Le libellé devrait
+  dire « Vibration du minuteur ».
+- **Une routine perso perd son identité à la synchronisation.**
+  `/api/completions` résout `routine_id` par slug ; un slug `perso-…` n'existe
+  pas dans `routines`, donc la colonne est `NULL` et le slug n'est stocké nulle
+  part. Les minutes bougées restent justes, la provenance est perdue.
+- **La rotation des jetons de rafraîchissement n'a pas de détection de rejeu.**
+  Un jeton volé puis rejoué après rotation reçoit un 401, mais la famille de
+  jetons n'est pas révoquée : le voleur qui passe en premier garde la main. La
+  parade usuelle est de révoquer toute la chaîne dès qu'un jeton déjà consommé
+  se représente.
+- **Code mort** : `minutesFromSeconds` (`features/session/stats.ts`) et
+  `ZONE_FAMILY` (`content/index.ts`) ne sont importés nulle part.
+
 ## À la charge du propriétaire (secrets, hors dépôt)
 
 - Créer le rôle `releve_app` + la base `releve`, appliquer les migrations

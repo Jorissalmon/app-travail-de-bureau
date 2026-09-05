@@ -11,6 +11,7 @@ import { requireUser } from './_auth.js'
 
 const KINDS = new Set(['stand', 'eyes', 'mobility'])
 const ACTIONS = new Set(['done', 'snoozed', 'dismissed', 'expired'])
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
 interface IncomingEvent {
   clientId?: unknown
@@ -43,6 +44,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const sql = db()
     let inserted = 0
+    let skipped = 0
 
     for (const e of events as IncomingEvent[]) {
       const clientId = str(e.clientId)
@@ -55,22 +57,41 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         // must always be able to drain.
         continue
       }
-      const sessionId = e.sessionId ? str(e.sessionId) : null
       const actedAt = e.actedAt ? str(e.actedAt) : null
+      // The session id is resolved against this user's own sessions rather than
+      // trusted. Two reasons, and the first is not theoretical: until the
+      // server confirms a start, the device holds a uuid IT generated, and a
+      // start that failed (offline, a 500, an expired token) leaves it holding
+      // that uuid for the whole day. Inserting it violates the foreign key,
+      // which fails the request, which means the offline queue can never drain
+      // again. The second is that nothing otherwise stopped a client from
+      // attaching its events to somebody else's session.
+      const claimed = e.sessionId ? str(e.sessionId) : ''
+      const sessionId = UUID.test(claimed) ? claimed : null
 
-      const r = await sql`
-        INSERT INTO reminder_events
-          (client_id, user_id, session_id, kind, fired_at, action, acted_at, local_date)
-        VALUES
-          (${clientId}, ${sub}, ${sessionId}, ${kind}::reminder_kind, ${firedAt},
-           ${action}::reminder_action, ${actedAt}, ${localDate})
-        ON CONFLICT (user_id, client_id) DO NOTHING
-        RETURNING id
-      `
-      if (r.length > 0) inserted++
+      try {
+        const r = await sql`
+          INSERT INTO reminder_events
+            (client_id, user_id, session_id, kind, fired_at, action, acted_at, local_date)
+          VALUES
+            (${clientId}, ${sub},
+             (SELECT id FROM work_sessions WHERE id = ${sessionId} AND user_id = ${sub}),
+             ${kind}::reminder_kind, ${firedAt},
+             ${action}::reminder_action, ${actedAt}, ${localDate})
+          ON CONFLICT (user_id, client_id) DO NOTHING
+          RETURNING id
+        `
+        if (r.length > 0) inserted++
+      } catch (rowError) {
+        // One bad row must never block the queue: the client replays the whole
+        // batch, so a row that fails forever would wedge every later event
+        // behind it. Counted and logged, not fatal.
+        skipped++
+        console.warn('[events] row rejected', rowError)
+      }
     }
 
-    json(res, 200, { inserted })
+    json(res, 200, { inserted, skipped })
   } catch (e) {
     fail(res, e)
   }

@@ -199,6 +199,13 @@ export async function request<T>(path: string, opts: RequestOptions = {}): Promi
 
 export const api = {
   get: <T>(path: string, signal?: AbortSignal) => request<T>(path, { signal }),
+  /**
+   * A GET on an endpoint that needs no account. The content routes are public,
+   * and without this a device in local mode would never see a content
+   * correction: NoAccountError cuts the request off before it is made.
+   */
+  getPublic: <T>(path: string, signal?: AbortSignal) =>
+    request<T>(path, { signal, anonymous: true }),
   post: <T>(path: string, body?: unknown) => request<T>(path, { method: 'POST', body }),
   put: <T>(path: string, body?: unknown) => request<T>(path, { method: 'PUT', body }),
   postAnonymous: <T>(path: string, body?: unknown) =>

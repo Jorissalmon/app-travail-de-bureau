@@ -33,6 +33,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const sql = db()
     let inserted = 0
+    let skipped = 0
 
     for (const c of items as IncomingCompletion[]) {
       const clientId = str(c.clientId)
@@ -42,20 +43,27 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const slug = str(c.routineSlug)
       if (!clientId || !completedAt || !localDate || Number.isNaN(durationS)) continue
 
-      const r = await sql`
-        INSERT INTO completions (client_id, user_id, routine_id, completed_at, duration_s, local_date)
-        VALUES (
-          ${clientId}, ${sub},
-          (SELECT id FROM routines WHERE slug = ${slug} LIMIT 1),
-          ${completedAt}, ${durationS}, ${localDate}
-        )
-        ON CONFLICT (user_id, client_id) DO NOTHING
-        RETURNING id
-      `
-      if (r.length > 0) inserted++
+      try {
+        const r = await sql`
+          INSERT INTO completions (client_id, user_id, routine_id, completed_at, duration_s, local_date)
+          VALUES (
+            ${clientId}, ${sub},
+            (SELECT id FROM routines WHERE slug = ${slug} LIMIT 1),
+            ${completedAt}, ${durationS}, ${localDate}
+          )
+          ON CONFLICT (user_id, client_id) DO NOTHING
+          RETURNING id
+        `
+        if (r.length > 0) inserted++
+      } catch (rowError) {
+        // Same rule as /api/events: a row the database refuses is dropped, not
+        // allowed to wedge everything queued behind it.
+        skipped++
+        console.warn('[completions] row rejected', rowError)
+      }
     }
 
-    json(res, 200, { inserted })
+    json(res, 200, { inserted, skipped })
   } catch (e) {
     fail(res, e)
   }

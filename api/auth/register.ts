@@ -1,14 +1,23 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { db } from '../_db.js'
-import { ApiError, allowCors, body, fail, json, methods } from '../_http.js'
+import { ApiError, allowCors, body, clientIp, fail, json, methods } from '../_http.js'
 import { hashPassword, issueRefreshToken, signAccessToken } from '../_auth.js'
 import { toPublicUser } from '../_models.js'
 import { requireEmail, requirePassword, requireString } from '../_validate.js'
+import { rateLimit } from '../_ratelimit.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     if (allowCors(req, res)) return
     methods(req, 'POST')
+
+    // The invite code is the only thing between an attacker and an account, and
+    // it was the one credential in the API nothing throttled: login is limited,
+    // registration was not, so the code could be guessed at full speed.
+    if (!rateLimit(`register:${clientIp(req)}`, 5, 15 * 60_000)) {
+      throw new ApiError(429, 'too_many', 'Trop de tentatives. Réessaie dans quelques minutes.')
+    }
+
     const b = body<{
       email?: unknown
       password?: unknown
