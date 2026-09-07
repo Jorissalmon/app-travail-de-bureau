@@ -1,4 +1,4 @@
-import { registerPlugin } from '@capacitor/core'
+import { Capacitor, registerPlugin } from '@capacitor/core'
 import { isNative, platform } from '@/lib/platform'
 
 /**
@@ -52,6 +52,30 @@ interface AudioSessionLike {
 function webSession(): AudioSessionLike | null {
   const nav = navigator as Navigator & { audioSession?: AudioSessionLike }
   return nav.audioSession ?? null
+}
+
+/**
+ * Whether anything here can actually turn the music down.
+ *
+ * Worth exposing rather than failing quietly: an OTA bundle lands on whatever
+ * APK is installed, and `duckOthers` only exists in the shell from 1.4.0 on.
+ * On an older one the call below rejects with an "is not implemented" exception
+ * that this file swallows — correct, because the bowl must still ring, but it
+ * meant the settings screen promised ducking that could never happen. The
+ * screen asks first now, and says so when the answer is no.
+ *
+ * Capacitor's native bridge injects `PluginHeaders`, one entry per plugin with
+ * the methods that shell was compiled with, so this is answerable on the spot
+ * and without calling anything.
+ */
+export function canDuck(): boolean {
+  if (webSession()) return true
+  if (!available()) return false
+  const headers = (Capacitor as { PluginHeaders?: readonly { name: string; methods: readonly { name: string }[] }[] })
+    .PluginHeaders
+  if (!headers) return false
+  const screenWake = headers.find((h) => h.name === 'ScreenWake')
+  return screenWake?.methods.some((m) => m.name === 'duckOthers') ?? false
 }
 
 /** Ask the system to duck other audio, by whichever route this engine offers. */

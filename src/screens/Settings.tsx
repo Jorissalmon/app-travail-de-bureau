@@ -33,6 +33,7 @@ import {
   setAlertMode,
   setAlertVolume,
 } from '@/features/reminders/alert'
+import { canDuck } from '@/features/reminders/audiofocus'
 import { isNative } from '@/lib/platform'
 
 const REPO_URL = 'https://github.com/Jorissalmon/app-travail-de-bureau'
@@ -70,6 +71,16 @@ export function Settings() {
       .then((info) => setNativeVersion(info.version))
       .catch(() => setNativeVersion(null))
   }, [])
+
+  // Whether this shell can duck the music at all. `duckOthers` shipped in the
+  // APK from 1.4.0; an OTA bundle running on an older one rings the bowl over
+  // whatever is playing and can do nothing about it. Saying that is the point:
+  // the hint used to promise ducking, so pressing « Écouter » and hearing the
+  // music stay put looked like a bug rather than a shell to reinstall.
+  const cannotDuck = isNative() && !canDuck()
+  const volumeHint = !cannotDuck
+    ? 'Le curseur règle le bol joué quand l’app est ouverte, et l’app demande alors à Android de baisser ce que tu écoutes. Quand l’app est fermée, c’est Android qui sonne, au volume des notifications du téléphone, et il baisse ta musique de lui-même. Le bouton fait entendre le réglage tout de suite, même en silencieux.'
+    : 'Le curseur règle le bol joué quand l’app est ouverte. Cette version-ci ne sait pas encore baisser ta musique pendant qu’il sonne : il faut réinstaller l’app depuis la dernière release. Quand l’app est fermée, en revanche, c’est Android qui sonne, au volume des notifications du téléphone, et lui baisse ta musique de lui-même. Le bouton fait entendre le réglage tout de suite, même en silencieux.'
 
   // The three grants a reminder needs. The sheet only appears when starting a
   // session, so this is where the state stays readable and fixable afterwards.
@@ -261,7 +272,7 @@ export function Settings() {
         </SettingRow>
         <SettingRow
           label="Volume de l’alarme"
-          hint="Le curseur règle le bol joué quand l’app est ouverte, et l’app demande alors à Android de baisser ce que tu écoutes. Quand l’app est fermée, c’est Android qui sonne, au volume des notifications du téléphone, et il baisse ta musique de lui-même. Le bouton fait entendre le réglage tout de suite, même en silencieux."
+          hint={volumeHint}
           stacked
         >
           <div className="flex items-center gap-3">
