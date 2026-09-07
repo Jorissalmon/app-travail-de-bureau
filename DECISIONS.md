@@ -598,6 +598,42 @@ sont dans le rapport de session ; ce qui suit, c'est ce qu'on en a fait.
   demanderait d'en créer un nouveau, un canal existant n'étant pas modifiable :
   c'est la même impasse que le son et la vibration.
 
+## Le bureau était trop restrictif, et le son avait deux chemins
+
+- **Trois mouvements étaient mal classés** — `chat-vache` se fait mains sur les
+  cuisses et n'a rien de visible ; `inclinaison-laterale` dit elle-même
+  « debout **ou assis** » ; `ischios` c'est un talon sur une chaise. Les trois
+  étaient marqués `discreet: false`, donc retirés au bureau. Il en reste trois
+  qui le méritent : la fente basse, l'ouverture à l'encadrement de porte (qui
+  demande une porte) et le balancement de hanche. Effet mesuré : « Lombaires »
+  passe de 6 à 9 mouvements servis, « Hanches » de « laissée entière avec un
+  badge maison » à 4 mouvements réellement adaptés, « Réveil » de 2 à 5.
+- **« Debout » au bureau, c'était deux marches et un étirement** — c'est la
+  routine que le rappel ouvre toutes les trente minutes, donc celle qu'on voit
+  le plus. Ses six étapes perdaient les deux fentes basses, à raison, et rien ne
+  les remplaçait : il restait Marche, Extension, Regard au loin, Marche. Deux
+  mouvements discrets ont été ajoutés, choisis pour ce qu'ils apportent au poste
+  assis : le serrage d'omoplates, qui est l'intervention la mieux démontrée de
+  toute la littérature du bureau, et les montées sur la pointe, pour la pompe
+  du mollet. Au bureau : six mouvements, trois minutes. À la maison : huit,
+  quatre minutes.
+- **Le son ducké avait déjà un chemin qui marche** — vérifié dans le code du
+  plugin de notifications : il crée le canal avec `USAGE_NOTIFICATION` et
+  `CONTENT_TYPE_SONIFICATION`, exactement la combinaison pour laquelle Android
+  baisse le média tout seul depuis la version 8. Donc **quand l'app n'est pas au
+  premier plan, la musique baisse déjà** — à condition que le mode d'alarme ne
+  soit pas « Silencieux », qui est le défaut et qui fait poster la notification
+  sur le canal muet. C'est probablement l'explication de ce qu'on observe, et
+  les libellés des réglages le disent désormais au lieu de le laisser deviner.
+- **Le cas restant est l'app au premier plan**, où c'est le bol synthétisé qui
+  joue et où aucune API navigateur n'arbitre. Deux routes sont tentées dans
+  l'ordre : `navigator.audioSession.type = 'transient'`, la réponse propre du
+  web, détectée à l'exécution et absente de Chrome et du WebView Android
+  aujourd'hui mais gratuite à tenter ; puis la demande de focus natif. Vérifié
+  en simulant un moteur qui expose l'API : `transient` à la sonnerie, `auto` à
+  l'arrêt. Le jour où le WebView la livre, baisser la musique cessera de
+  demander un APK.
+
 ## À la charge du propriétaire (secrets, hors dépôt)
 
 - Créer le rôle `releve_app` + la base `releve`, appliquer les migrations

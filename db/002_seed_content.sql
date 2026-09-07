@@ -113,14 +113,14 @@ ON CONFLICT (key) DO UPDATE SET
   articles = EXCLUDED.articles, discreet = EXCLUDED.discreet;
 -- chat-vache
 INSERT INTO exercises (key, title, steps, tips, easier, muscles, avoid, articles, discreet)
-VALUES ('chat-vache', 'Chat-vache debout', ARRAY['Debout, mains posées sur les cuisses, genoux légèrement fléchis.', 'Arrondis le dos vers le haut, menton vers la poitrine, comme un chat qui s''étire.', 'Puis creuse le dos, poitrine et regard vers l''avant, comme une vache.', 'Enchaîne les deux au rythme de ta respiration : expire en arrondissant, inspire en creusant.'], ARRAY['Le mouvement part du bassin et remonte vertèbre par vertèbre, ce n''est pas juste les épaules qui bougent.', 'Fais-le lentement : la respiration donne le tempo, pas l''inverse.'], 'Réduis l''amplitude : un dos qui s''arrondit et se creuse légèrement suffit.', ARRAY['Colonne vertébrale', 'Abdominaux', 'Bas du dos'], 'Rien de spécifique : c''est l''un des mouvements les plus doux pour le dos.', ARRAY['pourquoi-30-minutes', 'ergonomie-ce-qui-marche'], false)
+VALUES ('chat-vache', 'Chat-vache debout', ARRAY['Debout, mains posées sur les cuisses, genoux légèrement fléchis.', 'Arrondis le dos vers le haut, menton vers la poitrine, comme un chat qui s''étire.', 'Puis creuse le dos, poitrine et regard vers l''avant, comme une vache.', 'Enchaîne les deux au rythme de ta respiration : expire en arrondissant, inspire en creusant.'], ARRAY['Le mouvement part du bassin et remonte vertèbre par vertèbre, ce n''est pas juste les épaules qui bougent.', 'Fais-le lentement : la respiration donne le tempo, pas l''inverse.'], 'Réduis l''amplitude : un dos qui s''arrondit et se creuse légèrement suffit.', ARRAY['Colonne vertébrale', 'Abdominaux', 'Bas du dos'], 'Rien de spécifique : c''est l''un des mouvements les plus doux pour le dos.', ARRAY['pourquoi-30-minutes', 'ergonomie-ce-qui-marche'], true)
 ON CONFLICT (key) DO UPDATE SET
   title = EXCLUDED.title, steps = EXCLUDED.steps, tips = EXCLUDED.tips,
   easier = EXCLUDED.easier, muscles = EXCLUDED.muscles, avoid = EXCLUDED.avoid,
   articles = EXCLUDED.articles, discreet = EXCLUDED.discreet;
 -- inclinaison-laterale
 INSERT INTO exercises (key, title, steps, tips, easier, muscles, avoid, articles, discreet)
-VALUES ('inclinaison-laterale', 'Inclinaison latérale', ARRAY['Debout ou assis, lève un bras au-dessus de la tête.', 'Penche le buste du côté opposé, comme pour dessiner un arc de cercle.', 'Respire dans les côtes du côté qui s''étire, sans tourner le buste.', 'Reviens au centre, puis change de côté.'], ARRAY['Le mouvement reste dans un seul plan : pas de rotation ni de bascule vers l''avant.', 'Sens l''étirement sur tout le côté du buste, des côtes jusqu''à la hanche.'], 'Garde le bras le long du corps plutôt que levé, et penche moins loin.', ARRAY['Obliques', 'Grand dorsal'], 'Rien de spécifique : réduis l''amplitude si l''équilibre te manque.', ARRAY['pourquoi-30-minutes'], false)
+VALUES ('inclinaison-laterale', 'Inclinaison latérale', ARRAY['Debout ou assis, lève un bras au-dessus de la tête.', 'Penche le buste du côté opposé, comme pour dessiner un arc de cercle.', 'Respire dans les côtes du côté qui s''étire, sans tourner le buste.', 'Reviens au centre, puis change de côté.'], ARRAY['Le mouvement reste dans un seul plan : pas de rotation ni de bascule vers l''avant.', 'Sens l''étirement sur tout le côté du buste, des côtes jusqu''à la hanche.'], 'Garde le bras le long du corps plutôt que levé, et penche moins loin.', ARRAY['Obliques', 'Grand dorsal'], 'Rien de spécifique : réduis l''amplitude si l''équilibre te manque.', ARRAY['pourquoi-30-minutes'], true)
 ON CONFLICT (key) DO UPDATE SET
   title = EXCLUDED.title, steps = EXCLUDED.steps, tips = EXCLUDED.tips,
   easier = EXCLUDED.easier, muscles = EXCLUDED.muscles, avoid = EXCLUDED.avoid,
@@ -211,7 +211,7 @@ ON CONFLICT (key) DO UPDATE SET
   articles = EXCLUDED.articles, discreet = EXCLUDED.discreet;
 -- ischios
 INSERT INTO exercises (key, title, steps, tips, easier, muscles, avoid, articles, discreet)
-VALUES ('ischios', 'Ischio-jambiers, appui surélevé', ARRAY['Pose un talon sur une chaise basse ou un support stable, jambe tendue.', 'Garde le dos droit et penche le buste vers l''avant depuis les hanches.', 'Arrête-toi dès que tu sens un étirement à l''arrière de la cuisse.', 'Tiens la position en respirant, puis change de côté.'], ARRAY['Plus le support est haut, plus l''étirement est marqué. Commence bas.', 'Le dos reste droit du début à la fin ; c''est le pli des hanches qui étire, pas le dos qui s''arrondit.'], 'Utilise un support plus bas, ou pose simplement le talon au sol, jambe tendue devant toi.', ARRAY['Ischio-jambiers'], 'Une perte d''équilibre : prends appui sur un meuble stable à côté de toi.', ARRAY['pourquoi-30-minutes'], false)
+VALUES ('ischios', 'Ischio-jambiers, appui surélevé', ARRAY['Pose un talon sur une chaise basse ou un support stable, jambe tendue.', 'Garde le dos droit et penche le buste vers l''avant depuis les hanches.', 'Arrête-toi dès que tu sens un étirement à l''arrière de la cuisse.', 'Tiens la position en respirant, puis change de côté.'], ARRAY['Plus le support est haut, plus l''étirement est marqué. Commence bas.', 'Le dos reste droit du début à la fin ; c''est le pli des hanches qui étire, pas le dos qui s''arrondit.'], 'Utilise un support plus bas, ou pose simplement le talon au sol, jambe tendue devant toi.', ARRAY['Ischio-jambiers'], 'Une perte d''équilibre : prends appui sur un meuble stable à côté de toi.', ARRAY['pourquoi-30-minutes'], true)
 ON CONFLICT (key) DO UPDATE SET
   title = EXCLUDED.title, steps = EXCLUDED.steps, tips = EXCLUDED.tips,
   easier = EXCLUDED.easier, muscles = EXCLUDED.muscles, avoid = EXCLUDED.avoid,
@@ -310,7 +310,7 @@ ON CONFLICT (key) DO UPDATE SET
 
 -- debout
 INSERT INTO routines (slug, title, zone, duration_s, summary, accent, sort_order)
-VALUES ('debout', 'Debout', 'bureau', 180, 'La pause de référence. Trois minutes, toutes les trente minutes.', 'lime', 1)
+VALUES ('debout', 'Debout', 'bureau', 240, 'La pause de référence. Trois minutes, toutes les trente minutes.', 'lime', 1)
 ON CONFLICT (slug) DO UPDATE SET
   title = EXCLUDED.title, zone = EXCLUDED.zone, duration_s = EXCLUDED.duration_s,
   summary = EXCLUDED.summary, accent = EXCLUDED.accent, sort_order = EXCLUDED.sort_order;
@@ -321,8 +321,10 @@ VALUES
   ((SELECT id FROM routines WHERE slug = 'debout'), 2, 'Extension debout', 30, 'Mains dans le bas du dos, ouvre la poitrine, regarde vers le plafond. Doucement.', 'extension-debout', 'extension-debout'),
   ((SELECT id FROM routines WHERE slug = 'debout'), 3, 'Fente basse (droite)', 30, 'Un grand pas en avant, genou arrière tendu. Pousse la hanche arrière vers l''avant.', 'fente', 'fente-basse'),
   ((SELECT id FROM routines WHERE slug = 'debout'), 4, 'Fente basse (gauche)', 30, 'Même chose de l''autre côté. Le bassin reste droit.', 'fente', 'fente-basse'),
-  ((SELECT id FROM routines WHERE slug = 'debout'), 5, 'Regard au loin', 30, 'Cherche le point le plus lointain visible, et cligne lentement dix fois.', 'loin-pres', 'regard-au-loin'),
-  ((SELECT id FROM routines WHERE slug = 'debout'), 6, 'Marche', 30, 'Retour au poste en marchant. Rien ne presse.', 'marche', 'marche');
+  ((SELECT id FROM routines WHERE slug = 'debout'), 5, 'Serrage d''omoplates', 30, 'Serre les omoplates l''une vers l''autre, tiens 5 s, relâche.', 'omoplates', 'omoplates'),
+  ((SELECT id FROM routines WHERE slug = 'debout'), 6, 'Montées sur la pointe', 30, 'Monte sur la pointe des pieds, redescends lentement. Vingt fois.', 'mollet-releve', 'mollet-releve'),
+  ((SELECT id FROM routines WHERE slug = 'debout'), 7, 'Regard au loin', 30, 'Cherche le point le plus lointain visible, et cligne lentement dix fois.', 'loin-pres', 'regard-au-loin'),
+  ((SELECT id FROM routines WHERE slug = 'debout'), 8, 'Marche', 30, 'Retour au poste en marchant. Rien ne presse.', 'marche', 'marche');
 
 -- express
 INSERT INTO routines (slug, title, zone, duration_s, summary, accent, sort_order)

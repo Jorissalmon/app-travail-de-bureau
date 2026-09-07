@@ -361,7 +361,7 @@
       "pourquoi-30-minutes",
       "ergonomie-ce-qui-marche"
     ],
-    "discreet": false
+    "discreet": true
   },
   "inclinaison-laterale": {
     "title": "Inclinaison latérale",
@@ -384,7 +384,7 @@
     "articles": [
       "pourquoi-30-minutes"
     ],
-    "discreet": false
+    "discreet": true
   },
   "respiration-4-6": {
     "title": "Respirer, 4 puis 6",
@@ -691,7 +691,7 @@
     "articles": [
       "pourquoi-30-minutes"
     ],
-    "discreet": false
+    "discreet": true
   },
   "balancement-hanche": {
     "title": "Balancement de hanche",

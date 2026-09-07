@@ -245,7 +245,7 @@ export function Settings() {
         </SettingRow>
         <SettingRow
           label="Alarme du rappel"
-          hint="Le bol, quand un rappel tombe. Silencieux par défaut (open space). « Répété » sonne toutes les 20 s jusqu’à ce que tu répondes, et s’arrête au bout de cinq minutes."
+          hint="Le bol, quand un rappel tombe. Silencieux par défaut, pour l’open space : sur ce réglage, app fermée, aucun son ne part. « Répété » sonne toutes les 20 s jusqu’à ce que tu répondes, et s’arrête au bout de cinq minutes."
           stacked
         >
           <Segmented
@@ -261,7 +261,7 @@ export function Settings() {
         </SettingRow>
         <SettingRow
           label="Volume de l’alarme"
-          hint="Pendant qu’elle sonne, l’app demande à Android de baisser ce que tu écoutes, puis le remet. Le bouton fait entendre le bol tout de suite, même en silencieux."
+          hint="Le curseur règle le bol joué quand l’app est ouverte, et l’app demande alors à Android de baisser ce que tu écoutes. Quand l’app est fermée, c’est Android qui sonne, au volume des notifications du téléphone, et il baisse ta musique de lui-même. Le bouton fait entendre le réglage tout de suite, même en silencieux."
           stacked
         >
           <div className="flex items-center gap-3">

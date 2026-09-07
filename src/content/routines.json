@@ -3,7 +3,7 @@
     "slug": "debout",
     "title": "Debout",
     "zone": "bureau",
-    "durationS": 180,
+    "durationS": 240,
     "summary": "La pause de référence. Trois minutes, toutes les trente minutes.",
     "accent": "lime",
     "sortOrder": 1,
@@ -42,6 +42,22 @@
       },
       {
         "position": 5,
+        "name": "Serrage d'omoplates",
+        "durationS": 30,
+        "cue": "Serre les omoplates l'une vers l'autre, tiens 5 s, relâche.",
+        "figureKey": "omoplates",
+        "exerciseKey": "omoplates"
+      },
+      {
+        "position": 6,
+        "name": "Montées sur la pointe",
+        "durationS": 30,
+        "cue": "Monte sur la pointe des pieds, redescends lentement. Vingt fois.",
+        "figureKey": "mollet-releve",
+        "exerciseKey": "mollet-releve"
+      },
+      {
+        "position": 7,
         "name": "Regard au loin",
         "durationS": 30,
         "cue": "Cherche le point le plus lointain visible, et cligne lentement dix fois.",
@@ -49,7 +65,7 @@
         "exerciseKey": "regard-au-loin"
       },
       {
-        "position": 6,
+        "position": 8,
         "name": "Marche",
         "durationS": 30,
         "cue": "Retour au poste en marchant. Rien ne presse.",
