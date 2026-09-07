@@ -1,7 +1,7 @@
 {
-  "version": "1.0.20",
-  "url": "https://app-travail-de-bureau.vercel.app/ota/bundle-1.0.20.zip",
-  "checksum": "fc5119ae45f2e021b9f02d90aad068d8d77a1494a14d097d5df23670e4f9c2ce",
+  "version": "1.0.21",
+  "url": "https://app-travail-de-bureau.vercel.app/ota/bundle-1.0.21.zip",
+  "checksum": "2f40a7d89654f3c64380e1cde6596a2c8c14435ae59f54c63e0225659e86dbdd",
   "minNative": "1.0.0",
-  "notes": "Merge branch 'place-home-or-office'"
+  "notes": "Merge: session engine, offline sync, scrolling, and the alarm\n\nHuit commits. Ce qui change pour quelqu'un qui utilise l'app :\n\n- « Démarrage auto » fait enfin quelque chose : une notification à\n  l'heure réglée, dont un appui démarre la journée.\n- La journée se termine seule à la borne que l'utilisateur a posée, et\n  demande plutôt que d'inventer si la veille est restée ouverte.\n- Une première ouverture existe : quatre écrans avant les onglets.\n- On peut se servir de l'app sans compte, le suivi étant calculé sur\n  l'appareil depuis un journal local.\n- Un rappel ignoré ne gèle plus la journée, et la pop-up offre « Je suis\n  en réunion ».\n- La série ne casse plus tous les samedis.\n- La feuille de sélection d'exercices défile, et dégage la barre d'état.\n- Chaque page s'ouvre en haut : #root était borné par une hauteur\n  minimale, donc rien ne défilait là où on croyait.\n- La synchronisation hors ligne ne pouvait plus se vider dès qu'un\n  démarrage de session avait échoué. C'était le bug le plus grave.\n- Le bol est réglable, deux fois plus fort par défaut, et demande à\n  Android de baisser la musique (cette dernière partie exige un APK).\n\nCo-Authored-By: Claude Opus 5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_011eebtsS8FnXD63uZtnd8yN"
 }
