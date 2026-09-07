@@ -34,6 +34,7 @@ export const KEYS = {
   scheduled: 'reminders.scheduled',
   playerSound: 'player.sound',
   alertMode: 'reminders.alertMode',
+  alertVolume: 'reminders.alertVolume',
   place: 'place',
   stepDurations: 'player.durations',
   customRoutines: 'routines.custom',

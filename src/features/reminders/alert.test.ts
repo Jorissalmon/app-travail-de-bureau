@@ -14,14 +14,31 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 // Device storage is Capacitor Preferences; in Node it has no implementation.
 const store = new Map<string, string>()
 vi.mock('@/lib/storage', () => ({
-  KEYS: { alertMode: 'reminders.alertMode' },
+  KEYS: { alertMode: 'reminders.alertMode', alertVolume: 'reminders.alertVolume' },
   getRaw: async (k: string) => store.get(k) ?? null,
   setRaw: async (k: string, v: string) => void store.set(k, v),
 }))
 
-const { loadAlertMode, setAlertMode, startAlerting, stopAlerting, alertMode } = await import(
-  './alert'
-)
+// Le pont natif n'a pas d'implémentation hors appareil.
+vi.mock('./audiofocus', () => ({
+  duckOthers: async () => undefined,
+  stopDucking: async () => undefined,
+}))
+
+const {
+  loadAlertMode,
+  setAlertMode,
+  startAlerting,
+  stopAlerting,
+  alertMode,
+  alertVolume,
+  clampVolume,
+  loadAlertVolume,
+  setAlertVolume,
+  DEFAULT_VOLUME,
+  MIN_VOLUME,
+  MAX_VOLUME,
+} = await import('./alert')
 
 beforeEach(() => {
   vi.useFakeTimers()
@@ -92,5 +109,39 @@ describe('ringing', () => {
     const armed = vi.getTimerCount()
     startAlerting()
     expect(vi.getTimerCount()).toBe(armed)
+  })
+})
+
+describe('alert volume', () => {
+  it('starts at the default, loud enough to be heard over a room', async () => {
+    expect(await loadAlertVolume()).toBe(DEFAULT_VOLUME)
+    expect(DEFAULT_VOLUME).toBeGreaterThanOrEqual(70)
+  })
+
+  it('survives a restart', async () => {
+    await setAlertVolume(40)
+    expect(await loadAlertVolume()).toBe(40)
+    expect(alertVolume()).toBe(40)
+  })
+
+  it('never lands on silence: that is what the mode is for', () => {
+    expect(clampVolume(0)).toBe(MIN_VOLUME)
+    expect(clampVolume(-50)).toBe(MIN_VOLUME)
+    expect(clampVolume(3)).toBe(MIN_VOLUME)
+  })
+
+  it('never goes past the top of the scale', () => {
+    expect(clampVolume(100)).toBe(MAX_VOLUME)
+    expect(clampVolume(9999)).toBe(MAX_VOLUME)
+  })
+
+  it('snaps to the step the slider offers', () => {
+    expect(clampVolume(44)).toBe(40)
+    expect(clampVolume(46)).toBe(50)
+  })
+
+  it('falls back to the default on a stored value that is not a number', async () => {
+    store.set('reminders.alertVolume', 'fort')
+    expect(await loadAlertVolume()).toBe(DEFAULT_VOLUME)
   })
 })

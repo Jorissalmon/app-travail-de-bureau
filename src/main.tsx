@@ -9,7 +9,7 @@ import { isNative } from '@/lib/platform'
 import { catchUpAndRoute, installReminderListeners } from '@/features/reminders/listener'
 import { installWebAlarm } from '@/features/reminders/webAlarm'
 import { installAutoStart } from '@/features/reminders/autostart'
-import { loadAlertMode } from '@/features/reminders/alert'
+import { loadAlertMode, loadAlertVolume } from '@/features/reminders/alert'
 import { ensureChannelAndActions } from '@/features/reminders/notifications'
 import { notifyReady, checkForUpdate } from '@/features/ota/updater'
 import { useAuthStore } from '@/stores/auth'
@@ -48,6 +48,7 @@ async function boot() {
   // itself. Inert in a browser, which cannot schedule anything.
   installAutoStart()
   void loadAlertMode()
+  void loadAlertVolume()
 
   if (isNative()) {
     try {

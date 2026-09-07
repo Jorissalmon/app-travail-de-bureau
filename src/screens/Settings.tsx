@@ -24,8 +24,14 @@ import {
   ALERT_MODES,
   ALERT_MODE_LABEL,
   type AlertMode,
+  MAX_VOLUME,
+  MIN_VOLUME,
+  VOLUME_STEP,
   loadAlertMode,
+  loadAlertVolume,
+  previewAlert,
   setAlertMode,
+  setAlertVolume,
 } from '@/features/reminders/alert'
 import { isNative } from '@/lib/platform'
 
@@ -85,6 +91,11 @@ export function Settings() {
   const [alert, setAlert] = useState<AlertMode>('silent')
   useEffect(() => {
     void loadAlertMode().then(setAlert)
+  }, [])
+
+  const [volume, setVolume] = useState(80)
+  useEffect(() => {
+    void loadAlertVolume().then(setVolume)
   }, [])
 
   const refreshPlace = useContentStore((s) => s.refreshPlace)
@@ -247,6 +258,43 @@ export function Settings() {
             }}
             format={(v) => ALERT_MODE_LABEL[v]}
           />
+        </SettingRow>
+        <SettingRow
+          label="Volume de l’alarme"
+          hint="Pendant qu’elle sonne, l’app demande à Android de baisser ce que tu écoutes, puis le remet. Le bouton fait entendre le bol tout de suite, même en silencieux."
+          stacked
+        >
+          <div className="flex items-center gap-3">
+            <input
+              type="range"
+              min={MIN_VOLUME}
+              max={MAX_VOLUME}
+              step={VOLUME_STEP}
+              value={volume}
+              aria-label="Volume de l’alarme"
+              onChange={(e) => {
+                const v = Number(e.target.value)
+                setVolume(v)
+                void setAlertVolume(v)
+              }}
+              // Relâcher le curseur fait entendre le réglage : on ne règle pas
+              // un volume à l'aveugle.
+              onPointerUp={() => previewAlert()}
+              onKeyUp={() => previewAlert()}
+              className="min-w-0 flex-1"
+              style={{ accentColor: 'var(--accent)', height: 32 }}
+            />
+            <span className="num shrink-0 text-[14px]" style={{ width: 40, color: 'var(--text-2)' }}>
+              {volume}
+            </span>
+            <button
+              type="button"
+              className="btn btn-secondary shrink-0"
+              onClick={() => previewAlert()}
+            >
+              Écouter
+            </button>
+          </div>
         </SettingRow>
         <SettingRow
           label="Sons du minuteur"

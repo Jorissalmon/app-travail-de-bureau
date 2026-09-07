@@ -564,6 +564,40 @@ sont dans le rapport de session ; ce qui suit, c'est ce qu'on en a fait.
 - **Code mort** : `minutesFromSeconds` (`features/session/stats.ts`) et
   `ZONE_FAMILY` (`content/index.ts`) ne sont importés nulle part.
 
+## Le son de l'alarme
+
+- **Le bol jouait au tiers de ce que l'appareil sait faire** — les trois
+  partiels culminaient ensemble à 0,32, sans gain maître. Il y a maintenant une
+  chaîne : un gain réglable, puis un limiteur (`DynamicsCompressor`, seuil
+  −3 dB, ratio 20, attaque 2 ms). Le gain monte à 3, ce qui place la crête juste
+  sous la pleine échelle, et c'est le limiteur qui rend ça propre plutôt que
+  saturé. Mesuré dans un navigateur : à 20 le gain vaut 0,36, à 80 il vaut 2,01,
+  à 100 il vaut 3. Par défaut 80, soit le double de l'ancien volume.
+- **Le volume est un réglage, avec un bouton pour l'entendre** — de 10 à 100 par
+  pas de 10. Jamais zéro : le silence, c'est ce que fait le mode d'alarme, et
+  un volume à zéro pendant que le mode dit « une fois » serait deux
+  interrupteurs qui se contredisent. « Écouter » joue le bol **même en
+  silencieux** : le but d'un bouton de test est d'entendre ce qu'on règle, pas
+  d'avoir à changer de mode, écouter, puis revenir. Relâcher le curseur le joue
+  aussi, parce qu'on ne règle pas un volume à l'aveugle. Local à l'appareil,
+  comme le mode et pour la même raison : `/api/me` remplace `Settings` en entier.
+- **Baisser la musique demande du code natif** — il n'existe aucune API de
+  focus audio dans un navigateur, donc un son joué en Web Audio se pose
+  par-dessus ce qui tourne déjà et perd. Android arbitre ça avec
+  `AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK`, que l'app de musique honore en baissant
+  son volume le temps du bol puis en le remontant. Ajouté au plugin `ScreenWake`
+  (`duckOthers` / `stopDucking`), en transitoire et non en gain complet : deux
+  secondes de bol n'ont pas à mettre un podcast en pause, seulement à s'appuyer
+  dessus. **Ça ne descend pas par OTA** : coque `1.4.0` / `versionCode 5`. Le
+  pont JavaScript est en `try/catch`, donc sur l'APK actuelle le bol sonne
+  quand même, simplement sans baisser le reste.
+- **Ce que le volume ne pilote pas** — quand un rappel tombe app fermée, c'est
+  Android qui joue `res/raw/bol.wav` sur le canal de notification, et son volume
+  est celui du flux de notifications du téléphone. Le curseur agit sur le bol
+  synthétisé, c'est-à-dire quand l'app tourne. Changer le volume du canal
+  demanderait d'en créer un nouveau, un canal existant n'étant pas modifiable :
+  c'est la même impasse que le son et la vibration.
+
 ## À la charge du propriétaire (secrets, hors dépôt)
 
 - Créer le rôle `releve_app` + la base `releve`, appliquer les migrations

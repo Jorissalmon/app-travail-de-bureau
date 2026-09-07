@@ -2,6 +2,9 @@ package app.releve;
 
 import android.app.AlarmManager;
 import android.app.NotificationManager;
+import android.media.AudioAttributes;
+import android.media.AudioFocusRequest;
+import android.media.AudioManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -94,6 +97,76 @@ public class ScreenWakePlugin extends Plugin {
                 (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
         if (manager != null) manager.cancel(WakeReceiver.NOTIFICATION_ID);
 
+        call.resolve();
+    }
+
+    // ---------------------------------------------------------------------
+    // Audio focus
+    // ---------------------------------------------------------------------
+
+    /**
+     * What a web page cannot do: tell Android that something short and
+     * important is about to play, so whatever music or podcast is running
+     * turns itself down for the duration and comes back afterwards.
+     *
+     * TRANSIENT_MAY_DUCK rather than a full GAIN: a two-second bowl has no
+     * business pausing a podcast, only leaning on it.
+     */
+    private AudioFocusRequest focusRequest;
+
+    @PluginMethod
+    public void duckOthers(PluginCall call) {
+        AudioManager audio =
+                (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
+        if (audio == null) {
+            call.resolve();
+            return;
+        }
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (focusRequest == null) {
+                    AudioAttributes attributes = new AudioAttributes.Builder()
+                            .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+                            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                            .build();
+                    focusRequest = new AudioFocusRequest
+                            .Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK)
+                            .setAudioAttributes(attributes)
+                            // No listener, so this must stay false: we never
+                            // want the other app paused, only quieter.
+                            .setWillPauseWhenDucked(false)
+                            .build();
+                }
+                audio.requestAudioFocus(focusRequest);
+            } else {
+                audio.requestAudioFocus(
+                        null,
+                        AudioManager.STREAM_MUSIC,
+                        AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
+            }
+        } catch (Exception e) {
+            // Refused focus is not a failure: the bowl still rings, on top.
+        }
+        call.resolve();
+    }
+
+    @PluginMethod
+    public void stopDucking(PluginCall call) {
+        AudioManager audio =
+                (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
+        if (audio == null) {
+            call.resolve();
+            return;
+        }
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (focusRequest != null) audio.abandonAudioFocusRequest(focusRequest);
+            } else {
+                audio.abandonAudioFocus(null);
+            }
+        } catch (Exception e) {
+            // Nothing held, nothing to give back.
+        }
         call.resolve();
     }
 
