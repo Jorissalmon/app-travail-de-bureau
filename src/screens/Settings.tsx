@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { App } from '@capacitor/app'
 import { Browser } from '@capacitor/browser'
 import { Segmented } from '@/components/Segmented'
@@ -23,8 +24,14 @@ import {
   ALERT_MODES,
   ALERT_MODE_LABEL,
   type AlertMode,
+  MAX_VOLUME,
+  MIN_VOLUME,
+  VOLUME_STEP,
   loadAlertMode,
+  loadAlertVolume,
+  previewAlert,
   setAlertMode,
+  setAlertVolume,
 } from '@/features/reminders/alert'
 import { isNative } from '@/lib/platform'
 
@@ -41,10 +48,12 @@ const WEEKDAYS = [
 
 /** §11.6 — Profil: Session · Rappels · Compte · À propos. */
 export function Settings() {
+  const navigate = useNavigate()
   const settings = useSettingsStore((s) => s.settings)
   const update = useSettingsStore((s) => s.update)
   const user = useAuthStore((s) => s.user)
   const logout = useAuthStore((s) => s.logout)
+  const authStatus = useAuthStore((s) => s.status)
 
   const [nativeUpdate, setNativeUpdate] = useState(false)
   useEffect(() => {
@@ -82,6 +91,11 @@ export function Settings() {
   const [alert, setAlert] = useState<AlertMode>('silent')
   useEffect(() => {
     void loadAlertMode().then(setAlert)
+  }, [])
+
+  const [volume, setVolume] = useState(80)
+  useEffect(() => {
+    void loadAlertVolume().then(setVolume)
   }, [])
 
   const refreshPlace = useContentStore((s) => s.refreshPlace)
@@ -122,7 +136,7 @@ export function Settings() {
       <SettingsSection title="Session">
         <SettingRow
           label="Où tu travailles"
-          hint="Au bureau, l’app retire des routines les mouvements qu’on ne fait pas en open space — une fente, un étirement à l’encadrement de porte. À la maison, tout est proposé."
+          hint="Au bureau, l’app retire des routines les mouvements qu’on ne fait pas en open space : une fente, un étirement à l’encadrement de porte. À la maison, tout est proposé."
           stacked
         >
           <Segmented
@@ -190,7 +204,7 @@ export function Settings() {
 
         <TimeRow
           label="Démarrage auto"
-          hint="Laisse vide pour démarrer à la main."
+          hint="Une notification à cette heure-là, les jours actifs. Un appui suffit à démarrer la journée. L’app ne la démarre jamais toute seule, sinon elle compterait une assise que tu n’as pas faite. Laisse vide si tu n’en veux pas."
           value={settings.autoStartAt}
           onChange={(autoStartAt) => void update({ autoStartAt })}
         />
@@ -246,6 +260,43 @@ export function Settings() {
           />
         </SettingRow>
         <SettingRow
+          label="Volume de l’alarme"
+          hint="Pendant qu’elle sonne, l’app demande à Android de baisser ce que tu écoutes, puis le remet. Le bouton fait entendre le bol tout de suite, même en silencieux."
+          stacked
+        >
+          <div className="flex items-center gap-3">
+            <input
+              type="range"
+              min={MIN_VOLUME}
+              max={MAX_VOLUME}
+              step={VOLUME_STEP}
+              value={volume}
+              aria-label="Volume de l’alarme"
+              onChange={(e) => {
+                const v = Number(e.target.value)
+                setVolume(v)
+                void setAlertVolume(v)
+              }}
+              // Relâcher le curseur fait entendre le réglage : on ne règle pas
+              // un volume à l'aveugle.
+              onPointerUp={() => previewAlert()}
+              onKeyUp={() => previewAlert()}
+              className="min-w-0 flex-1"
+              style={{ accentColor: 'var(--accent)', height: 32 }}
+            />
+            <span className="num shrink-0 text-[14px]" style={{ width: 40, color: 'var(--text-2)' }}>
+              {volume}
+            </span>
+            <button
+              type="button"
+              className="btn btn-secondary shrink-0"
+              onClick={() => previewAlert()}
+            >
+              Écouter
+            </button>
+          </div>
+        </SettingRow>
+        <SettingRow
           label="Sons du minuteur"
           hint="Bip au changement d’étape et sur les cinq dernières secondes."
         >
@@ -261,17 +312,38 @@ export function Settings() {
       </SettingsSection>
 
       <SettingsSection title="Compte">
-        <SettingRow label="E-mail" hint={user?.email ?? '—'} />
-        <div className="py-3.5">
-          <button
-            type="button"
-            onClick={() => void logout()}
-            className="text-[16px]"
-            style={{ color: 'var(--danger)' }}
-          >
-            Se déconnecter
-          </button>
-        </div>
+        {authStatus === 'local' ? (
+          <>
+            <SettingRow
+              label="Aucun compte"
+              hint="Tes réglages, tes routines et tes chiffres vivent sur ce téléphone, et nulle part ailleurs. Un compte sert à les retrouver sur un autre appareil. Rien d’autre n’en dépend."
+            />
+            <div className="py-3.5">
+              <button
+                type="button"
+                onClick={() => navigate('/login')}
+                className="text-[16px] underline underline-offset-4"
+                style={{ color: 'var(--accent)' }}
+              >
+                Créer un compte pour synchroniser
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <SettingRow label="E-mail" hint={user?.email ?? '—'} />
+            <div className="py-3.5">
+              <button
+                type="button"
+                onClick={() => void logout()}
+                className="text-[16px]"
+                style={{ color: 'var(--danger)' }}
+              >
+                Se déconnecter
+              </button>
+            </div>
+          </>
+        )}
       </SettingsSection>
 
       <SettingsSection title="À propos">
@@ -343,7 +415,10 @@ function TimeRangeRow({
   return (
     <div className="py-3.5" style={{ borderBottom: '1px solid var(--border)' }}>
       <p className="text-[16px]">{label}</p>
-      <p className="t-meta mt-0.5">Aucun rappel pendant cette plage.</p>
+      <p className="t-meta mt-0.5">
+        Aucun rappel pendant cette plage. La journée s’y termine aussi toute seule, au lieu de
+        courir toute la nuit.
+      </p>
       <div className="mt-3 flex items-center gap-2">
         <input
           type="time"

@@ -27,9 +27,17 @@
   }
 
   #root {
-    min-height: 100dvh;
+    /* A HEIGHT, not a minimum. With `min-height` the column grew to fit its
+       content, so `main`'s `flex-1 min-h-0 overflow-y-auto` never received a
+       bounded height and never became a scroller: the whole document scrolled
+       instead. Everything downstream depended on that being wrong — resetting
+       a screen's scroll position on navigation had nothing to reset, and a
+       sheet could not reliably contain its own scrolling. */
+    height: 100dvh;
+    max-height: 100dvh;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
   }
 
   button {

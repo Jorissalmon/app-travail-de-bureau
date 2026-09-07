@@ -25,6 +25,19 @@ export const CHANNEL_ID = 'releve_breaks'
 export const CHANNEL_ID_SOUND = 'releve_breaks_bol'
 export const ACTION_TYPE = 'RELEVE_BREAK'
 
+/**
+ * The morning invitation to begin, which is a different thing from a break and
+ * carries its own two answers.
+ */
+export const DAY_ACTION_TYPE = 'RELEVE_DAY'
+
+/**
+ * A fixed id for it, outside the hashed occurrence ids, so it can be replaced
+ * and cancelled on its own. `cancelAll()` clears a whole session's reminders
+ * and must not take tomorrow morning with it.
+ */
+export const AUTO_START_ID = 7_700_001
+
 export interface ScheduleContext {
   /** Opt-in notification sound. Vibration is a channel property, set in
       createChannel, so it is not per-notification here. */
@@ -36,7 +49,7 @@ function channelFor(ctx: ScheduleContext): string {
   return ctx.sound ? CHANNEL_ID_SOUND : CHANNEL_ID
 }
 
-/** Register the notification channel and the three-action type (§8.3 / §8.4). */
+/** Register the notification channels and the two action types (§8.3 / §8.4). */
 export async function ensureChannelAndActions(): Promise<void> {
   if (!isNative()) return
 
@@ -70,6 +83,13 @@ export async function ensureChannelAndActions(): Promise<void> {
           { id: 'done', title: 'Fait' },
           { id: 'snooze', title: '+10 min' },
           { id: 'stop', title: 'Stop', destructive: true },
+        ],
+      },
+      {
+        id: DAY_ACTION_TYPE,
+        actions: [
+          { id: 'begin', title: 'Commencer' },
+          { id: 'later', title: 'Plus tard' },
         ],
       },
     ],
@@ -145,13 +165,17 @@ export async function cancelAll(): Promise<void> {
   if (!isNative()) return
   await cancelWakeAlerts()
   const pending = await LocalNotifications.getPending()
-  if (pending.notifications.length > 0) {
-    await LocalNotifications.cancel({
-      notifications: pending.notifications.map((n) => ({ id: n.id })),
-    })
+  // Everything belonging to the session, and only that: the invitation to
+  // begin tomorrow morning is not part of the day being wound up, and
+  // cancelling it here would have made "démarrage auto" fire exactly once.
+  const mine = pending.notifications.filter((n) => n.id !== AUTO_START_ID)
+  if (mine.length > 0) {
+    await LocalNotifications.cancel({ notifications: mine.map((n) => ({ id: n.id })) })
   }
-  const after = await LocalNotifications.getPending()
-  if (after.notifications.length > 0) {
-    console.warn('[reminders] notifications still pending after cancelAll', after.notifications)
+  const after = (await LocalNotifications.getPending()).notifications.filter(
+    (n) => n.id !== AUTO_START_ID,
+  )
+  if (after.length > 0) {
+    console.warn('[reminders] notifications still pending after cancelAll', after)
   }
 }

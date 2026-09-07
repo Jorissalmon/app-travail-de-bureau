@@ -2,10 +2,12 @@ import { App } from '@capacitor/app'
 import { LocalNotifications } from '@capacitor/local-notifications'
 import { isNative } from '@/lib/platform'
 import { useSessionStore } from '@/stores/session'
+import { useSettingsStore } from '@/stores/settings'
 import { flushEvents } from './events'
 import { navigateTo } from './deeplink'
 import { onWakeAlert } from './screenwake'
 import { startAlerting } from './alert'
+import { syncAutoStart } from './autostart'
 
 /**
  * Wires the native listeners for the reminder engine (§8.4). Registered from
@@ -36,6 +38,27 @@ export function installReminderListeners(): void {
     }
     if (action === 'stop') {
       await store.stop({ via: 'notification' })
+      return
+    }
+    // The morning invitation. Starting the day is the tap, never the clock —
+    // and the sync afterwards is what puts tomorrow's in place.
+    if (action === 'begin') {
+      try {
+        // Tapped from a cold start, the device settings may not have been read
+        // yet and the first interval would be planned from the defaults.
+        await useSettingsStore.getState().load()
+        await store.start()
+      } catch {
+        // A grant has been revoked since, most likely. The home screen is
+        // where the sheet that repairs it lives, so land there rather than
+        // failing silently inside a notification handler.
+      }
+      navigateTo('/')
+      void syncAutoStart()
+      return
+    }
+    if (action === 'later') {
+      void syncAutoStart()
       return
     }
     // Body tap (actionId === 'tap'): open the player (§8.4).

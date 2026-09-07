@@ -1,4 +1,5 @@
 import { KEYS, getRaw, setRaw } from '@/lib/storage'
+import { duckOthers, stopDucking } from './audiofocus'
 
 /**
  * How loudly a due reminder announces itself, and the sound it makes.
@@ -35,7 +36,24 @@ function isAlertMode(v: string | null): v is AlertMode {
   return v === 'silent' || v === 'once' || v === 'repeat'
 }
 
+/**
+ * How loud the bowl is, 10 to 100. Never zero: silence is what the mode is
+ * for, and a volume that can be set to nothing while the mode says « une fois »
+ * would be two switches contradicting each other.
+ */
+export const MIN_VOLUME = 10
+export const MAX_VOLUME = 100
+export const VOLUME_STEP = 10
+export const DEFAULT_VOLUME = 80
+
+export function clampVolume(v: number): number {
+  if (!Number.isFinite(v)) return DEFAULT_VOLUME
+  const snapped = Math.round(v / VOLUME_STEP) * VOLUME_STEP
+  return Math.min(MAX_VOLUME, Math.max(MIN_VOLUME, snapped))
+}
+
 let mode: AlertMode = 'silent'
+let volume = DEFAULT_VOLUME
 
 export function alertMode(): AlertMode {
   return mode
@@ -50,6 +68,21 @@ export async function loadAlertMode(): Promise<AlertMode> {
 export async function setAlertMode(next: AlertMode): Promise<void> {
   mode = next
   await setRaw(KEYS.alertMode, next)
+}
+
+export function alertVolume(): number {
+  return volume
+}
+
+export async function loadAlertVolume(): Promise<number> {
+  const stored = await getRaw(KEYS.alertVolume)
+  volume = stored === null ? DEFAULT_VOLUME : clampVolume(Number(stored))
+  return volume
+}
+
+export async function setAlertVolume(next: number): Promise<void> {
+  volume = clampVolume(next)
+  await setRaw(KEYS.alertVolume, String(volume))
 }
 
 // ---------------------------------------------------------------------------
@@ -89,10 +122,44 @@ const BOWL_DECAY_S = 3.2
  * to be too easy to work through, the "répété" mode is the answer rather than
  * a louder sound.
  */
+/**
+ * Master chain: one gain for the volume, then a limiter.
+ *
+ * The three partials peak at about 0.32 together, which was the whole problem:
+ * the bowl was a third of what the device could play, and it lost to anything
+ * else going on. The gain now reaches 3x, which puts the peak just under full
+ * scale, and the limiter is what makes that safe rather than distorted. Built
+ * once and reused, so the volume can be changed while it is ringing.
+ */
+let master: { gain: GainNode; limiter: DynamicsCompressorNode } | null = null
+
+function chain(ac: AudioContext): GainNode {
+  if (master) return master.gain
+  const gain = ac.createGain()
+  const limiter = ac.createDynamicsCompressor()
+  limiter.threshold.value = -3
+  limiter.knee.value = 0
+  limiter.ratio.value = 20
+  limiter.attack.value = 0.002
+  limiter.release.value = 0.15
+  gain.connect(limiter).connect(ac.destination)
+  master = { gain, limiter }
+  return gain
+}
+
+/** 10..100 to a linear gain. Squared, because loudness is not linear in the ear. */
+function gainFor(v: number): number {
+  const unit = clampVolume(v) / MAX_VOLUME
+  return 0.25 + 2.75 * unit * unit
+}
+
 function bowl(): void {
   const ac = context()
   if (!ac) return
   if (ac.state === 'suspended') void ac.resume()
+
+  const out = chain(ac)
+  out.gain.setValueAtTime(gainFor(volume), ac.currentTime)
 
   const at = ac.currentTime + 0.02
   for (const [freq, peak] of BOWL) {
@@ -103,7 +170,7 @@ function bowl(): void {
     gain.gain.setValueAtTime(0, at)
     gain.gain.linearRampToValueAtTime(peak, at + 0.08)
     gain.gain.exponentialRampToValueAtTime(0.0001, at + BOWL_DECAY_S)
-    osc.connect(gain).connect(ac.destination)
+    osc.connect(gain).connect(out)
     osc.start(at)
     osc.stop(at + BOWL_DECAY_S + 0.1)
   }
@@ -122,6 +189,8 @@ export function startAlerting(): void {
   // sets of timers on top of each other.
   stopAlerting()
   if (mode === 'silent') return
+  // Turn the music down first, then ring into the gap it leaves.
+  void duckOthers()
   bowl()
   if (mode !== 'repeat') return
 
@@ -130,6 +199,7 @@ export function startAlerting(): void {
 }
 
 export function stopAlerting(): void {
+  void stopDucking()
   if (repeatTimer !== null) {
     clearInterval(repeatTimer)
     repeatTimer = null
@@ -138,6 +208,20 @@ export function stopAlerting(): void {
     clearTimeout(stopTimer)
     stopTimer = null
   }
+}
+
+/**
+ * Play it once, right now, whatever the mode says.
+ *
+ * The point of a test button is to hear the thing you are setting, so it rings
+ * even on « Silencieux » — otherwise the only way to check the volume would be
+ * to change the mode, listen, and change it back. It ducks like the real one,
+ * so what you hear is what a reminder will sound like over your music.
+ */
+export function previewAlert(): void {
+  void duckOthers()
+  bowl()
+  window.setTimeout(() => void stopDucking(), (BOWL_DECAY_S + 0.4) * 1000)
 }
 
 /**

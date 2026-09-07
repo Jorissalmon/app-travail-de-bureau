@@ -122,6 +122,20 @@ export async function setCustomStepDuration(
   }))
 }
 
+/**
+ * Write the whole list at once.
+ *
+ * The builder edits its own copy and draws from it, so a tap lands on screen
+ * immediately instead of after a write to device storage and a rebuild of every
+ * routine. This is what it saves afterwards, in the background.
+ */
+export async function setCustomSteps(slug: string, steps: CustomStep[]): Promise<void> {
+  await edit(slug, (r) => ({
+    ...r,
+    steps: steps.map((s) => ({ ...s, durationS: clampStep(s.durationS) })),
+  }))
+}
+
 /** Swap a step with its neighbour. Out-of-range moves are a no-op, not an error:
     the buttons at either end of the list are simply disabled. */
 export async function moveCustomStep(slug: string, index: number, delta: -1 | 1): Promise<void> {

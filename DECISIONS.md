@@ -306,6 +306,298 @@ Chaque écart par rapport au mégaprompt, avec sa raison en une phrase (§15.8).
   frontière d'erreur ajoutée plus tôt a transformé la boucle en écran de secours
   plutôt qu'en page noire.
 
+- **« Démarrage auto » invite, il ne démarre pas** — le réglage existait,
+  s'enregistrait, se synchronisait, et **aucune ligne hors de l'écran de
+  réglages ne lisait `autoStartAt`** : régler 09:00 ne déclenchait rien. Ce qui
+  l'implémente est une notification unique à l'heure dite, les jours actifs,
+  dont la première action démarre la journée — pas un démarrage silencieux. Une
+  session ouverte sans toi mesurerait une assise que tu n'as pas faite, et la
+  seule chose qui rende la plus longue assise, le taux de réponse et la série
+  dignes d'être affichés, c'est qu'aucun des trois n'est inventé. Une seule
+  invitation est armée à la fois, sous un id réservé (`AUTO_START_ID`) que
+  `cancelAll()` épargne : la fin d'une journée ne doit pas emporter le matin
+  suivant. Elle se réarme au premier plan, au changement de réglage et à la fin
+  d'une session. Limite assumée, la même que pour tout le moteur : l'app ne
+  tourne pas en arrière-plan, donc une semaine sans ouvrir l'app laisse
+  l'invitation déjà armée, pas sept.
+- **La journée se termine toute seule, à une limite que l'utilisateur a posée**
+  — rien ne fermait une session hors du bouton « Terminer » et de l'action de
+  notification : une journée oubliée le vendredi soir tournait tout le week-end,
+  et la plus longue assise affichait soixante heures parce que c'est
+  littéralement ce qui s'était passé du point de vue de l'app. `dayEndAt()`
+  prend la première des deux bornes : le début de la plage silencieuse — l'heure
+  où l'utilisateur a lui-même dit qu'aucun rappel ne devait tomber — et la fin
+  du jour. Ni l'une ni l'autre n'est une supposition sur l'heure à laquelle il a
+  quitté son bureau ; ce sont des lignes qu'il a tracées. La borne est appliquée
+  à chaque regard sur l'horloge (`catchUp`, et le tic de l'onglet), pas par une
+  alarme : Android ne réveille pas l'app pour exécuter du JavaScript.
+- **Passé minuit, on demande au lieu de deviner** — fermer à la borne le jour
+  même, c'est répéter la règle de l'utilisateur ; le faire le lendemain matin,
+  ce serait écrire une heure qu'on ne connaît pas. Une session qui a survécu à
+  son jour devient donc un `pendingClose` — la session locale est close
+  immédiatement, mais l'heure de fin reste due — et une pop-up demande « tu as
+  fini vers quelle heure ? », la proposition de l'app déjà dans la case. Elle se
+  ferme sans répondre et revient au premier plan suivant, exactement comme la
+  pop-up d'exercice. La réponse est bornée des deux côtés (jamais avant le
+  début, jamais après la borne) et vit sous sa propre clé de stockage : elle
+  survit à la session qu'elle décrit.
+- **Une première ouverture, qui n'existait pas** — `grep -rn "onboarding"` ne
+  renvoyait rien : la première ouverture était un formulaire de connexion avec
+  code d'invitation, puis un écran avec un bouton. Quatre écrans avant les
+  onglets : ce que fait l'app et ce qu'elle ne mesure pas, l'ouverture de
+  « Pourquoi trente minutes » **lue depuis le store de contenu** (une correction
+  de l'article atteint donc l'accueil, les deux ne peuvent pas diverger), les
+  quatre autorisations Android, et le lieu de travail. Le drapeau est local à
+  l'appareil et non dans `Settings`, que `/api/me` remplace en entier : un
+  second téléphone refait l'introduction, ce qui est juste. La liste des
+  autorisations est désormais un composant partagé (`PermissionsList`) entre la
+  fiche d'avant-session et l'accueil, pour que les deux ne racontent jamais deux
+  histoires des mêmes quatre interrupteurs.
+- **`pnpm typecheck` ne vérifiait rien** — `tsconfig.json` a `"files": []` et
+  deux `references`, et `tsc --noEmit` sur un fichier de références sans
+  `composite` ne compile aucun projet : la commande sortait en 0 sur `src/`
+  jamais lu. La CI était donc verte sur trois erreurs de type réelles, dont
+  `armFrom(session.id, now)` dans `resumeWork` — l'horloge passée à la place des
+  ancrages, deux arguments sur trois — qui lançait un `TypeError` dans
+  `planNext` dès qu'une reprise de pause tombait dans une plage calme ou un jour
+  exclu. Le script cible maintenant les deux projets explicitement, et `build`
+  l'appelle au lieu de refaire le même `tsc --noEmit` inerte.
+
+## Adoption — ce que les forums reprochent à ce genre d'app
+
+Cinq changements dictés par une revue de ce que les gens disent des rappels de
+pause : ce qui les fait désinstaller, et ce qui les fait rester. Les sources
+sont dans le rapport de session ; ce qui suit, c'est ce qu'on en a fait.
+
+- **L'exercice dû se périme au bout d'un intervalle** — le reproche numéro un
+  fait à ce genre d'app est le rappel qui tombe pendant une réunion, et
+  l'app qui insiste ensuite. Log Off y était plus exposée que les autres : un
+  rappel sans réponse gelait **tout** (rien d'autre n'était armé) et
+  ré-ouvrait sa pop-up à chaque passage au premier plan. Ignorer un rappel à
+  14 h coûtait donc l'après-midi entière. La dette reste — c'est ce qui rend
+  un rappel manqué impossible à contourner en fermant l'app — mais elle
+  s'éteint au bout d'un intervalle : le manqué est consigné (`expired`), il
+  compte contre le taux de réponse, et la journée repart. Un `awaiting` créé
+  par un tap sur la notification est marqué `logged: false` et n'était jusque-là
+  jamais consigné du tout : sa péremption écrit désormais le manqué.
+- **« Je suis en réunion » sur la pop-up** — « +10 min » n'est pas la bonne
+  durée pour une réunion, et fermer la pop-up ne disait rien à l'app. Le
+  bouton réutilise la pause manuelle, déjà construite et déjà juste : l'horloge
+  gèle, l'exercice reste dû, et les deux reviennent quand on se rassoit.
+- **La série ne casse plus tous les samedis** — `computeStreak` remontait les
+  jours un par un et s'arrêtait au premier jour sous le seuil. Avec des jours
+  actifs du lundi au vendredi, le samedi remettait donc le compteur à zéro
+  **chaque semaine** : la série affichée ne pouvait structurellement pas
+  dépasser cinq, et valait 1 ou 2 la plupart du temps. Les jours que
+  l'utilisateur n'a pas cochés sont maintenant sautés, ni comptés ni
+  bloquants. Un seul jour travaillé manqué est par ailleurs pardonné (le
+  deuxième arrête la série) : la littérature sur l'abandon est unanime sur le
+  fait que le jour où une longue série casse est le jour où l'app est
+  supprimée. Le jour pardonné **n'est pas compté** — le nombre reste
+  exactement « les jours où tu as bougé », l'app ne le gonfle pas.
+  `/api/stats` lit désormais `settings.weekdays` pour ça.
+- **On peut se servir de l'app sans compte** — forcer la création d'un compte
+  avant d'avoir prouvé quoi que ce soit est l'erreur d'accueil la plus chère
+  qui existe, et ici elle était doublée d'un code d'invitation et d'une base
+  Neon en veille : téléphone neuf, serveur endormi, l'app ne s'ouvrait pas du
+  tout. Or tout ce qui compte était déjà local — le contenu est embarqué, la
+  copie des réglages sur l'appareil est ce que lit le moteur de rappels. Il ne
+  manquait que les chiffres. L'écran de connexion mène donc par un bouton
+  « Commencer » ; le compte est une case en dessous, et ne sert qu'à
+  synchroniser deux appareils. `NoAccountError` (statut 0, donc lu comme
+  « hors ligne » par tous les appels déjà écrits pour l'être) coupe court à
+  toute requête quand il n'y a pas de jeton : sans ça, un appareil sans compte
+  déclenchait la danse du refresh puis l'écouteur `authLost`, et renvoyait vers
+  la connexion quelqu'un qui n'en voulait pas.
+- **Le suivi se calcule sur l'appareil** — la file d'événements est un tampon de
+  synchronisation : un flush réussi la vide, ce qui est correct pour un tampon
+  et inutilisable comme archive. Les mêmes entrées sont donc aussi écrites dans
+  un **journal** gardé 45 jours, et `buildLocalStats` applique dessus exactement
+  les mêmes règles pures que le serveur. L'écran Suivi s'affiche donc avant
+  toute requête, s'affiche hors ligne, et s'affiche pour qui n'a pas de compte.
+  La copie serveur reprend la main dès qu'elle arrive : elle a tout l'historique,
+  le journal n'en a que six semaines.
+- **Les alarmes de réveil d'écran survivent au redémarrage** — Android vide les
+  alarmes en attente à chaque redémarrage. Les notifications, elles, revenaient
+  (le plugin déclare son propre récepteur de démarrage) ; l'alarme qui rallume
+  l'écran, non — jusqu'à la prochaine ouverture manuelle. Le plugin ne stockait
+  qu'un ensemble d'ids, de quoi annuler mais pas de quoi reconstruire. Il garde
+  maintenant la charge utile complète, et `BootReceiver` la rejoue
+  (`BOOT_COMPLETED`, `QUICKBOOT_POWERON`, `MY_PACKAGE_REPLACED`), tout enveloppé
+  dans un try/catch : un récepteur qui lève au démarrage affiche un plantage à
+  l'utilisateur, ce qui serait un bien pire marché qu'un réveil d'écran manqué.
+  Coque `1.3.0` / `versionCode 4` — ça ne peut pas descendre par OTA.
+  **Non vérifié à l'exécution** : pas de SDK Android dans l'environnement de
+  développement distant, seul `apk.yml` compilera ce code.
+
+## Fluidité et écriture
+
+- **La borne de la feuille tient compte de la barre d'état** — `86vh` plaçait
+  le haut du panneau là où 14 % de l'écran tombait, ce qui n'est pas une
+  promesse de dégager quoi que ce soit : sur un téléphone haut avec la barre
+  d'état dessinée par-dessus le webview, le début de la liste passait dessous.
+  C'est `calc(100dvh - env(safe-area-inset-top) - 88px)`, dans la même unité que
+  la coque. Les 88 px ne sont pas le minimum pour dégager l'encoche : c'est
+  aussi la cible de « taper à côté pour fermer », et une bande cachée sous
+  l'horloge n'est une cible pour personne. Vérifié au doigt en 412x915, 390x844
+  et 360x640 : voile de 88 px, premier exercice atteignable, défilement jusqu'au
+  dernier, poignée et voile ferment.
+- **La feuille modale n'avait pas de hauteur** — le sélecteur d'exercices
+  contient 42 entrées, la feuille grandissait avec, et comme elle est ancrée en
+  bas d'un conteneur fixe, le débordement partait par le haut sans rien à faire
+  défiler : les dernières entrées étaient littéralement inatteignables. Mesuré
+  après correction : 656 px visibles pour 4 128 px de contenu. La feuille est
+  désormais bornée à 86 vh avec un corps défilant, et le glisser-pour-fermer a
+  été déplacé sur la poignée : sur un corps défilant, les deux gestes étaient le
+  même geste, et faire défiler la liste refermait la feuille.
+- **Le compositeur de routine répond à l'instant** — chaque appui écrivait dans
+  le stockage de l'appareil puis reconstruisait toutes les routines avant que
+  quoi que ce soit ne bouge à l'écran. Sur un bouton qu'on presse dix fois de
+  suite, ça se voit. L'écran tient maintenant sa propre copie de la liste, la
+  dessine, et enregistre derrière (`setCustomSteps` écrit la liste entière
+  plutôt qu'une mutation à la fois). Mesuré : dix appuis en 339 ms, aucun perdu.
+  Un champ de recherche a été ajouté au sélecteur, parce que 42 entrées ne se
+  parcourent pas quand on sait déjà ce qu'on cherche.
+- **Chaque page s'ouvre en haut** — le défilement vit sur le `<main>` de
+  `AppLayout` et React Router n'y touche pas, donc ouvrir une fiche depuis le
+  bas de la bibliothèque atterrissait au milieu de l'explication. Remis à zéro
+  en `useLayoutEffect` sur le changement de route, donc avant peinture. Même
+  chose entre les écrans de l'accueil. **Sans effet tant que `#root` n'était pas
+  borné** : voir l'entrée suivante, écrite après coup.
+- **`#root` avait une hauteur minimale, pas une hauteur** — `min-height: 100dvh`
+  laissait la colonne grandir avec son contenu, donc le `flex-1 min-h-0
+  overflow-y-auto` de `<main>` ne recevait jamais de hauteur bornée et ne
+  devenait jamais un conteneur défilant : c'était le document qui défilait.
+  Mesuré sur la bibliothèque en 390x844 : `main` faisait 3 196 px de haut pour
+  autant de contenu, `scrollTop` restait à zéro par construction, et
+  `document.scrollingElement` montait à 3 252. Deux conséquences que je n'avais
+  pas vues en écrivant la remise à zéro du défilement : elle remettait à zéro
+  une valeur qui valait déjà zéro, donc elle ne faisait rien ; et une feuille
+  modale ne pouvait pas contenir son propre défilement de façon fiable, le
+  document restant défilable dessous. `#root` a maintenant `height` et
+  `max-height` à `100dvh` avec `overflow: hidden`.
+- **L'écran de connexion défile** — corollaire du précédent. Une fois `#root`
+  borné, le formulaire d'inscription complet (nom, e-mail, mot de passe, code
+  d'invitation) dépassait un écran de 360x640 de cinq pixels et n'était plus
+  rattrapable, là où le document le rattrapait avant. Il est devenu un conteneur
+  défilant, et le bloc est centré par `my-auto` plutôt que par
+  `justify-center` sur le parent : un conteneur flex qui centre son enfant
+  rogne le haut de celui qui déborde.
+- **Le défilement tactile ne se vérifie pas au script** — la première
+  vérification de la feuille modale appelait `scrollTo()` puis constatait que
+  `scrollTop` avait bougé, ce qui ne prouve que la validité du CSS. Un vrai
+  doigt passe par le compositeur, respecte `touch-action` et les gestionnaires
+  d'événements. Les tests de geste passent désormais par
+  `Input.dispatchTouchEvent` (démarrage, une douzaine de déplacements, fin), et
+  la méthode est elle-même validée sur un cas témoin avant d'être appliquée à
+  l'app. `Input.synthesizeScrollGesture` en mode tactile a été essayé et écarté :
+  il ne pilote pas les conteneurs défilants imbriqués dans cet environnement, et
+  faisait passer pour cassé ce qui fonctionnait.
+- **Le tiret cadratin ne sert plus d'incise** — c'est la marque la plus
+  reconnaissable d'un texte écrit par une machine, et il y en avait partout :
+  accueil, réglages, pop-up de fin de journée, bibliothèque, suivi, plus 24
+  occurrences dans le contenu embarqué. Réécrits en deux-points, en virgules ou
+  en phrases séparées, sans toucher à un seul chiffre ni à une seule nuance de
+  preuve. Deux exceptions gardées : le tiret comme valeur vide (« — » quand il
+  n'y a rien à afficher) et dans un intitulé de source (« INRS — Travail sur
+  écran »). Les noms d'étapes gauche/droite passent en parenthèses
+  (« Fente basse (droite) »).
+
+## Revue complète du dépôt
+
+- **`/api/events` faisait confiance à l'`session_id` du client, et ça bloquait
+  toute la synchronisation** — `reminder_events.session_id` porte une clé
+  étrangère vers `work_sessions`. Or tant que le serveur n'a pas confirmé un
+  démarrage, l'appareil détient un uuid qu'il a généré lui-même, et un démarrage
+  qui échoue (hors ligne, 500, jeton expiré) le lui laisse pour la journée
+  entière. Insérer cet uuid viole la contrainte, la requête part en 500,
+  `flushEvents` relance l'exception parce que ce n'est pas une coupure réseau,
+  et **la file ne se vide plus jamais** : chaque tentative rejoue le même lot et
+  rebute sur la même ligne. Reproduit dans un navigateur : `/api/sessions`
+  coupé, session `synced: false`, et le `sessionId` local part tel quel dans le
+  POST. L'identifiant est maintenant résolu par sous-requête contre les sessions
+  de cet utilisateur, ce qui corrige aussi le fait que rien n'empêchait un
+  client d'accrocher ses événements à la session de quelqu'un d'autre.
+- **Une ligne refusée ne bloque plus le lot** — le commentaire d'`events.ts`
+  promettait déjà que « la file doit toujours pouvoir se vider », et le code ne
+  le tenait pas : une seule erreur d'insertion faisait échouer la requête
+  entière. Chaque ligne est désormais dans son propre `try`, comptée dans
+  `skipped` et journalisée. Même règle pour `/api/completions`.
+- **Le contenu redevient joignable sans compte** — régression que j'avais
+  introduite avec le mode local : `NoAccountError` coupe court à toute requête
+  sans jeton, y compris vers `/api/routines`, `/api/articles` et
+  `/api/exercises`, qui sont pourtant publiques. Un appareil sans compte ne
+  voyait donc plus aucune correction de contenu. `api.getPublic` passe
+  `anonymous: true` et les rend de nouveau atteignables. Vérifié de bout en
+  bout : sans compte, un article servi par le serveur s'affiche.
+- **L'inscription n'était pas limitée en débit** — la connexion l'est (10
+  tentatives par IP et par quart d'heure), l'inscription ne l'était pas. Le code
+  d'invitation est pourtant la seule chose entre un inconnu et un compte, et il
+  était devinable à pleine vitesse. Cinq tentatives par IP et par quart d'heure.
+- **La fenêtre de limitation ne se vidait jamais** — une entrée par IP, gardée
+  pour la vie de l'instance. Rare en pratique puisqu'une fonction serverless est
+  recyclée souvent, mais sans borne. Balayage des fenêtres expirées au-delà de
+  cinq mille clés.
+
+### Constatés, pas corrigés : ce sont des décisions produit
+
+- **`breakMinutes` est un second réglage mort.** « Durée de pause », proposée de
+  1 à 10 minutes, écrite en base avec sa contrainte `CHECK`, validée par l'API,
+  relue au chargement, et **lue par aucun code**. Exactement le cas de
+  `autoStartAt` avant qu'on le branche. Deux issues cohérentes avec le dépôt :
+  lui donner un effet, ou le retirer de l'écran comme l'a été le bouton « Son
+  des notifications ». Le laisser en l'état est la seule qui ne l'est pas.
+- **La bascule « Vibration » promet plus qu'elle ne fait.** Elle ne pilote que
+  le retour haptique du lecteur (`Player.tsx`). La vibration des notifications
+  est une propriété de canal Android, fixée à `true` à la création et non
+  modifiable ensuite : c'est la même impasse que le son. Le libellé devrait
+  dire « Vibration du minuteur ».
+- **Une routine perso perd son identité à la synchronisation.**
+  `/api/completions` résout `routine_id` par slug ; un slug `perso-…` n'existe
+  pas dans `routines`, donc la colonne est `NULL` et le slug n'est stocké nulle
+  part. Les minutes bougées restent justes, la provenance est perdue.
+- **La rotation des jetons de rafraîchissement n'a pas de détection de rejeu.**
+  Un jeton volé puis rejoué après rotation reçoit un 401, mais la famille de
+  jetons n'est pas révoquée : le voleur qui passe en premier garde la main. La
+  parade usuelle est de révoquer toute la chaîne dès qu'un jeton déjà consommé
+  se représente.
+- **Code mort** : `minutesFromSeconds` (`features/session/stats.ts`) et
+  `ZONE_FAMILY` (`content/index.ts`) ne sont importés nulle part.
+
+## Le son de l'alarme
+
+- **Le bol jouait au tiers de ce que l'appareil sait faire** — les trois
+  partiels culminaient ensemble à 0,32, sans gain maître. Il y a maintenant une
+  chaîne : un gain réglable, puis un limiteur (`DynamicsCompressor`, seuil
+  −3 dB, ratio 20, attaque 2 ms). Le gain monte à 3, ce qui place la crête juste
+  sous la pleine échelle, et c'est le limiteur qui rend ça propre plutôt que
+  saturé. Mesuré dans un navigateur : à 20 le gain vaut 0,36, à 80 il vaut 2,01,
+  à 100 il vaut 3. Par défaut 80, soit le double de l'ancien volume.
+- **Le volume est un réglage, avec un bouton pour l'entendre** — de 10 à 100 par
+  pas de 10. Jamais zéro : le silence, c'est ce que fait le mode d'alarme, et
+  un volume à zéro pendant que le mode dit « une fois » serait deux
+  interrupteurs qui se contredisent. « Écouter » joue le bol **même en
+  silencieux** : le but d'un bouton de test est d'entendre ce qu'on règle, pas
+  d'avoir à changer de mode, écouter, puis revenir. Relâcher le curseur le joue
+  aussi, parce qu'on ne règle pas un volume à l'aveugle. Local à l'appareil,
+  comme le mode et pour la même raison : `/api/me` remplace `Settings` en entier.
+- **Baisser la musique demande du code natif** — il n'existe aucune API de
+  focus audio dans un navigateur, donc un son joué en Web Audio se pose
+  par-dessus ce qui tourne déjà et perd. Android arbitre ça avec
+  `AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK`, que l'app de musique honore en baissant
+  son volume le temps du bol puis en le remontant. Ajouté au plugin `ScreenWake`
+  (`duckOthers` / `stopDucking`), en transitoire et non en gain complet : deux
+  secondes de bol n'ont pas à mettre un podcast en pause, seulement à s'appuyer
+  dessus. **Ça ne descend pas par OTA** : coque `1.4.0` / `versionCode 5`. Le
+  pont JavaScript est en `try/catch`, donc sur l'APK actuelle le bol sonne
+  quand même, simplement sans baisser le reste.
+- **Ce que le volume ne pilote pas** — quand un rappel tombe app fermée, c'est
+  Android qui joue `res/raw/bol.wav` sur le canal de notification, et son volume
+  est celui du flux de notifications du téléphone. Le curseur agit sur le bol
+  synthétisé, c'est-à-dire quand l'app tourne. Changer le volume du canal
+  demanderait d'en créer un nouveau, un canal existant n'étant pas modifiable :
+  c'est la même impasse que le son et la vibration.
+
 ## À la charge du propriétaire (secrets, hors dépôt)
 
 - Créer le rôle `releve_app` + la base `releve`, appliquer les migrations

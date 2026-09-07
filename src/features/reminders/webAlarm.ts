@@ -51,6 +51,10 @@ export function installWebAlarm(): void {
 }
 
 async function tick(): Promise<void> {
+  // A tab left open overnight is the plainest way a day never ends. The clock
+  // is already being read here, so this is where it gets noticed.
+  if (await useSessionStore.getState().closeOverrun()) return
+
   const { session, occurrences, pause, awaiting } = useSessionStore.getState()
   // Nothing to watch: no day running, held on purpose, or already waiting on an
   // answer (in which case the prompt is already up and possibly still ringing).

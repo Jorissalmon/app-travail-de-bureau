@@ -133,7 +133,7 @@ export function Library() {
                   {/* Shown, not hidden: you may well be at home tomorrow. */}
                   {!suitsPlace(r, place(), exerciseByKey) && (
                     <p className="t-meta mt-1.5 ml-1">
-                      Plutôt à la maison — trop de mouvements peu discrets pour un open space.
+                      Plutôt à la maison : trop de mouvements peu discrets pour un open space.
                     </p>
                   )}
                 </div>

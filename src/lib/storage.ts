@@ -14,14 +14,27 @@ export const KEYS = {
   user: 'auth.user',
   settings: 'settings',
   session: 'session.active',
+  /** A day that outlived itself and still owes an answer about when it ended. */
+  dayClose: 'session.pendingClose',
+  onboarded: 'onboarding.done',
   eventQueue: 'events.queue',
   completionQueue: 'completions.queue',
+  /**
+   * The journals: the same entries as the queues, but never drained by a sync.
+   * They are what the tracking screen is computed from when the server has not
+   * answered — offline, or because there is no account to answer for.
+   */
+  eventJournal: 'events.journal',
+  completionJournal: 'completions.journal',
+  /** The device is deliberately being used without an account. */
+  localOnly: 'auth.localOnly',
   routines: 'content.routines',
   articles: 'content.articles',
   exercises: 'content.exercises',
   scheduled: 'reminders.scheduled',
   playerSound: 'player.sound',
   alertMode: 'reminders.alertMode',
+  alertVolume: 'reminders.alertVolume',
   place: 'place',
   stepDurations: 'player.durations',
   customRoutines: 'routines.custom',

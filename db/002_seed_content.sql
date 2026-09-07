@@ -15,7 +15,7 @@ BEGIN;
 
 -- marche
 INSERT INTO exercises (key, title, steps, tips, easier, muscles, avoid, articles, discreet)
-VALUES ('marche', 'Marche', ARRAY['Lève-toi et pars marcher — dans le couloir, jusqu''à la machine à café, peu importe où.', 'Marche à un rythme normal, bras qui se balancent librement.', 'Si tu ne peux pas quitter la pièce, fais des allers-retours sur place.'], ARRAY['Le but n''est pas la distance : c''est de mettre le corps en mouvement et de changer d''air, même trente secondes.', 'Regarde ailleurs qu''un écran pendant que tu marches, ça repose aussi les yeux.'], 'Si tu ne peux vraiment pas te lever, reste debout et transfère ton poids d''un pied à l''autre.', ARRAY['Circulation', 'Tout le corps'], 'Rien de spécifique : c''est l''exercice le plus sûr du lot.', ARRAY['pourquoi-30-minutes', 'debout-nest-pas-actif', 'ce-que-les-pauses-changent', 'lumiere-du-jour'], true)
+VALUES ('marche', 'Marche', ARRAY['Lève-toi et pars marcher : dans le couloir, jusqu''à la machine à café, peu importe où.', 'Marche à un rythme normal, bras qui se balancent librement.', 'Si tu ne peux pas quitter la pièce, fais des allers-retours sur place.'], ARRAY['Le but n''est pas la distance : c''est de mettre le corps en mouvement et de changer d''air, même trente secondes.', 'Regarde ailleurs qu''un écran pendant que tu marches, ça repose aussi les yeux.'], 'Si tu ne peux vraiment pas te lever, reste debout et transfère ton poids d''un pied à l''autre.', ARRAY['Circulation', 'Tout le corps'], 'Rien de spécifique : c''est l''exercice le plus sûr du lot.', ARRAY['pourquoi-30-minutes', 'debout-nest-pas-actif', 'ce-que-les-pauses-changent', 'lumiere-du-jour'], true)
 ON CONFLICT (key) DO UPDATE SET
   title = EXCLUDED.title, steps = EXCLUDED.steps, tips = EXCLUDED.tips,
   easier = EXCLUDED.easier, muscles = EXCLUDED.muscles, avoid = EXCLUDED.avoid,
@@ -43,7 +43,7 @@ ON CONFLICT (key) DO UPDATE SET
   articles = EXCLUDED.articles, discreet = EXCLUDED.discreet;
 -- regard-au-loin
 INSERT INTO exercises (key, title, steps, tips, easier, muscles, avoid, articles, discreet)
-VALUES ('regard-au-loin', 'Regard au loin', ARRAY['Trouve le point le plus lointain que tu peux voir — par une fenêtre, au bout du couloir.', 'Fixe-le quelques secondes, en relâchant les yeux plutôt qu''en les plissant.', 'Cligne franchement dix fois, paupières complètement fermées à chaque clignement.'], ARRAY['Un clignement franc mouille toute la surface de l''œil ; un clignement paresseux n''en mouille que la moitié.', 'S''il n''y a pas de fenêtre, regarde le point le plus éloigné possible dans la pièce.'], 'Sans point lointain disponible, ferme simplement les yeux quelques secondes à la place.', ARRAY['Muscles oculaires', 'Film lacrymal'], 'Rien de spécifique.', ARRAY['vingt-vingt-vingt', 'lumiere-bleue', 'lumiere-du-jour'], true)
+VALUES ('regard-au-loin', 'Regard au loin', ARRAY['Trouve le point le plus lointain que tu peux voir : par une fenêtre, au bout du couloir.', 'Fixe-le quelques secondes, en relâchant les yeux plutôt qu''en les plissant.', 'Cligne franchement dix fois, paupières complètement fermées à chaque clignement.'], ARRAY['Un clignement franc mouille toute la surface de l''œil ; un clignement paresseux n''en mouille que la moitié.', 'S''il n''y a pas de fenêtre, regarde le point le plus éloigné possible dans la pièce.'], 'Sans point lointain disponible, ferme simplement les yeux quelques secondes à la place.', ARRAY['Muscles oculaires', 'Film lacrymal'], 'Rien de spécifique.', ARRAY['vingt-vingt-vingt', 'lumiere-bleue', 'lumiere-du-jour'], true)
 ON CONFLICT (key) DO UPDATE SET
   title = EXCLUDED.title, steps = EXCLUDED.steps, tips = EXCLUDED.tips,
   easier = EXCLUDED.easier, muscles = EXCLUDED.muscles, avoid = EXCLUDED.avoid,
@@ -85,7 +85,7 @@ ON CONFLICT (key) DO UPDATE SET
   articles = EXCLUDED.articles, discreet = EXCLUDED.discreet;
 -- figure4-assise
 INSERT INTO exercises (key, title, steps, tips, easier, muscles, avoid, articles, discreet)
-VALUES ('figure4-assise', 'Figure 4 assise', ARRAY['Assis, croise une cheville sur le genou opposé, comme le chiffre 4.', 'Garde le pied du dessus légèrement fléchi plutôt que pointé.', 'Penche le buste vers l''avant en gardant le dos droit, jusqu''à sentir un étirement dans la fesse.', 'Tiens la position en respirant, puis change de côté.'], ARRAY['L''étirement se sent dans la fesse et l''extérieur de la hanche, pas dans le genou.', 'Plus le buste se penche, plus l''étirement est marqué — avance progressivement.'], 'Reste redressé, sans pencher le buste : le croisement seul suffit pour commencer.', ARRAY['Piriforme', 'Fessiers'], 'Une douleur dans le genou du dessus : relâche la pression et croise moins fort.', ARRAY['pourquoi-30-minutes', 'regler-son-poste'], true)
+VALUES ('figure4-assise', 'Figure 4 assise', ARRAY['Assis, croise une cheville sur le genou opposé, comme le chiffre 4.', 'Garde le pied du dessus légèrement fléchi plutôt que pointé.', 'Penche le buste vers l''avant en gardant le dos droit, jusqu''à sentir un étirement dans la fesse.', 'Tiens la position en respirant, puis change de côté.'], ARRAY['L''étirement se sent dans la fesse et l''extérieur de la hanche, pas dans le genou.', 'Plus le buste se penche, plus l''étirement est marqué. Avance progressivement.'], 'Reste redressé, sans pencher le buste : le croisement seul suffit pour commencer.', ARRAY['Piriforme', 'Fessiers'], 'Une douleur dans le genou du dessus : relâche la pression et croise moins fort.', ARRAY['pourquoi-30-minutes', 'regler-son-poste'], true)
 ON CONFLICT (key) DO UPDATE SET
   title = EXCLUDED.title, steps = EXCLUDED.steps, tips = EXCLUDED.tips,
   easier = EXCLUDED.easier, muscles = EXCLUDED.muscles, avoid = EXCLUDED.avoid,
@@ -134,7 +134,7 @@ ON CONFLICT (key) DO UPDATE SET
   articles = EXCLUDED.articles, discreet = EXCLUDED.discreet;
 -- nuque-inclinaison
 INSERT INTO exercises (key, title, steps, tips, easier, muscles, avoid, articles, discreet)
-VALUES ('nuque-inclinaison', 'Inclinaison de nuque', ARRAY['Assis ou debout, regarde droit devant toi.', 'Incline la tête pour amener l''oreille vers l''épaule, sans tourner la tête.', 'La main opposée peut se poser légèrement sur la tête, sans jamais tirer.', 'Tiens en respirant, puis reviens au centre et change de côté.'], ARRAY['L''épaule du côté qui s''étire reste basse et détendue — ne la remonte pas vers l''oreille.', 'Le poids de la tête suffit ; la main ne fait qu''accompagner.'], 'Fais le mouvement sans poser la main, juste avec le poids de la tête.', ARRAY['Trapèze supérieur', 'Sterno-cléido-mastoïdien'], 'Une douleur qui descend dans le bras ou des fourmillements : arrête immédiatement.', ARRAY['muscler-le-haut-du-dos', 'regler-son-poste'], true)
+VALUES ('nuque-inclinaison', 'Inclinaison de nuque', ARRAY['Assis ou debout, regarde droit devant toi.', 'Incline la tête pour amener l''oreille vers l''épaule, sans tourner la tête.', 'La main opposée peut se poser légèrement sur la tête, sans jamais tirer.', 'Tiens en respirant, puis reviens au centre et change de côté.'], ARRAY['L''épaule du côté qui s''étire reste basse et détendue. Ne la remonte pas vers l''oreille.', 'Le poids de la tête suffit ; la main ne fait qu''accompagner.'], 'Fais le mouvement sans poser la main, juste avec le poids de la tête.', ARRAY['Trapèze supérieur', 'Sterno-cléido-mastoïdien'], 'Une douleur qui descend dans le bras ou des fourmillements : arrête immédiatement.', ARRAY['muscler-le-haut-du-dos', 'regler-son-poste'], true)
 ON CONFLICT (key) DO UPDATE SET
   title = EXCLUDED.title, steps = EXCLUDED.steps, tips = EXCLUDED.tips,
   easier = EXCLUDED.easier, muscles = EXCLUDED.muscles, avoid = EXCLUDED.avoid,
@@ -169,7 +169,7 @@ ON CONFLICT (key) DO UPDATE SET
   articles = EXCLUDED.articles, discreet = EXCLUDED.discreet;
 -- omoplates
 INSERT INTO exercises (key, title, steps, tips, easier, muscles, avoid, articles, discreet)
-VALUES ('omoplates', 'Serrage d''omoplates', ARRAY['Assis ou debout, bras relâchés le long du corps.', 'Serre les omoplates l''une vers l''autre, comme pour tenir un crayon entre elles.', 'Tiens cinq secondes, épaules basses pendant tout le mouvement.', 'Relâche complètement, puis recommence.'], ARRAY['Les épaules ne doivent pas monter vers les oreilles : seul le dos travaille.', 'C''est un petit mouvement, presque invisible de l''extérieur — c''est normal.'], 'Serre moins fort, l''essentiel est de sentir le haut du dos s''activer.', ARRAY['Rhomboïdes', 'Trapèze moyen'], 'Rien de spécifique.', ARRAY['muscler-le-haut-du-dos', 'ergonomie-ce-qui-marche'], true)
+VALUES ('omoplates', 'Serrage d''omoplates', ARRAY['Assis ou debout, bras relâchés le long du corps.', 'Serre les omoplates l''une vers l''autre, comme pour tenir un crayon entre elles.', 'Tiens cinq secondes, épaules basses pendant tout le mouvement.', 'Relâche complètement, puis recommence.'], ARRAY['Les épaules ne doivent pas monter vers les oreilles : seul le dos travaille.', 'C''est un petit mouvement, presque invisible de l''extérieur. C''est normal.'], 'Serre moins fort, l''essentiel est de sentir le haut du dos s''activer.', ARRAY['Rhomboïdes', 'Trapèze moyen'], 'Rien de spécifique.', ARRAY['muscler-le-haut-du-dos', 'ergonomie-ce-qui-marche'], true)
 ON CONFLICT (key) DO UPDATE SET
   title = EXCLUDED.title, steps = EXCLUDED.steps, tips = EXCLUDED.tips,
   easier = EXCLUDED.easier, muscles = EXCLUDED.muscles, avoid = EXCLUDED.avoid,
@@ -211,7 +211,7 @@ ON CONFLICT (key) DO UPDATE SET
   articles = EXCLUDED.articles, discreet = EXCLUDED.discreet;
 -- ischios
 INSERT INTO exercises (key, title, steps, tips, easier, muscles, avoid, articles, discreet)
-VALUES ('ischios', 'Ischio-jambiers, appui surélevé', ARRAY['Pose un talon sur une chaise basse ou un support stable, jambe tendue.', 'Garde le dos droit et penche le buste vers l''avant depuis les hanches.', 'Arrête-toi dès que tu sens un étirement à l''arrière de la cuisse.', 'Tiens la position en respirant, puis change de côté.'], ARRAY['Plus le support est haut, plus l''étirement est marqué — commence bas.', 'Le dos reste droit du début à la fin ; c''est le pli des hanches qui étire, pas le dos qui s''arrondit.'], 'Utilise un support plus bas, ou pose simplement le talon au sol, jambe tendue devant toi.', ARRAY['Ischio-jambiers'], 'Une perte d''équilibre : prends appui sur un meuble stable à côté de toi.', ARRAY['pourquoi-30-minutes'], false)
+VALUES ('ischios', 'Ischio-jambiers, appui surélevé', ARRAY['Pose un talon sur une chaise basse ou un support stable, jambe tendue.', 'Garde le dos droit et penche le buste vers l''avant depuis les hanches.', 'Arrête-toi dès que tu sens un étirement à l''arrière de la cuisse.', 'Tiens la position en respirant, puis change de côté.'], ARRAY['Plus le support est haut, plus l''étirement est marqué. Commence bas.', 'Le dos reste droit du début à la fin ; c''est le pli des hanches qui étire, pas le dos qui s''arrondit.'], 'Utilise un support plus bas, ou pose simplement le talon au sol, jambe tendue devant toi.', ARRAY['Ischio-jambiers'], 'Une perte d''équilibre : prends appui sur un meuble stable à côté de toi.', ARRAY['pourquoi-30-minutes'], false)
 ON CONFLICT (key) DO UPDATE SET
   title = EXCLUDED.title, steps = EXCLUDED.steps, tips = EXCLUDED.tips,
   easier = EXCLUDED.easier, muscles = EXCLUDED.muscles, avoid = EXCLUDED.avoid,
@@ -281,7 +281,7 @@ ON CONFLICT (key) DO UPDATE SET
   articles = EXCLUDED.articles, discreet = EXCLUDED.discreet;
 -- clignement
 INSERT INTO exercises (key, title, steps, tips, easier, muscles, avoid, articles, discreet)
-VALUES ('clignement', 'Clignements lents', ARRAY['Assis, relâche le visage.', 'Ferme complètement les paupières, sans les plisser.', 'Rouvre les yeux, puis recommence vingt fois.', 'Fais-le à un rythme tranquille, pas précipité.'], ARRAY['Devant un écran, on cligne deux fois moins souvent que la normale — ces vingt clignements francs compensent une partie du déficit.', 'Un clignement complet mouille toute la surface de l''œil ; un clignement partiel n''en mouille que la moitié.'], 'Fais-le en dix clignements plutôt que vingt.', ARRAY['Film lacrymal'], 'Rien de spécifique.', ARRAY['vingt-vingt-vingt', 'lumiere-bleue'], true)
+VALUES ('clignement', 'Clignements lents', ARRAY['Assis, relâche le visage.', 'Ferme complètement les paupières, sans les plisser.', 'Rouvre les yeux, puis recommence vingt fois.', 'Fais-le à un rythme tranquille, pas précipité.'], ARRAY['Devant un écran, on cligne deux fois moins souvent que la normale. Ces vingt clignements francs compensent une partie du déficit.', 'Un clignement complet mouille toute la surface de l''œil ; un clignement partiel n''en mouille que la moitié.'], 'Fais-le en dix clignements plutôt que vingt.', ARRAY['Film lacrymal'], 'Rien de spécifique.', ARRAY['vingt-vingt-vingt', 'lumiere-bleue'], true)
 ON CONFLICT (key) DO UPDATE SET
   title = EXCLUDED.title, steps = EXCLUDED.steps, tips = EXCLUDED.tips,
   easier = EXCLUDED.easier, muscles = EXCLUDED.muscles, avoid = EXCLUDED.avoid,
@@ -319,8 +319,8 @@ INSERT INTO routine_steps (routine_id, position, name, duration_s, cue, figure_k
 VALUES
   ((SELECT id FROM routines WHERE slug = 'debout'), 1, 'Marche', 30, 'Lève-toi et marche. Sors de la pièce si tu peux.', 'marche', 'marche'),
   ((SELECT id FROM routines WHERE slug = 'debout'), 2, 'Extension debout', 30, 'Mains dans le bas du dos, ouvre la poitrine, regarde vers le plafond. Doucement.', 'extension-debout', 'extension-debout'),
-  ((SELECT id FROM routines WHERE slug = 'debout'), 3, 'Fente basse — droite', 30, 'Un grand pas en avant, genou arrière tendu. Pousse la hanche arrière vers l''avant.', 'fente', 'fente-basse'),
-  ((SELECT id FROM routines WHERE slug = 'debout'), 4, 'Fente basse — gauche', 30, 'Même chose de l''autre côté. Le bassin reste droit.', 'fente', 'fente-basse'),
+  ((SELECT id FROM routines WHERE slug = 'debout'), 3, 'Fente basse (droite)', 30, 'Un grand pas en avant, genou arrière tendu. Pousse la hanche arrière vers l''avant.', 'fente', 'fente-basse'),
+  ((SELECT id FROM routines WHERE slug = 'debout'), 4, 'Fente basse (gauche)', 30, 'Même chose de l''autre côté. Le bassin reste droit.', 'fente', 'fente-basse'),
   ((SELECT id FROM routines WHERE slug = 'debout'), 5, 'Regard au loin', 30, 'Cherche le point le plus lointain visible, et cligne lentement dix fois.', 'loin-pres', 'regard-au-loin'),
   ((SELECT id FROM routines WHERE slug = 'debout'), 6, 'Marche', 30, 'Retour au poste en marchant. Rien ne presse.', 'marche', 'marche');
 
@@ -347,12 +347,12 @@ DELETE FROM routine_steps WHERE routine_id = (SELECT id FROM routines WHERE slug
 INSERT INTO routine_steps (routine_id, position, name, duration_s, cue, figure_key, exercise_key)
 VALUES
   ((SELECT id FROM routines WHERE slug = 'assis'), 1, 'Menton rentré', 30, 'Recule le menton comme pour faire un double menton. Tiens 5 s, relâche.', 'menton-rentre', 'menton-rentre'),
-  ((SELECT id FROM routines WHERE slug = 'assis'), 2, 'Nuque en diagonale — droite', 30, 'Menton vers l’aisselle opposée, la main accompagne sans tirer.', 'nuque-diagonale', 'nuque-diagonale'),
-  ((SELECT id FROM routines WHERE slug = 'assis'), 3, 'Nuque en diagonale — gauche', 30, 'Même chose de l’autre côté.', 'nuque-diagonale', 'nuque-diagonale'),
-  ((SELECT id FROM routines WHERE slug = 'assis'), 4, 'Rotation assise — droite', 45, 'Pieds au sol, tourne le buste, attrape le dossier. Le regard suit.', 'rotation-assise', 'rotation-assise'),
-  ((SELECT id FROM routines WHERE slug = 'assis'), 5, 'Rotation assise — gauche', 45, 'Même chose de l’autre côté.', 'rotation-assise', 'rotation-assise'),
-  ((SELECT id FROM routines WHERE slug = 'assis'), 6, 'Ischio assis — droite', 40, 'Talon au sol, jambe tendue devant, penche le buste depuis les hanches. Dos droit.', 'ischios-assis', 'ischios-assis'),
-  ((SELECT id FROM routines WHERE slug = 'assis'), 7, 'Ischio assis — gauche', 40, 'Même chose de l’autre côté.', 'ischios-assis', 'ischios-assis');
+  ((SELECT id FROM routines WHERE slug = 'assis'), 2, 'Nuque en diagonale (droite)', 30, 'Menton vers l’aisselle opposée, la main accompagne sans tirer.', 'nuque-diagonale', 'nuque-diagonale'),
+  ((SELECT id FROM routines WHERE slug = 'assis'), 3, 'Nuque en diagonale (gauche)', 30, 'Même chose de l’autre côté.', 'nuque-diagonale', 'nuque-diagonale'),
+  ((SELECT id FROM routines WHERE slug = 'assis'), 4, 'Rotation assise (droite)', 45, 'Pieds au sol, tourne le buste, attrape le dossier. Le regard suit.', 'rotation-assise', 'rotation-assise'),
+  ((SELECT id FROM routines WHERE slug = 'assis'), 5, 'Rotation assise (gauche)', 45, 'Même chose de l’autre côté.', 'rotation-assise', 'rotation-assise'),
+  ((SELECT id FROM routines WHERE slug = 'assis'), 6, 'Ischio assis (droite)', 40, 'Talon au sol, jambe tendue devant, penche le buste depuis les hanches. Dos droit.', 'ischios-assis', 'ischios-assis'),
+  ((SELECT id FROM routines WHERE slug = 'assis'), 7, 'Ischio assis (gauche)', 40, 'Même chose de l’autre côté.', 'ischios-assis', 'ischios-assis');
 
 -- bureau-complet
 INSERT INTO routines (slug, title, zone, duration_s, summary, accent, sort_order)
@@ -363,10 +363,10 @@ ON CONFLICT (slug) DO UPDATE SET
 DELETE FROM routine_steps WHERE routine_id = (SELECT id FROM routines WHERE slug = 'bureau-complet');
 INSERT INTO routine_steps (routine_id, position, name, duration_s, cue, figure_key, exercise_key)
 VALUES
-  ((SELECT id FROM routines WHERE slug = 'bureau-complet'), 1, 'Figure 4 assise — droite', 45, 'Cheville droite sur le genou gauche, penche le buste, dos droit.', 'figure4-assise', 'figure4-assise'),
-  ((SELECT id FROM routines WHERE slug = 'bureau-complet'), 2, 'Figure 4 assise — gauche', 45, 'Même chose de l’autre côté.', 'figure4-assise', 'figure4-assise'),
-  ((SELECT id FROM routines WHERE slug = 'bureau-complet'), 3, 'Ischio assis — droite', 40, 'Talon au sol, jambe tendue devant, penche depuis les hanches.', 'ischios-assis', 'ischios-assis'),
-  ((SELECT id FROM routines WHERE slug = 'bureau-complet'), 4, 'Ischio assis — gauche', 40, 'Même chose de l’autre côté.', 'ischios-assis', 'ischios-assis'),
+  ((SELECT id FROM routines WHERE slug = 'bureau-complet'), 1, 'Figure 4 assise (droite)', 45, 'Cheville droite sur le genou gauche, penche le buste, dos droit.', 'figure4-assise', 'figure4-assise'),
+  ((SELECT id FROM routines WHERE slug = 'bureau-complet'), 2, 'Figure 4 assise (gauche)', 45, 'Même chose de l’autre côté.', 'figure4-assise', 'figure4-assise'),
+  ((SELECT id FROM routines WHERE slug = 'bureau-complet'), 3, 'Ischio assis (droite)', 40, 'Talon au sol, jambe tendue devant, penche depuis les hanches.', 'ischios-assis', 'ischios-assis'),
+  ((SELECT id FROM routines WHERE slug = 'bureau-complet'), 4, 'Ischio assis (gauche)', 40, 'Même chose de l’autre côté.', 'ischios-assis', 'ischios-assis'),
   ((SELECT id FROM routines WHERE slug = 'bureau-complet'), 5, 'Rotation du torse', 45, 'Pieds au sol, tourne le buste, attrape le dossier. Change de côté à mi-temps.', 'rotation-assise', 'rotation-assise'),
   ((SELECT id FROM routines WHERE slug = 'bureau-complet'), 6, 'Câlin à un bras', 45, 'Bras en travers de la poitrine, l’autre avant-bras le ramène. Change à mi-temps.', 'calin-bras', 'calin-bras'),
   ((SELECT id FROM routines WHERE slug = 'bureau-complet'), 7, 'Triceps au-dessus de la tête', 40, 'Coude en l’air, main entre les omoplates, l’autre main pousse le coude. Change à mi-temps.', 'triceps-tete', 'triceps-tete');
@@ -383,10 +383,10 @@ VALUES
   ((SELECT id FROM routines WHERE slug = 'reveil'), 1, 'Marche sur place', 40, 'Genoux hauts, bras qui accompagnent. Monte en température.', 'marche', 'marche-sur-place'),
   ((SELECT id FROM routines WHERE slug = 'reveil'), 2, 'Cercles de bras', 40, 'Vers l''arrière, amplitude maximale, épaules relâchées.', 'cercle-bras', 'cercle-bras'),
   ((SELECT id FROM routines WHERE slug = 'reveil'), 3, 'Chat-vache debout', 40, 'Mains sur les cuisses, arrondis puis creuse.', 'chat-vache', 'chat-vache'),
-  ((SELECT id FROM routines WHERE slug = 'reveil'), 4, 'Fente basse — droite', 40, 'Pousse la hanche arrière vers l''avant.', 'fente', 'fente-basse'),
-  ((SELECT id FROM routines WHERE slug = 'reveil'), 5, 'Fente basse — gauche', 40, 'Même chose de l''autre côté.', 'fente', 'fente-basse'),
-  ((SELECT id FROM routines WHERE slug = 'reveil'), 6, 'Inclinaison latérale — droite', 30, 'Bras au-dessus de la tête, respire dans les côtes.', 'inclinaison-laterale', 'inclinaison-laterale'),
-  ((SELECT id FROM routines WHERE slug = 'reveil'), 7, 'Inclinaison latérale — gauche', 30, 'Même chose de l''autre côté.', 'inclinaison-laterale', 'inclinaison-laterale'),
+  ((SELECT id FROM routines WHERE slug = 'reveil'), 4, 'Fente basse (droite)', 40, 'Pousse la hanche arrière vers l''avant.', 'fente', 'fente-basse'),
+  ((SELECT id FROM routines WHERE slug = 'reveil'), 5, 'Fente basse (gauche)', 40, 'Même chose de l''autre côté.', 'fente', 'fente-basse'),
+  ((SELECT id FROM routines WHERE slug = 'reveil'), 6, 'Inclinaison latérale (droite)', 30, 'Bras au-dessus de la tête, respire dans les côtes.', 'inclinaison-laterale', 'inclinaison-laterale'),
+  ((SELECT id FROM routines WHERE slug = 'reveil'), 7, 'Inclinaison latérale (gauche)', 30, 'Même chose de l''autre côté.', 'inclinaison-laterale', 'inclinaison-laterale'),
   ((SELECT id FROM routines WHERE slug = 'reveil'), 8, 'Menton rentré', 20, 'Recule le menton, tiens 5 s, relâche.', 'menton-rentre', 'menton-rentre'),
   ((SELECT id FROM routines WHERE slug = 'reveil'), 9, 'Respiration', 20, 'Quatre respirations : inspire sur 4 temps, expire sur 6.', 'respiration', 'respiration-4-6');
 
@@ -400,8 +400,8 @@ DELETE FROM routine_steps WHERE routine_id = (SELECT id FROM routines WHERE slug
 INSERT INTO routine_steps (routine_id, position, name, duration_s, cue, figure_key, exercise_key)
 VALUES
   ((SELECT id FROM routines WHERE slug = 'nuque'), 1, 'Menton rentré', 30, 'Recule le menton comme pour faire un double menton. Tiens 5 s, relâche, recommence.', 'menton-rentre', 'menton-rentre'),
-  ((SELECT id FROM routines WHERE slug = 'nuque'), 2, 'Inclinaison — droite', 30, 'Oreille vers l''épaule, la main opposée relâche. Ne tire pas.', 'nuque-laterale', 'nuque-inclinaison'),
-  ((SELECT id FROM routines WHERE slug = 'nuque'), 3, 'Inclinaison — gauche', 30, 'Même chose de l''autre côté.', 'nuque-laterale', 'nuque-inclinaison'),
+  ((SELECT id FROM routines WHERE slug = 'nuque'), 2, 'Inclinaison (droite)', 30, 'Oreille vers l''épaule, la main opposée relâche. Ne tire pas.', 'nuque-laterale', 'nuque-inclinaison'),
+  ((SELECT id FROM routines WHERE slug = 'nuque'), 3, 'Inclinaison (gauche)', 30, 'Même chose de l''autre côté.', 'nuque-laterale', 'nuque-inclinaison'),
   ((SELECT id FROM routines WHERE slug = 'nuque'), 4, 'Rotation lente', 30, 'Tourne la tête d''un côté puis de l''autre, comme si tu suivais un horizon.', 'nuque-rotation', 'nuque-rotation'),
   ((SELECT id FROM routines WHERE slug = 'nuque'), 5, 'Haussements d''épaules', 30, 'Monte les épaules vers les oreilles, tiens 3 s, laisse tomber d''un coup.', 'haussement-epaules', 'haussement-epaules'),
   ((SELECT id FROM routines WHERE slug = 'nuque'), 6, 'Ouverture à l''encadrement', 30, 'Avant-bras contre un montant de porte, avance d''un pas. Poitrine ouverte.', 'encadrement-porte', 'encadrement-porte'),
@@ -422,8 +422,8 @@ VALUES
   ((SELECT id FROM routines WHERE slug = 'dos'), 4, 'Rotation externe', 40, 'Coudes au corps, les avant-bras s''écartent comme deux portes.', 'rotation-externe', 'rotation-externe'),
   ((SELECT id FROM routines WHERE slug = 'dos'), 5, 'Extension sur chaise', 40, 'Assis, mains derrière la tête, passe le haut du dos par-dessus le dossier.', 'extension-chaise', 'extension-chaise'),
   ((SELECT id FROM routines WHERE slug = 'dos'), 6, 'Tirage à vide', 50, 'Bras tendus devant, tire les coudes vers l''arrière comme sur une machine.', 'tirage-vide', 'tirage-vide'),
-  ((SELECT id FROM routines WHERE slug = 'dos'), 7, 'Câlin à un bras — droite', 40, 'Bras droit en travers de la poitrine, l’avant-bras gauche le ramène vers toi. Épaule basse.', 'calin-bras', 'calin-bras'),
-  ((SELECT id FROM routines WHERE slug = 'dos'), 8, 'Câlin à un bras — gauche', 40, 'Même chose de l’autre côté.', 'calin-bras', 'calin-bras'),
+  ((SELECT id FROM routines WHERE slug = 'dos'), 7, 'Câlin à un bras (droite)', 40, 'Bras droit en travers de la poitrine, l’avant-bras gauche le ramène vers toi. Épaule basse.', 'calin-bras', 'calin-bras'),
+  ((SELECT id FROM routines WHERE slug = 'dos'), 8, 'Câlin à un bras (gauche)', 40, 'Même chose de l’autre côté.', 'calin-bras', 'calin-bras'),
   ((SELECT id FROM routines WHERE slug = 'dos'), 9, 'Triceps au-dessus de la tête', 40, 'Coude en l’air, main entre les omoplates, l’autre main pousse doucement le coude. Change à mi-temps.', 'triceps-tete', 'triceps-tete');
 
 -- lombaires
@@ -436,14 +436,14 @@ DELETE FROM routine_steps WHERE routine_id = (SELECT id FROM routines WHERE slug
 INSERT INTO routine_steps (routine_id, position, name, duration_s, cue, figure_key, exercise_key)
 VALUES
   ((SELECT id FROM routines WHERE slug = 'lombaires'), 1, 'Chat-vache debout', 40, 'Mains sur les cuisses. Arrondis le dos, puis creuse-le, au rythme de ta respiration.', 'chat-vache', 'chat-vache'),
-  ((SELECT id FROM routines WHERE slug = 'lombaires'), 2, 'Inclinaison latérale — droite', 30, 'Un bras au-dessus de la tête, penche du côté opposé. Respire dans les côtes.', 'inclinaison-laterale', 'inclinaison-laterale'),
-  ((SELECT id FROM routines WHERE slug = 'lombaires'), 3, 'Inclinaison latérale — gauche', 30, 'Même chose de l''autre côté.', 'inclinaison-laterale', 'inclinaison-laterale'),
-  ((SELECT id FROM routines WHERE slug = 'lombaires'), 4, 'Rotation assise — droite', 30, 'Pieds au sol, tourne le buste, attrape le dossier. Le regard suit.', 'rotation-assise', 'rotation-assise'),
-  ((SELECT id FROM routines WHERE slug = 'lombaires'), 5, 'Rotation assise — gauche', 30, 'Même chose de l''autre côté.', 'rotation-assise', 'rotation-assise'),
+  ((SELECT id FROM routines WHERE slug = 'lombaires'), 2, 'Inclinaison latérale (droite)', 30, 'Un bras au-dessus de la tête, penche du côté opposé. Respire dans les côtes.', 'inclinaison-laterale', 'inclinaison-laterale'),
+  ((SELECT id FROM routines WHERE slug = 'lombaires'), 3, 'Inclinaison latérale (gauche)', 30, 'Même chose de l''autre côté.', 'inclinaison-laterale', 'inclinaison-laterale'),
+  ((SELECT id FROM routines WHERE slug = 'lombaires'), 4, 'Rotation assise (droite)', 30, 'Pieds au sol, tourne le buste, attrape le dossier. Le regard suit.', 'rotation-assise', 'rotation-assise'),
+  ((SELECT id FROM routines WHERE slug = 'lombaires'), 5, 'Rotation assise (gauche)', 30, 'Même chose de l''autre côté.', 'rotation-assise', 'rotation-assise'),
   ((SELECT id FROM routines WHERE slug = 'lombaires'), 6, 'Extension debout', 40, 'Mains dans le bas du dos, ouvre vers l''arrière. Petite amplitude, sans forcer.', 'extension-debout', 'extension-debout'),
   ((SELECT id FROM routines WHERE slug = 'lombaires'), 7, 'Bascule du bassin', 40, 'Debout, bascule le bassin d''avant en arrière, comme un seau qu''on vide.', 'bascule-bassin', 'bascule-bassin'),
-  ((SELECT id FROM routines WHERE slug = 'lombaires'), 8, 'Genou à la poitrine — droite', 30, 'Assis, ramène un genou vers la poitrine avec les deux mains. Le dos reste long.', 'genou-poitrine', 'genou-poitrine'),
-  ((SELECT id FROM routines WHERE slug = 'lombaires'), 9, 'Genou à la poitrine — gauche', 30, 'Même chose de l’autre côté.', 'genou-poitrine', 'genou-poitrine');
+  ((SELECT id FROM routines WHERE slug = 'lombaires'), 8, 'Genou à la poitrine (droite)', 30, 'Assis, ramène un genou vers la poitrine avec les deux mains. Le dos reste long.', 'genou-poitrine', 'genou-poitrine'),
+  ((SELECT id FROM routines WHERE slug = 'lombaires'), 9, 'Genou à la poitrine (gauche)', 30, 'Même chose de l’autre côté.', 'genou-poitrine', 'genou-poitrine');
 
 -- hanches
 INSERT INTO routines (slug, title, zone, duration_s, summary, accent, sort_order)
@@ -454,12 +454,12 @@ ON CONFLICT (slug) DO UPDATE SET
 DELETE FROM routine_steps WHERE routine_id = (SELECT id FROM routines WHERE slug = 'hanches');
 INSERT INTO routine_steps (routine_id, position, name, duration_s, cue, figure_key, exercise_key)
 VALUES
-  ((SELECT id FROM routines WHERE slug = 'hanches'), 1, 'Fente basse — droite', 40, 'Genou arrière au sol ou tendu. Rentre le bassin, puis avance.', 'fente', 'fente-basse'),
-  ((SELECT id FROM routines WHERE slug = 'hanches'), 2, 'Fente basse — gauche', 40, 'Même chose de l''autre côté.', 'fente', 'fente-basse'),
-  ((SELECT id FROM routines WHERE slug = 'hanches'), 3, 'Figure 4 assise — droite', 40, 'Cheville droite sur le genou gauche, penche le buste, dos droit.', 'figure4-assise', 'figure4-assise'),
-  ((SELECT id FROM routines WHERE slug = 'hanches'), 4, 'Figure 4 assise — gauche', 40, 'Même chose de l''autre côté.', 'figure4-assise', 'figure4-assise'),
-  ((SELECT id FROM routines WHERE slug = 'hanches'), 5, 'Ischios — droite', 30, 'Talon sur une chaise basse, jambe tendue, penche depuis les hanches.', 'ischios', 'ischios'),
-  ((SELECT id FROM routines WHERE slug = 'hanches'), 6, 'Ischios — gauche', 30, 'Même chose de l''autre côté.', 'ischios', 'ischios'),
+  ((SELECT id FROM routines WHERE slug = 'hanches'), 1, 'Fente basse (droite)', 40, 'Genou arrière au sol ou tendu. Rentre le bassin, puis avance.', 'fente', 'fente-basse'),
+  ((SELECT id FROM routines WHERE slug = 'hanches'), 2, 'Fente basse (gauche)', 40, 'Même chose de l''autre côté.', 'fente', 'fente-basse'),
+  ((SELECT id FROM routines WHERE slug = 'hanches'), 3, 'Figure 4 assise (droite)', 40, 'Cheville droite sur le genou gauche, penche le buste, dos droit.', 'figure4-assise', 'figure4-assise'),
+  ((SELECT id FROM routines WHERE slug = 'hanches'), 4, 'Figure 4 assise (gauche)', 40, 'Même chose de l''autre côté.', 'figure4-assise', 'figure4-assise'),
+  ((SELECT id FROM routines WHERE slug = 'hanches'), 5, 'Ischios (droite)', 30, 'Talon sur une chaise basse, jambe tendue, penche depuis les hanches.', 'ischios', 'ischios'),
+  ((SELECT id FROM routines WHERE slug = 'hanches'), 6, 'Ischios (gauche)', 30, 'Même chose de l''autre côté.', 'ischios', 'ischios'),
   ((SELECT id FROM routines WHERE slug = 'hanches'), 7, 'Balancement de hanche', 20, 'Debout, jambe libre, balance d''avant en arrière. Amplitude confortable.', 'balancement-hanche', 'balancement-hanche');
 
 -- poignets
@@ -471,8 +471,8 @@ ON CONFLICT (slug) DO UPDATE SET
 DELETE FROM routine_steps WHERE routine_id = (SELECT id FROM routines WHERE slug = 'poignets');
 INSERT INTO routine_steps (routine_id, position, name, duration_s, cue, figure_key, exercise_key)
 VALUES
-  ((SELECT id FROM routines WHERE slug = 'poignets'), 1, 'Poignet en flexion — droite', 25, 'Bras tendu devant, paume vers le bas, l’autre main tire les doigts vers toi.', 'poignet-flexion', 'poignet-flexion'),
-  ((SELECT id FROM routines WHERE slug = 'poignets'), 2, 'Poignet en flexion — gauche', 25, 'Même chose de l’autre côté.', 'poignet-flexion', 'poignet-flexion'),
+  ((SELECT id FROM routines WHERE slug = 'poignets'), 1, 'Poignet en flexion (droite)', 25, 'Bras tendu devant, paume vers le bas, l’autre main tire les doigts vers toi.', 'poignet-flexion', 'poignet-flexion'),
+  ((SELECT id FROM routines WHERE slug = 'poignets'), 2, 'Poignet en flexion (gauche)', 25, 'Même chose de l’autre côté.', 'poignet-flexion', 'poignet-flexion'),
   ((SELECT id FROM routines WHERE slug = 'poignets'), 3, 'Poignet en extension', 25, 'Paume vers le haut, l’autre main tire les doigts vers le sol. Change de côté à mi-temps.', 'poignet-extension', 'poignet-extension'),
   ((SELECT id FROM routines WHERE slug = 'poignets'), 4, 'Doigts écartés', 20, 'Écarte les doigts au maximum, tiens 3 s, referme le poing. Dix fois.', 'doigts-ecartes', 'doigts-ecartes'),
   ((SELECT id FROM routines WHERE slug = 'poignets'), 5, 'Mains dos à dos', 25, 'Dos des mains l’un contre l’autre devant la poitrine, coudes vers l’extérieur.', 'priere-inversee', 'mains-dos-a-dos'),
@@ -487,8 +487,8 @@ ON CONFLICT (slug) DO UPDATE SET
 DELETE FROM routine_steps WHERE routine_id = (SELECT id FROM routines WHERE slug = 'chevilles');
 INSERT INTO routine_steps (routine_id, position, name, duration_s, cue, figure_key, exercise_key)
 VALUES
-  ((SELECT id FROM routines WHERE slug = 'chevilles'), 1, 'Cercles de cheville — droite', 30, 'Décolle le pied, dessine un cercle large, dans un sens puis dans l’autre.', 'cheville-cercle', 'cheville-cercle'),
-  ((SELECT id FROM routines WHERE slug = 'chevilles'), 2, 'Cercles de cheville — gauche', 30, 'Même chose de l’autre côté.', 'cheville-cercle', 'cheville-cercle'),
+  ((SELECT id FROM routines WHERE slug = 'chevilles'), 1, 'Cercles de cheville (droite)', 30, 'Décolle le pied, dessine un cercle large, dans un sens puis dans l’autre.', 'cheville-cercle', 'cheville-cercle'),
+  ((SELECT id FROM routines WHERE slug = 'chevilles'), 2, 'Cercles de cheville (gauche)', 30, 'Même chose de l’autre côté.', 'cheville-cercle', 'cheville-cercle'),
   ((SELECT id FROM routines WHERE slug = 'chevilles'), 3, 'Talon-pointe', 30, 'Assis ou debout, alterne l’appui sur les talons puis sur la pointe. Sans à-coups.', 'talon-pointe', 'talon-pointe'),
   ((SELECT id FROM routines WHERE slug = 'chevilles'), 4, 'Montées sur la pointe', 30, 'Debout, monte sur la pointe des pieds, redescends lentement. Vingt fois.', 'mollet-releve', 'mollet-releve');
 
@@ -524,7 +524,7 @@ VALUES ('pourquoi-30-minutes', 'Pourquoi trente minutes', 'Le seul intervalle qu
 
 Une équipe de Columbia a fait asseoir onze adultes pendant huit heures en laboratoire, et a comparé cinq protocoles : une minute de marche toutes les trente minutes, une minute toutes les heures, cinq minutes toutes les trente minutes, cinq minutes toutes les heures, et rien du tout.
 
-Un seul protocole a amélioré à la fois la glycémie et la tension artérielle : **cinq minutes de marche toutes les trente minutes**. Le pic de sucre après le repas baissait de 58 %, et la tension de 4 à 5 mmHg — une baisse que l''auteur principal compare à six mois d''entraînement quotidien. Une minute toutes les trente minutes donnait un effet modeste, sur la glycémie seulement.
+Un seul protocole a amélioré à la fois la glycémie et la tension artérielle : **cinq minutes de marche toutes les trente minutes**. Le pic de sucre après le repas baissait de 58 %, et la tension de 4 à 5 mmHg, une baisse que l''auteur principal compare à six mois d''entraînement quotidien. Une minute toutes les trente minutes donnait un effet modeste, sur la glycémie seulement.
 
 ::figure marche | Cinq minutes de marche toutes les trente minutes : le seul protocole qui a bougé les deux marqueurs.
 
@@ -562,7 +562,7 @@ ON CONFLICT (slug) DO UPDATE SET
 INSERT INTO articles (slug, title, dek, body_md, tag, evidence, read_min, source_label, source_url, sort_order)
 VALUES ('debout-nest-pas-actif', 'Debout n’est pas actif', 'Ce que 83 000 porteurs d’accéléromètre ont appris sur le bureau assis-debout.', 'Le bureau assis-debout s''est vendu comme l''antidote à la sédentarité. Les données ne suivent pas.
 
-L''UK Biobank a suivi 83 013 adultes sans maladie cardiaque au départ, pendant sept à huit ans, avec un accéléromètre au poignet — donc du temps debout mesuré, pas déclaré. Rester debout plus longtemps n''a pas amélioré le risque cardiovasculaire. Pire, le temps debout prolongé était associé à davantage de troubles circulatoires : varices, thrombose veineuse.
+L''UK Biobank a suivi 83 013 adultes sans maladie cardiaque au départ, pendant sept à huit ans, avec un accéléromètre au poignet : du temps debout mesuré, pas déclaré. Rester debout plus longtemps n''a pas amélioré le risque cardiovasculaire. Pire, le temps debout prolongé était associé à davantage de troubles circulatoires : varices, thrombose veineuse.
 
 Au-delà de dix heures assis par jour, en revanche, les deux risques montent. Le seuil compte, et il inclut le canapé du soir, pas seulement le bureau.
 
@@ -585,7 +585,7 @@ Sur le bien-être, l''effet est net et constant : plus de vigueur (d = 0,36), mo
 
 ::figure respiration | Plus de vigueur, moins de fatigue : c’est là que l’effet est net et constant.
 
-Sur la performance, c''est autre chose. L''effet global est petit et **non significatif** (d = 0,16). Il devient positif sur les tâches administratives et créatives, et reste quasi nul sur les tâches cognitivement exigeantes — celles-là demandent des pauses de plus de dix minutes pour en tirer quoi que ce soit.
+Sur la performance, c''est autre chose. L''effet global est petit et **non significatif** (d = 0,16). Il devient positif sur les tâches administratives et créatives, et reste quasi nul sur les tâches cognitivement exigeantes. Celles-là demandent des pauses de plus de dix minutes pour en tirer quoi que ce soit.
 
 Autrement dit : une pause de trois minutes ne va pas te rendre plus intelligent sur un problème difficile. Elle va te faire finir la journée moins cassé. C''est déjà la seule promesse que cette app fait.
 
@@ -602,7 +602,7 @@ VALUES ('muscler-le-haut-du-dos', 'Le renforcement divise le risque par deux', '
 
 Réponse : les groupes qui s''entraînaient avaient environ **deux fois moins de risque** de développer une cervicalgie (rapport de cotes 0,49 ; intervalle de confiance 0,31–0,76). Sur mille personnes et douze mois, cela représente environ 127 cas évités. Il faut faire s''entraîner huit personnes pour en épargner une. Certitude modérée.
 
-Ce qui marchait dans les essais : renforcement de la nuque et des épaules, pauses actives, travail de contrôle moteur, activité physique générale. Aucun format n''écrase les autres — celui que tu suivras est le bon.
+Ce qui marchait dans les essais : renforcement de la nuque et des épaules, pauses actives, travail de contrôle moteur, activité physique générale. Aucun format n''écrase les autres : celui que tu suivras est le bon.
 
 ::figure omoplates | Le serrage d’omoplates : la base du renforcement du haut du dos.
 
@@ -665,7 +665,7 @@ Dix-sept essais randomisés, 619 participants. Les verres filtrant la lumière b
 
 Les auteurs relèvent même quelques effets indésirables rapportés : maux de tête, inconfort, humeur en baisse. Rien de grave, mais rien qui justifie l’achat.
 
-Ce qui n’est pas remis en cause, c’est l’inconfort lui-même. Devant un écran, le taux de clignement s’effondre et l’œil sèche — c’est un problème de film lacrymal, pas de longueur d’onde. D’où l’ordre des priorités : baisser l’écran sous la ligne du regard, écarter la ventilation qui souffle au visage, cligner franchement.
+Ce qui n’est pas remis en cause, c’est l’inconfort lui-même. Devant un écran, le taux de clignement s’effondre et l’œil sèche. C’est un problème de film lacrymal, pas de longueur d’onde. D’où l’ordre des priorités : baisser l’écran sous la ligne du regard, écarter la ventilation qui souffle au visage, cligner franchement.
 
 ::figure paumes | Fermer complètement les paupières refait le film lacrymal. Un filtre sur un verre, non.
 
@@ -678,15 +678,15 @@ ON CONFLICT (slug) DO UPDATE SET
 
 -- ergonomie-ce-qui-marche
 INSERT INTO articles (slug, title, dek, body_md, tag, evidence, read_min, source_label, source_url, sort_order)
-VALUES ('ergonomie-ce-qui-marche', 'Ce qui marche vraiment, au bureau', 'Une revue de revues sépare les interventions qui tiennent de celles qui ne tiennent pas. Le tri est brutal.', 'Quand on empile les revues systématiques sur la prévention des troubles musculo-squelettiques au bureau, un classement apparaît — et il ne ressemble pas à ce que vend le marché du bien-être au travail.
+VALUES ('ergonomie-ce-qui-marche', 'Ce qui marche vraiment, au bureau', 'Une revue de revues sépare les interventions qui tiennent de celles qui ne tiennent pas. Le tri est brutal.', 'Quand on empile les revues systématiques sur la prévention des troubles musculo-squelettiques au bureau, un classement apparaît, et il ne ressemble pas à ce que vend le marché du bien-être au travail.
 
 **Preuve forte d’un effet positif : le renforcement musculaire.** C’est la seule intervention qui sort nettement du lot. Les essais convergent : entraînement en résistance, même bref, même à faible dose.
 
 ::figure omoplates | Le renforcement du haut du dos est l’intervention la mieux démontrée de toutes.
 
-**Preuve forte d’absence d’effet** — c’est-à-dire qu’on a cherché et qu’on n’a pas trouvé : l’ergonomie participative, les interventions multi-facettes, et les programmes de gestion du stress. Ce sont pourtant les trois formats les plus vendus aux entreprises.
+**Preuve forte d’absence d’effet**, c’est-à-dire qu’on a cherché et qu’on n’a pas trouvé : l’ergonomie participative, les interventions multi-facettes, et les programmes de gestion du stress. Ce sont pourtant les trois formats les plus vendus aux entreprises.
 
-**Preuve limitée : l’ergonomie de poste elle-même.** Régler la hauteur du siège et de l’écran n’est pas inutile — les essais sur poste informatique montrent des gains de posture et parfois de douleur lombaire — mais l’effet est plus petit et moins reproductible qu’on ne le raconte. Une autre revue, portant sur 31 études d’interventions ergonomiques de bureau, va jusqu’à conclure à un effet nul voire défavorable.
+**Preuve limitée : l’ergonomie de poste elle-même.** Régler la hauteur du siège et de l’écran n’est pas inutile : les essais sur poste informatique montrent des gains de posture et parfois de douleur lombaire. Mais l’effet est plus petit et moins reproductible qu’on ne le raconte. Une autre revue, portant sur 31 études d’interventions ergonomiques de bureau, va jusqu’à conclure à un effet nul voire défavorable.
 
 ::figure extension-debout | Bouger reste plus efficace que d’être assis parfaitement.
 
@@ -703,13 +703,13 @@ ON CONFLICT (slug) DO UPDATE SET
 INSERT INTO articles (slug, title, dek, body_md, tag, evidence, read_min, source_label, source_url, sort_order)
 VALUES ('expiration-plus-longue', 'Respirer lentement suffit', 'L’expiration allongée est partout. Un essai à cent participants ne lui trouve pas d’avantage.', 'Toutes les applications de respiration répètent la même chose : allonge l’expiration, c’est elle qui active le système parasympathique. C’est joliment mécaniste, et un essai randomisé de 2023 vient nuancer sérieusement l’affaire.
 
-Cent participants, douze semaines, en simple aveugle. Deux groupes : respiration lente avec **expiration plus longue** que l’inspiration, ou respiration lente à durées **égales**. Résultat : la respiration lente réduit significativement le stress psychologique — dans les deux groupes. Allonger l’expiration n’apporte **aucun bénéfice supplémentaire** mesurable.
+Cent participants, douze semaines, en simple aveugle. Deux groupes : respiration lente avec **expiration plus longue** que l’inspiration, ou respiration lente à durées **égales**. Résultat : la respiration lente réduit significativement le stress psychologique, dans les deux groupes. Allonger l’expiration n’apporte **aucun bénéfice supplémentaire** mesurable.
 
 ::figure respiration | Ce qui compte, c’est de ralentir. Le rapport entre inspiration et expiration, beaucoup moins.
 
-Une étude de Stanford, la même année, compare de son côté cinq minutes quotidiennes de plusieurs techniques : le soupir cyclique — deux inspirations puis une longue expiration — améliore l’humeur un peu mieux que la méditation de pleine conscience. Les deux résultats ne se contredisent pas vraiment : ralentir marche, et le détail du rythme compte moins qu’on ne le dit.
+Une étude de Stanford, la même année, compare de son côté cinq minutes quotidiennes de plusieurs techniques : le soupir cyclique (deux inspirations puis une longue expiration) améliore l’humeur un peu mieux que la méditation de pleine conscience. Les deux résultats ne se contredisent pas vraiment : ralentir marche, et le détail du rythme compte moins qu’on ne le dit.
 
-Ce que l’app en tire : la routine « Souffle » propose toujours quatre temps d’inspiration pour six d’expiration, parce qu’un rythme compté est plus facile à tenir qu’une consigne vague. Mais si compter te gêne, **respire simplement plus lentement** — tu ne perds rien de démontré.
+Ce que l’app en tire : la routine « Souffle » propose toujours quatre temps d’inspiration pour six d’expiration, parce qu’un rythme compté est plus facile à tenir qu’une consigne vague. Mais si compter te gêne, **respire simplement plus lentement**. Tu ne perds rien de démontré.
 
 À garder en tête : essai unique sur un critère auto-rapporté, et douze semaines c’est court. La conclusion prudente est qu’on ne sait pas si le rapport compte, pas qu’il est certainement inutile.', 'preuve', 'partielle', 3, 'Slow breathing for reducing stress: the effect of extending exhale, Vanderbilt, 2023', 'https://pubmed.ncbi.nlm.nih.gov/36871835/', 10)
 ON CONFLICT (slug) DO UPDATE SET
@@ -720,7 +720,7 @@ ON CONFLICT (slug) DO UPDATE SET
 
 -- open-space
 INSERT INTO articles (slug, title, dek, body_md, tag, evidence, read_min, source_label, source_url, sort_order)
-VALUES ('open-space', 'L’open space, et ce qu’on peut y faire', 'Trente et une études passées en revue : aucune ne trouve de gain de productivité. Voilà ce qui reste sous ton contrôle.', 'Une revue qui a passé au crible plus de dix mille publications pour en retenir trente et une arrive à un constat net : **aucune étude ne met en évidence de gain de productivité lié à l’aménagement en open space.** Le bénéfice annoncé — la collaboration — n’apparaît pas dans les mesures.
+VALUES ('open-space', 'L’open space, et ce qu’on peut y faire', 'Trente et une études passées en revue : aucune ne trouve de gain de productivité. Voilà ce qui reste sous ton contrôle.', 'Une revue qui a passé au crible plus de dix mille publications pour en retenir trente et une arrive à un constat net : **aucune étude ne met en évidence de gain de productivité lié à l’aménagement en open space.** Le bénéfice annoncé, la collaboration, n’apparaît pas dans les mesures.
 
 Le coupable principal est identifié, et ce n’est pas le bruit en général : c’est **la parole intelligible**. Une conversation qu’on comprend capte l’attention bien plus qu’un bruit de fond continu. Les sources les plus citées de perte de productivité sont les discussions de collègues, les téléphones qui sonnent, et les interruptions.
 
@@ -730,7 +730,7 @@ Ce qui reste sous ton contrôle, du plus au moins efficace :
 
 **Éloigner la parole.** Changer de place, même de quelques mètres, ou trouver une salle pour les tâches qui demandent de la concentration. C’est la seule action qui s’attaque à la cause.
 
-**Masquer plutôt que couvrir.** Un bruit de fond continu et sans paroles — ventilation, bruit rose — rend la parole voisine moins intelligible. La musique avec paroles fait l’inverse.
+**Masquer plutôt que couvrir.** Un bruit de fond continu et sans paroles (ventilation, bruit rose) rend la parole voisine moins intelligible. La musique avec paroles fait l’inverse.
 
 **Le casque, avec une réserve.** Il fonctionne, mais une étude relève que les personnes qui recourent en permanence au casque ou à la radio pour tenir rapportent davantage de symptômes dépressifs. C’est un outil, pas un mode de vie.
 

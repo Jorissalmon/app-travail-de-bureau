@@ -63,7 +63,7 @@ export function SessionCard({
           ? heldS !== null
             ? // The frozen countdown, not the word "paused": what it says is that
               // the time already waited is still there and resumes untouched.
-              [mmss(heldS), 'gelé — reprend là où tu t’es arrêté']
+              [mmss(heldS), 'gelé, reprend là où tu t’es arrêté']
             : ['En pause', 'reprends quand tu es revenu']
           : pauseReason === 'break'
             ? ['En pause', 'le temps de l’exercice']

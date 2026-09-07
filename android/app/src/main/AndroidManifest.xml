@@ -28,6 +28,22 @@
             android:name=".WakeReceiver"
             android:exported="false" />
 
+        <!-- Android drops every pending alarm on reboot. The reminder
+             notifications come back on their own (the notifications plugin
+             declares its own boot receiver); the alarm that turns a dark screen
+             on did not, so until the app was next opened by hand a reminder
+             arrived as a banner nobody would see. -->
+        <receiver
+            android:name=".BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

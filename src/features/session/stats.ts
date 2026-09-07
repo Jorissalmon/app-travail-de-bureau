@@ -1,4 +1,4 @@
-import { addDays, daysBetween } from '../../lib/date.js'
+import { addDays, daysBetween, fromLocalDate } from '../../lib/date.js'
 import type { ReminderAction } from '../../lib/types.js'
 
 /**
@@ -19,23 +19,71 @@ export const STREAK_THRESHOLD = 3
 /** §11.5 — below this 30-day response rate, the UI offers a longer interval. */
 export const LOW_ADHERENCE = 0.4
 
+/** Days walked back at most, so an empty history can never loop forever. */
+const STREAK_HORIZON_DAYS = 366
+
+/** ISO weekday of a "YYYY-MM-DD" string, 1 = Monday … 7 = Sunday. */
+function weekdayOf(dateStr: string): number {
+  const js = fromLocalDate(dateStr).getDay()
+  return js === 0 ? 7 : js
+}
+
+export interface StreakOptions {
+  /**
+   * The days the user works, ISO 1..7. A day outside this list is skipped, not
+   * counted and not a break: a Monday-to-Friday user could otherwise never
+   * hold a streak past five, because Saturday reset it every single week. An
+   * empty list means every day counts, as everywhere else in the app.
+   */
+  weekdays?: number[]
+  /**
+   * One missed working day is forgiven; the second ends the run. Forums are
+   * unanimous that the day a long streak breaks is the day the app gets
+   * deleted, and a counter that punishes one dentist appointment is a counter
+   * that will be wrong about you for a month. The forgiven day is NOT counted,
+   * so the number stays exactly "days you actually moved" — the app does not
+   * get to inflate it on your behalf.
+   */
+  grace?: boolean
+}
+
 /**
- * Consecutive days, ending today, with at least STREAK_THRESHOLD stands.
- * Today not yet meeting the threshold does not break a streak built up to
- * yesterday — the day is still in progress.
+ * Consecutive working days, ending today, with at least STREAK_THRESHOLD
+ * stands. Today not yet meeting the threshold does not break a streak built up
+ * to yesterday — the day is still in progress.
  */
-export function computeStreak(days: DayCount[], today: string): number {
+export function computeStreak(
+  days: DayCount[],
+  today: string,
+  options: StreakOptions = {},
+): number {
+  const { weekdays = [], grace = true } = options
+  const active = (d: string) => weekdays.length === 0 || weekdays.includes(weekdayOf(d))
   const stands = new Map(days.map((d) => [d.localDate, d.stands]))
+  const qualifies = (d: string) => (stands.get(d) ?? 0) >= STREAK_THRESHOLD
+
   let streak = 0
+  let forgiven = 0
   let cursor = today
 
   // If today is not yet a qualifying day, start counting from yesterday so the
   // streak reflects completed days.
-  if ((stands.get(today) ?? 0) < STREAK_THRESHOLD) {
-    cursor = addDays(today, -1)
-  }
-  while ((stands.get(cursor) ?? 0) >= STREAK_THRESHOLD) {
-    streak++
+  if (!qualifies(today)) cursor = addDays(today, -1)
+
+  for (let i = 0; i < STREAK_HORIZON_DAYS; i++) {
+    if (!active(cursor)) {
+      // A day off is not a day missed.
+      cursor = addDays(cursor, -1)
+      continue
+    }
+    if (qualifies(cursor)) {
+      streak++
+    } else if (grace && forgiven === 0 && streak > 0) {
+      // Never as the first step back: a run does not begin with a blank day.
+      forgiven++
+    } else {
+      break
+    }
     cursor = addDays(cursor, -1)
   }
   return streak

@@ -1,3 +1,4 @@
+import { daysBetween } from '@/lib/date'
 import type { Completion, ReminderEvent } from '@/lib/types'
 
 /**
@@ -13,10 +14,7 @@ export const QUEUE_CAP = 500
  * Append events, drop duplicates by clientId (a replayed action must not
  * enqueue twice), and keep only the most recent QUEUE_CAP entries.
  */
-export function enqueueEvents(
-  queue: ReminderEvent[],
-  incoming: ReminderEvent[],
-): ReminderEvent[] {
+export function enqueueEvents(queue: ReminderEvent[], incoming: ReminderEvent[]): ReminderEvent[] {
   const seen = new Set(queue.map((e) => e.clientId))
   const merged = [...queue]
   for (const e of incoming) {
@@ -33,10 +31,7 @@ export function enqueueEvents(
   return merged.length > QUEUE_CAP ? merged.slice(merged.length - QUEUE_CAP) : merged
 }
 
-export function enqueueCompletions(
-  queue: Completion[],
-  incoming: Completion[],
-): Completion[] {
+export function enqueueCompletions(queue: Completion[], incoming: Completion[]): Completion[] {
   const seen = new Set(queue.map((e) => e.clientId))
   const merged = [...queue]
   for (const c of incoming) {
@@ -58,4 +53,17 @@ export function removeConfirmed<T extends { clientId: string }>(
 ): T[] {
   const done = new Set(confirmedClientIds)
   return queue.filter((e) => !done.has(e.clientId))
+}
+
+/**
+ * Drop journal entries older than `days`, counted in local days rather than
+ * in entries: a record is kept for a period, not for a number of taps. An
+ * entry dated in the future is kept — a clock set wrong must not erase itself.
+ */
+export function prune<T extends { localDate: string }>(
+  entries: T[],
+  today: string,
+  days: number,
+): T[] {
+  return entries.filter((e) => daysBetween(e.localDate, today) < days)
 }
