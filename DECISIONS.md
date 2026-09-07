@@ -432,6 +432,16 @@ sont dans le rapport de session ; ce qui suit, c'est ce qu'on en a fait.
 
 ## Fluidité et écriture
 
+- **La borne de la feuille tient compte de la barre d'état** — `86vh` plaçait
+  le haut du panneau là où 14 % de l'écran tombait, ce qui n'est pas une
+  promesse de dégager quoi que ce soit : sur un téléphone haut avec la barre
+  d'état dessinée par-dessus le webview, le début de la liste passait dessous.
+  C'est `calc(100dvh - env(safe-area-inset-top) - 88px)`, dans la même unité que
+  la coque. Les 88 px ne sont pas le minimum pour dégager l'encoche : c'est
+  aussi la cible de « taper à côté pour fermer », et une bande cachée sous
+  l'horloge n'est une cible pour personne. Vérifié au doigt en 412x915, 390x844
+  et 360x640 : voile de 88 px, premier exercice atteignable, défilement jusqu'au
+  dernier, poignée et voile ferment.
 - **La feuille modale n'avait pas de hauteur** — le sélecteur d'exercices
   contient 42 entrées, la feuille grandissait avec, et comme elle est ancrée en
   bas d'un conteneur fixe, le débordement partait par le haut sans rien à faire

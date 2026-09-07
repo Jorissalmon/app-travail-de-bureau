@@ -9,8 +9,8 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
  *
  * It has a height. A long list (the exercise picker holds forty-two) made the
  * panel taller than the screen, and since it sits at the bottom of a fixed
- * container the overflow ran off the top with nothing to scroll: the last
- * entries were simply unreachable.
+ * container the overflow ran off the top with nothing to scroll: the first
+ * entries were simply unreachable, and what remained ran under the status bar.
  *
  * And the drag lives on the handle, not on the whole panel. With a scrollable
  * body the two gestures were the same gesture: swiping the list down dragged
@@ -67,7 +67,16 @@ export function Sheet({
           background: 'var(--surface)',
           borderTopLeftRadius: 'var(--r-sheet)',
           borderTopRightRadius: 'var(--r-sheet)',
-          maxHeight: '86vh',
+          // Not a guessed percentage. `86vh` left the top of the sheet wherever
+          // 14 % of the screen happened to fall, and on a tall phone with the
+          // status bar drawn over the webview that is not a promise about
+          // clearing it. This reserves the system inset plus a band of scrim,
+          // so the panel starts below the clock on any screen, and it is `dvh`
+          // like the app shell rather than a second unit that can disagree.
+          // The band is 88px rather than just enough to clear the inset: it is
+          // also the target for "tap outside to close", and a strip hiding
+          // under the status bar is not a target anyone can hit.
+          maxHeight: 'calc(100dvh - env(safe-area-inset-top, 0px) - 88px)',
           transform: `translateY(${dragY}px)`,
           transition: startY.current === null ? 'transform 220ms var(--ease)' : 'none',
         }}
