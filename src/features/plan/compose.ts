@@ -134,7 +134,7 @@ function poolFor(input: ComposeInput, zone: Zone, type: ExerciseType): Candidate
   const seen = new Set<string>()
   const out: Candidate[] = []
   for (const r of input.routines) {
-    if (!r.targetZones.includes(zone)) continue
+    if (!r.targetZones?.includes(zone)) continue
     for (const s of r.steps) {
       if (seen.has(s.exerciseKey)) continue
       const ex = input.exerciseByKey(s.exerciseKey)
@@ -168,7 +168,7 @@ function resetPool(input: ComposeInput): Candidate[] {
       if (!ex || ex.type !== 'reset') continue
       seen.add(s.exerciseKey)
       out.push({
-        zone: r.targetZones[0] ?? 'bien-etre',
+        zone: r.targetZones?.[0] ?? 'bien-etre',
         discreet: ex.discreet,
         block: {
           name: s.name,

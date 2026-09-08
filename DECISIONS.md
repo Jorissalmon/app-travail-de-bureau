@@ -763,6 +763,29 @@ s'écartent de ce qui était demandé, ou qui coûtent quelque chose.
   jours de réponses. Ni l'un ni l'autre n'était visible dans un typage ou un
   test unitaire.
 
+- **Le pivot cassait l'app dès qu'elle passait en ligne.** L'app se met à jour
+  par OTA en quelques secondes ; l'API et la base se mettent à jour quand
+  quelqu'un déploie et lance une migration — et « DB migrate » échoue depuis des
+  jours sur un secret absent. Il y a donc, à chaque livraison et pour chaque
+  utilisateur, une fenêtre où un téléphone à jour lit un catalogue qui ne l'est
+  pas. Le pivot rendait cette fenêtre fatale : `/api/routines` ne renvoyait pas
+  encore `goal` ni `targetZones`, le store écrasait le JSON embarqué avec ça, et
+  le compositeur lisait `routine.targetZones.includes(...)` sur `undefined`.
+  Reproduit dans un navigateur contre une API qui imite celle en production :
+  quatre `TypeError`, et **la carte du plan absente de l'accueil** — tout le
+  pivot invisible. Le raw était en plus mis en cache, donc ça survivait au
+  relancement.
+- **Le correctif est une frontière de réconciliation, pas un `?.`** —
+  `src/content/reconcile.ts`, appliqué à la lecture du cache *et* de l'API. Un
+  champ absent du fil est repris de l'entrée embarquée de même slug : le JSON
+  est le fichier même dont le seed est généré, donc c'est la valeur que la base
+  aura une fois migrée, pas une invention. Un `targetZones` vide compte comme
+  absent — une base migrée mais non re-seedée porte `'{}'`, ce qui aurait masqué
+  la routine de tous les plans sans jamais lever d'erreur, la panne la pire
+  parce que personne ne la signale. Un mouvement inconnu et non typé est
+  `mobility`, jamais `strength` : charger une zone qui fait mal sur aucune
+  information est la seule chose qu'on ne doit pas pouvoir faire dire au plan.
+
 ## À la charge du propriétaire (secrets, hors dépôt)
 
 - Créer le rôle `releve_app` + la base `releve`, appliquer les migrations

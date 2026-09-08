@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { api } from '@/lib/api'
 import { KEYS, getJSON, setJSON } from '@/lib/storage'
 import { LOCAL_ARTICLES, LOCAL_EXERCISES, LOCAL_ROUTINES } from '@/content'
+import { reconcileArticles, reconcileExercises, reconcileRoutines } from '@/content/reconcile'
 import type { Article, Exercise, Routine } from '@/lib/types'
 import {
   buildCatalogue,
@@ -76,9 +77,16 @@ export const useContentStore = create<ContentState>((set, get) => ({
     await loadPlace()
     await loadCustomRoutines()
     // Show cached-or-bundled immediately.
-    const cachedRoutines = await getJSON<Routine[]>(KEYS.routines, LOCAL_ROUTINES)
+    // Reconciled on the way out of storage too: a device that ran a build from
+    // before this fix has a raw, fieldless catalogue cached, and it would take
+    // the app down on launch before any request went out.
+    const cachedRoutines = reconcileRoutines(
+      await getJSON<Routine[]>(KEYS.routines, LOCAL_ROUTINES),
+    )
     const cachedArticles = await getJSON<Article[]>(KEYS.articles, LOCAL_ARTICLES)
-    const cachedExercises = await getJSON<Exercise[]>(KEYS.exercises, LOCAL_EXERCISES)
+    const cachedExercises = reconcileExercises(
+      await getJSON<Exercise[]>(KEYS.exercises, LOCAL_EXERCISES),
+    )
     set({
       routines: cachedRoutines,
       articles: cachedArticles,
@@ -95,17 +103,26 @@ export const useContentStore = create<ContentState>((set, get) => ({
         api.getPublic<Article[]>('/api/articles'),
         api.getPublic<Exercise[]>('/api/exercises'),
       ])
+      // Reconciled, never stored raw: the API can be older than this build —
+      // it is, on every release, until the deploy and the migration catch up —
+      // and a routine without `targetZones` crashed the plan composer on the
+      // home screen. Caching the raw answer made it survive the next launch.
       if (routines.length) {
-        set({ routines })
-        await setJSON(KEYS.routines, routines)
+        const merged = reconcileRoutines(routines)
+        set({ routines: merged })
+        await setJSON(KEYS.routines, merged)
       }
       if (articles.length) {
-        set({ articles })
-        await setJSON(KEYS.articles, articles)
+        const merged = reconcileArticles(articles)
+        if (merged.length) {
+          set({ articles: merged })
+          await setJSON(KEYS.articles, merged)
+        }
       }
       if (exercises.length) {
-        set({ exercises })
-        await setJSON(KEYS.exercises, exercises)
+        const merged = reconcileExercises(exercises)
+        set({ exercises: merged })
+        await setJSON(KEYS.exercises, merged)
       }
       // The catalogue may have moved under the user's routines: rebuild them
       // against what just arrived.
