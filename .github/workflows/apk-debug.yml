@@ -22,6 +22,10 @@ on:
       - 'public/ota/**'
       - 'ota/version.json'
       - '**.md'
+  # Lancé à la main, il construit depuis la branche choisie — c'est voulu : un
+  # APK de test doit pouvoir sortir d'une branche avant qu'elle soit mergée.
+  # La note de la release dit donc de quelle branche il sort, sans quoi on
+  # installe un fichier sans savoir ce qu'il contient.
   workflow_dispatch:
 
 permissions:
@@ -98,7 +102,7 @@ jobs:
           fail_on_unmatched_files: true
           body: |
             APK de test de **Log Off ${{ steps.meta.outputs.app }}**, à installer par sideload.
-            Contenu web ${{ steps.meta.outputs.ota }} · construit depuis `main` (${{ github.sha }}).
+            Contenu web ${{ steps.meta.outputs.ota }} · construit depuis `${{ github.ref_name }}` (${{ github.sha }}).
 
             ### Désinstalle l'app avant d'installer
 
