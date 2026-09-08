@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { App } from '@capacitor/app'
 import { Browser } from '@capacitor/browser'
 import { Segmented } from '@/components/Segmented'
 import { Toggle } from '@/components/Toggle'
@@ -7,6 +9,31 @@ import { useSettingsStore } from '@/stores/settings'
 import { useAuthStore } from '@/stores/auth'
 import { INTERVAL_CHOICES, RECOMMENDED_INTERVAL } from '@/lib/defaults'
 import { BUNDLE_VERSION, isNativeUpdatePending } from '@/features/ota/updater'
+import {
+  PERMISSION_COPY,
+  PERMISSION_ORDER,
+  type PermissionKey,
+  type PermissionState,
+  readPermissions,
+  requestPermission,
+} from '@/features/reminders/permissions'
+import { loadCues, setCues } from '@/features/session/cues'
+import { PLACES, PLACE_LABEL, type Place, loadPlace, setPlace } from '@/features/place/place'
+import { useContentStore } from '@/stores/content'
+import {
+  ALERT_MODES,
+  ALERT_MODE_LABEL,
+  type AlertMode,
+  MAX_VOLUME,
+  MIN_VOLUME,
+  VOLUME_STEP,
+  loadAlertMode,
+  loadAlertVolume,
+  previewAlert,
+  setAlertMode,
+  setAlertVolume,
+} from '@/features/reminders/alert'
+import { canDuck } from '@/features/reminders/audiofocus'
 import { isNative } from '@/lib/platform'
 
 const REPO_URL = 'https://github.com/Jorissalmon/app-travail-de-bureau'
@@ -22,14 +49,67 @@ const WEEKDAYS = [
 
 /** §11.6 — Profil: Session · Rappels · Compte · À propos. */
 export function Settings() {
+  const navigate = useNavigate()
   const settings = useSettingsStore((s) => s.settings)
   const update = useSettingsStore((s) => s.update)
   const user = useAuthStore((s) => s.user)
   const logout = useAuthStore((s) => s.logout)
+  const authStatus = useAuthStore((s) => s.status)
 
   const [nativeUpdate, setNativeUpdate] = useState(false)
   useEffect(() => {
     void isNativeUpdatePending().then(setNativeUpdate)
+  }, [])
+
+  // The APK version, which the OTA never changes. It is the only way to tell
+  // whether the shell installed is recent enough for the features that need a
+  // native plugin — the row used to be blank on the device itself.
+  const [nativeVersion, setNativeVersion] = useState<string | null>(null)
+  useEffect(() => {
+    if (!isNative()) return
+    void App.getInfo()
+      .then((info) => setNativeVersion(info.version))
+      .catch(() => setNativeVersion(null))
+  }, [])
+
+  // The one hint left in this screen that is not a label or a value, kept
+  // because it is a state rather than a lesson: `duckOthers` shipped in the APK
+  // from 1.4.0, and on an older shell « Écouter » rings over the music and can
+  // do nothing about it — which looks like a bug unless the screen says so.
+  const volumeHint =
+    isNative() && !canDuck() ? 'Cette version ne peut pas baisser ta musique' : undefined
+
+  // The three grants a reminder needs. The sheet only appears when starting a
+  // session, so this is where the state stays readable and fixable afterwards.
+  const [permissions, setPermissions] = useState<PermissionState | null>(null)
+  useEffect(() => {
+    void readPermissions().then(setPermissions)
+  }, [])
+
+  async function grant(key: PermissionKey) {
+    setPermissions(await requestPermission(key))
+  }
+
+  // Device-local: Settings is replaced wholesale by the server copy on /api/me.
+  const [playerSound, setPlayerSound] = useState(true)
+  useEffect(() => {
+    void loadCues().then(setPlayerSound)
+  }, [])
+
+  const [alert, setAlert] = useState<AlertMode>('silent')
+  useEffect(() => {
+    void loadAlertMode().then(setAlert)
+  }, [])
+
+  const [volume, setVolume] = useState(80)
+  useEffect(() => {
+    void loadAlertVolume().then(setVolume)
+  }, [])
+
+  const refreshPlace = useContentStore((s) => s.refreshPlace)
+  const [where, setWhere] = useState<Place>('bureau')
+  useEffect(() => {
+    void loadPlace().then(setWhere)
   }, [])
 
   function toggleWeekday(n: number) {
@@ -62,7 +142,19 @@ export function Settings() {
       )}
 
       <SettingsSection title="Session">
-        <SettingRow label="Intervalle des rappels" hint="30 minutes est l’intervalle recommandé." stacked>
+        <SettingRow label="Où tu travailles" stacked>
+          <Segmented
+            ariaLabel="Lieu de travail"
+            options={PLACES}
+            value={where}
+            onChange={(v) => {
+              setWhere(v)
+              void setPlace(v).then(refreshPlace)
+            }}
+            format={(v) => PLACE_LABEL[v]}
+          />
+        </SettingRow>
+        <SettingRow label="Intervalle des rappels" stacked>
           <Segmented
             ariaLabel="Intervalle des rappels en minutes"
             options={INTERVAL_CHOICES}
@@ -73,7 +165,7 @@ export function Settings() {
           />
         </SettingRow>
 
-        <SettingRow label="Durée de pause" hint="Minutes conseillées pour chaque pause." stacked>
+        <SettingRow label="Durée de pause" stacked>
           <Segmented
             ariaLabel="Durée de pause en minutes"
             options={[1, 2, 3, 5, 10] as const}
@@ -116,14 +208,31 @@ export function Settings() {
 
         <TimeRow
           label="Démarrage auto"
-          hint="Laisse vide pour démarrer à la main."
           value={settings.autoStartAt}
           onChange={(autoStartAt) => void update({ autoStartAt })}
         />
       </SettingsSection>
 
       <SettingsSection title="Rappels">
-        <SettingRow label="Rappels des yeux" hint="Désactivé par défaut. Voir l’article dédié.">
+        {permissions !== null &&
+          PERMISSION_ORDER.map((key) => (
+            <SettingRow
+              key={key}
+              label={PERMISSION_COPY[key].label}
+              hint={permissions[key] ? 'Accordée' : 'Non accordée'}
+            >
+              {!permissions[key] && (
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => void grant(key)}
+                >
+                  Autoriser
+                </button>
+              )}
+            </SettingRow>
+          ))}
+        <SettingRow label="Rappels des yeux">
           <Toggle
             label="Rappels des yeux"
             checked={settings.eyeReminders}
@@ -137,28 +246,101 @@ export function Settings() {
             onChange={(v) => void update({ vibrate: v })}
           />
         </SettingRow>
-        <SettingRow label="Son" hint="Désactivé par défaut (open space).">
-          <Toggle label="Son" checked={settings.sound} onChange={(v) => void update({ sound: v })} />
+        <SettingRow label="Alarme du rappel" stacked>
+          <Segmented
+            ariaLabel="Insistance de l’alarme"
+            options={ALERT_MODES}
+            value={alert}
+            onChange={(v) => {
+              setAlert(v)
+              void setAlertMode(v)
+            }}
+            format={(v) => ALERT_MODE_LABEL[v]}
+          />
+        </SettingRow>
+        <SettingRow label="Volume de l’alarme" hint={volumeHint} stacked>
+          <div className="flex items-center gap-3">
+            <input
+              type="range"
+              min={MIN_VOLUME}
+              max={MAX_VOLUME}
+              step={VOLUME_STEP}
+              value={volume}
+              aria-label="Volume de l’alarme"
+              onChange={(e) => {
+                const v = Number(e.target.value)
+                setVolume(v)
+                void setAlertVolume(v)
+              }}
+              // Relâcher le curseur fait entendre le réglage : on ne règle pas
+              // un volume à l'aveugle.
+              onPointerUp={() => previewAlert()}
+              onKeyUp={() => previewAlert()}
+              className="min-w-0 flex-1"
+              style={{ accentColor: 'var(--accent)', height: 32 }}
+            />
+            <span className="num shrink-0 text-[14px]" style={{ width: 40, color: 'var(--text-2)' }}>
+              {volume}
+            </span>
+            <button
+              type="button"
+              className="btn btn-secondary shrink-0"
+              onClick={() => previewAlert()}
+            >
+              Écouter
+            </button>
+          </div>
+        </SettingRow>
+        <SettingRow label="Sons du minuteur">
+          <Toggle
+            label="Sons du minuteur"
+            checked={playerSound}
+            onChange={(v) => {
+              setPlayerSound(v)
+              void setCues(v)
+            }}
+          />
         </SettingRow>
       </SettingsSection>
 
       <SettingsSection title="Compte">
-        <SettingRow label="E-mail" hint={user?.email ?? '—'} />
-        <div className="py-3.5">
-          <button
-            type="button"
-            onClick={() => void logout()}
-            className="text-[16px]"
-            style={{ color: 'var(--danger)' }}
-          >
-            Se déconnecter
-          </button>
-        </div>
+        {authStatus === 'local' ? (
+          <>
+            <SettingRow label="Aucun compte" hint="Rien n’est synchronisé" />
+            <div className="py-3.5">
+              <button
+                type="button"
+                onClick={() => navigate('/login')}
+                className="text-[16px] underline underline-offset-4"
+                style={{ color: 'var(--accent)' }}
+              >
+                Créer un compte pour synchroniser
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <SettingRow label="E-mail" hint={user?.email ?? '—'} />
+            <div className="py-3.5">
+              <button
+                type="button"
+                onClick={() => void logout()}
+                className="text-[16px]"
+                style={{ color: 'var(--danger)' }}
+              >
+                Se déconnecter
+              </button>
+            </div>
+          </>
+        )}
       </SettingsSection>
 
       <SettingsSection title="À propos">
         <SettingRow label="Version du contenu (OTA)" hint={BUNDLE_VERSION} />
-        <SettingRow label="Version de l’application" hint={isNative() ? undefined : 'navigateur'} />
+        <SettingRow
+          label="Version de l’application"
+          hint={isNative() ? (nativeVersion ?? '—') : 'navigateur'}
+        />
         <div className="py-3.5" style={{ borderBottom: '1px solid var(--border)' }}>
           <button
             type="button"
@@ -170,7 +352,7 @@ export function Settings() {
           </button>
         </div>
         <p className="t-meta py-4">
-          Relève n’est pas un dispositif médical. En cas de douleur qui persiste, un médecin ou un
+          Log Off n’est pas un dispositif médical. En cas de douleur qui persiste, un médecin ou un
           kiné tranchera mieux qu’une app.
         </p>
       </SettingsSection>
@@ -222,7 +404,6 @@ function TimeRangeRow({
   return (
     <div className="py-3.5" style={{ borderBottom: '1px solid var(--border)' }}>
       <p className="text-[16px]">{label}</p>
-      <p className="t-meta mt-0.5">Aucun rappel pendant cette plage.</p>
       <div className="mt-3 flex items-center gap-2">
         <input
           type="time"

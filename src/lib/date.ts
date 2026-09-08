@@ -84,6 +84,27 @@ export function daysBetween(a: string, b: string): number {
   return Math.round(ms / 86_400_000)
 }
 
+/**
+ * « Aujourd'hui », « Hier », or « Lundi 8 septembre » — the heading of a day in
+ * the journal. The two nearest days get their name rather than their date,
+ * because that is how anyone reading their own week refers to them.
+ */
+export function journalDayLabel(dateStr: string, today: string): string {
+  const away = daysBetween(dateStr, today)
+  if (away === 0) return 'Aujourd’hui'
+  if (away === 1) return 'Hier'
+  const d = fromLocalDate(dateStr)
+  const name = DAYS[d.getDay()] ?? ''
+  return `${name} ${d.getDate()} ${(MONTHS[d.getMonth()] ?? '').toLowerCase()}`
+}
+
+/** "09:04" from an ISO instant, in the reader's own clock. */
+export function clockTime(iso: string): string {
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return '—'
+  return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
+}
+
 /** Short weekday initial used by the 7-day bar chart. */
 export function weekdayInitial(dateStr: string): string {
   const name = DAYS[fromLocalDate(dateStr).getDay()] ?? ''

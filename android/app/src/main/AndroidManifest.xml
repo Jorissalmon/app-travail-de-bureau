@@ -24,6 +24,26 @@
 
         </activity>
 
+        <receiver
+            android:name=".WakeReceiver"
+            android:exported="false" />
+
+        <!-- Android drops every pending alarm on reboot. The reminder
+             notifications come back on their own (the notifications plugin
+             declares its own boot receiver); the alarm that turns a dark screen
+             on did not, so until the app was next opened by hand a reminder
+             arrived as a banner nobody would see. -->
+        <receiver
+            android:name=".BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
@@ -49,4 +69,8 @@
     <!-- Ask to be excluded from battery optimisation so reminders survive Doze
          (§8.3); the request is shown once, never forced. -->
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <!-- Show the break over the lock screen when the phone is asleep: the only
+         way Android lets a background app start an activity. Granted at install
+         below Android 14, asked for on the permissions sheet above it. -->
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
 </manifest>

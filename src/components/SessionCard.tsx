@@ -14,10 +14,20 @@ export interface SessionCardProps {
   elapsedS: number
   /** Seconds until the next scheduled reminder, or null if none pending. */
   nextInS: number | null
+  /** Why the clock is stopped, or null while it runs. */
+  pauseReason?: 'manual' | 'break' | null
+  /** Seconds frozen by the pause, shown so it is plain nothing was lost. */
+  heldS?: number | null
+  /** True while a reminder that fired is still waiting to be answered. */
+  awaiting?: boolean
   /** Interval in seconds, to size the ring. */
   intervalS: number
   onStart: () => void
   onStop: () => void
+  onPause: () => void
+  onResume: () => void
+  /** Open the exercise that is owed. Only ever called while `awaiting`. */
+  onDoExercise: () => void
   busy?: boolean
 }
 
@@ -28,12 +38,36 @@ export function SessionCard({
   intervalS,
   onStart,
   onStop,
+  onPause,
+  onResume,
+  onDoExercise,
   busy,
+  pauseReason = null,
+  heldS = null,
+  awaiting = false,
 }: SessionCardProps) {
+  const paused = pauseReason !== null
   const progress = useMemo(() => {
-    if (nextInS === null || intervalS <= 0) return 0
+    if (paused || awaiting || nextInS === null || intervalS <= 0) return 0
     return 1 - Math.min(1, Math.max(0, nextInS / intervalS))
-  }, [nextInS, intervalS])
+  }, [paused, awaiting, nextInS, intervalS])
+
+  // The ring says one thing at a time, in the order that matters: an exercise
+  // owed outranks a pause, and both outrank the countdown.
+  const [count, caption] =
+    awaiting && pauseReason === 'manual'
+      ? ['En pause', 'un exercice t’attend à la reprise']
+      : awaiting
+        ? ['À faire', 'un exercice t’attend']
+        : pauseReason === 'manual'
+          ? heldS !== null
+            ? // The frozen countdown, not the word "paused": what it says is that
+              // the time already waited is still there and resumes untouched.
+              [mmss(heldS), 'gelé, reprend là où tu t’es arrêté']
+            : ['En pause', 'reprends quand tu es revenu']
+          : pauseReason === 'break'
+            ? ['En pause', 'le temps de l’exercice']
+            : [nextInS === null ? '—' : mmss(nextInS), 'avant le prochain']
 
   if (!active) {
     return (
@@ -47,11 +81,19 @@ export function SessionCard({
         </div>
         <div
           className="relative flex flex-col justify-end p-6"
-          style={{ minHeight: '44vh', background: 'linear-gradient(to top, var(--surface) 40%, transparent)' }}
+          style={{
+            minHeight: '44vh',
+            background: 'linear-gradient(to top, var(--surface) 40%, transparent)',
+          }}
         >
           <p className="t-card-eyebrow">Prêt</p>
           <h2 className="t-hero mt-1 mb-5">Commencer ma journée</h2>
-          <button type="button" className="btn btn-accent btn-block" onClick={onStart} disabled={busy}>
+          <button
+            type="button"
+            className="btn btn-accent btn-block"
+            onClick={onStart}
+            disabled={busy}
+          >
             {busy ? 'Un instant…' : 'Commencer'}
           </button>
         </div>
@@ -68,20 +110,41 @@ export function SessionCard({
       <p className="t-card-eyebrow mb-4 text-center">En session depuis {elapsedLabel(elapsedS)}</p>
 
       <TimerRing progress={progress} size={220} stroke={6}>
-        <span className="t-count" style={{ fontSize: 54 }}>
-          {nextInS === null ? '—' : mmss(nextInS)}
+        <span className="t-count" style={{ fontSize: paused || awaiting ? 34 : 54 }}>
+          {count}
         </span>
-        <span className="t-meta mt-1">avant le prochain</span>
+        <span className="t-meta mt-1">{caption}</span>
       </TimerRing>
 
-      <button
-        type="button"
-        className="btn btn-danger btn-block mt-7"
-        onClick={onStop}
-        disabled={busy}
-      >
-        Terminer ma journée
-      </button>
+      {/* An owed exercise needs a way in from here too: the prompt can be
+          closed, and the card was then the only thing left saying one was due
+          — without offering any way to actually do it. */}
+      {awaiting && (
+        <button
+          type="button"
+          className="btn btn-accent btn-block mt-6"
+          onClick={onDoExercise}
+          disabled={busy}
+        >
+          Faire l’exercice
+        </button>
+      )}
+
+      <div className={`${awaiting ? 'mt-2.5' : 'mt-7'} flex w-full gap-2.5`}>
+        <button
+          type="button"
+          className="btn btn-secondary flex-1"
+          onClick={pauseReason === 'manual' ? onResume : onPause}
+          // Only the user's own pause is theirs to lift here; the one an
+          // exercise puts on the clock ends when the exercise does.
+          disabled={busy || pauseReason === 'break'}
+        >
+          {pauseReason === 'manual' ? 'Reprendre' : 'Pause'}
+        </button>
+        <button type="button" className="btn btn-danger flex-1" onClick={onStop} disabled={busy}>
+          Terminer
+        </button>
+      </div>
     </section>
   )
 }

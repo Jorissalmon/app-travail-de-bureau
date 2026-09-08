@@ -1,6 +1,7 @@
-import type { AccentKey, Article, Routine, Zone } from '@/lib/types'
+import type { AccentKey, Article, Exercise, Family, Routine, Zone } from '@/lib/types'
 import routinesJson from './routines.json'
 import articlesJson from './articles.json'
+import exercisesJson from './exercises.json'
 
 /**
  * Local copy of the seeded content (§12). Used as the offline fallback on the
@@ -11,24 +12,54 @@ import articlesJson from './articles.json'
 
 export const LOCAL_ROUTINES = routinesJson as Routine[]
 export const LOCAL_ARTICLES = articlesJson as Article[]
+/** The JSON is keyed by exerciseKey; the array form is what the API and the
+    content store both use, so the key lives on the value too (§ audit). */
+export const LOCAL_EXERCISES: Exercise[] = Object.entries(
+  exercisesJson as Record<string, Omit<Exercise, 'key'>>,
+).map(([key, ex]) => ({ key, ...ex }))
 
 export interface ZoneMeta {
   zone: Zone
   label: string
+  family: Family
   /** Representative figure + tone for the zone card. */
   figureKey: string
   tone: AccentKey
 }
 
-/** §11.1 — the six browse-by-zone cards, in display order. */
+/**
+ * §11.1 — the browse-by-zone cards, in display order. The family a zone belongs
+ * to is what the home screen groups by: the moment of the day, the body part
+ * that hurts, or what one is after.
+ */
 export const ZONES: ZoneMeta[] = [
-  { zone: 'general', label: 'Général', figureKey: 'marche', tone: 'lime' },
-  { zone: 'hanches', label: 'Hanches', figureKey: 'fente', tone: 'blush' },
-  { zone: 'lombaires', label: 'Lombaires', figureKey: 'chat-vache', tone: 'sage' },
-  { zone: 'nuque', label: 'Nuque', figureKey: 'menton-rentre', tone: 'sky' },
-  { zone: 'dos', label: 'Haut du dos', figureKey: 'omoplates', tone: 'navy' },
-  { zone: 'yeux', label: 'Yeux', figureKey: 'clignement', tone: 'sun' },
+  { zone: 'matin', label: 'Matin', family: 'moment', figureKey: 'marche', tone: 'sun' },
+  { zone: 'bureau', label: 'Au bureau', family: 'moment', figureKey: 'extension-debout', tone: 'lime' },
+  { zone: 'nuque', label: 'Nuque', family: 'corps', figureKey: 'menton-rentre', tone: 'sky' },
+  { zone: 'dos', label: 'Haut du dos', family: 'corps', figureKey: 'omoplates', tone: 'navy' },
+  { zone: 'lombaires', label: 'Lombaires', family: 'corps', figureKey: 'chat-vache', tone: 'sage' },
+  { zone: 'hanches', label: 'Hanches', family: 'corps', figureKey: 'fente', tone: 'blush' },
+  { zone: 'poignets', label: 'Poignets', family: 'corps', figureKey: 'poignet-flexion', tone: 'peach' },
+  { zone: 'chevilles', label: 'Chevilles', family: 'corps', figureKey: 'cheville-cercle', tone: 'pine' },
+  { zone: 'yeux', label: 'Yeux', family: 'bien-etre', figureKey: 'clignement', tone: 'sun' },
+  { zone: 'bien-etre', label: 'Souffle', family: 'bien-etre', figureKey: 'respiration', tone: 'brick' },
 ]
+
+export interface FamilyMeta {
+  family: Family
+  label: string
+}
+
+/** Section headings on the home screen and in the library. */
+export const FAMILIES: FamilyMeta[] = [
+  { family: 'moment', label: 'Selon le moment' },
+  { family: 'corps', label: 'Selon la zone' },
+  { family: 'bien-etre', label: 'Bien-être au travail' },
+]
+
+export const ZONE_FAMILY: Record<Zone, Family> = Object.fromEntries(
+  ZONES.map((z) => [z.zone, z.family]),
+) as Record<Zone, Family>
 
 export const ZONE_LABEL: Record<Zone, string> = Object.fromEntries(
   ZONES.map((z) => [z.zone, z.label]),

@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import { Pause, Play, SkipForward, X } from 'lucide-react'
+import { Info, Pause, Play, SkipForward, X } from 'lucide-react'
 import { Haptics, ImpactStyle } from '@capacitor/haptics'
 import { KeepAwake } from '@capacitor-community/keep-awake'
 import { FigureBadge } from '@/components/FigureBadge'
 import { TimerRing } from '@/components/TimerRing'
+import { Sheet } from '@/components/Sheet'
+import { ExerciseSections } from '@/components/ExerciseSections'
 import { useContentStore } from '@/stores/content'
 import { useSettingsStore } from '@/stores/settings'
 import { useSessionStore } from '@/stores/session'
@@ -13,6 +15,18 @@ import { mmss } from '@/lib/format'
 import { localDate } from '@/lib/date'
 import { uuid } from '@/lib/uuid'
 import { logCompletion } from '@/features/reminders/events'
+import {
+  FINAL_COUNTDOWN_S,
+  READY_S,
+  cueEnd,
+  cueReady,
+  cueStep,
+  cueTick,
+  loadCues,
+  primeCues,
+} from '@/features/session/cues'
+import { durationFor, loadDurations } from '@/features/session/durations'
+import { stopAlerting } from '@/features/reminders/alert'
 import type { Completion } from '@/lib/types'
 
 /**
@@ -28,35 +42,58 @@ export function Player() {
   const fromNotification = params.get('from') === 'notification'
 
   const routine = useContentStore((s) => (slug ? s.routineBySlug(slug) : undefined))
+  const exerciseByKey = useContentStore((s) => s.exerciseByKey)
   const vibrate = useSettingsStore((s) => s.settings.vibrate)
   const markDone = useSessionStore((s) => s.markDone)
+  const [showInfo, setShowInfo] = useState(false)
+  const pauseForBreak = useSessionStore((s) => s.pauseForBreak)
+  const routineDone = useSessionStore((s) => s.routineDone)
+  const resumeFromBreak = useSessionStore((s) => s.resumeFromBreak)
 
   const [stepIndex, setStepIndex] = useState(0)
-  const [remaining, setRemaining] = useState(routine?.steps[0]?.durationS ?? 0)
+  const [remaining, setRemaining] = useState(0)
   const [paused, setPaused] = useState(false)
   const [finished, setFinished] = useState(false)
   const startedAtRef = useRef<number>(Date.now())
+  /** Wall-clock instant the current step ends. Null while paused. */
+  const deadlineRef = useRef<number | null>(null)
+  /** Last second already cued, so the 250 ms interval blips only once each. */
+  const lastCuedRef = useRef<number | null>(null)
+
+  /** Every exercise opens with a few seconds to get into position. */
+  const [phase, setPhase] = useState<'ready' | 'work'>('ready')
 
   const steps = useMemo(() => routine?.steps ?? [], [routine])
   const step = steps[stepIndex]
   const isLast = stepIndex >= steps.length - 1
+  const stepExercise = step ? exerciseByKey(step.exerciseKey) : undefined
+
+  const workSeconds = useMemo(
+    () => (step && routine ? durationFor(routine.slug, step.position, step.durationS) : 0),
+    [step, routine],
+  )
 
   const tick = useCallback(() => {
     if (vibrate && isNative()) void Haptics.impact({ style: ImpactStyle.Light })
+    cueStep()
   }, [vibrate])
+
+  const startWork = useCallback(() => {
+    setPhase('work')
+    setRemaining(workSeconds)
+    deadlineRef.current = Date.now() + workSeconds * 1000
+    lastCuedRef.current = null
+    tick()
+  }, [workSeconds, tick])
 
   const goNext = useCallback(() => {
     if (isLast) {
       setFinished(true)
       return
     }
-    setStepIndex((i) => {
-      const next = i + 1
-      setRemaining(steps[next]?.durationS ?? 0)
-      return next
-    })
+    setStepIndex((i) => i + 1)
     tick()
-  }, [isLast, steps, tick])
+  }, [isLast, tick])
 
   // Keep the screen awake while playing (§11.3).
   useEffect(() => {
@@ -67,25 +104,91 @@ export function Player() {
     }
   }, [])
 
-  // Countdown. When a step reaches zero, advance.
+  // The reminder grid is stopped for as long as the routine is on screen, and
+  // restarts from the moment it is left — done, skipped or closed alike. A
+  // no-op when no work session is running (a routine opened from the library).
   useEffect(() => {
-    if (paused || finished) return
+    // Engaging with the reminder is answer enough for the sound to stop: it
+    // exists to get you here, and once you are here it is only noise.
+    stopAlerting()
+    void pauseForBreak()
+    return () => {
+      void resumeFromBreak()
+    }
+  }, [pauseForBreak, resumeFromBreak])
+
+  // Reaching this screen is always a tap, which is the gesture the browser
+  // wants before it will let an AudioContext make a sound. The durations are
+  // loaded here too, before the first step is armed.
+  const [ready, setReady] = useState(false)
+  useEffect(() => {
+    void Promise.all([loadCues().then(primeCues), loadDurations()]).then(() => setReady(true))
+  }, [])
+
+  // Arm the step on its get-ready countdown. Also covers the routine arriving
+  // after the first render.
+  useEffect(() => {
+    const s = steps[stepIndex]
+    if (!s || !routine || !ready) return
+    setPhase('ready')
+    setRemaining(READY_S)
+    deadlineRef.current = Date.now() + READY_S * 1000
+    lastCuedRef.current = null
+    cueReady()
+  }, [steps, stepIndex, routine, ready])
+
+  // Held in refs so a new identity does not restart the interval and reset its
+  // phase on every step.
+  const goNextRef = useRef(goNext)
+  useEffect(() => {
+    goNextRef.current = goNext
+  }, [goNext])
+  const startWorkRef = useRef(startWork)
+  useEffect(() => {
+    startWorkRef.current = startWork
+  }, [startWork])
+
+  // Countdown read from the wall clock, never by counting ticks: the WebView
+  // throttles (and on Android may suspend) timers as soon as the app goes to
+  // the background, which made steps run long. Reading a deadline means a
+  // frozen interval self-corrects on the very next tick after resume.
+  useEffect(() => {
+    if (paused || finished || !step) return
     const t = setInterval(() => {
-      setRemaining((r) => {
-        if (r <= 1) {
-          // Defer the state transition out of the setter.
-          queueMicrotask(goNext)
-          return 0
-        }
-        return r - 1
-      })
-    }, 1000)
+      const deadline = deadlineRef.current
+      if (deadline === null) return
+      const left = Math.max(0, Math.ceil((deadline - Date.now()) / 1000))
+      setRemaining(left)
+      // Four ticks a second, so the cue is gated on the displayed second
+      // actually changing.
+      if (left !== lastCuedRef.current) {
+        lastCuedRef.current = left
+        if (left > 0 && left <= FINAL_COUNTDOWN_S) cueTick()
+      }
+      if (left === 0) {
+        if (phase === 'ready') startWorkRef.current()
+        else goNextRef.current()
+      }
+    }, 250)
     return () => clearInterval(t)
-  }, [paused, finished, goNext, stepIndex])
+  }, [paused, finished, step, phase])
+
+  const togglePause = useCallback(() => {
+    if (paused) {
+      deadlineRef.current = Date.now() + remaining * 1000
+      setPaused(false)
+      return
+    }
+    const deadline = deadlineRef.current
+    if (deadline !== null) setRemaining(Math.max(0, Math.ceil((deadline - Date.now()) / 1000)))
+    deadlineRef.current = null
+    setPaused(true)
+  }, [paused, remaining])
 
   // On finish: record completion + event.
   useEffect(() => {
     if (!finished || !routine) return
+    cueEnd()
     const durationS = Math.round((Date.now() - startedAtRef.current) / 1000)
     const completion: Completion = {
       clientId: uuid(),
@@ -97,12 +200,14 @@ export function Player() {
     }
     void logCompletion(completion)
     if (fromNotification) void markDone(new Date(startedAtRef.current))
-  }, [finished, routine, fromNotification, markDone])
+    else void routineDone()
+  }, [finished, routine, fromNotification, markDone, routineDone])
 
   const progress = useMemo(() => {
-    if (!step) return 0
-    return 1 - remaining / step.durationS
-  }, [step, remaining])
+    const total = phase === 'ready' ? READY_S : workSeconds
+    if (total <= 0) return 0
+    return 1 - remaining / total
+  }, [phase, workSeconds, remaining])
 
   if (!routine || !step) {
     return (
@@ -162,15 +267,42 @@ export function Player() {
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col items-center justify-center gutter">
-        <TimerRing progress={progress} size={260} stroke={6}>
-          <FigureBadge figureKey={step.figureKey} tone={routine.accent} size={200} />
-        </TimerRing>
-
-        <p className="num mt-6" style={{ fontSize: 72, lineHeight: 1 }}>
-          {mmss(remaining)}
+        <p
+          className="t-card-eyebrow mb-3"
+          style={{ color: phase === 'ready' ? 'var(--text-2)' : 'var(--accent)' }}
+        >
+          {phase === 'ready'
+            ? 'En place'
+            : `Étape ${stepIndex + 1} sur ${steps.length}`}
         </p>
 
-        <h2 className="t-screen mt-6 text-center">{step.name}</h2>
+        <TimerRing progress={progress} size={260} stroke={6}>
+          <FigureBadge figureKey={step.figureKey} tone={routine.accent} size={200} animated />
+        </TimerRing>
+
+        <p
+          className="num mt-6"
+          style={{
+            fontSize: 72,
+            lineHeight: 1,
+            color: phase === 'ready' ? 'var(--text-2)' : 'var(--text)',
+          }}
+        >
+          {phase === 'ready' ? remaining : mmss(remaining)}
+        </p>
+
+        <div className="mt-6 flex items-center gap-2">
+          <h2 className="t-screen text-center">{step.name}</h2>
+          <button
+            type="button"
+            aria-label="En savoir plus sur cet exercice"
+            className="tap rounded-full"
+            style={{ width: 30, height: 30, background: 'var(--surface-2)' }}
+            onClick={() => setShowInfo(true)}
+          >
+            <Info size={16} color="var(--text-2)" style={{ margin: 'auto' }} />
+          </button>
+        </div>
         <p className="t-body mt-2 max-w-[32ch] text-center" style={{ color: 'var(--text-2)', fontSize: 17 }}>
           {step.cue}
         </p>
@@ -180,17 +312,43 @@ export function Player() {
         <button
           type="button"
           className="btn btn-secondary flex-1"
-          onClick={() => setPaused((p) => !p)}
+          onClick={togglePause}
           aria-label={paused ? 'Reprendre' : 'Mettre en pause'}
         >
           {paused ? <Play size={20} /> : <Pause size={20} />}
           {paused ? 'Reprendre' : 'Pause'}
         </button>
-        <button type="button" className="btn btn-accent flex-1" onClick={goNext} aria-label="Étape suivante">
-          <SkipForward size={20} />
-          {isLast ? 'Terminer' : 'Suivant'}
-        </button>
+        {/* During the get-ready phase the obvious action is to start early, not
+            to skip the exercise you have not done yet. */}
+        {phase === 'ready' ? (
+          <button
+            type="button"
+            className="btn btn-accent flex-1"
+            onClick={startWork}
+            aria-label="Démarrer l’exercice"
+          >
+            <Play size={20} />
+            Je suis prêt
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="btn btn-accent flex-1"
+            onClick={goNext}
+            aria-label="Étape suivante"
+          >
+            <SkipForward size={20} />
+            {isLast ? 'Terminer' : 'Suivant'}
+          </button>
+        )}
       </div>
+
+      {/* A sheet, not a route: the countdown keeps running underneath, exactly
+          like every other sheet in the app. Navigating away would remount the
+          player on return and lose the step you were on. */}
+      <Sheet open={showInfo} onClose={() => setShowInfo(false)} title={step.name}>
+        {stepExercise && <ExerciseSections exercise={stepExercise} />}
+      </Sheet>
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import { ApiError } from './_http'
+import { ApiError } from './_http.js'
 
 /** Small input guards. Keep the messages French and displayable (§6). */
 

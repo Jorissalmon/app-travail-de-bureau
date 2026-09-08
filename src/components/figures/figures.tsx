@@ -349,6 +349,225 @@ const figures: Record<FigureKey, () => JSX.Element> = {
       <path {...HAIR} d="M78 40 A32 32 0 0 0 78 20" />
     </g>
   ),
+
+  // ---- Wrists and forearms --------------------------------------------------
+  // Drawn close up: at badge size a whole body would hide the only thing that
+  // matters here, which is the angle of the hand on the forearm.
+
+  'poignet-flexion': () => (
+    <g>
+      <path {...S} d="M14 40 L54 40" />
+      <path {...S} d="M54 40 L60 62" />
+      <path {...THIN} d="M60 62 L52 70 M60 62 L62 72 M60 62 L70 68" />
+      <path {...HAIR} d="M74 42 C80 52 78 62 70 68" />
+      <path {...HAIR} d="M74 34 L74 44 L66 42" />
+    </g>
+  ),
+
+  'poignet-extension': () => (
+    <g>
+      <path {...S} d="M14 56 L54 56" />
+      <path {...S} d="M54 56 L60 34" />
+      <path {...THIN} d="M60 34 L52 26 M60 34 L62 24 M60 34 L70 28" />
+      <path {...HAIR} d="M74 54 C80 44 78 34 70 28" />
+      <path {...HAIR} d="M74 62 L74 52 L66 54" />
+    </g>
+  ),
+
+  'doigts-ecartes': () => (
+    <g>
+      <path {...S} d="M48 84 L48 70" />
+      <rect x={35} y={56} width={27} height={15} rx={7.5} fill="currentColor" />
+      <path {...THIN} d="M40 56 L30 34" />
+      <path {...THIN} d="M46 56 L44 30" />
+      <path {...THIN} d="M53 56 L57 31" />
+      <path {...THIN} d="M59 58 L70 40" />
+      <path {...THIN} d="M37 63 L20 57" />
+    </g>
+  ),
+
+  'priere-inversee': () => (
+    <g>
+      <Head cx={50} cy={20} />
+      <path {...S} d="M50 29 L50 58" />
+      <path {...S} d="M50 36 L30 48 L44 60" />
+      <path {...S} d="M50 36 L70 48 L56 60" />
+      <path {...THIN} d="M50 58 L50 74" />
+      <path {...HAIR} d="M44 62 L44 72 M56 62 L56 72" />
+    </g>
+  ),
+
+  // ---- Ankles and calves ----------------------------------------------------
+
+  'cheville-cercle': () => (
+    <g>
+      <path {...S} d="M46 14 L46 48" />
+      <path {...S} d="M46 48 L66 54" />
+      <path {...HAIR} d="M46 66 m -22 0 a 22 12 0 1 0 44 0 a 22 12 0 1 0 -44 0" />
+      <path {...HAIR} d="M62 60 L70 66 L62 72" />
+    </g>
+  ),
+
+  // Drawn as a lower leg rather than a whole body: at badge size a standing
+  // figure on tiptoe is indistinguishable from one walking.
+  'mollet-releve': () => (
+    <g>
+      <Ground />
+      <path {...S} d="M50 16 L50 54" />
+      <path {...S} d="M50 54 L43 62" />
+      <path {...S} d="M43 62 L70 80" />
+      <path {...THIN} d="M28 62 L28 44 M22 51 L28 43 L34 51" opacity={0.6} />
+    </g>
+  ),
+
+  'talon-pointe': () => (
+    <g>
+      <Ground />
+      <path {...S} d="M44 14 L44 50" />
+      <path {...S} d="M44 50 L38 64" />
+      <path {...S} d="M38 64 L38 80" />
+      <path {...S} d="M38 72 L70 60" />
+      <path {...THIN} d="M80 52 L86 58 L80 64" opacity={0.6} />
+      <path {...THIN} d="M80 84 L86 78 L80 72" opacity={0.6} />
+      <path {...HAIR} d="M86 58 L86 78" />
+    </g>
+  ),
+
+  // ---- Neck, diagonal -------------------------------------------------------
+
+  // ---- Second positions -----------------------------------------------------
+  // A stretch you hold needs one drawing; a movement between two positions
+  // needs both, or the figure shows half the exercise. These are the "b" frames
+  // that figureFrames.ts pairs with the "a" ones above.
+
+  'chat-vache-b': () => (
+    <g>
+      <Ground />
+      <Head cx={30} cy={34} />
+      <path {...S} d="M36 38 C48 48 62 50 72 44" />
+      <path {...S} d="M72 44 L74 82" />
+      <path {...S} d="M40 44 L38 82" />
+      <path {...HAIR} d="M44 26 C56 34 66 34 74 30" />
+    </g>
+  ),
+
+  'omoplates-b': () => (
+    <g>
+      <Ground />
+      <Head cx={50} cy={20} />
+      <path {...S} d="M50 29 L50 58" />
+      <path {...S} d="M50 58 L42 82" />
+      <path {...S} d="M50 58 L58 82" />
+      <path {...S} d="M50 36 C40 40 34 48 34 56" />
+      <path {...S} d="M50 36 C60 40 66 48 66 56" />
+    </g>
+  ),
+
+  'doigts-poing': () => (
+    <g>
+      <path {...S} d="M48 84 L48 70" />
+      <rect x={33} y={48} width={31} height={23} rx={11} fill="currentColor" />
+      {/* Carved out in the pastille colour, as in `paumes`: the folded fingers
+          and the thumb across them are what make this read as a fist. */}
+      <path {...S} d="M40 49 L40 58" stroke="var(--pastille)" strokeWidth={3} />
+      <path {...S} d="M48 48 L48 58" stroke="var(--pastille)" strokeWidth={3} />
+      <path {...S} d="M56 49 L56 58" stroke="var(--pastille)" strokeWidth={3} />
+      <path {...S} d="M35 64 L60 62" stroke="var(--pastille)" strokeWidth={3.5} />
+    </g>
+  ),
+
+  'mollet-plat': () => (
+    <g>
+      <Ground />
+      <path {...S} d="M50 16 L50 58" />
+      <path {...S} d="M50 58 L44 72" />
+      <path {...S} d="M44 72 L44 80" />
+      <path {...S} d="M44 78 L72 78" />
+    </g>
+  ),
+
+  // ---- Shoulders and arms ---------------------------------------------------
+
+  'calin-bras': () => (
+    <g>
+      <Head cx={50} cy={22} r={11} />
+      <path {...S} d="M50 33 L50 62" />
+      <path {...S} d="M64 40 C52 46 40 48 28 48" />
+      <path {...S} d="M36 40 C33 50 36 55 45 52" />
+      <path {...S} d="M32 74 L68 74" />
+    </g>
+  ),
+
+  'triceps-tete': () => (
+    <g>
+      <Head cx={46} cy={34} r={11} />
+      <path {...S} d="M46 45 L48 66" />
+      <path {...S} d="M58 42 L64 18" />
+      <path {...S} d="M64 18 L46 28" />
+      <path {...S} d="M34 48 L60 20" />
+      <path {...S} d="M30 74 L70 74" />
+    </g>
+  ),
+
+  'ischios-assis': () => (
+    <g>
+      <Chair />
+      <Ground />
+      <Head cx={38} cy={26} r={8} />
+      <path {...S} d="M38 34 C41 44 41 50 44 56" />
+      <path {...S} d="M44 56 L78 64" />
+      <path {...S} d="M78 64 L84 56" />
+      <path {...S} d="M44 56 L36 72 L30 82" />
+      <path {...S} d="M40 36 L66 58" />
+    </g>
+  ),
+
+  'genou-poitrine': () => (
+    <g>
+      <Chair />
+      <Ground />
+      <Head cx={42} cy={24} r={8} />
+      <path {...S} d="M42 32 L44 54" />
+      <path {...S} d="M44 54 L60 44 L54 28" />
+      <path {...S} d="M44 54 L40 72 L33 82" />
+      <path {...S} d="M43 35 L58 42" />
+    </g>
+  ),
+
+  'nuque-flexion': () => (
+    <g>
+      <Head cx={48} cy={40} r={12} />
+      <path {...S} d="M52 51 L56 66" />
+      <path {...S} d="M34 74 L76 74" />
+      <path {...S} d="M56 66 L56 74" />
+      <path {...S} d="M36 70 C34 50 42 32 52 29" />
+      <path {...S} d="M70 70 C73 50 64 32 54 29" />
+    </g>
+  ),
+
+  'poignet-priere': () => (
+    <g>
+      <path {...S} d="M22 64 L44 46" />
+      <path {...S} d="M78 64 L56 46" />
+      <path {...S} d="M44 46 L46 20" />
+      <path {...S} d="M56 46 L54 20" />
+      <path {...HAIR} d="M22 74 L22 84 M16 78 L22 85 L28 78" />
+      <path {...HAIR} d="M78 74 L78 84 M72 78 L78 85 L84 78" />
+    </g>
+  ),
+
+  'nuque-diagonale': () => (
+    <g>
+      <Head cx={42} cy={36} r={12} />
+      <path {...S} d="M48 46 C54 52 56 58 56 64" />
+      <path {...S} d="M34 74 L74 74" />
+      <path {...S} d="M56 64 L56 74" />
+      {/* The hand comes up the far side and lands behind the crown, so the arm
+          never crosses the face. */}
+      <path {...S} d="M70 72 C78 52 70 30 52 26" />
+      <path {...HAIR} d="M28 54 L20 62 M20 54 L20 62 L28 62" />
+    </g>
+  ),
 }
 
 export default figures

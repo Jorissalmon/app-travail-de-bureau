@@ -1,6 +1,19 @@
 /** Shared domain types. Mirrors db/001_init.sql — keep the two in step. */
 
-export type Zone = 'general' | 'hanches' | 'lombaires' | 'nuque' | 'dos' | 'yeux'
+export type Zone =
+  | 'matin'
+  | 'bureau'
+  | 'nuque'
+  | 'dos'
+  | 'lombaires'
+  | 'hanches'
+  | 'poignets'
+  | 'chevilles'
+  | 'yeux'
+  | 'bien-etre'
+
+/** How the library is browsed (§11.2): by moment, by body part, by intent. */
+export type Family = 'moment' | 'corps' | 'bien-etre'
 
 export type AccentKey =
   | 'peach'
@@ -56,6 +69,33 @@ export interface RoutineStep {
   durationS: number
   cue: string
   figureKey: string
+  /** Which entry of the exercise library explains this movement in full. */
+  exerciseKey: string
+}
+
+/**
+ * The full explanation of one movement (§ audit — "les exos doivent avoir une
+ * page où on explique ce que c'est"). Keyed by `exerciseKey`, not by routine
+ * step: the same movement recurs across routines (a lunge is a lunge whether
+ * it opens "Debout" or closes "Réveil"), so it is documented once and every
+ * step that uses it points at the same entry.
+ */
+export interface Exercise {
+  key: string
+  title: string
+  /** Numbered how-to, read top to bottom. */
+  steps: string[]
+  tips: string[]
+  /** One way to make it more accessible — a beginner always has exactly one. */
+  easier: string
+  /** Body parts or systems it works, shown as chips. */
+  muscles: string[]
+  /** The one thing that means "stop", plain enough for someone who has never done it. */
+  avoid: string
+  /** Article slugs that explain why this movement is worth the time. */
+  articles: string[]
+  /** Doable at a desk in an open space without drawing looks. */
+  discreet: boolean
 }
 
 export interface Routine {
@@ -104,6 +144,35 @@ export interface Completion {
   localDate: string
 }
 
+/** One line of the activity journal. See features/session/journal.ts. */
+export type JournalEntryKind = 'start' | 'end' | 'moved' | 'snoozed' | 'missed' | 'stood'
+
+export interface JournalEntry {
+  /** ISO instant, what the line is sorted by. */
+  at: string
+  kind: JournalEntryKind
+  /** For a movement break: which routine. The title is resolved by the screen,
+      from the catalogue, so a renamed routine renames its history too. */
+  routineSlug?: string
+  durationS?: number
+}
+
+export interface JournalDay {
+  localDate: string
+  /** Seconds between starting the day and ending it, summed over the day's
+      sessions. An open one counts up to now. */
+  workedS: number
+  /** Seconds spent in routines carried to the end. */
+  movedS: number
+  /** Worked minus moved: the time actually spent at the desk, on the work. */
+  focusS: number
+  stands: number
+  reminders: number
+  /** A day still running. */
+  open: boolean
+  entries: JournalEntry[]
+}
+
 export interface Stats {
   standsToday: number
   remindersToday: number
@@ -112,6 +181,8 @@ export interface Stats {
   minutesMoved: number
   /** Share of reminders acted on over the last 30 days, 0..1, or null if none. */
   adherence: number | null
+  /** Day by day, newest first: what happened and how long it took. */
+  journal: JournalDay[]
 }
 
 export interface ApiError {

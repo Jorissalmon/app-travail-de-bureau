@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { db } from './_db'
-import { allowCors, fail, json, methods } from './_http'
+import { db } from './_db.js'
+import { allowCors, fail, json, methods } from './_http.js'
 
 /** All routines with their steps, ordered (§6). */
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -13,7 +13,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       FROM routines ORDER BY sort_order, title
     `
     const steps = await sql`
-      SELECT routine_id, position, name, duration_s, cue, figure_key
+      SELECT routine_id, position, name, duration_s, cue, figure_key, exercise_key
       FROM routine_steps ORDER BY routine_id, position
     `
     const byRoutine = new Map<string, unknown[]>()
@@ -25,6 +25,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         durationS: Number(s.duration_s),
         cue: s.cue,
         figureKey: s.figure_key,
+        exerciseKey: s.exercise_key,
       })
       byRoutine.set(s.routine_id as string, list)
     }

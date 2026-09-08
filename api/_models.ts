@@ -1,4 +1,4 @@
-import type { Row } from './_db'
+import type { Row } from './_db.js'
 
 /**
  * Row → public DTO mappers. Every user object that leaves the API goes through

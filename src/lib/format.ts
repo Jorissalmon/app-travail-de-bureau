@@ -31,6 +31,13 @@ export function durationEyebrow(totalSeconds: number): string {
   return durationLabel(totalSeconds).toUpperCase()
 }
 
+/** 42 -> "42 min", 95 -> "1 h 35". Minutes actually moved, not an estimate. */
+export function minutesLabel(minutes: number): string {
+  const m = Math.max(0, Math.round(minutes))
+  if (m < 60) return `${m} min`
+  return `${Math.floor(m / 60)} h ${String(m % 60).padStart(2, '0')}`
+}
+
 export function plural(n: number, one: string, many: string): string {
   return n <= 1 ? one : many
 }
@@ -44,6 +51,17 @@ export function standsLine(stands: number, reminders: number): string {
     'rappel',
     'rappels',
   )}`
+}
+
+/**
+ * Seconds to « 7 h 12 » or « 48 min ». The journal's unit: a working day is
+ * hours, a break is minutes, and neither should be shouted in capitals the way
+ * the session card does.
+ */
+export function hoursLabel(totalSeconds: number): string {
+  const m = Math.max(0, Math.round(totalSeconds / 60))
+  if (m < 60) return `${m} min`
+  return `${Math.floor(m / 60)} h ${String(m % 60).padStart(2, '0')}`
 }
 
 export function percent(v: number | null): string {

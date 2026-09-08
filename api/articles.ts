@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { db } from './_db'
-import { ApiError, allowCors, fail, json, methods } from './_http'
+import { db } from './_db.js'
+import { ApiError, allowCors, fail, json, methods } from './_http.js'
 
 /** Article list, or one article when ?slug= is given (§6). */
 export default async function handler(req: VercelRequest, res: VercelResponse) {

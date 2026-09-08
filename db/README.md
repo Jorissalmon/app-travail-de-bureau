@@ -1,6 +1,6 @@
-# Base de données — Relève
+# Base de données — Log Off
 
-Relève utilise le **projet Neon Postgres déjà en place**, mais dans une **base et
+Log Off utilise le **projet Neon Postgres déjà en place**, mais dans une **base et
 un rôle dédiés**. On ne lit, n'écrit et ne migre **rien** dans la base de l'autre
 application du projet (§C2).
 
@@ -36,17 +36,32 @@ GRANT ALL ON SCHEMA public TO releve_app;
 
   **Mais vérifie d'abord que le rôle applicatif de l'autre app a bien un
   `GRANT CONNECT` explicite**, sinon tu la casses. Ne fais cette révocation que si
-  tu confirmes ce point. Elle est **optionnelle** et hors du périmètre de Relève.
-- La chaîne de connexion de Relève va dans `DATABASE_URL` côté Vercel. Elle
+  tu confirmes ce point. Elle est **optionnelle** et hors du périmètre de Log Off.
+- La chaîne de connexion de Log Off va dans `DATABASE_URL` côté Vercel. Elle
   **ne doit jamais** pointer vers l'autre base.
 
 ## 3. Appliquer les migrations
 
-Deux fichiers, dans l'ordre :
+Tous les `db/NNN_*.sql`, dans l'ordre numérique. Le script les découvre en
+lisant le dossier : ajouter une migration, c'est ajouter un fichier.
 
 1. `001_init.sql` — schéma.
 2. `002_seed_content.sql` — contenu (routines + articles). **Généré** depuis
    `src/content/*.json` par `pnpm gen:seed` ; ne l'édite pas à la main.
+3. `003_prefs.sql` — `user_prefs`, les préférences rattachées au compte.
+
+Une table `schema_migrations` retient ce qui a déjà tourné, parce que
+`001_init.sql` n'est pas rejouable (ses `CREATE TABLE` n'ont pas de
+`IF NOT EXISTS`). Sur une base créée avant ce registre, 001 est marqué comme
+appliqué dès que la table `users` existe. Le seed, lui, est un rafraîchissement
+de contenu : il rejoue à chaque fois.
+
+> **Le workflow GitHub « DB migrate » ne peut pas tourner** tant que le secret
+> `DATABASE_URL` n'existe pas dans Settings → Secrets and variables → Actions.
+> Sans lui il échoue tout de suite, et une modification de `src/content/*.json`
+> reste dans le bundle sans jamais atteindre la base — l'app la récupère ensuite
+> par `/api/articles` et écrase la version embarquée. Crée le secret, ou applique
+> le seed à la main.
 
 ### Option A — script fourni
 

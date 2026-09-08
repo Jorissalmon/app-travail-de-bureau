@@ -4,16 +4,23 @@ import { Flame } from 'lucide-react'
 import { SessionCard } from '@/components/SessionCard'
 import { SearchField } from '@/components/SearchField'
 import { ZoneCard } from '@/components/ZoneCard'
-import { BatteryNotice } from '@/components/BatteryNotice'
+import { PermissionsSheet } from '@/components/PermissionsSheet'
+import { DayCard } from '@/components/DayCard'
+import { adviceFor } from '@/features/session/daypart'
 import { useSessionStore } from '@/stores/session'
 import { useSettingsStore } from '@/stores/settings'
 import { useAuthStore } from '@/stores/auth'
 import { useStatsStore } from '@/stores/stats'
-import { ZONES } from '@/content'
+import { useContentStore } from '@/stores/content'
+import { FAMILIES, ZONES } from '@/content'
 import { useNow } from '@/app/useNow'
 import { dateEyebrow, dayName } from '@/lib/date'
 import { pendingAfter } from '@/features/reminders/schedule'
+import { PermissionsMissingError } from '@/features/reminders/permissions'
+import { primeAlarm, stopAlerting } from '@/features/reminders/alert'
+import { askForTabNotifications } from '@/features/reminders/webAlarm'
 import { standsLine } from '@/lib/format'
+import { KINDS } from '@/features/reminders/kinds'
 
 /** §11.1 — Aujourd'hui. */
 export function Today() {
@@ -24,14 +31,20 @@ export function Today() {
   const occurrences = useSessionStore((s) => s.occurrences)
   const start = useSessionStore((s) => s.start)
   const stop = useSessionStore((s) => s.stop)
+  const pause = useSessionStore((s) => s.pause)
+  const awaiting = useSessionStore((s) => s.awaiting)
+  const pauseWork = useSessionStore((s) => s.pauseWork)
+  const resumeWork = useSessionStore((s) => s.resumeWork)
 
   const intervalMin = useSettingsStore((s) => s.settings.intervalMin)
   const user = useAuthStore((s) => s.user)
   const stats = useStatsStore((s) => s.stats)
   const loadStats = useStatsStore((s) => s.load)
+  const routines = useContentStore((s) => s.routines)
 
   const [busy, setBusy] = useState(false)
-  const [showBattery, setShowBattery] = useState(false)
+  const [showPermissions, setShowPermissions] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     void loadStats()
@@ -39,6 +52,18 @@ export function Today() {
 
   const active = session !== null
   const elapsedS = active ? Math.max(0, (now.getTime() - new Date(session.startedAt).getTime()) / 1000) : 0
+
+  // Re-derived on every clock tick, so the card follows the day by itself.
+  const advice = useMemo(
+    () =>
+      adviceFor({
+        now,
+        sessionActive: active,
+        standsToday: stats?.standsToday ?? 0,
+        available: routines.map((r) => r.slug),
+      }),
+    [now, active, stats, routines],
+  )
 
   const nextInS = useMemo(() => {
     if (!active) return null
@@ -50,10 +75,21 @@ export function Today() {
 
   async function handleStart() {
     setBusy(true)
+    setError(null)
+    // This tap is the only moment a browser will unlock audio or grant
+    // notifications; half an hour later, at the reminder, it is far too late.
+    primeAlarm()
+    void askForTabNotifications()
     try {
       await start()
-      // Show the battery-optimisation notice once, right after the first start (§8.3).
-      setShowBattery(true)
+      setShowPermissions(false)
+    } catch (e) {
+      // Missing grants are not a failure to report, they are a thing to fix:
+      // open the sheet that fixes them (§8.3). Anything else is shown inline —
+      // never rethrown, or it would leave the button spinning on an unhandled
+      // rejection instead of telling the user what to do next.
+      if (e instanceof PermissionsMissingError) setShowPermissions(true)
+      else setError('La session n’a pas pu démarrer. Réessaie.')
     } finally {
       setBusy(false)
     }
@@ -61,9 +97,12 @@ export function Today() {
 
   async function handleStop() {
     setBusy(true)
+    setError(null)
     try {
       await stop({ via: 'button' })
       void loadStats()
+    } catch {
+      setError('La journée n’a pas pu s’arrêter. Réessaie.')
     } finally {
       setBusy(false)
     }
@@ -106,36 +145,60 @@ export function Today() {
         active={active}
         elapsedS={elapsedS}
         nextInS={nextInS}
+        pauseReason={pause?.reason ?? null}
+        heldS={pause?.heldMs != null ? Math.round(pause.heldMs / 1000) : null}
+        awaiting={awaiting !== null}
         intervalS={intervalMin * 60}
         onStart={handleStart}
         onStop={handleStop}
+        onPause={() => void pauseWork()}
+        onResume={() => void resumeWork()}
+        onDoExercise={() => {
+          if (!awaiting) return
+          stopAlerting()
+          navigate(`/player/${KINDS[awaiting.kind].routineSlug}?from=notification`)
+        }}
         busy={busy}
       />
+
+      {error && (
+        <p className="t-meta mt-3" role="alert" style={{ color: 'var(--danger)' }}>
+          {error}
+        </p>
+      )}
+
+      {advice && <DayCard advice={advice} />}
 
       <div className="mt-5">
         <SearchField value="" onChange={(v) => navigate(`/library?q=${encodeURIComponent(v)}`)} />
       </div>
 
-      <section className="mt-7">
-        <h2 className="t-section mb-3">Parcourir par zone</h2>
-        <div className="grid grid-cols-2 gap-2.5">
-          {ZONES.map((z) => (
-            <ZoneCard
-              key={z.zone}
-              label={z.label}
-              to={`/library?zone=${z.zone}`}
-              figureKey={z.figureKey}
-              tone={z.tone}
-            />
-          ))}
-        </div>
-      </section>
+      {FAMILIES.map((f) => (
+        <section key={f.family} className="mt-7">
+          <h2 className="t-section mb-3">{f.label}</h2>
+          <div className="grid grid-cols-2 gap-2.5">
+            {ZONES.filter((z) => z.family === f.family).map((z) => (
+              <ZoneCard
+                key={z.zone}
+                label={z.label}
+                to={`/library?zone=${z.zone}`}
+                figureKey={z.figureKey}
+                tone={z.tone}
+              />
+            ))}
+          </div>
+        </section>
+      ))}
 
       <p className="t-meta mt-7">
         {standsLine(stats?.standsToday ?? 0, stats?.remindersToday ?? 0)}
       </p>
 
-      <BatteryNotice open={showBattery} onClose={() => setShowBattery(false)} />
+      <PermissionsSheet
+        open={showPermissions}
+        onClose={() => setShowPermissions(false)}
+        onAllGranted={() => void handleStart()}
+      />
     </div>
   )
 }

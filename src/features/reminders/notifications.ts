@@ -5,7 +5,9 @@ import {
 } from '@capacitor/local-notifications'
 import { isNative } from '@/lib/platform'
 import type { Occurrence } from './schedule'
-import type { ReminderKind } from '@/lib/types'
+import { KINDS, alertRoute } from './kinds'
+import { nudgeFor } from '@/features/session/daypart'
+import { cancelWakeAlerts, scheduleWakeAlerts } from './screenwake'
 
 /**
  * Thin wrapper over @capacitor/local-notifications (§8). All scheduling is
@@ -14,24 +16,40 @@ import type { ReminderKind } from '@/lib/types'
  */
 
 export const CHANNEL_ID = 'releve_breaks'
+/**
+ * A second channel, identical but for the sound. Android will not let an
+ * existing channel's sound be changed — which is why the "Son" toggle could
+ * never do anything on Android 8+ — so the only way to offer both is to create
+ * both and choose per notification.
+ */
+export const CHANNEL_ID_SOUND = 'releve_breaks_bol'
 export const ACTION_TYPE = 'RELEVE_BREAK'
 
-/** Notification body copy per kind (§8.4). */
-const COPY: Record<ReminderKind, { title: string; body: string }> = {
-  stand: { title: 'Debout.', body: '3 minutes. Marche, et regarde par la fenêtre.' },
-  mobility: { title: 'Pause mobilité.', body: 'Trois minutes pour une zone qui coince.' },
-  eyes: { title: 'Les yeux.', body: 'Regarde au loin, et cligne franchement.' },
-}
+/**
+ * The morning invitation to begin, which is a different thing from a break and
+ * carries its own two answers.
+ */
+export const DAY_ACTION_TYPE = 'RELEVE_DAY'
+
+/**
+ * A fixed id for it, outside the hashed occurrence ids, so it can be replaced
+ * and cancelled on its own. `cancelAll()` clears a whole session's reminders
+ * and must not take tomorrow morning with it.
+ */
+export const AUTO_START_ID = 7_700_001
 
 export interface ScheduleContext {
   /** Opt-in notification sound. Vibration is a channel property, set in
       createChannel, so it is not per-notification here. */
   sound: boolean
-  /** Where the notification body-tap should land (§8.4). */
-  route: string
 }
 
-/** Register the notification channel and the three-action type (§8.3 / §8.4). */
+/** Which of the two channels a notification should land on. */
+function channelFor(ctx: ScheduleContext): string {
+  return ctx.sound ? CHANNEL_ID_SOUND : CHANNEL_ID
+}
+
+/** Register the notification channels and the two action types (§8.3 / §8.4). */
 export async function ensureChannelAndActions(): Promise<void> {
   if (!isNative()) return
 
@@ -42,7 +60,19 @@ export async function ensureChannelAndActions(): Promise<void> {
     importance: 4, // HIGH
     visibility: 1,
     vibration: true,
-    // No sound by default — open space (§8.3).
+    // No sound — open space (§8.3). This is still the default channel.
+  })
+
+  await LocalNotifications.createChannel({
+    id: CHANNEL_ID_SOUND,
+    name: 'Rappels de pause (avec le bol)',
+    description: 'Les mêmes rappels, annoncés par le bol.',
+    importance: 4, // HIGH
+    visibility: 1,
+    vibration: true,
+    // res/raw/bol.wav — Android plays it itself, so a reminder is audible even
+    // when the app is not running and cannot synthesise anything.
+    sound: 'bol',
   })
 
   await LocalNotifications.registerActionTypes({
@@ -55,55 +85,39 @@ export async function ensureChannelAndActions(): Promise<void> {
           { id: 'stop', title: 'Stop', destructive: true },
         ],
       },
+      {
+        id: DAY_ACTION_TYPE,
+        actions: [
+          { id: 'begin', title: 'Commencer' },
+          { id: 'later', title: 'Plus tard' },
+        ],
+      },
     ],
   })
 }
 
-/** Ask for POST_NOTIFICATIONS at the moment it is needed (§8.3). */
-export async function requestPermission(): Promise<boolean> {
-  if (!isNative()) return true
-  const status = await LocalNotifications.checkPermissions()
-  if (status.display === 'granted') return true
-  const req = await LocalNotifications.requestPermissions()
-  return req.display === 'granted'
-}
-
-/**
- * Best-effort request for exact alarms. If the user declines, we degrade to
- * inexact alarms silently — a few minutes of drift on a 30-minute reminder is
- * harmless and must never block the app (§8.3).
- */
-export async function tryEnableExactAlarms(): Promise<void> {
-  if (!isNative()) return
-  try {
-    const anyPlugin = LocalNotifications as unknown as {
-      checkExactNotificationSetting?: () => Promise<{ exact_alarm: string }>
-      changeExactNotificationSetting?: () => Promise<unknown>
-    }
-    const setting = await anyPlugin.checkExactNotificationSetting?.()
-    if (setting && setting.exact_alarm !== 'granted') {
-      await anyPlugin.changeExactNotificationSetting?.()
-    }
-  } catch {
-    // Older plugin or unsupported OS — ignore and use inexact alarms.
-  }
-}
+// Permissions live in ./permissions.ts: asking is only half the job, since a
+// recorded refusal has to be routed to the matching Android settings screen.
 
 function toSchedule(occ: Occurrence, ctx: ScheduleContext): ScheduleOptions['notifications'][number] {
-  const copy = COPY[occ.kind]
+  const copy = KINDS[occ.kind]
   return {
     id: occ.id,
     title: copy.title,
-    body: copy.body,
-    channelId: CHANNEL_ID,
+    // The stand reminder speaks to the hour it fires at — the reason to get up
+    // at 15 h is not the reason at 9 h. The other two are about a body part,
+    // and time does not change what they are for.
+    body: occ.kind === 'stand' ? nudgeFor(occ.at) : copy.body,
+    channelId: channelFor(ctx),
     actionTypeId: ACTION_TYPE,
     schedule: { at: occ.at, allowWhileIdle: true },
     // Sound is opt-in and off by default (open space, §8.3). Vibration is a
     // channel property on Android, so it is set once in createChannel.
     ...(ctx.sound ? { sound: 'default' } : {}),
-    smallIcon: 'ic_stat_releve',
-    // The deep-link target rides in `extra` — no custom URL scheme (§8.4).
-    extra: { route: ctx.route, from: 'notification', kind: occ.kind, occurrenceId: occ.id },
+    smallIcon: 'ic_stat_logoff',
+    // The deep-link target rides in `extra` — no custom URL scheme (§8.4). It
+    // is derived from the kind so the tap lands on the matching alert screen.
+    extra: { route: alertRoute(occ.kind), kind: occ.kind, occurrenceId: occ.id },
   }
 }
 
@@ -113,6 +127,18 @@ export async function scheduleAll(occurrences: Occurrence[], ctx: ScheduleContex
   await LocalNotifications.schedule({
     notifications: occurrences.map((o) => toSchedule(o, ctx)),
   })
+  // A notification alone is not read through a dark screen: mirror every
+  // occurrence with a native alarm that turns the screen on (§8.3).
+  await scheduleWakeAlerts(
+    occurrences.map((o) => ({
+      id: o.id,
+      at: o.at.getTime(),
+      route: alertRoute(o.kind),
+      title: KINDS[o.kind].title,
+      // Asked to be alerted: the break takes the screen whatever its state.
+      always: ctx.sound,
+    })),
+  )
 }
 
 /** Schedule a single occurrence (used by the +10 min snooze). */
@@ -132,19 +158,24 @@ export async function getPending(): Promise<PendingResult> {
 }
 
 /**
- * Cancel every pending Relève notification and verify nothing is left (§8.2).
+ * Cancel every pending Log Off notification and verify nothing is left (§8.2).
  * Logs if the platform still reports pending ids after the cancel.
  */
 export async function cancelAll(): Promise<void> {
   if (!isNative()) return
+  await cancelWakeAlerts()
   const pending = await LocalNotifications.getPending()
-  if (pending.notifications.length > 0) {
-    await LocalNotifications.cancel({
-      notifications: pending.notifications.map((n) => ({ id: n.id })),
-    })
+  // Everything belonging to the session, and only that: the invitation to
+  // begin tomorrow morning is not part of the day being wound up, and
+  // cancelling it here would have made "démarrage auto" fire exactly once.
+  const mine = pending.notifications.filter((n) => n.id !== AUTO_START_ID)
+  if (mine.length > 0) {
+    await LocalNotifications.cancel({ notifications: mine.map((n) => ({ id: n.id })) })
   }
-  const after = await LocalNotifications.getPending()
-  if (after.notifications.length > 0) {
-    console.warn('[reminders] notifications still pending after cancelAll', after.notifications)
+  const after = (await LocalNotifications.getPending()).notifications.filter(
+    (n) => n.id !== AUTO_START_ID,
+  )
+  if (after.length > 0) {
+    console.warn('[reminders] notifications still pending after cancelAll', after)
   }
 }
