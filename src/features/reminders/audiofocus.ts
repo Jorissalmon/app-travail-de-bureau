@@ -1,5 +1,6 @@
-import { Capacitor, registerPlugin } from '@capacitor/core'
+import { Capacitor } from '@capacitor/core'
 import { isNative, platform } from '@/lib/platform'
+import { ScreenWake } from './screenwake'
 
 /**
  * Asking Android to turn everything else down while the bowl rings.
@@ -32,13 +33,6 @@ import { isNative, platform } from '@/lib/platform'
  * combination since version 8. So the case this file exists for is the other
  * one: the app on screen, the bowl synthesised in the webview.
  */
-
-interface AudioFocusPlugin {
-  duckOthers(): Promise<void>
-  stopDucking(): Promise<void>
-}
-
-const ScreenWake = registerPlugin<AudioFocusPlugin>('ScreenWake')
 
 function available(): boolean {
   return isNative() && platform() === 'android'

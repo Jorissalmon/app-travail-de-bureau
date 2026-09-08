@@ -38,9 +38,51 @@ export const KEYS = {
   place: 'place',
   stepDurations: 'player.durations',
   customRoutines: 'routines.custom',
+  /** When the synced preferences last changed on this device. */
+  prefsUpdatedAt: 'prefs.updatedAt',
   bundleVersion: 'ota.bundleVersion',
   pendingNativeUpdate: 'ota.pendingNativeUpdate',
 } as const
+
+/**
+ * Anyone who wants to know that a stored value changed.
+ *
+ * The preferences that follow the account — routines, durations, cues — are
+ * each owned by their own module with their own load function, and none of them
+ * knew anything about syncing. Rather than thread a push call through all of
+ * them, the sync watches writes here: one place, and a preference added later
+ * is carried without touching it.
+ */
+type Watcher = (key: string) => void
+const watchers = new Set<Watcher>()
+
+export function watchStorage(fn: Watcher): () => void {
+  watchers.add(fn)
+  return () => watchers.delete(fn)
+}
+
+function announce(key: string): void {
+  for (const fn of watchers) {
+    try {
+      fn(key)
+    } catch {
+      /* A watcher must never break the write it was told about. */
+    }
+  }
+}
+
+/**
+ * Write without waking the watchers. Used by the sync when it applies what the
+ * server sent: announcing those would push the same values straight back.
+ */
+export async function setRawQuietly(key: string, value: string): Promise<void> {
+  await Preferences.set({ key, value })
+}
+
+/** Delete without waking the watchers, for the same reason. */
+export async function removeQuietly(key: string): Promise<void> {
+  await Preferences.remove({ key })
+}
 
 export async function getRaw(key: string): Promise<string | null> {
   const { value } = await Preferences.get({ key })
@@ -49,10 +91,12 @@ export async function getRaw(key: string): Promise<string | null> {
 
 export async function setRaw(key: string, value: string): Promise<void> {
   await Preferences.set({ key, value })
+  announce(key)
 }
 
 export async function remove(key: string): Promise<void> {
   await Preferences.remove({ key })
+  announce(key)
 }
 
 export async function getJSON<T>(key: string, fallback: T): Promise<T> {

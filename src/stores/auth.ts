@@ -4,6 +4,7 @@ import { KEYS, getJSON, getRaw, remove, setJSON, setRaw } from '@/lib/storage'
 import { DEFAULT_SETTINGS } from '@/lib/defaults'
 import type { Settings, User } from '@/lib/types'
 import { useSettingsStore } from './settings'
+import { disablePrefsSync, enablePrefsSync, syncPrefs } from '@/features/prefs/sync'
 
 /**
  * Auth domain store. Holds the current user and the "am I logged in" flag the
@@ -49,6 +50,19 @@ interface MeResponse {
   settings: Settings
 }
 
+/**
+ * Signed in: turn the preference sync on and reconcile straight away, so a
+ * second device shows the routines built on the first one without waiting for
+ * anything. Failures are silent — offline is the ordinary case, and the next
+ * boot or foreground tries again.
+ */
+function syncNow(): void {
+  enablePrefsSync()
+  void syncPrefs().catch(() => {
+    /* Offline, or the endpoint not deployed yet: the device copy stands. */
+  })
+}
+
 async function applyAuth(res: AuthResponse): Promise<User> {
   await setTokens(res.accessToken, res.refreshToken)
   // Signing in ends local mode, and the journal written meanwhile is flushed by
@@ -59,6 +73,7 @@ async function applyAuth(res: AuthResponse): Promise<User> {
     const me = await api.get<MeResponse>('/api/me')
     useSettingsStore.getState().hydrate(me.settings)
     await setJSON(KEYS.user, me.user)
+    syncNow()
     return me.user
   } catch {
     // Signed in but /me unreachable — proceed with what we have.
@@ -89,6 +104,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       const me = await api.get<MeResponse>('/api/me')
       await setJSON(KEYS.user, me.user)
       useSettingsStore.getState().hydrate(me.settings)
+      syncNow()
       set({ status: 'authed', user: me.user })
     } catch {
       // Still hold a refresh token → authed-but-offline, keep the cached user
@@ -96,6 +112,9 @@ export const useAuthStore = create<AuthState>((set) => ({
       if ((await hasSessionTokens()) && cachedUser) {
         const settings = await getJSON<Settings>(KEYS.settings, DEFAULT_SETTINGS)
         useSettingsStore.getState().hydrate(settings)
+        // Still signed in, just unreachable: the sync stays armed so the first
+        // foreground with a network reconciles both directions.
+        enablePrefsSync()
         set({ status: 'authed', user: cachedUser })
       } else {
         set({ status: 'anon', user: null })
@@ -128,7 +147,10 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   logout: async () => {
     await clearTokens()
-    // Deliberately keep settings and the pending event queue (§7).
+    // Deliberately keep settings and the pending event queue (§7). The synced
+    // preferences stay too — they are still this person's routines — but they
+    // stop being sent anywhere.
+    await disablePrefsSync()
     set({ status: 'anon', user: null })
   },
 }))

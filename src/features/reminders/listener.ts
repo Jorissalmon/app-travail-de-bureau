@@ -4,6 +4,7 @@ import { isNative } from '@/lib/platform'
 import { useSessionStore } from '@/stores/session'
 import { useSettingsStore } from '@/stores/settings'
 import { flushEvents } from './events'
+import { syncPrefs } from '@/features/prefs/sync'
 import { navigateTo } from './deeplink'
 import { onWakeAlert } from './screenwake'
 import { startAlerting } from './alert'
@@ -82,11 +83,16 @@ export function installReminderListeners(): void {
     void catchUpAndRoute()
   })
 
-  // Look at the clock and flush on every foreground (§8.2).
+  // Look at the clock and flush on every foreground (§8.2). The preferences go
+  // with it: coming back to a device is exactly when it should pick up what was
+  // decided on the other one.
   App.addListener('appStateChange', ({ isActive }) => {
     if (!isActive) return
     void catchUpAndRoute()
     void flushEvents()
+    void syncPrefs().catch(() => {
+      /* Offline, or signed out: the device copy stands. */
+    })
   })
 }
 

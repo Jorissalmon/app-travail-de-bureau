@@ -72,15 +72,12 @@ export function Settings() {
       .catch(() => setNativeVersion(null))
   }, [])
 
-  // Whether this shell can duck the music at all. `duckOthers` shipped in the
-  // APK from 1.4.0; an OTA bundle running on an older one rings the bowl over
-  // whatever is playing and can do nothing about it. Saying that is the point:
-  // the hint used to promise ducking, so pressing « Écouter » and hearing the
-  // music stay put looked like a bug rather than a shell to reinstall.
-  const cannotDuck = isNative() && !canDuck()
-  const volumeHint = !cannotDuck
-    ? 'Le curseur règle le bol joué quand l’app est ouverte, et l’app demande alors à Android de baisser ce que tu écoutes. Quand l’app est fermée, c’est Android qui sonne, au volume des notifications du téléphone, et il baisse ta musique de lui-même. Le bouton fait entendre le réglage tout de suite, même en silencieux.'
-    : 'Le curseur règle le bol joué quand l’app est ouverte. Cette version-ci ne sait pas encore baisser ta musique pendant qu’il sonne : il faut réinstaller l’app depuis la dernière release. Quand l’app est fermée, en revanche, c’est Android qui sonne, au volume des notifications du téléphone, et lui baisse ta musique de lui-même. Le bouton fait entendre le réglage tout de suite, même en silencieux.'
+  // The one hint left in this screen that is not a label or a value, kept
+  // because it is a state rather than a lesson: `duckOthers` shipped in the APK
+  // from 1.4.0, and on an older shell « Écouter » rings over the music and can
+  // do nothing about it — which looks like a bug unless the screen says so.
+  const volumeHint =
+    isNative() && !canDuck() ? 'Cette version ne peut pas baisser ta musique' : undefined
 
   // The three grants a reminder needs. The sheet only appears when starting a
   // session, so this is where the state stays readable and fixable afterwards.
@@ -145,11 +142,7 @@ export function Settings() {
       )}
 
       <SettingsSection title="Session">
-        <SettingRow
-          label="Où tu travailles"
-          hint="Au bureau, l’app retire des routines les mouvements qu’on ne fait pas en open space : une fente, un étirement à l’encadrement de porte. À la maison, tout est proposé."
-          stacked
-        >
+        <SettingRow label="Où tu travailles" stacked>
           <Segmented
             ariaLabel="Lieu de travail"
             options={PLACES}
@@ -161,7 +154,7 @@ export function Settings() {
             format={(v) => PLACE_LABEL[v]}
           />
         </SettingRow>
-        <SettingRow label="Intervalle des rappels" hint="30 minutes est l’intervalle recommandé." stacked>
+        <SettingRow label="Intervalle des rappels" stacked>
           <Segmented
             ariaLabel="Intervalle des rappels en minutes"
             options={INTERVAL_CHOICES}
@@ -172,7 +165,7 @@ export function Settings() {
           />
         </SettingRow>
 
-        <SettingRow label="Durée de pause" hint="Minutes conseillées pour chaque pause." stacked>
+        <SettingRow label="Durée de pause" stacked>
           <Segmented
             ariaLabel="Durée de pause en minutes"
             options={[1, 2, 3, 5, 10] as const}
@@ -215,7 +208,6 @@ export function Settings() {
 
         <TimeRow
           label="Démarrage auto"
-          hint="Une notification à cette heure-là, les jours actifs. Un appui suffit à démarrer la journée. L’app ne la démarre jamais toute seule, sinon elle compterait une assise que tu n’as pas faite. Laisse vide si tu n’en veux pas."
           value={settings.autoStartAt}
           onChange={(autoStartAt) => void update({ autoStartAt })}
         />
@@ -227,7 +219,7 @@ export function Settings() {
             <SettingRow
               key={key}
               label={PERMISSION_COPY[key].label}
-              hint={permissions[key] ? 'Accordée.' : PERMISSION_COPY[key].why}
+              hint={permissions[key] ? 'Accordée' : 'Non accordée'}
             >
               {!permissions[key] && (
                 <button
@@ -240,7 +232,7 @@ export function Settings() {
               )}
             </SettingRow>
           ))}
-        <SettingRow label="Rappels des yeux" hint="Désactivé par défaut. Voir l’article dédié.">
+        <SettingRow label="Rappels des yeux">
           <Toggle
             label="Rappels des yeux"
             checked={settings.eyeReminders}
@@ -254,11 +246,7 @@ export function Settings() {
             onChange={(v) => void update({ vibrate: v })}
           />
         </SettingRow>
-        <SettingRow
-          label="Alarme du rappel"
-          hint="Le bol, quand un rappel tombe. Silencieux par défaut, pour l’open space : sur ce réglage, app fermée, aucun son ne part. « Répété » sonne toutes les 20 s jusqu’à ce que tu répondes, et s’arrête au bout de cinq minutes."
-          stacked
-        >
+        <SettingRow label="Alarme du rappel" stacked>
           <Segmented
             ariaLabel="Insistance de l’alarme"
             options={ALERT_MODES}
@@ -270,11 +258,7 @@ export function Settings() {
             format={(v) => ALERT_MODE_LABEL[v]}
           />
         </SettingRow>
-        <SettingRow
-          label="Volume de l’alarme"
-          hint={volumeHint}
-          stacked
-        >
+        <SettingRow label="Volume de l’alarme" hint={volumeHint} stacked>
           <div className="flex items-center gap-3">
             <input
               type="range"
@@ -307,10 +291,7 @@ export function Settings() {
             </button>
           </div>
         </SettingRow>
-        <SettingRow
-          label="Sons du minuteur"
-          hint="Bip au changement d’étape et sur les cinq dernières secondes."
-        >
+        <SettingRow label="Sons du minuteur">
           <Toggle
             label="Sons du minuteur"
             checked={playerSound}
@@ -325,10 +306,7 @@ export function Settings() {
       <SettingsSection title="Compte">
         {authStatus === 'local' ? (
           <>
-            <SettingRow
-              label="Aucun compte"
-              hint="Tes réglages, tes routines et tes chiffres vivent sur ce téléphone, et nulle part ailleurs. Un compte sert à les retrouver sur un autre appareil. Rien d’autre n’en dépend."
-            />
+            <SettingRow label="Aucun compte" hint="Rien n’est synchronisé" />
             <div className="py-3.5">
               <button
                 type="button"
@@ -426,10 +404,6 @@ function TimeRangeRow({
   return (
     <div className="py-3.5" style={{ borderBottom: '1px solid var(--border)' }}>
       <p className="text-[16px]">{label}</p>
-      <p className="t-meta mt-0.5">
-        Aucun rappel pendant cette plage. La journée s’y termine aussi toute seule, au lieu de
-        courir toute la nuit.
-      </p>
       <div className="mt-3 flex items-center gap-2">
         <input
           type="time"

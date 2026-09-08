@@ -31,13 +31,21 @@ interface ScreenWakePlugin {
   cancelAll(): Promise<void>
   checkPermission(): Promise<{ granted: boolean }>
   requestPermission(): Promise<{ granted: boolean }>
+  /** Turn other audio down while the bowl rings, and give it back after. */
+  duckOthers(): Promise<void>
+  stopDucking(): Promise<void>
   addListener(
     eventName: 'wakeAlert',
     listener: (data: { route: string }) => void,
   ): Promise<PluginListenerHandle>
 }
 
-const ScreenWake = registerPlugin<ScreenWakePlugin>('ScreenWake')
+/**
+ * Registered once, here, and shared. Capacitor logs a warning and hands back
+ * the first proxy when a plugin name is registered twice, which is what the
+ * audio-focus module was doing — harmless, but it printed on every boot.
+ */
+export const ScreenWake = registerPlugin<ScreenWakePlugin>('ScreenWake')
 
 function available(): boolean {
   return isNative() && platform() === 'android'

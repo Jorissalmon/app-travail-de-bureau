@@ -18,6 +18,8 @@ import { useContentStore } from '@/stores/content'
 import { useSessionStore } from '@/stores/session'
 import { useOnboardingStore } from '@/stores/onboarding'
 import { flushEvents } from '@/features/reminders/events'
+import { installPrefsSync } from '@/features/prefs/sync'
+import { reloadSyncedPrefs } from '@/features/prefs/apply'
 
 /**
  * Boot order matters (§9.3):
@@ -49,6 +51,9 @@ async function boot() {
   installAutoStart()
   void loadAlertMode()
   void loadAlertVolume()
+  // Watches device storage for the preferences that follow the account. Sends
+  // nothing until the auth store says there is one to follow.
+  installPrefsSync(reloadSyncedPrefs)
 
   if (isNative()) {
     try {
