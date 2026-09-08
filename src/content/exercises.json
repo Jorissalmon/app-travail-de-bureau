@@ -1401,5 +1401,131 @@
     ],
     "discreet": true,
     "type": "strength"
+  },
+  "cheville-pointe-flex": {
+    "title": "Pointe-flex",
+    "steps": [
+      "Assis, une jambe tendue devant toi, talon posé au sol.",
+      "Tire la pointe du pied vers toi, aussi loin que possible.",
+      "Pousse-la ensuite loin devant, comme pour faire pointer le pied.",
+      "Quinze allers-retours lents, puis change de jambe."
+    ],
+    "tips": [
+      "L'amplitude compte plus que la vitesse : va au bout des deux positions.",
+      "Sous le bureau, personne ne voit rien."
+    ],
+    "easier": "Garde le pied au sol et fais le mouvement en gardant le talon posé.",
+    "muscles": [
+      "Cheville",
+      "Mollets",
+      "Tibial antérieur"
+    ],
+    "avoid": "Une crampe qui s'installe dans le mollet : relâche et repose le pied à plat.",
+    "articles": [
+      "debout-nest-pas-actif",
+      "pourquoi-30-minutes"
+    ],
+    "discreet": true,
+    "type": "mobility"
+  },
+  "orteils-releves": {
+    "title": "Orteils relevés",
+    "steps": [
+      "Assis, pieds à plat au sol, talons ancrés.",
+      "Décolle la pointe des pieds en gardant les talons au sol.",
+      "Tiens deux secondes en haut, repose lentement.",
+      "Vingt fois."
+    ],
+    "tips": [
+      "C'est le devant de la jambe qui travaille, celui que la position assise n'utilise jamais.",
+      "Si tu sens brûler sur le devant du tibia, c'est le bon muscle."
+    ],
+    "easier": "Dix répétitions, sans tenir en haut.",
+    "muscles": [
+      "Tibial antérieur",
+      "Cheville"
+    ],
+    "avoid": "Une douleur vive sur l'avant du tibia, pas une simple brûlure : arrête.",
+    "articles": [
+      "debout-nest-pas-actif"
+    ],
+    "discreet": true,
+    "type": "mobility"
+  },
+  "pompe-mollet-assis": {
+    "title": "Pompe du mollet, assis",
+    "steps": [
+      "Assis, pieds à plat, mains posées sur les cuisses.",
+      "Décolle les deux talons en poussant sur la pointe des pieds.",
+      "Repose-les, et recommence à un rythme régulier.",
+      "Trente fois, sans à-coups."
+    ],
+    "tips": [
+      "C'est le geste qui remonte le sang des jambes : le mollet est une pompe, et assis elle ne tourne pas.",
+      "Le plus discret de tous : les pieds sont sous le bureau."
+    ],
+    "easier": "Un pied à la fois, en alternant, ce qui demande moins d'endurance.",
+    "muscles": [
+      "Mollets",
+      "Circulation"
+    ],
+    "avoid": "Une douleur dans le mollet, chaude ou dure au toucher : arrête et fais-la voir.",
+    "articles": [
+      "debout-nest-pas-actif",
+      "pourquoi-30-minutes"
+    ],
+    "discreet": true,
+    "type": "mobility"
+  },
+  "nerf-median-glisse": {
+    "title": "Glissement du nerf médian",
+    "steps": [
+      "Bras le long du corps, coude plié, paume vers le haut, doigts fermés sur le pouce.",
+      "Ouvre la main et écarte les doigts, poignet neutre.",
+      "Tends le poignet vers l'arrière, doigts vers le sol.",
+      "Écarte le pouce, puis tends doucement le coude. Reviens. Cinq fois par main, très lentement."
+    ],
+    "tips": [
+      "Ce n'est pas un étirement : dès que ça tire ou fourmille, tu es allé trop loin, reviens d'un cran.",
+      "Cinq répétitions suffisent. Le nerf n'aime pas être insisté."
+    ],
+    "easier": "Fais les trois premières positions seulement, sans tendre le coude.",
+    "muscles": [
+      "Nerf médian",
+      "Avant-bras",
+      "Muscles de la main"
+    ],
+    "avoid": "Un fourmillement ou une décharge qui persiste après le mouvement : arrête, et n'y reviens pas sans avis.",
+    "articles": [
+      "regler-son-poste"
+    ],
+    "discreet": true,
+    "type": "mobility"
+  },
+  "avant-bras-rotation": {
+    "title": "Rotation d'avant-bras",
+    "steps": [
+      "Coudes collés aux côtes, pliés à quatre-vingt-dix degrés, poings fermés sans serrer.",
+      "Tourne les avant-bras paumes vers le haut, jusqu'au bout.",
+      "Puis paumes vers le bas, jusqu'au bout.",
+      "Vingt allers-retours lents."
+    ],
+    "tips": [
+      "Les coudes ne bougent pas : si les épaules s'en mêlent, l'avant-bras ne travaille plus.",
+      "La souris tient l'avant-bras dans une seule position toute la journée ; celle-ci en fait le tour."
+    ],
+    "easier": "Un bras à la fois, l'autre main tenant le coude en place.",
+    "muscles": [
+      "Avant-bras",
+      "Coude",
+      "Poignet"
+    ],
+    "avoid": "Une douleur au coude, à l'intérieur ou à l'extérieur : réduis l'amplitude.",
+    "articles": [
+      "regler-son-poste",
+      "ergonomie-ce-qui-marche"
+    ],
+    "discreet": true,
+    "type": "mobility"
   }
 }

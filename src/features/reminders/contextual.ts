@@ -13,11 +13,15 @@ import type { AdaptivePlan, ReminderKind } from '@/lib/types'
  * one, opening « Hanches » either way. That is a timer with a body attached,
  * and it is the thing the pivot replaces.
  *
- * It now names the zone the plan was composed for, the time the plan actually
- * takes, and lands on the plan itself. § pivot — so does the stand reminder,
- * which is the point where the timer and the plan become one product: the
- * first reminder of the day that finds the plan undone opens it, and every
- * reminder after that is the ordinary three-minute break.
+ * It now names the zone the plan was composed for, the time the session
+ * actually takes, and lands on the plan itself. § pivot — so does the stand
+ * reminder, which is the point where the timer and the plan become one
+ * product: **every** reminder opens an adaptive session. The first of the day
+ * opens the full plan; once that is done the rest open a ninety-second top-up,
+ * composed by the same engine for the same zones. Reopening the whole plan
+ * every thirty minutes would be sixteen minutes of exercise an hour; falling
+ * back to a fixed routine would be the old product coming back through the
+ * notification.
  *
  * The eye reminder is left alone. It is not about a painful zone, and dressing
  * it up as if it were would be the app pretending to know something.
@@ -38,16 +42,12 @@ export interface ContextualInput {
   /** Today's composed session, or null before the first composition. */
   plan: AdaptivePlan | null
   /**
-   * Whether the plan has already been carried to the end today.
-   *
-   * This is the whole Timer ↔ Plan rule in one flag. A reminder every thirty
-   * minutes that each time opened a six-minute session would be sixteen
-   * minutes of exercise an hour, which nobody does and nobody asked for. So
-   * the plan is the day's dose, served by the first reminder that finds it
-   * undone; every reminder after it is the ordinary three-minute break the
-   * app has always had.
+   * Whether the plan has already been carried to the end today. It selects the
+   * envelope — full plan, or top-up — never whether the plan is served at all.
    */
   planDoneToday: boolean
+  /** Seconds the top-up runs, so the notification can state it honestly. */
+  topUpS?: number
 }
 
 /** Nothing over this many characters survives a lock screen intact. */
@@ -72,11 +72,9 @@ function zoneLine(plan: AdaptivePlan, zone: string): string {
  * True when the plan is in a state worth pointing a reminder at: composed, not
  * empty, aimed at a zone, and not already done today.
  */
-function planIsDue(input: ContextualInput): input is ContextualInput & {
-  plan: AdaptivePlan & { primaryZone: string }
-} {
-  const { plan, planDoneToday } = input
-  return plan !== null && !planDoneToday && plan.blocks.length > 0 && plan.primaryZone !== null
+function planIsDue(input: ContextualInput): boolean {
+  const { plan } = input
+  return plan !== null && plan.blocks.length > 0 && plan.primaryZone !== null
 }
 
 export function contextualCopy(
@@ -91,8 +89,9 @@ export function contextualCopy(
   if (kind === 'eyes') return { ...fallback }
 
   if (!planIsDue(input)) {
-    // No plan to serve, or it is already done. The stand reminder keeps its
-    // hour-context nudge, which is the contextual thing it has always had.
+    // No plan at all — nothing declared and nothing rated, or the catalogue
+    // has not loaded. The stand reminder keeps its hour-context nudge, which
+    // is the contextual thing it has always had.
     return {
       title: fallback.title,
       body: kind === 'stand' ? nudgeFor(at) : fallback.body,
@@ -103,6 +102,20 @@ export function contextualCopy(
 
   const plan = input.plan as AdaptivePlan
   const zone = PAIN_ZONE_LABEL[plan.primaryZone as string] ?? (plan.primaryZone as string)
+
+  if (input.planDoneToday) {
+    // The dose is done; this is the top-up. It says so, so that opening it is
+    // never a surprise and never reads as the app having forgotten.
+    const seconds = input.topUpS ?? 90
+    return {
+      title: kind === 'stand' ? fallback.title : `Ta ${zone}.`,
+      body: `Séance du jour faite. ${seconds} secondes de plus pour ${
+        PLURAL_ZONES.has(zone) ? 'les' : 'la'
+      } ${zone}, si tu veux.`,
+      why: 'La séance du jour est faite. Celle-ci est un appoint, pas un rattrapage.',
+      routineSlug: PLAN_SLUG,
+    }
+  }
 
   return {
     // The stand reminder keeps its own word — getting up is what it is for —

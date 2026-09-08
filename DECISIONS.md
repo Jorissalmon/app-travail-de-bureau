@@ -786,6 +786,44 @@ s'écartent de ce qui était demandé, ou qui coûtent quelque chose.
   `mobility`, jamais `strength` : charger une zone qui fait mal sur aucune
   information est la seule chose qu'on ne doit pas pouvoir faire dire au plan.
 
+## Correction post-audit
+
+- **Un article affirmait quatre fois que le renforcement n'était pas dans
+  l'app.** `muscler-le-haut-du-dos`, noté `solide`, avec le mensonge jusque dans
+  son dek — la ligne visible dans la liste d'articles. Le pivot avait ajouté
+  quatorze mouvements de renforcement sans relire l'article qui disait le
+  contraire. Réécrit : les chiffres de la méta-analyse sont inchangés, une
+  section dit ce que l'app a pu prendre (isométrie, poids de corps) et ce
+  qu'elle n'a pas pu (la charge des essais), et la section de limites précise
+  que le niveau `solide` porte sur le résultat de la revue, pas sur ce que l'app
+  en fait. C'est le seul écart qui attaquait la promesse elle-même : une app
+  dont l'argument est l'honnêteté ne peut pas se tromper sur son propre contenu.
+- **Trois autres phrases relues à l'aune du pivot.** « C'est la seule promesse
+  que cette app fait » ne l'était plus. Les autres mentions de l'app dans les
+  onze articles ont été vérifiées une par une et sont restées vraies.
+- **`adviceFor` et `DayCard` supprimés, tests compris.** L'accueil portait deux
+  réponses à « quoi faire maintenant » : le plan composé, et une carte qui
+  proposait une routine fixe selon l'heure. Du code mort aurait été un moindre
+  mal ; du code mort **testé** a l'air vivant. `bandFor` et `nudgeFor` restent,
+  le rappel de lever parle toujours à l'heure qu'il est.
+- **Le rappel ouvre désormais toujours une séance composée.** La règle
+  précédente (les rappels suivants rouvrent `debout`) tenait le volume horaire
+  mais laissait l'ancien produit revenir par la notification. L'enveloppe change
+  au lieu de la destination : appoint de 90 s composé par le même moteur, sans
+  bloc de charge sous quatre minutes.
+- **La sortie de la question de fin est passée d'un lien à une croix de coin.**
+  « Répondre plus tard » était à côté de l'action principale, sur le seul écran
+  dont la réponse est la mesure de résultat de l'app.
+- **Trois événements analytics étaient déclarés sans émetteur** — `reminder_acted`,
+  `streak_freeze_used`, `article_opened` — soit un schéma qui a l'air complet et
+  quatre métriques incalculables. Émis, et **verrouillés par un test** qui lit
+  les sources et refuse tout membre de l'union sans appelant : un type ne peut
+  pas attraper ça, un membre inutilisé étant parfaitement valide.
+- **`freezeSpent` est une fonction pure à part**, parce que `computeStreak`
+  tourne aussi côté serveur et doit le rester. Un mois neuf n'est pas une
+  dépense : le budget se recharge, et l'annoncer serait rapporter un événement
+  qui n'a pas eu lieu.
+
 ## À la charge du propriétaire (secrets, hors dépôt)
 
 - Créer le rôle `releve_app` + la base `releve`, appliquer les migrations

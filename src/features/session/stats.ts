@@ -130,6 +130,32 @@ export function freezesLeft(
   return Math.max(0, freezesPerMonth - used)
 }
 
+/** What the device last reported about the freeze budget. */
+export interface FreezeSeen {
+  /** "YYYY-MM" — the budget is per calendar month, so it resets with it. */
+  month: string
+  left: number
+}
+
+/**
+ * Whether a freeze has been spent since the last look, given what was last
+ * seen and what the journal says now.
+ *
+ * Pure, because `computeStreak` has to stay pure — it runs on the server too —
+ * and a mechanism the app announces ("deux gels par mois") but never reports is
+ * a mechanism nobody can check. A new month is not a spend: the budget refills,
+ * and `left` going back up is the refill, not an event.
+ */
+export function freezeSpent(
+  seen: FreezeSeen | null,
+  today: string,
+  left: number,
+): boolean {
+  const month = today.slice(0, 7)
+  if (seen === null || seen.month !== month) return false
+  return left < seen.left
+}
+
 /**
  * Share of reminders that were acted on (done or snoozed) over a window.
  * 'expired' and 'dismissed' count against it. Returns null when no reminder

@@ -406,6 +406,41 @@ ON CONFLICT (key) DO UPDATE SET
   title = EXCLUDED.title, steps = EXCLUDED.steps, tips = EXCLUDED.tips,
   easier = EXCLUDED.easier, muscles = EXCLUDED.muscles, avoid = EXCLUDED.avoid,
   articles = EXCLUDED.articles, discreet = EXCLUDED.discreet, type = EXCLUDED.type;
+-- cheville-pointe-flex
+INSERT INTO exercises (key, title, steps, tips, easier, muscles, avoid, articles, discreet, type)
+VALUES ('cheville-pointe-flex', 'Pointe-flex', ARRAY['Assis, une jambe tendue devant toi, talon posé au sol.', 'Tire la pointe du pied vers toi, aussi loin que possible.', 'Pousse-la ensuite loin devant, comme pour faire pointer le pied.', 'Quinze allers-retours lents, puis change de jambe.'], ARRAY['L''amplitude compte plus que la vitesse : va au bout des deux positions.', 'Sous le bureau, personne ne voit rien.'], 'Garde le pied au sol et fais le mouvement en gardant le talon posé.', ARRAY['Cheville', 'Mollets', 'Tibial antérieur'], 'Une crampe qui s''installe dans le mollet : relâche et repose le pied à plat.', ARRAY['debout-nest-pas-actif', 'pourquoi-30-minutes'], true, 'mobility')
+ON CONFLICT (key) DO UPDATE SET
+  title = EXCLUDED.title, steps = EXCLUDED.steps, tips = EXCLUDED.tips,
+  easier = EXCLUDED.easier, muscles = EXCLUDED.muscles, avoid = EXCLUDED.avoid,
+  articles = EXCLUDED.articles, discreet = EXCLUDED.discreet, type = EXCLUDED.type;
+-- orteils-releves
+INSERT INTO exercises (key, title, steps, tips, easier, muscles, avoid, articles, discreet, type)
+VALUES ('orteils-releves', 'Orteils relevés', ARRAY['Assis, pieds à plat au sol, talons ancrés.', 'Décolle la pointe des pieds en gardant les talons au sol.', 'Tiens deux secondes en haut, repose lentement.', 'Vingt fois.'], ARRAY['C''est le devant de la jambe qui travaille, celui que la position assise n''utilise jamais.', 'Si tu sens brûler sur le devant du tibia, c''est le bon muscle.'], 'Dix répétitions, sans tenir en haut.', ARRAY['Tibial antérieur', 'Cheville'], 'Une douleur vive sur l''avant du tibia, pas une simple brûlure : arrête.', ARRAY['debout-nest-pas-actif'], true, 'mobility')
+ON CONFLICT (key) DO UPDATE SET
+  title = EXCLUDED.title, steps = EXCLUDED.steps, tips = EXCLUDED.tips,
+  easier = EXCLUDED.easier, muscles = EXCLUDED.muscles, avoid = EXCLUDED.avoid,
+  articles = EXCLUDED.articles, discreet = EXCLUDED.discreet, type = EXCLUDED.type;
+-- pompe-mollet-assis
+INSERT INTO exercises (key, title, steps, tips, easier, muscles, avoid, articles, discreet, type)
+VALUES ('pompe-mollet-assis', 'Pompe du mollet, assis', ARRAY['Assis, pieds à plat, mains posées sur les cuisses.', 'Décolle les deux talons en poussant sur la pointe des pieds.', 'Repose-les, et recommence à un rythme régulier.', 'Trente fois, sans à-coups.'], ARRAY['C''est le geste qui remonte le sang des jambes : le mollet est une pompe, et assis elle ne tourne pas.', 'Le plus discret de tous : les pieds sont sous le bureau.'], 'Un pied à la fois, en alternant, ce qui demande moins d''endurance.', ARRAY['Mollets', 'Circulation'], 'Une douleur dans le mollet, chaude ou dure au toucher : arrête et fais-la voir.', ARRAY['debout-nest-pas-actif', 'pourquoi-30-minutes'], true, 'mobility')
+ON CONFLICT (key) DO UPDATE SET
+  title = EXCLUDED.title, steps = EXCLUDED.steps, tips = EXCLUDED.tips,
+  easier = EXCLUDED.easier, muscles = EXCLUDED.muscles, avoid = EXCLUDED.avoid,
+  articles = EXCLUDED.articles, discreet = EXCLUDED.discreet, type = EXCLUDED.type;
+-- nerf-median-glisse
+INSERT INTO exercises (key, title, steps, tips, easier, muscles, avoid, articles, discreet, type)
+VALUES ('nerf-median-glisse', 'Glissement du nerf médian', ARRAY['Bras le long du corps, coude plié, paume vers le haut, doigts fermés sur le pouce.', 'Ouvre la main et écarte les doigts, poignet neutre.', 'Tends le poignet vers l''arrière, doigts vers le sol.', 'Écarte le pouce, puis tends doucement le coude. Reviens. Cinq fois par main, très lentement.'], ARRAY['Ce n''est pas un étirement : dès que ça tire ou fourmille, tu es allé trop loin, reviens d''un cran.', 'Cinq répétitions suffisent. Le nerf n''aime pas être insisté.'], 'Fais les trois premières positions seulement, sans tendre le coude.', ARRAY['Nerf médian', 'Avant-bras', 'Muscles de la main'], 'Un fourmillement ou une décharge qui persiste après le mouvement : arrête, et n''y reviens pas sans avis.', ARRAY['regler-son-poste'], true, 'mobility')
+ON CONFLICT (key) DO UPDATE SET
+  title = EXCLUDED.title, steps = EXCLUDED.steps, tips = EXCLUDED.tips,
+  easier = EXCLUDED.easier, muscles = EXCLUDED.muscles, avoid = EXCLUDED.avoid,
+  articles = EXCLUDED.articles, discreet = EXCLUDED.discreet, type = EXCLUDED.type;
+-- avant-bras-rotation
+INSERT INTO exercises (key, title, steps, tips, easier, muscles, avoid, articles, discreet, type)
+VALUES ('avant-bras-rotation', 'Rotation d''avant-bras', ARRAY['Coudes collés aux côtes, pliés à quatre-vingt-dix degrés, poings fermés sans serrer.', 'Tourne les avant-bras paumes vers le haut, jusqu''au bout.', 'Puis paumes vers le bas, jusqu''au bout.', 'Vingt allers-retours lents.'], ARRAY['Les coudes ne bougent pas : si les épaules s''en mêlent, l''avant-bras ne travaille plus.', 'La souris tient l''avant-bras dans une seule position toute la journée ; celle-ci en fait le tour.'], 'Un bras à la fois, l''autre main tenant le coude en place.', ARRAY['Avant-bras', 'Coude', 'Poignet'], 'Une douleur au coude, à l''intérieur ou à l''extérieur : réduis l''amplitude.', ARRAY['regler-son-poste', 'ergonomie-ce-qui-marche'], true, 'mobility')
+ON CONFLICT (key) DO UPDATE SET
+  title = EXCLUDED.title, steps = EXCLUDED.steps, tips = EXCLUDED.tips,
+  easier = EXCLUDED.easier, muscles = EXCLUDED.muscles, avoid = EXCLUDED.avoid,
+  articles = EXCLUDED.articles, discreet = EXCLUDED.discreet, type = EXCLUDED.type;
 
 -- debout
 INSERT INTO routines (slug, title, zone, duration_s, summary, accent, sort_order, goal, target_zones)
@@ -906,6 +941,45 @@ VALUES
   ((SELECT id FROM routines WHERE slug = 'chevilles-circulation'), 7, 'Marche sur place', 30, 'Genoux hauts, bras qui accompagnent. La pompe du mollet, à plein régime.', 'marche', 'marche-sur-place'),
   ((SELECT id FROM routines WHERE slug = 'chevilles-circulation'), 8, 'Respiration', 15, 'Deux respirations : inspire sur 4 temps, expire sur 6.', 'respiration', 'respiration-4-6');
 
+-- chevilles-assis
+INSERT INTO routines (slug, title, zone, duration_s, summary, accent, sort_order, goal, target_zones)
+VALUES ('chevilles-assis', 'Chevilles, sans se lever', 'chevilles', 240, 'Quatre minutes pour les jambes lourdes, entièrement sous le bureau.', 'pine', 30, 'pain_relief', ARRAY['chevilles'])
+ON CONFLICT (slug) DO UPDATE SET
+  title = EXCLUDED.title, zone = EXCLUDED.zone, duration_s = EXCLUDED.duration_s,
+  summary = EXCLUDED.summary, accent = EXCLUDED.accent, sort_order = EXCLUDED.sort_order,
+  goal = EXCLUDED.goal, target_zones = EXCLUDED.target_zones;
+DELETE FROM routine_steps WHERE routine_id = (SELECT id FROM routines WHERE slug = 'chevilles-assis');
+INSERT INTO routine_steps (routine_id, position, name, duration_s, cue, figure_key, exercise_key)
+VALUES
+  ((SELECT id FROM routines WHERE slug = 'chevilles-assis'), 1, 'Pointe-flex (droite)', 30, 'Jambe tendue, talon au sol : tire la pointe vers toi, puis pousse-la loin devant.', 'cheville-cercle', 'cheville-pointe-flex'),
+  ((SELECT id FROM routines WHERE slug = 'chevilles-assis'), 2, 'Pointe-flex (gauche)', 30, 'Même chose de l''autre côté, même amplitude.', 'cheville-cercle', 'cheville-pointe-flex'),
+  ((SELECT id FROM routines WHERE slug = 'chevilles-assis'), 3, 'Cercles de cheville', 30, 'Décolle le pied, dessine un cercle large, dans un sens puis dans l''autre. Change à mi-temps.', 'cheville-cercle', 'cheville-cercle'),
+  ((SELECT id FROM routines WHERE slug = 'chevilles-assis'), 4, 'Orteils relevés', 30, 'Talons ancrés, décolle la pointe des pieds. Tiens 2 s, repose. Vingt fois.', 'talon-pointe', 'orteils-releves'),
+  ((SELECT id FROM routines WHERE slug = 'chevilles-assis'), 5, 'Pompe du mollet', 45, 'Décolle les deux talons, repose. Trente fois, à rythme régulier.', 'mollet-releve', 'pompe-mollet-assis'),
+  ((SELECT id FROM routines WHERE slug = 'chevilles-assis'), 6, 'Talon-pointe', 30, 'Alterne l''appui sur les talons puis sur la pointe. Sans à-coups.', 'talon-pointe', 'talon-pointe'),
+  ((SELECT id FROM routines WHERE slug = 'chevilles-assis'), 7, 'Descente lente sur les talons', 30, 'Debout derrière la chaise : monte sur la pointe, redescends en comptant jusqu''à quatre.', 'mollet-plat', 'mollet-excentrique'),
+  ((SELECT id FROM routines WHERE slug = 'chevilles-assis'), 8, 'Respiration', 15, 'Deux respirations : inspire sur 4 temps, expire sur 6.', 'respiration', 'respiration-4-6');
+
+-- poignets-clavier
+INSERT INTO routines (slug, title, zone, duration_s, summary, accent, sort_order, goal, target_zones)
+VALUES ('poignets-clavier', 'Poignets, après le clavier', 'poignets', 270, 'Quatre minutes et demie : les quatre directions, la rotation, et un glissement nerveux.', 'peach', 31, 'pain_relief', ARRAY['poignets'])
+ON CONFLICT (slug) DO UPDATE SET
+  title = EXCLUDED.title, zone = EXCLUDED.zone, duration_s = EXCLUDED.duration_s,
+  summary = EXCLUDED.summary, accent = EXCLUDED.accent, sort_order = EXCLUDED.sort_order,
+  goal = EXCLUDED.goal, target_zones = EXCLUDED.target_zones;
+DELETE FROM routine_steps WHERE routine_id = (SELECT id FROM routines WHERE slug = 'poignets-clavier');
+INSERT INTO routine_steps (routine_id, position, name, duration_s, cue, figure_key, exercise_key)
+VALUES
+  ((SELECT id FROM routines WHERE slug = 'poignets-clavier'), 1, 'Doigts écartés', 30, 'Écarte les doigts au maximum, tiens 3 s, referme le poing. Dix fois.', 'doigts-ecartes', 'doigts-ecartes'),
+  ((SELECT id FROM routines WHERE slug = 'poignets-clavier'), 2, 'Rotation d''avant-bras', 30, 'Coudes au corps : paumes vers le haut, puis vers le bas, jusqu''au bout. Vingt fois.', 'poignet-priere', 'avant-bras-rotation'),
+  ((SELECT id FROM routines WHERE slug = 'poignets-clavier'), 3, 'Poignet en extension', 30, 'Paume vers le haut, l''autre main tire les doigts vers le sol. Change à mi-temps.', 'poignet-extension', 'poignet-extension'),
+  ((SELECT id FROM routines WHERE slug = 'poignets-clavier'), 4, 'Poignet en flexion', 30, 'Bras tendu devant, paume vers le bas, l''autre main tire les doigts vers toi. Change à mi-temps.', 'poignet-flexion', 'poignet-flexion'),
+  ((SELECT id FROM routines WHERE slug = 'poignets-clavier'), 5, 'Mains dos à dos', 30, 'Dos des mains l''un contre l''autre devant la poitrine, coudes vers l''extérieur.', 'priere-inversee', 'mains-dos-a-dos'),
+  ((SELECT id FROM routines WHERE slug = 'poignets-clavier'), 6, 'Glissement du nerf médian (droite)', 30, 'Très lentement, position par position. Dès que ça fourmille, reviens d''un cran.', 'poignet-extension', 'nerf-median-glisse'),
+  ((SELECT id FROM routines WHERE slug = 'poignets-clavier'), 7, 'Glissement du nerf médian (gauche)', 30, 'Même chose à gauche, même lenteur.', 'poignet-extension', 'nerf-median-glisse'),
+  ((SELECT id FROM routines WHERE slug = 'poignets-clavier'), 8, 'Prière', 30, 'Paumes jointes devant la poitrine, descends les mains en gardant les paumes collées.', 'poignet-priere', 'poignet-priere'),
+  ((SELECT id FROM routines WHERE slug = 'poignets-clavier'), 9, 'Poing serré', 30, 'Serre le poing 5 s, ouvre la main en grand 2 s. Huit fois, chaque main.', 'doigts-poing', 'poing-serre');
+
 -- pourquoi-30-minutes
 INSERT INTO articles (slug, title, dek, body_md, tag, evidence, read_min, source_label, source_url, sort_order)
 VALUES ('pourquoi-30-minutes', 'Pourquoi trente minutes', 'Le seul intervalle qui a été testé dose par dose, et ce qu’il change.', 'La plupart des conseils sur les pauses sont des chiffres ronds que personne n''a vérifiés. Trente minutes fait exception : c''est le seul intervalle qui a été testé contre d''autres, dans la même expérience.
@@ -1060,7 +1134,7 @@ L''effet global est de d = 0,16, et il **n''atteint pas le seuil de significativ
 
 ## Ce que ça change pour toi
 
-Une pause de trois minutes ne va pas te rendre plus intelligent sur un problème difficile. Elle va te faire finir la journée moins cassé. C''est la seule promesse que cette app fait, et c''est celle-là qui est démontrée.
+Une pause de trois minutes ne va pas te rendre plus intelligent sur un problème difficile. Elle va te faire finir la journée moins cassé. C''est la promesse que cette app fait sur les pauses, et c''est celle-là qui est démontrée. Ce qu''elle dit par ailleurs sur la douleur repose sur d''autres preuves, plus minces, et sur ce que tu réponds toi-même.
 
 1. Prends les pauses pour l''état dans lequel tu finis la journée, pas pour ta production de l''après-midi.
 2. Si tu es au milieu d''un problème dur, **ignore le rappel** et lève-toi au suivant. C''est prévu : rien ne se casse, la journée continue.
@@ -1079,7 +1153,7 @@ ON CONFLICT (slug) DO UPDATE SET
 
 -- muscler-le-haut-du-dos
 INSERT INTO articles (slug, title, dek, body_md, tag, evidence, read_min, source_label, source_url, sort_order)
-VALUES ('muscler-le-haut-du-dos', 'Le renforcement divise le risque par deux', 'L’intervention la plus rentable contre les douleurs de nuque, et elle n’est pas dans cette app.', 'Voici l''intervention la mieux démontrée contre les douleurs de nuque au bureau. Elle n''est pas dans cette app, et il vaut mieux le dire.
+VALUES ('muscler-le-haut-du-dos', 'Le renforcement divise le risque par deux', 'L’intervention la mieux démontrée contre les douleurs de nuque. Ce que l’app en propose n’est pas ce que les essais ont testé.', 'Voici l''intervention la mieux démontrée contre les douleurs de nuque au bureau. Elle est désormais dans l''app — sous une forme qui n''est pas celle des essais, et il vaut mieux le dire.
 
 ## Ce qu''on a mesuré
 
@@ -1102,17 +1176,28 @@ Celui que tu suivras est le bon. C''est un résultat rassurant : il n''y a pas d
 
 ::figure omoplates | Le serrage d''omoplates : la base du renforcement du haut du dos.
 
-## Pourquoi trois minutes ne remplacent pas la salle
+## Ce que l''app en a pris, et ce qu''elle n''a pas pu prendre
 
-Le renforcement demande une **charge** — assez de résistance pour que le muscle s''adapte — et une **répétition dans le temps**. Trois minutes de mobilité toutes les trente minutes apportent du mouvement et de la circulation, ce qui est utile, mais pas de charge. Ce sont deux choses différentes qui règlent deux problèmes différents.
+Quatorze mouvements de renforcement sont maintenant dans le catalogue, et le plan du jour en ajoute un ou deux quand la douleur que tu déclares baisse. Ce sont des **tenues isométriques et du poids de corps** : serrage d''omoplates tenu, tirage sur l''assise de la chaise, isométries de nuque, pompe sur le bureau.
+
+Ce n''est pas ce que les essais ont testé. Le renforcement y demandait une **charge** — assez de résistance pour que le muscle s''adapte — sur des programmes supervisés de plusieurs semaines. Derrière un bureau, sans matériel, on peut charger un peu ; on ne peut pas charger autant. L''écart entre les deux n''est mesuré nulle part.
+
+Et la mobilité reste de la mobilité : les étirements du plan apportent du mouvement et de la circulation, pas de la charge. Ce sont deux choses différentes qui règlent deux problèmes différents, et le plan les compte séparément.
 
 ## Ce que tu peux en faire
 
-1. Si tu vas déjà à la salle, ajoute du **tirage horizontal** — rowing, tirage poitrine — dix minutes, deux fois par semaine. C''est là que se joue l''essentiel.
-2. Si tu n''y vas pas, commence par le serrage d''omoplates et les élévations, qui sont dans les routines d''ici. C''est mieux que rien, et ça amorce l''habitude.
-3. Ne compte pas les pauses de l''app comme du renforcement. Elles n''en sont pas.
+1. Si tu vas déjà à la salle, ajoute du **tirage horizontal** — rowing, tirage poitrine — dix minutes, deux fois par semaine. C''est là que se joue l''essentiel, et c''est plus que ce que l''app peut te donner.
+2. Sinon, les blocs de renforcement du plan sont un début réel, pas un décor. Mieux vaut une tenue de dix secondes faite tous les jours qu''un programme parfait jamais commencé.
+3. Ne compte pas les blocs de **mobilité** comme du renforcement. Ils n''en sont pas, et l''app ne les compte pas comme tels non plus.
 
-> **À retenir** — Une notification ne remplace pas dix minutes de tirage horizontal deux fois par semaine. L''app t''aide à ne pas rester assis ; le renforcement, c''est ailleurs.', 'pratique', 'solide', 3, 'Journal of Orthopaedic & Sports Physical Therapy, 2023', 'https://www.jospt.org/doi/10.2519/jospt.2023.12063', 5)
+## Ce qu''il faut garder en tête
+
+- Le chiffre de cet article porte sur la **prévention** d''une cervicalgie chez des gens qui n''en avaient pas, pas sur le soulagement d''une douleur installée. Sur ce second point, c''est l''article « Ce que le renforcement change vraiment » qui répond, et il est plus prudent.
+- Les essais portaient sur des programmes **supervisés, chargés, sur plusieurs semaines**. Rien ne dit que des tenues isométriques derrière un bureau produisent le même effet, et l''écart joue probablement contre l''app.
+- La certitude est **modérée**, pas haute, et le niveau de preuve affiché en haut de cet article porte sur le résultat de la méta-analyse — pas sur ce que l''app en fait.
+- Rien de tout cela ne remplace un avis médical sur une douleur qui dure.
+
+> **À retenir** — Le renforcement divise le risque par deux, dans des essais qui ne ressemblent pas à ce que fait cette app. Les blocs de charge d''ici sont une version allégée et non testée : c''est mieux que rien, ce n''est pas la salle.', 'pratique', 'solide', 4, 'Journal of Orthopaedic & Sports Physical Therapy, 2023', 'https://www.jospt.org/doi/10.2519/jospt.2023.12063', 5)
 ON CONFLICT (slug) DO UPDATE SET
   title = EXCLUDED.title, dek = EXCLUDED.dek, body_md = EXCLUDED.body_md,
   tag = EXCLUDED.tag, evidence = EXCLUDED.evidence, read_min = EXCLUDED.read_min,
@@ -1379,7 +1464,7 @@ Il fonctionne. Mais une étude relève que les personnes qui recourent en perman
 
 ## Ce que le bruit fait au corps
 
-Il ne fatigue pas que l''attention. L''exposition au bruit fait monter les épaules et serrer la mâchoire sans qu''on s''en aperçoive, toute la journée. C''est une des raisons pour lesquelles les routines d''ici commencent souvent par relâcher les trapèzes.
+Il ne fatigue pas que l''attention. L''exposition au bruit fait monter les épaules et serrer la mâchoire sans qu''on s''en aperçoive, toute la journée. C''est une des raisons pour lesquelles les routines de nuque et de haut du dos d''ici commencent par relâcher les trapèzes.
 
 > **À retenir** — Si tu ne peux rien changer à ton bureau, le bruit rose dans un casque est ta meilleure option. Et lève-toi : sortir de la pièce coupe la source, ce qu''aucun casque ne fait.
 
@@ -1440,8 +1525,8 @@ ON CONFLICT (slug) DO UPDATE SET
 
 -- Drop content the JSON no longer defines. Deleting a routine sets
 -- completions.routine_id to NULL (ON DELETE SET NULL); the rows survive.
-DELETE FROM routines WHERE slug <> ALL (ARRAY['debout', 'express', 'assis', 'bureau-complet', 'reveil', 'nuque', 'dos', 'lombaires', 'hanches', 'poignets', 'chevilles', 'yeux', 'respiration', 'nuque-flash', 'nuque-soulagement', 'dos-flash', 'dos-soulagement', 'lombaires-flash', 'lombaires-soulagement', 'hanches-flash', 'hanches-soulagement', 'poignets-flash', 'poignets-soulagement', 'chevilles-flash', 'renfort-nuque', 'renfort-haut-du-dos', 'renfort-tronc', 'renfort-poignets', 'chevilles-circulation']);
+DELETE FROM routines WHERE slug <> ALL (ARRAY['debout', 'express', 'assis', 'bureau-complet', 'reveil', 'nuque', 'dos', 'lombaires', 'hanches', 'poignets', 'chevilles', 'yeux', 'respiration', 'nuque-flash', 'nuque-soulagement', 'dos-flash', 'dos-soulagement', 'lombaires-flash', 'lombaires-soulagement', 'hanches-flash', 'hanches-soulagement', 'poignets-flash', 'poignets-soulagement', 'chevilles-flash', 'renfort-nuque', 'renfort-haut-du-dos', 'renfort-tronc', 'renfort-poignets', 'chevilles-circulation', 'chevilles-assis', 'poignets-clavier']);
 DELETE FROM articles WHERE slug <> ALL (ARRAY['pourquoi-30-minutes', 'vingt-vingt-vingt', 'debout-nest-pas-actif', 'ce-que-les-pauses-changent', 'muscler-le-haut-du-dos', 'regler-son-poste', 'lumiere-du-jour', 'lumiere-bleue', 'ergonomie-ce-qui-marche', 'expiration-plus-longue', 'open-space', 'renforcement-et-douleur']);
-DELETE FROM exercises WHERE key <> ALL (ARRAY['marche', 'marche-sur-place', 'extension-debout', 'fente-basse', 'regard-au-loin', 'bascule-bassin', 'menton-rentre', 'nuque-diagonale', 'rotation-assise', 'ischios-assis', 'figure4-assise', 'calin-bras', 'triceps-tete', 'cercle-bras', 'chat-vache', 'inclinaison-laterale', 'respiration-4-6', 'nuque-inclinaison', 'nuque-rotation', 'haussement-epaules', 'encadrement-porte', 'nuque-flexion', 'omoplates', 'ouverture-pectorale', 'rotation-externe', 'extension-chaise', 'tirage-vide', 'genou-poitrine', 'ischios', 'balancement-hanche', 'poignet-flexion', 'poignet-extension', 'doigts-ecartes', 'mains-dos-a-dos', 'poignet-priere', 'cheville-cercle', 'talon-pointe', 'mollet-releve', 'clignement', 'loin-pres-alterne', 'paumes', 'installe-toi', 'isometrie-nuque-avant', 'isometrie-nuque-laterale', 'isometrie-nuque-arriere', 'omoplates-tenu', 'tirage-isometrique-chaise', 'rotation-externe-tenue', 'elevation-y', 'pompe-bureau', 'gainage-assis', 'charniere-hanche', 'assis-debout', 'poing-serre', 'poignet-resiste', 'mollet-excentrique']);
+DELETE FROM exercises WHERE key <> ALL (ARRAY['marche', 'marche-sur-place', 'extension-debout', 'fente-basse', 'regard-au-loin', 'bascule-bassin', 'menton-rentre', 'nuque-diagonale', 'rotation-assise', 'ischios-assis', 'figure4-assise', 'calin-bras', 'triceps-tete', 'cercle-bras', 'chat-vache', 'inclinaison-laterale', 'respiration-4-6', 'nuque-inclinaison', 'nuque-rotation', 'haussement-epaules', 'encadrement-porte', 'nuque-flexion', 'omoplates', 'ouverture-pectorale', 'rotation-externe', 'extension-chaise', 'tirage-vide', 'genou-poitrine', 'ischios', 'balancement-hanche', 'poignet-flexion', 'poignet-extension', 'doigts-ecartes', 'mains-dos-a-dos', 'poignet-priere', 'cheville-cercle', 'talon-pointe', 'mollet-releve', 'clignement', 'loin-pres-alterne', 'paumes', 'installe-toi', 'isometrie-nuque-avant', 'isometrie-nuque-laterale', 'isometrie-nuque-arriere', 'omoplates-tenu', 'tirage-isometrique-chaise', 'rotation-externe-tenue', 'elevation-y', 'pompe-bureau', 'gainage-assis', 'charniere-hanche', 'assis-debout', 'poing-serre', 'poignet-resiste', 'mollet-excentrique', 'cheville-pointe-flex', 'orteils-releves', 'pompe-mollet-assis', 'nerf-median-glisse', 'avant-bras-rotation']);
 
 COMMIT;

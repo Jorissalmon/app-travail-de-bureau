@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { Bell, BellOff } from 'lucide-react'
 import { Sheet } from './Sheet'
 import { KINDS } from '@/features/reminders/kinds'
+import { TOP_UP_S } from '@/features/plan/compose'
 import { contextualCopy } from '@/features/reminders/contextual'
 import { pendingAfter } from '@/features/reminders/schedule'
 import { clockTime } from '@/lib/date'
@@ -67,7 +68,7 @@ export function NextReminders({
             </p>
           ) : (
             armed.map((occ) => {
-              const copy = contextualCopy(occ.kind, occ.at, { plan, planDoneToday })
+              const copy = contextualCopy(occ.kind, occ.at, { plan, planDoneToday, topUpS: TOP_UP_S })
               return (
                 <Row
                   key={occ.id}

@@ -94,7 +94,7 @@ export function ExerciseSections({ exercise }: { exercise: Exercise }) {
                   type="button"
                   className="flex w-full items-center gap-3 rounded-[16px] p-3 text-left"
                   style={{ background: 'var(--surface)' }}
-                  onClick={() => navigate(`/articles/${article.slug}`)}
+                  onClick={() => navigate(`/articles/${article.slug}?from=exercise`)}
                 >
                   <span className="min-w-0 flex-1">
                     <span className="block text-[15px]" style={{ fontWeight: 700 }}>

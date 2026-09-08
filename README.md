@@ -1,11 +1,59 @@
 # Log Off
 
-Application Android personnelle qui rappelle de se lever et de bouger pendant les
-journées de bureau, propose des routines guidées courtes, et explique pourquoi
-via une section d'articles. **Thème sombre, français, hors-ligne d'abord.**
+Pour les personnes qui travaillent assises et **souffrent déjà** de nuque, dos,
+épaules ou poignets : le coach quotidien ultra-court qui structure la journée de
+travail et cherche à réduire la douleur perçue, avec un plan adaptatif de
+mobilité et de renforcement léger — en restant radicalement honnête sur les
+preuves. **Android (Capacitor), thème sombre, français, hors-ligne d'abord.**
 
-> Ce n'est pas un produit à vendre, ni un dispositif médical. Priorité : que ça
-> marche tous les jours sans y penser.
+> Log Off n'est pas un dispositif médical. En cas de douleur qui persiste, un
+> médecin ou un kiné tranchera mieux qu'une app.
+
+## La boucle
+
+1. **Premier lancement** — zones douloureuses, intensité 0-10 par zone, depuis
+   quand, lieu de travail, minutes disponibles. Un premier plan est composé et
+   lancé dans la foulée.
+2. **La journée** — la session de travail et ses rappels, à l'intervalle choisi
+   (30 min par défaut, 45 et 60 offerts).
+3. **La séance** — le premier rappel qui trouve le plan du jour non fait l'ouvre :
+   4 à 8 minutes, composées pour les zones qui font mal. Les rappels suivants
+   redeviennent la pause courte, sinon ce serait seize minutes d'exercice par
+   heure.
+4. **La question** — « Comment est ta nuque maintenant ? », 0-10. C'est la seule
+   mesure de résultat de l'app, et c'est l'utilisateur qui la donne.
+5. **Le retour** — heatmap de douleur sur 7 / 14 / 30 jours, et le delta
+   (« Nuque : 6 → 3 en 11 jours ») quand il y a de quoi le calculer.
+6. **La série** — deux gels par mois civil, aucun ton punitif, aucune
+   félicitation.
+
+Le plan est **composé, pas choisi** : les zones sont classées sur la dernière
+réponse, le renforcement est dosé sur la tendance à quatorze jours, et une zone
+déclarée à 6/10 ou plus ne reçoit **aucune charge** — la revue citée ne trouve
+aucune preuve sur la douleur aiguë. Voir `docs/PIVOT-COACH-DOULEUR.md`.
+
+## Modèle économique
+
+B2C freemium, avec abonnement — B2B envisagé plus tard. La frontière proposée
+est en §5 de `docs/VALIDATION-PIVOT.md`, et elle a une règle : **on ne fait
+jamais payer l'honnêteté.** Gratuit pour toujours — tous les articles avec leur
+niveau de preuve, le catalogue complet, les rappels, le journal de douleur, une
+séance composée par jour. Payant — l'historique au-delà de 30 jours, la
+synchronisation multi-appareil, plusieurs séances par jour, l'export. Jamais
+payant — le niveau de preuve, les limites d'un article, la question de fin de
+séance, la version plus facile d'un mouvement et son signe d'arrêt.
+
+## La doctrine, qui n'est pas négociable
+
+- Chaque affirmation porte son **niveau de preuve** (`solide` / `partielle` /
+  `non-demontree`), y compris quand il est faible, y compris contre l'app.
+- **Aucun chiffre inventé.** Les seuls nombres affichés sont comptés, ou tapés
+  par l'utilisateur. Un jour sans réponse est une case vide, jamais un zéro.
+- Chaque article se termine sur **ses propres limites**.
+- Ton factuel, tutoiement, **ni félicitations ni reproche** — vérifié par test.
+- Aucune prétention médicale.
+
+`docs/BRIEF-CONTENU.md` la détaille et dit ce qui fait refuser un contenu.
 
 ## Stack
 
@@ -32,7 +80,8 @@ définis `VITE_API_BASE_URL`.
 ```bash
 pnpm typecheck      # tsc --noEmit (front + api)
 pnpm lint           # eslint, 0 warning toléré
-pnpm test           # vitest — logique pure (planification, série, file, semver)
+pnpm test           # vitest — logique pure (composition du plan, journal de douleur,
+                    #   planification, série, file, découpeur SQL)
 pnpm build          # typecheck + build de production
 ```
 

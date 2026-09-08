@@ -7,7 +7,7 @@ import { useSessionStore } from '@/stores/session'
 import { usePlanStore } from '@/stores/plan'
 import { KINDS } from '@/features/reminders/kinds'
 import { contextualCopy } from '@/features/reminders/contextual'
-import { PLAN_SLUG } from '@/features/plan/compose'
+import { PLAN_SLUG, TOP_UP_S } from '@/features/plan/compose'
 import { stopAlerting } from '@/features/reminders/alert'
 import { durationLabel } from '@/lib/format'
 
@@ -41,7 +41,7 @@ export function BreakOverlay() {
   const planRoutine = usePlanStore((s) => s.planRoutine)
   const planDoneToday = usePlanStore((s) => s.doneToday)
   const copy = awaiting
-    ? contextualCopy(awaiting.kind, new Date(), { plan, planDoneToday })
+    ? contextualCopy(awaiting.kind, new Date(), { plan, planDoneToday, topUpS: TOP_UP_S })
     : null
   const meta = awaiting ? { ...KINDS[awaiting.kind], ...copy } : null
   const catalogue = useContentStore((s) =>

@@ -1886,5 +1886,171 @@
         "exerciseKey": "respiration-4-6"
       }
     ]
+  },
+  {
+    "slug": "chevilles-assis",
+    "title": "Chevilles, sans se lever",
+    "zone": "chevilles",
+    "durationS": 240,
+    "summary": "Quatre minutes pour les jambes lourdes, entièrement sous le bureau.",
+    "accent": "pine",
+    "sortOrder": 30,
+    "goal": "pain_relief",
+    "targetZones": [
+      "chevilles"
+    ],
+    "steps": [
+      {
+        "position": 1,
+        "name": "Pointe-flex (droite)",
+        "durationS": 30,
+        "cue": "Jambe tendue, talon au sol : tire la pointe vers toi, puis pousse-la loin devant.",
+        "figureKey": "cheville-cercle",
+        "exerciseKey": "cheville-pointe-flex"
+      },
+      {
+        "position": 2,
+        "name": "Pointe-flex (gauche)",
+        "durationS": 30,
+        "cue": "Même chose de l'autre côté, même amplitude.",
+        "figureKey": "cheville-cercle",
+        "exerciseKey": "cheville-pointe-flex"
+      },
+      {
+        "position": 3,
+        "name": "Cercles de cheville",
+        "durationS": 30,
+        "cue": "Décolle le pied, dessine un cercle large, dans un sens puis dans l'autre. Change à mi-temps.",
+        "figureKey": "cheville-cercle",
+        "exerciseKey": "cheville-cercle"
+      },
+      {
+        "position": 4,
+        "name": "Orteils relevés",
+        "durationS": 30,
+        "cue": "Talons ancrés, décolle la pointe des pieds. Tiens 2 s, repose. Vingt fois.",
+        "figureKey": "talon-pointe",
+        "exerciseKey": "orteils-releves"
+      },
+      {
+        "position": 5,
+        "name": "Pompe du mollet",
+        "durationS": 45,
+        "cue": "Décolle les deux talons, repose. Trente fois, à rythme régulier.",
+        "figureKey": "mollet-releve",
+        "exerciseKey": "pompe-mollet-assis"
+      },
+      {
+        "position": 6,
+        "name": "Talon-pointe",
+        "durationS": 30,
+        "cue": "Alterne l'appui sur les talons puis sur la pointe. Sans à-coups.",
+        "figureKey": "talon-pointe",
+        "exerciseKey": "talon-pointe"
+      },
+      {
+        "position": 7,
+        "name": "Descente lente sur les talons",
+        "durationS": 30,
+        "cue": "Debout derrière la chaise : monte sur la pointe, redescends en comptant jusqu'à quatre.",
+        "figureKey": "mollet-plat",
+        "exerciseKey": "mollet-excentrique"
+      },
+      {
+        "position": 8,
+        "name": "Respiration",
+        "durationS": 15,
+        "cue": "Deux respirations : inspire sur 4 temps, expire sur 6.",
+        "figureKey": "respiration",
+        "exerciseKey": "respiration-4-6"
+      }
+    ]
+  },
+  {
+    "slug": "poignets-clavier",
+    "title": "Poignets, après le clavier",
+    "zone": "poignets",
+    "durationS": 270,
+    "summary": "Quatre minutes et demie : les quatre directions, la rotation, et un glissement nerveux.",
+    "accent": "peach",
+    "sortOrder": 31,
+    "goal": "pain_relief",
+    "targetZones": [
+      "poignets"
+    ],
+    "steps": [
+      {
+        "position": 1,
+        "name": "Doigts écartés",
+        "durationS": 30,
+        "cue": "Écarte les doigts au maximum, tiens 3 s, referme le poing. Dix fois.",
+        "figureKey": "doigts-ecartes",
+        "exerciseKey": "doigts-ecartes"
+      },
+      {
+        "position": 2,
+        "name": "Rotation d'avant-bras",
+        "durationS": 30,
+        "cue": "Coudes au corps : paumes vers le haut, puis vers le bas, jusqu'au bout. Vingt fois.",
+        "figureKey": "poignet-priere",
+        "exerciseKey": "avant-bras-rotation"
+      },
+      {
+        "position": 3,
+        "name": "Poignet en extension",
+        "durationS": 30,
+        "cue": "Paume vers le haut, l'autre main tire les doigts vers le sol. Change à mi-temps.",
+        "figureKey": "poignet-extension",
+        "exerciseKey": "poignet-extension"
+      },
+      {
+        "position": 4,
+        "name": "Poignet en flexion",
+        "durationS": 30,
+        "cue": "Bras tendu devant, paume vers le bas, l'autre main tire les doigts vers toi. Change à mi-temps.",
+        "figureKey": "poignet-flexion",
+        "exerciseKey": "poignet-flexion"
+      },
+      {
+        "position": 5,
+        "name": "Mains dos à dos",
+        "durationS": 30,
+        "cue": "Dos des mains l'un contre l'autre devant la poitrine, coudes vers l'extérieur.",
+        "figureKey": "priere-inversee",
+        "exerciseKey": "mains-dos-a-dos"
+      },
+      {
+        "position": 6,
+        "name": "Glissement du nerf médian (droite)",
+        "durationS": 30,
+        "cue": "Très lentement, position par position. Dès que ça fourmille, reviens d'un cran.",
+        "figureKey": "poignet-extension",
+        "exerciseKey": "nerf-median-glisse"
+      },
+      {
+        "position": 7,
+        "name": "Glissement du nerf médian (gauche)",
+        "durationS": 30,
+        "cue": "Même chose à gauche, même lenteur.",
+        "figureKey": "poignet-extension",
+        "exerciseKey": "nerf-median-glisse"
+      },
+      {
+        "position": 8,
+        "name": "Prière",
+        "durationS": 30,
+        "cue": "Paumes jointes devant la poitrine, descends les mains en gardant les paumes collées.",
+        "figureKey": "poignet-priere",
+        "exerciseKey": "poignet-priere"
+      },
+      {
+        "position": 9,
+        "name": "Poing serré",
+        "durationS": 30,
+        "cue": "Serre le poing 5 s, ouvre la main en grand 2 s. Huit fois, chaque main.",
+        "figureKey": "doigts-poing",
+        "exerciseKey": "poing-serre"
+      }
+    ]
   }
 ]

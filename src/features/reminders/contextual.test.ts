@@ -39,7 +39,7 @@ function due(over: Partial<AdaptivePlan> = {}) {
   return { plan: plan(over), planDoneToday: false }
 }
 
-describe('contextualCopy — the Timer ↔ Plan rule', () => {
+describe('contextualCopy — the Timer x Plan rule', () => {
   it('sends the stand reminder to the plan while the plan is undone', () => {
     const copy = contextualCopy('stand', AT, due())
     expect(copy.routineSlug).toBe(PLAN_SLUG)
@@ -47,15 +47,22 @@ describe('contextualCopy — the Timer ↔ Plan rule', () => {
     expect(copy.body).toContain('nuque')
   })
 
-  it('sends it back to the three-minute break once the plan is done', () => {
-    // Sixteen minutes of exercise an hour is nobody's product. The plan is the
-    // day's dose; the reminders after it are the break the app always had.
+  it('still sends it to the plan once the plan is done — never to a fixed routine', () => {
+    // The whole point of the merge: a reminder always opens an adaptive
+    // session. Falling back to `debout` was the old product coming back
+    // through the notification.
     const copy = contextualCopy('stand', AT, { plan: plan(), planDoneToday: true })
-    expect(copy.routineSlug).toBe(KINDS.stand.routineSlug)
-    expect(copy.title).toBe(KINDS.stand.title)
+    expect(copy.routineSlug).toBe(PLAN_SLUG)
   })
 
-  it('keeps the hour-context nudge on the fallback stand reminder', () => {
+  it('says plainly that the day is done and this is a top-up', () => {
+    const copy = contextualCopy('mobility', AT, { plan: plan(), planDoneToday: true, topUpS: 90 })
+    expect(copy.body).toContain('Séance du jour faite')
+    expect(copy.body).toContain('90 secondes')
+    expect(copy.why).toContain('appoint')
+  })
+
+  it('keeps the hour-context nudge when there is no plan at all', () => {
     const morning = contextualCopy('stand', new Date('2026-03-16T09:30:00'), {
       plan: null,
       planDoneToday: false,
@@ -64,12 +71,11 @@ describe('contextualCopy — the Timer ↔ Plan rule', () => {
       plan: null,
       planDoneToday: false,
     })
+    expect(morning.routineSlug).toBe(KINDS.stand.routineSlug)
     expect(morning.body).not.toBe(evening.body)
   })
 
   it('keeps the word « Debout » on the stand reminder even when it opens the plan', () => {
-    // It is still the reminder to get up; what changes is what getting up gets
-    // you, not what the reminder is called.
     expect(contextualCopy('stand', AT, due()).title).toBe(KINDS.stand.title)
   })
 })

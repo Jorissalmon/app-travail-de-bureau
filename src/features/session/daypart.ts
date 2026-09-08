@@ -12,6 +12,7 @@ import { minutesOfDayFrom } from '@/lib/date'
 
 export type DayPart = 'matin' | 'matinee' | 'midi' | 'apres-midi' | 'fin-journee' | 'soir' | 'nuit'
 
+/** @deprecated Plus d'appelant depuis que le plan adaptatif tient l'accueil. */
 export interface DayContext {
   now: Date
   /** A work session is running. */
@@ -125,21 +126,4 @@ export function bandFor(now: Date): Band {
  */
 export function nudgeFor(at: Date): string {
   return bandFor(at).nudge
-}
-
-export function adviceFor(ctx: DayContext): DayAdvice | null {
-  const band = bandFor(ctx.now)
-  const offered = band.candidates.filter((slug) => ctx.available.includes(slug))
-  // Nothing from this band is available: rather than an empty card, fall back
-  // to whatever the content store does have.
-  const pool = offered.length > 0 ? offered : ctx.available
-  if (pool.length === 0) return null
-
-  const index = Math.max(0, ctx.standsToday) % pool.length
-  return {
-    part: band.part,
-    headline: band.headline,
-    why: ctx.sessionActive ? band.why : 'Ta session n’est pas lancée : aucun rappel ne partira.',
-    routineSlug: pool[index]!,
-  }
 }

@@ -1,5 +1,5 @@
-import { useMemo } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useEffect, useMemo, useRef } from 'react'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { ArrowLeft, ExternalLink } from 'lucide-react'
 import { Browser } from '@capacitor/browser'
 import { EvidencePill } from '@/components/EvidencePill'
@@ -8,14 +8,36 @@ import { useContentStore } from '@/stores/content'
 import { splitArticle } from '@/lib/markdown'
 import { stepTone } from '@/lib/tones'
 import { isNative } from '@/lib/platform'
+import { trackNow } from '@/features/analytics/events'
 
 /** §11.4 — article detail with sanitised markdown body and an external source link. */
 export function ArticleDetail() {
   const { slug } = useParams()
   const navigate = useNavigate()
+  const [params] = useSearchParams()
   const article = useContentStore((s) => (slug ? s.articleBySlug(slug) : undefined))
 
   const blocks = useMemo(() => (article ? splitArticle(article.bodyMd) : []), [article])
+
+  /**
+   * Whether the graded evidence is read or only displayed. It is the one thing
+   * that tells us if the doctrine is a product feature or a decoration, so the
+   * level opened is reported alongside the slug — and where it was opened from,
+   * because an article reached from a movement sheet is a different act than
+   * one browsed in the list.
+   */
+  const seen = useRef<string | null>(null)
+  useEffect(() => {
+    if (!article || seen.current === article.slug) return
+    seen.current = article.slug
+    const from = params.get('from')
+    trackNow({
+      name: 'article_opened',
+      slug: article.slug,
+      evidence: article.evidence,
+      from: from === 'exercise' || from === 'plan' ? from : 'list',
+    })
+  }, [article, params])
 
   if (!article) {
     return (

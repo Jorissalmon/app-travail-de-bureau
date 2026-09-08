@@ -6,6 +6,7 @@ import {
   computeAdherence,
   computeStreak,
   fillDays,
+  freezeSpent,
   freezesLeft,
   type DayCount,
 } from './stats'
@@ -151,6 +152,26 @@ describe('freezesLeft', () => {
     // Every August day is blank, and none of them counts against September.
     const days = [day('2026-09-01', 4), day('2026-09-02', 4)]
     expect(freezesLeft(days, '2026-09-02', { weekdays: [1, 2, 3, 4, 5] })).toBe(FREEZES_PER_MONTH)
+  })
+})
+
+describe('freezeSpent', () => {
+  it('says nothing the first time it looks — there is no before', () => {
+    expect(freezeSpent(null, '2026-09-10', 1)).toBe(false)
+  })
+
+  it('reports a spend when the budget went down inside the month', () => {
+    expect(freezeSpent({ month: '2026-09', left: 2 }, '2026-09-10', 1)).toBe(true)
+  })
+
+  it('says nothing when nothing moved', () => {
+    expect(freezeSpent({ month: '2026-09', left: 1 }, '2026-09-10', 1)).toBe(false)
+  })
+
+  it('does not read a new month as a spend — the budget refilled', () => {
+    // Going from 0 left in August to 2 left in September is the reset, and
+    // announcing it would be the app reporting an event that never happened.
+    expect(freezeSpent({ month: '2026-08', left: 0 }, '2026-09-01', 2)).toBe(false)
   })
 })
 

@@ -48,6 +48,8 @@ export const KEYS = {
   analyticsQueue: 'analytics.queue',
   /** The analytics ring buffer, see features/analytics. */
   analyticsJournal: 'analytics.journal',
+  /** Freeze budget last reported, so a spend is announced exactly once. */
+  freezesSeen: 'streak.freezesSeen',
   stepDurations: 'player.durations',
   customRoutines: 'routines.custom',
   /** When the synced preferences last changed on this device. */

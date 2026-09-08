@@ -4,6 +4,7 @@ import { localDate } from '@/lib/date'
 import { uuid } from '@/lib/uuid'
 import type { Completion, ReminderAction, ReminderEvent, ReminderKind } from '@/lib/types'
 import { enqueueCompletions, enqueueEvents, prune, removeConfirmed } from './queue'
+import { trackNow } from '@/features/analytics/events'
 
 /**
  * The offline-first event journal (§8.5). Every interaction is written to the
@@ -33,6 +34,11 @@ export async function logEvent(event: ReminderEvent): Promise<void> {
   const queue = await getJSON<ReminderEvent[]>(KEYS.eventQueue, [])
   await setJSON(KEYS.eventQueue, enqueueEvents(queue, [event]))
   await journalEvents([event])
+  // Every reminder outcome in the app goes through here — done, snoozed,
+  // dismissed, expired. Reporting it at the five call sites instead would have
+  // meant five chances to forget one, and the analytics event existed for days
+  // without a single emitter for exactly that reason.
+  trackNow({ name: 'reminder_acted', kind: event.kind, action: event.action })
   void flushEvents()
 }
 

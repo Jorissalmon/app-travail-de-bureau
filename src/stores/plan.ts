@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { localDate } from '@/lib/date'
 import { place, loadPlace } from '@/features/place/place'
-import { PLAN_SLUG, composePlan, planToRoutine } from '@/features/plan/compose'
+import { PLAN_SLUG, TOP_UP_S, composePlan, planToRoutine } from '@/features/plan/compose'
 import { readCompletionJournal } from '@/features/reminders/events'
 import { flushPain, loadPain, painEntries, pullPain, recordPain } from '@/features/plan/pain'
 import { emptyProfile, loadProfile, profile, saveProfile } from '@/features/plan/profile'
@@ -27,6 +27,16 @@ interface PlanState {
   plan: AdaptivePlan | null
   /** The plan as the player reads it, or null before the first composition. */
   planRoutine: Routine | null
+  /**
+   * The short session a reminder serves once the day's plan is done.
+   *
+   * Composed by the same engine, for the same zones, in ninety seconds. It
+   * exists so that a reminder always opens an adaptive session rather than
+   * falling back to a fixed routine — while keeping the day's dose the day's
+   * dose. A reminder every thirty minutes that reopened the full six-minute
+   * plan would be sixteen minutes of exercise an hour, which nobody does.
+   */
+  topUpRoutine: Routine | null
   /**
    * Whether today's plan has already been carried to the end.
    *
@@ -65,6 +75,7 @@ export const usePlanStore = create<PlanState>((set, get) => ({
   entries: [],
   plan: null,
   planRoutine: null,
+  topUpRoutine: null,
   doneToday: false,
   loaded: false,
 
@@ -83,7 +94,20 @@ export const usePlanStore = create<PlanState>((set, get) => ({
       exerciseByKey: content.exerciseByKey,
       place: place(),
     })
-    set({ plan, planRoutine: planToRoutine(plan) })
+    const topUp = composePlan({
+      today: localDate(),
+      profile: current,
+      entries: get().entries,
+      routines: content.routines,
+      exerciseByKey: content.exerciseByKey,
+      place: place(),
+      budgetS: TOP_UP_S,
+    })
+    set({
+      plan,
+      planRoutine: planToRoutine(plan),
+      topUpRoutine: topUp.blocks.length > 0 ? planToRoutine(topUp) : null,
+    })
 
     // Only when it actually moved, so the log says "le plan a changé" and not
     // "l'écran a été ouvert".

@@ -25,24 +25,33 @@ la pause, et ce que le rappel ouvre.
 
 1. La personne démarre sa journée (ou le démarrage automatique la lance).
 2. À l'intervalle réglé — 30 par défaut, 45 et 60 offerts — un rappel arrive.
-3. **Le premier rappel qui trouve le plan du jour non fait ouvre le plan**
-   (4 à 8 min). Les suivants ouvrent la pause courte de trois minutes.
+3. **Chaque rappel ouvre une séance composée.** Le premier qui trouve le plan du
+   jour non fait ouvre le plan (4 à 8 min) ; les suivants ouvrent un **appoint
+   de 90 secondes**, composé par le même moteur pour les mêmes zones.
 4. À la fin : « Comment est ta nuque maintenant ? », 0-10.
 5. Le plan est recomposé, la heatmap bouge.
 6. Rappel raté → **pas de gel de journée**, un snooze qui recule.
 
-#### Pourquoi « le premier rappel », et pas tous
+#### Le plan toujours, mais pas toujours en entier
 
 C'est le seul point du cahier des charges qui ne se résolvait pas tout seul.
 « Un rappel toutes les trente minutes » et « le rappel ouvre le plan de 4 à 8
 minutes » donnent ensemble jusqu'à **seize minutes d'exercice par heure**.
 Personne ne fait ça, et une app qui le propose est désinstallée le deuxième jour.
 
-La règle retenue : **le plan est la dose du jour, le timer est la structure de la
-journée.** Le plan est servi par le premier rappel qui le trouve non fait ;
-ensuite les rappels redeviennent ce qu'ils ont toujours été, une pause de trois
-minutes pour se lever. Les deux objets gardent leur raison d'être et ne se
-concurrencent pas.
+La première résolution — les rappels suivants rouvrent `debout` — tenait le
+volume mais laissait **l'ancien produit revenir par la notification** : une
+routine fixe, identique le jour d'un 8 et le jour d'un 1.
+
+La règle retenue est donc : **le rappel ouvre toujours une séance composée, et
+c'est l'enveloppe qui change.** Le plan est la dose du jour ; une fois faite, le
+même moteur compose un appoint de 90 secondes (`TOP_UP_S`) pour les mêmes zones,
+sans bloc de charge — en dessous de `MIN_BUDGET_FOR_STRENGTH_S` (4 min), charger
+voudrait dire supprimer la mobilité qui précède. La notification le dit :
+« Séance du jour faite. 90 secondes de plus pour la nuque, si tu veux. »
+
+Un seul slug (`plan`) pour les deux : le rappel n'a jamais à savoir laquelle des
+deux il ouvre.
 
 Le drapeau qui décide est `usePlanStore().doneToday`, dérivé du **journal des
 séances terminées** — pas d'un booléen que l'app met quand elle pense que tu l'as
@@ -432,7 +441,10 @@ De haut en bas :
 
 1. **Plan du jour** — durée, zones ciblées, type de séance, nombre de blocs, le
    nombre de renforts s'il y en a, la phrase du compositeur, et « Lancer la
-   séance ».
+   séance ». **C'est la seule carte « quoi faire maintenant ».** L'ancienne
+   carte de conseil horaire (`DayCard`, `adviceFor`) a été supprimée, code et
+   tests compris : deux réponses concurrentes à la même question sur le même
+   écran, dont l'une venait du modèle produit d'avant.
 2. **Ce que tu as répondu** — sélecteur 7 / 14 / 30 jours ; la ligne de delta
    « Nuque : 6 → 3 en 11 jours » ; la heatmap.
 3. **Ta journée** — la carte de session, qui existe toujours : le moteur de
@@ -466,8 +478,14 @@ a pas de seuil à partir duquel une réponse devient une mauvaise réponse.
 `/player/plan` joue la séance composée ; les autres slugs jouent le catalogue.
 À la fin : « Terminé. », la durée, puis **« Comment est ta nuque maintenant ? »**
 avec l'échelle 0-10. Le bouton « Retour » est désactivé tant qu'il n'y a pas de
-réponse ; « Répondre plus tard » existe et est journalisé (`pain_skipped`), parce
-qu'un écran dont on ne peut pas sortir est un écran qu'on tue.
+réponse.
+
+La sortie sans répondre est **une croix dans le coin**, pas un lien à côté de
+l'action principale. C'était « Répondre plus tard », posé sous l'échelle et
+lisible comme l'une de deux options également normales — sur le seul écran dont
+la réponse est la mesure de résultat de l'app. Un écran sans sortie est un écran
+qu'on tue, donc la sortie reste ; elle cesse simplement de concurrencer la
+question. Le refus est toujours journalisé (`pain_skipped`).
 
 La zone demandée est la zone primaire du plan, ou la première `targetZone`
 notable d'une routine libre — et rien n'est demandé pour la respiration ou les

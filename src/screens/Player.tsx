@@ -51,11 +51,17 @@ export function Player() {
   // object rather than a stored copy that could be a day old.
   const catalogue = useContentStore((s) => (slug ? s.routineBySlug(slug) : undefined))
   const planRoutine = usePlanStore((s) => s.planRoutine)
+  const topUpRoutine = usePlanStore((s) => s.topUpRoutine)
+  const planDone = usePlanStore((s) => s.doneToday)
   const plan = usePlanStore((s) => s.plan)
   const rate = usePlanStore((s) => s.rate)
   const markPlanDone = usePlanStore((s) => s.markPlanDone)
   const isPlan = slug === PLAN_SLUG
-  const routine = isPlan ? (planRoutine ?? undefined) : catalogue
+  // One slug, two envelopes: the day's plan until it is done, then the
+  // ninety-second top-up. The reminder never has to know which.
+  const routine = isPlan
+    ? ((planDone ? topUpRoutine : planRoutine) ?? planRoutine ?? undefined)
+    : catalogue
   const exerciseByKey = useContentStore((s) => s.exerciseByKey)
   const vibrate = useSettingsStore((s) => s.settings.vibrate)
   const markDone = useSessionStore((s) => s.markDone)
@@ -315,6 +321,28 @@ export function Player() {
     const durationS = Math.round((Date.now() - startedAtRef.current) / 1000)
     return (
       <FullScreen>
+        {/*
+          The way out of the closing question is a corner cross, not a link
+          beside the primary action.
+          It used to be « Répondre plus tard », sitting right under the scale
+          and reading as one of two equally normal choices — on the one screen
+          whose answer is the app's only outcome measure. A screen with no exit
+          at all is a screen people kill, so the exit stays; it just stops
+          competing with the question.
+        */}
+        {askZone !== null && answer === null && (
+          <button
+            type="button"
+            aria-label="Fermer sans répondre"
+            className="tap absolute right-4 top-4"
+            onClick={() => {
+              trackNow({ name: 'pain_skipped', zone: askZone })
+              navigate('/', { replace: true })
+            }}
+          >
+            <X size={22} color="var(--text-3)" />
+          </button>
+        )}
         <h1 className="t-day">Terminé.</h1>
         <p className="t-meta mt-2">{mmss(durationS)} de mouvement.</p>
 
@@ -344,17 +372,10 @@ export function Player() {
             >
               Retour
             </button>
-            <button
-              type="button"
-              className="t-meta mt-4 w-full"
-              style={{ color: 'var(--text-3)' }}
-              onClick={() => {
-                trackNow({ name: 'pain_skipped', zone: askZone })
-                navigate('/', { replace: true })
-              }}
-            >
-              Répondre plus tard
-            </button>
+            <p className="t-meta mt-4">
+              Une réponse, et le plan de demain en tient compte. C’est la seule mesure de cette
+              app.
+            </p>
           </div>
         ) : (
           <button
@@ -488,7 +509,7 @@ export function Player() {
 function FullScreen({ children }: { children: React.ReactNode }) {
   return (
     <div
-      className="gutter flex min-h-0 flex-1 flex-col items-center justify-center text-center"
+      className="gutter relative flex min-h-0 flex-1 flex-col items-center justify-center text-center"
       style={{ background: 'var(--bg)' }}
     >
       {children}

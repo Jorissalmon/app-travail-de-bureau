@@ -47,6 +47,18 @@ export const TREND_WINDOW = 14
 const CLOSER_FALLBACK_S = 30
 
 /**
+ * Below this budget, no load block, whatever the zone says.
+ *
+ * A ninety-second top-up has room for two stretches and a breath. Squeezing a
+ * strength hold into it would mean dropping the mobility that precedes it, and
+ * loading a cold zone is the one thing the composer will not be talked into.
+ */
+export const MIN_BUDGET_FOR_STRENGTH_S = 240
+
+/** The envelope of the top-up session the reminders serve after the plan. */
+export const TOP_UP_S = 90
+
+/**
  * Where the plan looks when nothing has been declared and nothing rated. Not a
  * guess about this person: the three zones the app's own articles are about.
  */
@@ -60,6 +72,12 @@ export interface ComposeInput {
   routines: Routine[]
   exerciseByKey: (key: string) => Exercise | undefined
   place: Place
+  /**
+   * Override the budget, in seconds. Used for the short top-up session the
+   * reminders serve once the day's plan is done — same engine, same zones,
+   * same rules, a smaller envelope.
+   */
+  budgetS?: number
 }
 
 interface Candidate {
@@ -262,10 +280,10 @@ export function composePlan(input: ComposeInput): AdaptivePlan {
 
   const score = primary ? currentScore(entries, profile, primary) : null
   const slope = primary ? trend(entries, primary, today, TREND_WINDOW) : null
-  const slots = strengthSlots(score, slope, profile.minutes)
+  const budget = input.budgetS ?? profile.minutes * 60
+  const slots =
+    budget >= MIN_BUDGET_FOR_STRENGTH_S ? strengthSlots(score, slope, profile.minutes) : 0
   const goal = planGoal(score, slots)
-
-  const budget = profile.minutes * 60
   const rot = dayIndex(profile, today)
 
   const zones: Zone[] = secondary && secondary !== primary ? [primary as Zone, secondary] : primary ? [primary] : []
@@ -336,7 +354,9 @@ export function composePlan(input: ComposeInput): AdaptivePlan {
   const targetZones = [...new Set(blocks.map((b) => b.forZone).filter((z): z is Zone => z !== null))]
 
   return {
-    id: `plan-${today}`,
+    // The top-up is a different session on the same day, so it carries its own
+    // id: the home card and the analytics must not read one as the other.
+    id: input.budgetS === undefined ? `plan-${today}` : `plan-${today}-appoint`,
     localDate: today,
     durationS: blocks.reduce((n, b) => n + b.durationS, 0),
     goal,

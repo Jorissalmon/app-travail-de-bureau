@@ -6,6 +6,7 @@ import {
 import { isNative } from '@/lib/platform'
 import type { Occurrence } from './schedule'
 import { alertRoute } from './kinds'
+import { TOP_UP_S } from '@/features/plan/compose'
 import { contextualCopy } from './contextual'
 import { usePlanStore } from '@/stores/plan'
 import { cancelWakeAlerts, scheduleWakeAlerts } from './screenwake'
@@ -106,7 +107,7 @@ function toSchedule(occ: Occurrence, ctx: ScheduleContext): ScheduleOptions['not
   // says now. Read defensively — a notification must never fail to schedule
   // because the plan store has not hydrated yet.
   const { plan, doneToday } = usePlanStore.getState()
-  const copy = contextualCopy(occ.kind, occ.at, { plan, planDoneToday: doneToday })
+  const copy = contextualCopy(occ.kind, occ.at, { plan, planDoneToday: doneToday, topUpS: TOP_UP_S })
   return {
     id: occ.id,
     title: copy.title,

@@ -4,7 +4,9 @@ import { localDate } from '@/lib/date'
 import { readCompletionJournal, readEventJournal } from '@/features/reminders/events'
 import { buildLocalStats } from '@/features/session/localStats'
 import { readDayLog } from '@/features/session/daylog'
-import { rangeToSpan } from '@/features/session/stats'
+import { freezeSpent, freezesLeft, rangeToSpan, type FreezeSeen } from '@/features/session/stats'
+import { KEYS, getJSON, setJSON } from '@/lib/storage'
+import { trackNow } from '@/features/analytics/events'
 import type { Stats } from '@/lib/types'
 import { useSettingsStore } from './settings'
 
@@ -25,6 +27,25 @@ interface StatsState {
   load: (range?: 'week' | 'month') => Promise<void>
 }
 
+/**
+ * Announce a freeze the moment the journal shows one was spent, and exactly
+ * once. Silent on a new month: the budget refilling is not an event.
+ */
+async function reportFreeze(
+  days: { localDate: string; stands: number; reminders: number }[],
+  today: string,
+  weekdays: number[],
+): Promise<void> {
+  try {
+    const left = freezesLeft(days, today, { weekdays })
+    const seen = await getJSON<FreezeSeen | null>(KEYS.freezesSeen, null)
+    if (freezeSpent(seen, today, left)) trackNow({ name: 'streak_freeze_used', left })
+    await setJSON(KEYS.freezesSeen, { month: today.slice(0, 7), left })
+  } catch {
+    /* Reporting the streak must never be able to blank the tracking screen. */
+  }
+}
+
 export const useStatsStore = create<StatsState>((set, get) => ({
   stats: null,
   range: 'week',
@@ -42,18 +63,18 @@ export const useStatsStore = create<StatsState>((set, get) => ({
         readCompletionJournal(),
         readDayLog(),
       ])
-      set({
-        stats: buildLocalStats({
+      const weekdays = useSettingsStore.getState().settings.weekdays
+      const built = buildLocalStats({
           events,
           completions,
           sessions,
           today,
           now: new Date().toISOString(),
-          span: rangeToSpan(r),
-          weekdays: useSettingsStore.getState().settings.weekdays,
-        }),
-        local: true,
+        span: rangeToSpan(r),
+        weekdays,
       })
+      set({ stats: built, local: true })
+      await reportFreeze(built.standsByDay, today, weekdays)
     } catch {
       /* A corrupted journal must not blank the screen; the server may still answer. */
     }
