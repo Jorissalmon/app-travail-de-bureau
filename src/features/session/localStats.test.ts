@@ -31,7 +31,13 @@ function completion(localDate: string, durationS: number, i = 0): Completion {
   }
 }
 
-const base = { today, span: 7, weekdays: [1, 2, 3, 4, 5] }
+const base = {
+  today,
+  span: 7,
+  weekdays: [1, 2, 3, 4, 5],
+  sessions: [],
+  now: `${today}T18:00:00.000Z`,
+}
 
 describe('buildLocalStats', () => {
   it('counts today from the journal alone', () => {

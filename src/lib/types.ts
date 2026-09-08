@@ -144,6 +144,35 @@ export interface Completion {
   localDate: string
 }
 
+/** One line of the activity journal. See features/session/journal.ts. */
+export type JournalEntryKind = 'start' | 'end' | 'moved' | 'snoozed' | 'missed' | 'stood'
+
+export interface JournalEntry {
+  /** ISO instant, what the line is sorted by. */
+  at: string
+  kind: JournalEntryKind
+  /** For a movement break: which routine. The title is resolved by the screen,
+      from the catalogue, so a renamed routine renames its history too. */
+  routineSlug?: string
+  durationS?: number
+}
+
+export interface JournalDay {
+  localDate: string
+  /** Seconds between starting the day and ending it, summed over the day's
+      sessions. An open one counts up to now. */
+  workedS: number
+  /** Seconds spent in routines carried to the end. */
+  movedS: number
+  /** Worked minus moved: the time actually spent at the desk, on the work. */
+  focusS: number
+  stands: number
+  reminders: number
+  /** A day still running. */
+  open: boolean
+  entries: JournalEntry[]
+}
+
 export interface Stats {
   standsToday: number
   remindersToday: number
@@ -152,6 +181,8 @@ export interface Stats {
   minutesMoved: number
   /** Share of reminders acted on over the last 30 days, 0..1, or null if none. */
   adherence: number | null
+  /** Day by day, newest first: what happened and how long it took. */
+  journal: JournalDay[]
 }
 
 export interface ApiError {

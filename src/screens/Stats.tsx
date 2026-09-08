@@ -3,14 +3,31 @@ import { Link } from 'react-router-dom'
 import { Segmented } from '@/components/Segmented'
 import { useStatsStore } from '@/stores/stats'
 import { LOW_ADHERENCE } from '@/features/session/stats'
-import { minutesLabel, percent, plural, standsLine } from '@/lib/format'
-import { weekdayInitial } from '@/lib/date'
+import { hoursLabel, percent, plural, standsLine } from '@/lib/format'
+import { localDate, weekdayInitial } from '@/lib/date'
+import { JournalDayCard } from '@/components/JournalDayCard'
+import { useContentStore } from '@/stores/content'
 
 /**
  * §11.5 — honest numbers and nothing else. No calories, no "sitting time
  * avoided", no estimated health benefit: those would be invented figures.
  * Everything here is either counted or a share of things counted.
+ *
+ * The journal below them is the same rule applied to the day rather than to the
+ * week: it lists what happened and at what time, and the only figure it derives
+ * is the focus time — the worked time minus the moved time, named as the
+ * subtraction it is.
  */
+
+/**
+ * How tall the tallest bar is drawn, in pixels — not as a percentage.
+ *
+ * A percentage height inside a flex item that has no definite height of its own
+ * resolves to auto, which is zero. Every bar was drawn 0 px tall, so this chart
+ * had been an empty box since it was written; measuring it in the browser is
+ * what turned that up.
+ */
+const BAR_MAX_PX = 104
 
 const RANGES = ['week', 'month'] as const
 type Range = (typeof RANGES)[number]
@@ -43,9 +60,28 @@ export function Stats() {
   // A month of bars cannot carry a label each; one in five keeps it readable.
   const labelEvery = byDay.length > 10 ? 5 : 1
 
+  const journal = useMemo(() => stats?.journal ?? [], [stats])
+  const totals = useMemo(
+    () =>
+      journal.reduce(
+        (acc, d) => ({
+          worked: acc.worked + d.workedS,
+          moved: acc.moved + d.movedS,
+          focus: acc.focus + d.focusS,
+        }),
+        { worked: 0, moved: 0, focus: 0 },
+      ),
+    [journal],
+  )
+  const today = localDate()
+  const routineBySlug = useContentStore((s) => s.routineBySlug)
+  const mine = useContentStore((s) => s.mine)
+  const routineTitle = (slug: string) =>
+    routineBySlug(slug)?.title ?? mine.find((r) => r.slug === slug)?.title
+
   return (
     <div className="gutter pb-8">
-      <h1 className="t-screen pt-5 pb-4">Suivi</h1>
+      <h1 className="t-screen pt-5 pb-4">Activité</h1>
 
       <Segmented<Range>
         options={RANGES}
@@ -77,24 +113,29 @@ export function Stats() {
         </p>
         <div
           className="flex items-end justify-between"
-          style={{ height: 120, gap: byDay.length > 10 ? 2 : 8 }}
+          style={{ height: BAR_MAX_PX + 22, gap: byDay.length > 10 ? 2 : 8 }}
         >
           {byDay.map((d, i) => {
             const isToday = i === byDay.length - 1
-            const h = Math.max(6, (d.stands / maxStands) * 100)
+            const h = d.stands === 0 ? 3 : Math.max(6, (d.stands / maxStands) * BAR_MAX_PX)
             const labelled = isToday || (byDay.length - 1 - i) % labelEvery === 0
             return (
-              <div key={d.localDate} className="flex flex-1 flex-col items-center gap-2">
-                <div className="flex w-full flex-1 items-end">
-                  <div
-                    className="w-full rounded-t-[6px]"
-                    style={{
-                      height: `${h}%`,
-                      background: isToday ? 'var(--accent)' : 'var(--surface-3)',
-                    }}
-                    aria-label={`${d.localDate} : ${d.stands} ${plural(d.stands, 'lever', 'levers')}`}
-                  />
-                </div>
+              <div
+                key={d.localDate}
+                className="flex h-full flex-1 flex-col items-center justify-end gap-2"
+              >
+                <div
+                  className="w-full rounded-t-[6px]"
+                  style={{
+                    height: h,
+                    background: isToday
+                      ? 'var(--accent)'
+                      : d.stands === 0
+                        ? 'var(--surface-2)'
+                        : 'var(--surface-3)',
+                  }}
+                  aria-label={`${d.localDate} : ${d.stands} ${plural(d.stands, 'lever', 'levers')}`}
+                />
                 <span className="num text-[11px]" style={{ color: 'var(--text-3)' }}>
                   {labelled ? weekdayInitial(d.localDate) : ' '}
                 </span>
@@ -121,24 +162,59 @@ export function Stats() {
           <p className="t-meta mt-1">jours avec au moins 3 levers</p>
         </section>
         <section className="rounded-[20px] p-5" style={{ background: 'var(--surface)' }}>
-          <p className="t-card-eyebrow">Temps bougé</p>
+          <p className="t-card-eyebrow">Réponse aux rappels</p>
           <p className="num mt-2" style={{ fontSize: 34 }}>
-            {minutesLabel(stats?.minutesMoved ?? 0)}
+            {percent(stats?.adherence ?? null)}
           </p>
-          <p className="t-meta mt-1">
-            routines terminées, sur {range === 'week' ? '7' : '30'} jours
-          </p>
+          <p className="t-meta mt-1">rappels suivis d’un « Fait » ou d’un report</p>
         </section>
       </div>
 
+      {/* The three durations together: a value like « 7 h 12 » does not fit a
+          half-width card at the size the counters use, and putting them side by
+          side is also how they read — the third is the first minus the second. */}
       <section className="mt-3 rounded-[20px] p-5" style={{ background: 'var(--surface)' }}>
-        <p className="t-card-eyebrow">Réponse aux rappels</p>
-        <p className="num mt-2" style={{ fontSize: 34 }}>
-          {percent(stats?.adherence ?? null)}
+        <p className="t-card-eyebrow mb-3">
+          Temps, sur {range === 'week' ? '7' : '30'} jours
         </p>
-        <p className="t-meta mt-1">
-          part des rappels suivis d’un « Fait » ou d’un report, sur 30 jours
-        </p>
+        <div className="flex items-start justify-between gap-2">
+          {[
+            { label: 'Travail', value: totals.worked },
+            { label: 'Focus', value: totals.focus },
+            { label: 'Bougé', value: totals.moved },
+          ].map((t) => (
+            <div key={t.label} className="min-w-0 flex-1">
+              <p
+                className="num whitespace-nowrap"
+                style={{ fontSize: 20, lineHeight: 1.2 }}
+              >
+                {hoursLabel(t.value)}
+              </p>
+              <p className="t-meta mt-1">{t.label}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* The journal: the same days, told rather than counted. */}
+      <section className="mt-6">
+        <h2 className="t-section mb-3">Journal</h2>
+        {journal.length === 0 ? (
+          <p className="t-meta">
+            Rien encore sur cette période. Démarre une journée et elle s’écrira toute seule.
+          </p>
+        ) : (
+          <div className="flex flex-col gap-3">
+            {journal.map((d) => (
+              <JournalDayCard
+                key={d.localDate}
+                day={d}
+                today={today}
+                routineTitle={routineTitle}
+              />
+            ))}
+          </div>
+        )}
       </section>
 
       {lowAdherence && (

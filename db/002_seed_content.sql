@@ -522,17 +522,43 @@ VALUES
 
 -- pourquoi-30-minutes
 INSERT INTO articles (slug, title, dek, body_md, tag, evidence, read_min, source_label, source_url, sort_order)
-VALUES ('pourquoi-30-minutes', 'Pourquoi trente minutes', 'Le seul intervalle qui a été testé dose par dose, et ce qu’il change.', 'La plupart des conseils sur les pauses sont des chiffres ronds que personne n''a vérifiés. Celui-ci fait exception.
+VALUES ('pourquoi-30-minutes', 'Pourquoi trente minutes', 'Le seul intervalle qui a été testé dose par dose, et ce qu’il change.', 'La plupart des conseils sur les pauses sont des chiffres ronds que personne n''a vérifiés. Trente minutes fait exception : c''est le seul intervalle qui a été testé contre d''autres, dans la même expérience.
 
-Une équipe de Columbia a fait asseoir onze adultes pendant huit heures en laboratoire, et a comparé cinq protocoles : une minute de marche toutes les trente minutes, une minute toutes les heures, cinq minutes toutes les trente minutes, cinq minutes toutes les heures, et rien du tout.
+## Ce qu''on a mesuré
 
-Un seul protocole a amélioré à la fois la glycémie et la tension artérielle : **cinq minutes de marche toutes les trente minutes**. Le pic de sucre après le repas baissait de 58 %, et la tension de 4 à 5 mmHg, une baisse que l''auteur principal compare à six mois d''entraînement quotidien. Une minute toutes les trente minutes donnait un effet modeste, sur la glycémie seulement.
+Une équipe de Columbia a fait asseoir onze adultes pendant huit heures en laboratoire, plusieurs fois, en changeant à chaque fois une seule chose : la pause. Cinq protocoles comparés entre eux.
+
+1. Une minute de marche toutes les trente minutes.
+2. Une minute toutes les heures.
+3. Cinq minutes toutes les trente minutes.
+4. Cinq minutes toutes les heures.
+5. Rien du tout, huit heures assis.
+
+Deux marqueurs relevés : la glycémie après un repas, et la tension artérielle.
+
+## Le résultat
+
+Un seul protocole a amélioré les deux à la fois : **cinq minutes de marche toutes les trente minutes**. Le pic de sucre après le repas baissait de 58 %, et la tension de 4 à 5 mmHg — une baisse que l''auteur principal compare à six mois d''entraînement quotidien.
+
+Une minute toutes les trente minutes donnait un effet modeste, sur la glycémie seulement. Une pause toutes les heures, quelle que soit sa durée, ne suffisait pas.
 
 ::figure marche | Cinq minutes de marche toutes les trente minutes : le seul protocole qui a bougé les deux marqueurs.
 
-Ce qu''il faut garder en tête : onze participants, en laboratoire, sur des marqueurs intermédiaires. C''est une démonstration de mécanisme, pas une étude de mortalité. Mais c''est le seul essai qui a comparé les doses entre elles, et c''est pour ça que trente minutes est l''intervalle par défaut de cette app.
+## Pourquoi trente et pas soixante
 
-Si trente minutes ne tient pas dans tes journées, quarante-cinq vaut mieux que rien. L''intervalle que tu respectes bat toujours celui que tu ignores.', 'preuve', 'solide', 3, 'Columbia University Irving Medical Center, 2023', 'https://www.cuimc.columbia.edu/news/rx-prolonged-sitting-five-minute-stroll-every-half-hour', 1)
+Ce n''est pas la durée totale de la marche qui compte, c''est sa fréquence. Cinq minutes toutes les trente minutes et dix minutes toutes les heures font le même nombre de pas dans la journée — et seul le premier a marché. Ce que le corps encaisse mal, c''est la durée d''une assise d''un seul tenant, pas le total de la journée.
+
+## Ce que tu peux en faire
+
+1. Garde trente minutes tant que ça tient dans tes journées : c''est le réglage par défaut de l''app.
+2. Si ça ne tient pas, passe à quarante-cinq plutôt que d''ignorer le rappel. L''intervalle que tu respectes bat toujours celui que tu ignores.
+3. Vise cinq minutes debout quand tu peux, mais lève-toi même pour une minute. Une minute mesurée vaut mieux que cinq minutes prévues.
+
+> **À retenir** — Ce qui compte n''est pas combien tu bouges dans la journée, mais à quelle fréquence tu coupes l''assise.
+
+## Les limites
+
+Onze participants, en laboratoire, sur des marqueurs intermédiaires. C''est une démonstration de mécanisme, pas une étude de mortalité. Mais c''est le seul essai qui a comparé les doses entre elles, et c''est pour ça que trente minutes est l''intervalle par défaut ici.', 'preuve', 'solide', 3, 'Columbia University Irving Medical Center, 2023', 'https://www.cuimc.columbia.edu/news/rx-prolonged-sitting-five-minute-stroll-every-half-hour', 1)
 ON CONFLICT (slug) DO UPDATE SET
   title = EXCLUDED.title, dek = EXCLUDED.dek, body_md = EXCLUDED.body_md,
   tag = EXCLUDED.tag, evidence = EXCLUDED.evidence, read_min = EXCLUDED.read_min,
@@ -541,19 +567,43 @@ ON CONFLICT (slug) DO UPDATE SET
 
 -- vingt-vingt-vingt
 INSERT INTO articles (slug, title, dek, body_md, tag, evidence, read_min, source_label, source_url, sort_order)
-VALUES ('vingt-vingt-vingt', 'Le 20-20-20 n’a jamais été prouvé', 'La règle la plus répétée du travail sur écran, et ce qui marche à la place.', 'Toutes les vingt minutes, regarder à vingt pieds pendant vingt secondes. La règle est attribuée à l''optométriste américain Jeffrey Anshel, elle est reprise partout, et elle n''a jamais été validée.
+VALUES ('vingt-vingt-vingt', 'Le 20-20-20 n’a jamais été prouvé', 'La règle la plus répétée du travail sur écran, et ce qui marche à la place.', 'Toutes les vingt minutes, regarder à vingt pieds pendant vingt secondes. C''est la règle la plus répétée du travail sur écran. Elle est attribuée à l''optométriste américain Jeffrey Anshel, elle est reprise partout — et elle n''a jamais été validée.
 
-Une étude contrôlée l''a testée directement : trente participants, une tâche de lecture de quarante minutes sur tablette, avec des pauses programmées toutes les cinq, dix, vingt ou quarante minutes. Résultat : aucun effet significatif sur les symptômes oculaires (p = 0,70), sur la vitesse de lecture (p = 0,93), ni sur la précision (p = 0,55). Les auteurs concluent que des pauses de vingt secondes ne tiennent pas comme intervention.
+## Ce qu''on a mesuré
 
-Ça ne veut pas dire que la fatigue visuelle est imaginaire. Le mécanisme est réel : devant un écran, le taux de clignement s''effondre, le film lacrymal s''évapore, et l''œil sèche. Mais la variable utile n''est pas le chronomètre.
+Une étude contrôlée l''a testée de front. Trente participants, une tâche de lecture de quarante minutes sur tablette, avec des pauses programmées toutes les cinq, dix, vingt ou quarante minutes.
 
-::figure clignement | Cligner franchement, paupière complètement fermée. C’est ce qui refait le film lacrymal.
+Aucun effet significatif, sur aucun des trois critères :
 
-Ce qui marche, dans l''ordre : **baisser l''écran** sous la ligne des yeux, ce qui fait tomber la paupière et réduit la surface exposée ; **écarter la ventilation** ou la clim qui souffle vers le visage ; et **cligner franchement**, paupières complètement fermées, quand tu y penses.
+- symptômes oculaires : p = 0,70
+- vitesse de lecture : p = 0,93
+- précision : p = 0,55
 
-::figure loin-pres | Regarder au loin relâche l’accommodation, même sans compter jusqu’à vingt.
+Les auteurs concluent que des pauses de vingt secondes ne tiennent pas comme intervention.
 
-Le rappel « yeux » existe dans cette app, mais il est désactivé par défaut. C''est volontaire.', 'preuve', 'non-demontree', 3, '« 20-20-20 Rule: Are These Numbers Justified? », PubMed 36473088', 'https://pubmed.ncbi.nlm.nih.gov/36473088/', 2)
+## Pourquoi la fatigue est réelle quand même
+
+L''inconfort n''est pas imaginaire, et le mécanisme est bien connu. Devant un écran, le taux de clignement s''effondre — on cligne trois à quatre fois moins qu''en conversation. Le film lacrymal, cette couche de larmes qui recouvre l''œil, s''évapore sans être refait. L''œil sèche, et c''est ça qui pique.
+
+Autrement dit, le problème est un problème de **surface de l''œil**, pas de mise au point. Un chronomètre ne le règle pas.
+
+::figure clignement | Cligner franchement, paupière complètement fermée. C''est ce qui refait le film lacrymal.
+
+## Ce que tu peux en faire
+
+Dans cet ordre, du plus au moins efficace :
+
+1. **Baisse l''écran** sous la ligne des yeux. La paupière tombe, la surface exposée à l''air diminue, l''évaporation avec. C''est gratuit et ça prend trente secondes.
+2. **Écarte la ventilation.** Une bouche de clim qui souffle vers le visage assèche l''œil plus vite que huit heures de tableur.
+3. **Cligne franchement**, paupières complètement fermées, quand tu y penses. Un demi-clignement ne refait pas le film.
+
+::figure loin-pres | Regarder au loin relâche l''accommodation, même sans compter jusqu''à vingt.
+
+> **À retenir** — Regarder au loin détend l''accommodation, ce n''est pas inutile. Mais si tes yeux piquent, c''est la hauteur de l''écran et le courant d''air qu''il faut changer, pas ton minuteur.
+
+## Pourquoi le rappel « yeux » est désactivé ici
+
+Parce qu''il repose sur une règle qui n''a pas fait ses preuves. Il existe dans l''app pour ceux qui y trouvent leur compte, mais il est éteint par défaut, et c''est volontaire.', 'preuve', 'non-demontree', 3, '« 20-20-20 Rule: Are These Numbers Justified? », PubMed 36473088', 'https://pubmed.ncbi.nlm.nih.gov/36473088/', 2)
 ON CONFLICT (slug) DO UPDATE SET
   title = EXCLUDED.title, dek = EXCLUDED.dek, body_md = EXCLUDED.body_md,
   tag = EXCLUDED.tag, evidence = EXCLUDED.evidence, read_min = EXCLUDED.read_min,
@@ -564,15 +614,34 @@ ON CONFLICT (slug) DO UPDATE SET
 INSERT INTO articles (slug, title, dek, body_md, tag, evidence, read_min, source_label, source_url, sort_order)
 VALUES ('debout-nest-pas-actif', 'Debout n’est pas actif', 'Ce que 83 000 porteurs d’accéléromètre ont appris sur le bureau assis-debout.', 'Le bureau assis-debout s''est vendu comme l''antidote à la sédentarité. Les données ne suivent pas.
 
-L''UK Biobank a suivi 83 013 adultes sans maladie cardiaque au départ, pendant sept à huit ans, avec un accéléromètre au poignet : du temps debout mesuré, pas déclaré. Rester debout plus longtemps n''a pas amélioré le risque cardiovasculaire. Pire, le temps debout prolongé était associé à davantage de troubles circulatoires : varices, thrombose veineuse.
+## Ce qu''on a mesuré
 
-Au-delà de dix heures assis par jour, en revanche, les deux risques montent. Le seuil compte, et il inclut le canapé du soir, pas seulement le bureau.
+L''UK Biobank a suivi **83 013 adultes** sans maladie cardiaque au départ, pendant sept à huit ans. Point important : le temps debout n''était pas déclaré par les participants, il était mesuré par un accéléromètre au poignet. Personne n''avait à se souvenir de rien.
 
-La conclusion des chercheurs tient en une phrase : rester debout trop longtemps ne compense pas un mode de vie sédentaire. Ce qui compte, c''est le **changement de position** et la marche, pas la station verticale.
+Deux résultats, et le second est le plus surprenant :
+
+- Rester debout plus longtemps **n''a pas amélioré** le risque cardiovasculaire.
+- Le temps debout prolongé était associé à **davantage de troubles circulatoires** : varices, thrombose veineuse.
+
+Au-delà de dix heures assis par jour, en revanche, les deux risques montent. Ce seuil compte, et il inclut le canapé du soir, pas seulement le bureau.
+
+## Pourquoi debout ne suffit pas
+
+Rester debout immobile, c''est encore de l''immobilité. Les muscles des jambes ne se contractent pas, le sang ne remonte pas mieux, et la pompe du mollet — celle qui renvoie le sang vers le cœur à chaque pas — reste à l''arrêt. Elle ne s''active pas en tenant la position ; elle s''active en changeant de position.
 
 ::figure extension-debout | Alterner assis et debout, pas tenir huit heures debout.
 
-Concrètement : si tu as un bureau réglable, sers-t''en pour alterner, pas pour tenir huit heures debout. Et alterner ne remplace pas de sortir marcher.', 'preuve', 'solide', 3, 'University of Sydney / International Journal of Epidemiology, 2024', 'https://www.sydney.edu.au/news-opinion/news/2024/10/17/standing-more-may-not-reduce-cardiovascular-disease-risk--could-.html', 3)
+## Ce que tu peux en faire
+
+1. Si tu as un bureau réglable, sers-t''en pour **alterner** — trente à soixante minutes dans chaque position, pas huit heures debout.
+2. Ajoute du mouvement dans le passage : quelques pas, des montées sur la pointe des pieds. C''est le mouvement qui compte, pas la verticale.
+3. Ne compte pas l''alternance comme de l''activité physique. Elle ne remplace pas une marche.
+
+> **À retenir** — La conclusion des chercheurs tient en une phrase : rester debout trop longtemps ne compense pas un mode de vie sédentaire. Ce qui compte, c''est le changement de position.
+
+## Les limites
+
+Une étude observationnelle, si vaste soit-elle, ne démontre pas une cause. Il reste possible que les gens qui restent longtemps debout au travail aient d''autres choses en commun. Mais la mesure par accéléromètre écarte au moins le biais le plus courant : celui du souvenir.', 'preuve', 'solide', 3, 'University of Sydney / International Journal of Epidemiology, 2024', 'https://www.sydney.edu.au/news-opinion/news/2024/10/17/standing-more-may-not-reduce-cardiovascular-disease-risk--could-.html', 3)
 ON CONFLICT (slug) DO UPDATE SET
   title = EXCLUDED.title, dek = EXCLUDED.dek, body_md = EXCLUDED.body_md,
   tag = EXCLUDED.tag, evidence = EXCLUDED.evidence, read_min = EXCLUDED.read_min,
@@ -581,17 +650,41 @@ ON CONFLICT (slug) DO UPDATE SET
 
 -- ce-que-les-pauses-changent
 INSERT INTO articles (slug, title, dek, body_md, tag, evidence, read_min, source_label, source_url, sort_order)
-VALUES ('ce-que-les-pauses-changent', 'Ce que les pauses changent vraiment', 'Elles rechargent, elles ne rendent pas plus performant. La nuance a son importance.', 'Une méta-analyse de 2022 a rassemblé 22 échantillons et 2 335 participants pour mesurer ce que font les micro-pauses.
+VALUES ('ce-que-les-pauses-changent', 'Ce que les pauses changent vraiment', 'Elles rechargent, elles ne rendent pas plus performant. La nuance a son importance.', 'Les micro-pauses sont vendues comme un outil de productivité. Ce qu''elles font vraiment est plus modeste, et plus utile à savoir.
 
-Sur le bien-être, l''effet est net et constant : plus de vigueur (d = 0,36), moins de fatigue (d = 0,35), quel que soit le contexte.
+## Ce qu''on a mesuré
 
-::figure respiration | Plus de vigueur, moins de fatigue : c’est là que l’effet est net et constant.
+Une méta-analyse de 2022 a rassemblé **22 échantillons et 2 335 participants** pour séparer deux questions qu''on confond en général : est-ce que les pauses te font du bien, et est-ce qu''elles te rendent meilleur au travail.
 
-Sur la performance, c''est autre chose. L''effet global est petit et **non significatif** (d = 0,16). Il devient positif sur les tâches administratives et créatives, et reste quasi nul sur les tâches cognitivement exigeantes. Celles-là demandent des pauses de plus de dix minutes pour en tirer quoi que ce soit.
+### Sur le bien-être : net et constant
 
-Autrement dit : une pause de trois minutes ne va pas te rendre plus intelligent sur un problème difficile. Elle va te faire finir la journée moins cassé. C''est déjà la seule promesse que cette app fait.
+- Plus de vigueur : d = 0,36
+- Moins de fatigue : d = 0,35
 
-C''est aussi pour ça qu''il n''y a pas de mode « concentration » ici. Si tu es dans un problème dur, ignore le rappel et lève-toi au suivant. Le système est fait pour être ignoré de temps en temps sans culpabilité.', 'preuve', 'partielle', 3, '« Give me a break! », PLOS One, 2022', 'https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0272460', 4)
+Ces effets tiennent quel que soit le contexte. Le *d* est une taille d''effet : 0,2 est petit, 0,5 est moyen. On est donc entre les deux, mais reproductible.
+
+::figure respiration | Plus de vigueur, moins de fatigue : c''est là que l''effet est net et constant.
+
+### Sur la performance : petit, et non significatif
+
+L''effet global est de d = 0,16, et il **n''atteint pas le seuil de significativité**. En creusant :
+
+- Sur les tâches administratives et créatives, il devient positif.
+- Sur les tâches cognitivement exigeantes, il est quasi nul. Celles-là demandent des pauses de plus de dix minutes pour donner quoi que ce soit.
+
+## Ce que ça change pour toi
+
+Une pause de trois minutes ne va pas te rendre plus intelligent sur un problème difficile. Elle va te faire finir la journée moins cassé. C''est la seule promesse que cette app fait, et c''est celle-là qui est démontrée.
+
+1. Prends les pauses pour l''état dans lequel tu finis la journée, pas pour ta production de l''après-midi.
+2. Si tu es au milieu d''un problème dur, **ignore le rappel** et lève-toi au suivant. C''est prévu : rien ne se casse, la journée continue.
+3. Pour souffler vraiment sur une tâche difficile, il te faut plus de dix minutes. Ce n''est pas ce que fait cette app.
+
+> **À retenir** — Les pauses rechargent, elles ne rendent pas performant. C''est déjà beaucoup, et c''est mesuré.
+
+## Pourquoi il n''y a pas de mode « concentration » ici
+
+Parce que le système est fait pour être ignoré de temps en temps sans culpabilité. Un mode qui coupe les rappels donnerait l''illusion d''un contrôle qui n''a pas lieu d''être : ne pas répondre à un rappel est déjà une réponse valable.', 'preuve', 'partielle', 3, '« Give me a break! », PLOS One, 2022', 'https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0272460', 4)
 ON CONFLICT (slug) DO UPDATE SET
   title = EXCLUDED.title, dek = EXCLUDED.dek, body_md = EXCLUDED.body_md,
   tag = EXCLUDED.tag, evidence = EXCLUDED.evidence, read_min = EXCLUDED.read_min,
@@ -600,15 +693,40 @@ ON CONFLICT (slug) DO UPDATE SET
 
 -- muscler-le-haut-du-dos
 INSERT INTO articles (slug, title, dek, body_md, tag, evidence, read_min, source_label, source_url, sort_order)
-VALUES ('muscler-le-haut-du-dos', 'Le renforcement divise le risque par deux', 'L’intervention la plus rentable contre les douleurs de nuque, et elle n’est pas dans cette app.', 'Une méta-analyse publiée en 2023 a réuni cinq essais randomisés et 1 722 participants pour une question simple : est-ce que faire de l''exercice évite d''avoir mal à la nuque ?
+VALUES ('muscler-le-haut-du-dos', 'Le renforcement divise le risque par deux', 'L’intervention la plus rentable contre les douleurs de nuque, et elle n’est pas dans cette app.', 'Voici l''intervention la mieux démontrée contre les douleurs de nuque au bureau. Elle n''est pas dans cette app, et il vaut mieux le dire.
 
-Réponse : les groupes qui s''entraînaient avaient environ **deux fois moins de risque** de développer une cervicalgie (rapport de cotes 0,49 ; intervalle de confiance 0,31–0,76). Sur mille personnes et douze mois, cela représente environ 127 cas évités. Il faut faire s''entraîner huit personnes pour en épargner une. Certitude modérée.
+## Ce qu''on a mesuré
 
-Ce qui marchait dans les essais : renforcement de la nuque et des épaules, pauses actives, travail de contrôle moteur, activité physique générale. Aucun format n''écrase les autres : celui que tu suivras est le bon.
+Une méta-analyse publiée en 2023 a réuni **cinq essais randomisés et 1 722 participants** pour une question simple : est-ce que faire de l''exercice évite d''avoir mal à la nuque ?
 
-::figure omoplates | Le serrage d’omoplates : la base du renforcement du haut du dos.
+Les groupes qui s''entraînaient avaient environ **deux fois moins de risque** de développer une cervicalgie — rapport de cotes 0,49, intervalle de confiance 0,31 à 0,76.
 
-Et c''est le point important : trois minutes de mobilité toutes les trente minutes ne remplacent pas dix minutes de tirage horizontal deux fois par semaine. Si tu vas déjà à la salle, ajoute du travail de haut du dos à ce que tu fais. C''est là que se joue l''essentiel, pas dans une notification.', 'pratique', 'solide', 3, 'Journal of Orthopaedic & Sports Physical Therapy, 2023', 'https://www.jospt.org/doi/10.2519/jospt.2023.12063', 5)
+Traduit en personnes plutôt qu''en rapports : sur mille personnes suivies douze mois, cela représente environ **127 cas évités**. Il faut faire s''entraîner huit personnes pour en épargner une. Certitude jugée modérée par les auteurs.
+
+## Ce qui marchait dans les essais
+
+Quatre formats, et aucun n''écrase les autres :
+
+- renforcement de la nuque et des épaules
+- pauses actives
+- travail de contrôle moteur
+- activité physique générale
+
+Celui que tu suivras est le bon. C''est un résultat rassurant : il n''y a pas de protocole secret à trouver.
+
+::figure omoplates | Le serrage d''omoplates : la base du renforcement du haut du dos.
+
+## Pourquoi trois minutes ne remplacent pas la salle
+
+Le renforcement demande une **charge** — assez de résistance pour que le muscle s''adapte — et une **répétition dans le temps**. Trois minutes de mobilité toutes les trente minutes apportent du mouvement et de la circulation, ce qui est utile, mais pas de charge. Ce sont deux choses différentes qui règlent deux problèmes différents.
+
+## Ce que tu peux en faire
+
+1. Si tu vas déjà à la salle, ajoute du **tirage horizontal** — rowing, tirage poitrine — dix minutes, deux fois par semaine. C''est là que se joue l''essentiel.
+2. Si tu n''y vas pas, commence par le serrage d''omoplates et les élévations, qui sont dans les routines d''ici. C''est mieux que rien, et ça amorce l''habitude.
+3. Ne compte pas les pauses de l''app comme du renforcement. Elles n''en sont pas.
+
+> **À retenir** — Une notification ne remplace pas dix minutes de tirage horizontal deux fois par semaine. L''app t''aide à ne pas rester assis ; le renforcement, c''est ailleurs.', 'pratique', 'solide', 3, 'Journal of Orthopaedic & Sports Physical Therapy, 2023', 'https://www.jospt.org/doi/10.2519/jospt.2023.12063', 5)
 ON CONFLICT (slug) DO UPDATE SET
   title = EXCLUDED.title, dek = EXCLUDED.dek, body_md = EXCLUDED.body_md,
   tag = EXCLUDED.tag, evidence = EXCLUDED.evidence, read_min = EXCLUDED.read_min,
@@ -617,21 +735,37 @@ ON CONFLICT (slug) DO UPDATE SET
 
 -- regler-son-poste
 INSERT INTO articles (slug, title, dek, body_md, tag, evidence, read_min, source_label, source_url, sort_order)
-VALUES ('regler-son-poste', 'Régler son poste une fois pour toutes', 'Sept mesures, dix minutes, zéro euro. Le meilleur rapport effort/effet de la liste.', 'Avant toute app, il y a le poste. Les repères de l''INRS, à appliquer une fois :
+VALUES ('regler-son-poste', 'Régler son poste une fois pour toutes', 'Sept mesures, dix minutes, zéro euro. Le meilleur rapport effort/effet de la liste.', 'Avant toute app, il y a le poste. Sept réglages, dix minutes, zéro euro — le meilleur rapport effort/effet de toute cette liste. Les repères sont ceux de l''INRS.
 
-- **Distance œil–écran** : 50 à 70 cm, soit environ la longueur du bras.
-- **Hauteur** : le haut de l''écran au niveau des yeux ou légèrement en dessous. Jamais au-dessus.
-- **Clavier** : à 10 à 15 cm du bord du bureau, pour que les avant-bras reposent.
-- **Genoux** : angle droit ou légèrement ouvert, cuisses horizontales.
-- **Fenêtres** : écran perpendiculaire à la fenêtre, à plus de 150 cm.
-- **Éclairage** : 300 à 500 lux sur un écran à fond clair, température 3000 à 4000 K.
-- **Pauses actives** : idéalement toutes les 30 minutes.
+## Les sept mesures
 
-::figure menton-rentre | Écran au niveau des yeux : le menton reste rentré, la nuque n’a rien à compenser.
+1. **Distance œil–écran** : 50 à 70 cm, soit environ la longueur du bras tendu.
+2. **Hauteur d''écran** : le haut de l''écran au niveau des yeux ou légèrement en dessous. Jamais au-dessus.
+3. **Clavier** : à 10 à 15 cm du bord du bureau, pour que les avant-bras reposent.
+4. **Genoux** : angle droit ou légèrement ouvert, cuisses horizontales.
+5. **Fenêtres** : écran perpendiculaire à la fenêtre, à plus de 150 cm.
+6. **Éclairage** : 300 à 500 lux sur un écran à fond clair, température 3000 à 4000 K.
+7. **Pauses actives** : idéalement toutes les 30 minutes.
 
-Une note pour les yeux secs en particulier : baisser l''écran fait tomber la paupière plus bas, réduit la surface de l''œil exposée à l''air, et donc l''évaporation. C''est le réglage qui a le plus d''effet, il est gratuit, et il prend trente secondes.
+::figure menton-rentre | Écran au niveau des yeux : le menton reste rentré, la nuque n''a rien à compenser.
 
-L''autre coupable classique n''est pas l''écran mais la ventilation : une bouche de clim qui souffle vers le visage assèche l''œil bien plus vite que huit heures de tableur.', 'reglage', 'partielle', 2, 'INRS — Travail sur écran, prévention des risques', 'https://www.inrs.fr/risques/travail-ecran/prevention-risques.html', 6)
+## Pourquoi la hauteur d''écran compte deux fois
+
+C''est le seul réglage qui règle deux problèmes à la fois, et c''est pour ça qu''il faut commencer par lui.
+
+**Pour la nuque.** Un écran trop haut oblige à relever le menton. La tête pèse cinq kilos ; chaque degré d''inclinaison en avant multiplie la charge sur les cervicales. Le menton rentré, la nuque n''a rien à compenser.
+
+**Pour les yeux.** Regarder légèrement vers le bas fait tomber la paupière plus bas. La surface de l''œil exposée à l''air diminue, et l''évaporation du film lacrymal avec. C''est le réglage qui a le plus d''effet sur l''œil sec, il est gratuit, et il prend trente secondes.
+
+## Le coupable qu''on oublie
+
+Ce n''est souvent pas l''écran, c''est la **ventilation**. Une bouche de clim orientée vers le visage assèche l''œil bien plus vite que huit heures de tableur. Avant d''acheter quoi que ce soit, regarde d''où vient l''air.
+
+> **À retenir** — Fais les sept une fois, sérieusement, puis oublie-les. Un poste réglé ne se re-règle pas tous les lundis.
+
+## Une nuance importante
+
+Un poste bien réglé vaut mieux qu''un poste mal réglé, mais l''effet démontré est plus petit qu''on ne le raconte. Passer une heure à régler son siège puis ne plus bouger de la journée, c''est optimiser la mauvaise variable. Le réglage prépare le terrain ; c''est le mouvement qui fait le travail.', 'reglage', 'partielle', 3, 'INRS — Travail sur écran, prévention des risques', 'https://www.inrs.fr/risques/travail-ecran/prevention-risques.html', 6)
 ON CONFLICT (slug) DO UPDATE SET
   title = EXCLUDED.title, dek = EXCLUDED.dek, body_md = EXCLUDED.body_md,
   tag = EXCLUDED.tag, evidence = EXCLUDED.evidence, read_min = EXCLUDED.read_min,
@@ -640,17 +774,44 @@ ON CONFLICT (slug) DO UPDATE SET
 
 -- lumiere-du-jour
 INSERT INTO articles (slug, title, dek, body_md, tag, evidence, read_min, source_label, source_url, sort_order)
-VALUES ('lumiere-du-jour', 'La fenêtre compte plus que la lampe', 'Quarante-six minutes de sommeil en plus, mesurées au poignet, selon l’endroit où tu es assis.', 'C’est le réglage de poste le mieux démontré, et il ne coûte rien : être assis près d’une fenêtre.
+VALUES ('lumiere-du-jour', 'La fenêtre compte plus que la lampe', 'Quarante-six minutes de sommeil en plus, mesurées au poignet, selon l’endroit où tu es assis.', 'C''est le réglage de poste le mieux démontré, et il ne coûte rien : être assis près d''une fenêtre.
 
-Des chercheurs ont comparé des employés de bureau avec et sans fenêtre, actigraphie au poignet à l’appui. Ceux qui avaient une fenêtre recevaient **173 % de lumière en plus** pendant les heures de travail et dormaient **46 minutes de plus par nuit**. Un essai contrôlé plus récent, en optimisant la lumière du jour et la vue, retrouve 37 minutes de sommeil supplémentaires et de meilleurs scores aux tâches de décision complexe.
+## Ce qu''on a mesuré
 
-::figure marche | Sortir de la pièce à la pause fait plus pour ton horloge interne que n’importe quelle lampe de bureau.
+Des chercheurs ont comparé des employés de bureau avec et sans fenêtre, actigraphie au poignet à l''appui — le sommeil était mesuré, pas raconté.
 
-L’ordre de grandeur explique le reste : un extérieur ensoleillé, c’est 10 000 lux et plus. Un bureau éclairé correctement, 300 à 500. Il y a un facteur vingt entre les deux, et c’est la lumière du matin qui cale l’horloge circadienne.
+Ceux qui avaient une fenêtre :
 
-Ce qu’on peut en faire, dans l’ordre d’efficacité : **se mettre près d’une fenêtre** si le choix existe ; **sortir dehors** à la pause plutôt que d’aller au distributeur ; et à défaut, **s’approcher de la fenêtre** quelques minutes. Les études portent sur l’exposition, pas sur la source : ce qui compte est le nombre de lux qui atteint l’œil.
+- recevaient **173 % de lumière en plus** pendant les heures de travail
+- dormaient **46 minutes de plus par nuit**
 
-À garder en tête : l’étude fondatrice compte 49 participants et ne peut pas exclure qu’un bureau avec fenêtre soit aussi un meilleur poste à d’autres égards. L’essai contrôlé qui a suivi, lui, rend le lien beaucoup plus crédible.', 'preuve', 'solide', 3, 'Boubekri et al., Journal of Clinical Sleep Medicine, 2014', 'https://jcsm.aasm.org/doi/10.5664/jcsm.3780', 7)
+Un essai contrôlé plus récent, qui optimisait la lumière du jour et la vue, retrouve 37 minutes de sommeil supplémentaires et de meilleurs scores aux tâches de décision complexe.
+
+## Pourquoi une lampe ne remplace pas une fenêtre
+
+C''est une affaire d''ordre de grandeur, et il est plus grand qu''on ne l''imagine.
+
+- Extérieur ensoleillé : **10 000 lux** et plus
+- Extérieur couvert : 1 000 à 2 000 lux
+- Bureau bien éclairé : 300 à 500 lux
+
+Il y a un facteur vingt entre un bon bureau et une journée grise dehors. L''horloge circadienne — celle qui décide de l''heure à laquelle tu as sommeil — se cale sur la lumière du matin, et elle a besoin de cet ordre de grandeur-là.
+
+::figure marche | Sortir de la pièce à la pause fait plus pour ton horloge interne que n''importe quelle lampe de bureau.
+
+## Ce que tu peux en faire
+
+Dans l''ordre d''efficacité :
+
+1. **Choisis une place près d''une fenêtre** si le choix existe. C''est un arbitrage à faire une fois, qui joue tous les jours.
+2. **Sors dehors à la pause** plutôt que d''aller au distributeur. Même cinq minutes, même par temps couvert : mille lux battent cinq cents.
+3. **Approche-toi de la fenêtre** quelques minutes à défaut. Les études portent sur l''exposition, pas sur la source — ce qui compte est le nombre de lux qui atteint l''œil.
+
+> **À retenir** — Le matin est le moment qui compte le plus. Une pause dehors avant onze heures vaut plus, pour ton sommeil, que la même pause à seize heures.
+
+## Les limites
+
+L''étude fondatrice compte 49 participants, et elle ne peut pas exclure qu''un bureau avec fenêtre soit aussi un meilleur poste à d''autres égards — plus calme, mieux placé, occupé par des gens qui ont pu choisir. L''essai contrôlé qui a suivi rend le lien beaucoup plus crédible.', 'preuve', 'solide', 3, 'Boubekri et al., Journal of Clinical Sleep Medicine, 2014', 'https://jcsm.aasm.org/doi/10.5664/jcsm.3780', 7)
 ON CONFLICT (slug) DO UPDATE SET
   title = EXCLUDED.title, dek = EXCLUDED.dek, body_md = EXCLUDED.body_md,
   tag = EXCLUDED.tag, evidence = EXCLUDED.evidence, read_min = EXCLUDED.read_min,
@@ -659,19 +820,41 @@ ON CONFLICT (slug) DO UPDATE SET
 
 -- lumiere-bleue
 INSERT INTO articles (slug, title, dek, body_md, tag, evidence, read_min, source_label, source_url, sort_order)
-VALUES ('lumiere-bleue', 'Les verres anti-lumière bleue ne font rien', 'Dix-sept essais randomisés, 619 personnes, et aucun effet sur la fatigue visuelle.', 'C’est l’accessoire le plus vendu du travail sur écran, et la revue Cochrane de 2023 est sans ambiguïté.
+VALUES ('lumiere-bleue', 'Les verres anti-lumière bleue ne font rien', 'Dix-sept essais randomisés, 619 personnes, et aucun effet sur la fatigue visuelle.', 'C''est l''accessoire le plus vendu du travail sur écran. La revue Cochrane de 2023 est sans ambiguïté : il ne sert à rien.
 
-Dix-sept essais randomisés, 619 participants. Les verres filtrant la lumière bleue **ne font pas mieux** que des verres ordinaires sur la fatigue visuelle liée à l’écran. Aucun effet non plus sur l’acuité visuelle corrigée, et des résultats non concluants sur la qualité du sommeil.
+## Ce qu''on a mesuré
 
-::figure clignement | La fatigue visuelle est réelle. Ce n’est simplement pas la lumière bleue qui la cause.
+**Dix-sept essais randomisés, 619 participants.** Une revue Cochrane est le format le plus exigeant qui existe : elle rassemble les essais, évalue leur qualité, et refuse de conclure au-delà de ce qu''ils permettent.
 
-Les auteurs relèvent même quelques effets indésirables rapportés : maux de tête, inconfort, humeur en baisse. Rien de grave, mais rien qui justifie l’achat.
+Le verdict :
 
-Ce qui n’est pas remis en cause, c’est l’inconfort lui-même. Devant un écran, le taux de clignement s’effondre et l’œil sèche. C’est un problème de film lacrymal, pas de longueur d’onde. D’où l’ordre des priorités : baisser l’écran sous la ligne du regard, écarter la ventilation qui souffle au visage, cligner franchement.
+- Sur la **fatigue visuelle** liée à l''écran : les verres filtrant la lumière bleue ne font pas mieux que des verres ordinaires.
+- Sur l''**acuité visuelle corrigée** : aucun effet.
+- Sur la **qualité du sommeil** : résultats non concluants.
+
+Les auteurs relèvent même quelques effets indésirables rapportés — maux de tête, inconfort, humeur en baisse. Rien de grave, mais rien qui justifie l''achat.
+
+::figure clignement | La fatigue visuelle est réelle. Ce n''est simplement pas la lumière bleue qui la cause.
+
+## Pourquoi la fatigue est réelle malgré tout
+
+L''inconfort existe, il n''est simplement pas causé par une longueur d''onde. Devant un écran, le taux de clignement s''effondre — de trois à quatre fois. Le film lacrymal, cette pellicule de larmes qui recouvre l''œil et que chaque clignement refait, s''évapore sans être renouvelé. L''œil sèche.
+
+C''est un **problème de film lacrymal**, pas de lumière bleue. Un filtre posé sur un verre ne change rien à la fréquence à laquelle tu clignes.
+
+## Ce que tu peux en faire à la place
+
+1. **Baisse l''écran** sous la ligne du regard : la paupière tombe, la surface exposée diminue.
+2. **Écarte la ventilation** qui souffle vers le visage.
+3. **Cligne franchement**, paupières complètement fermées. Un demi-clignement ne refait pas le film.
 
 ::figure paumes | Fermer complètement les paupières refait le film lacrymal. Un filtre sur un verre, non.
 
-La revue note qu’il manque encore des essais longs et de meilleure qualité. Mais en l’état, personne ne peut affirmer que ces verres servent à quelque chose.', 'preuve', 'non-demontree', 2, 'Singh et al., Cochrane Database of Systematic Reviews, 2023', 'https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD013244.pub2/full', 8)
+> **À retenir** — Garde tes lunettes si tu les aimes, elles ne font pas de mal. Mais si tu comptais sur elles pour tes yeux secs, les trois gestes ci-dessus feront le travail qu''elles ne font pas.
+
+## Les limites
+
+La revue note qu''il manque encore des essais longs et de meilleure qualité. Personne ne peut affirmer que ces verres sont nuisibles. Mais en l''état, personne ne peut affirmer non plus qu''ils servent à quelque chose.', 'preuve', 'non-demontree', 3, 'Singh et al., Cochrane Database of Systematic Reviews, 2023', 'https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD013244.pub2/full', 8)
 ON CONFLICT (slug) DO UPDATE SET
   title = EXCLUDED.title, dek = EXCLUDED.dek, body_md = EXCLUDED.body_md,
   tag = EXCLUDED.tag, evidence = EXCLUDED.evidence, read_min = EXCLUDED.read_min,
@@ -680,21 +863,51 @@ ON CONFLICT (slug) DO UPDATE SET
 
 -- ergonomie-ce-qui-marche
 INSERT INTO articles (slug, title, dek, body_md, tag, evidence, read_min, source_label, source_url, sort_order)
-VALUES ('ergonomie-ce-qui-marche', 'Ce qui marche vraiment, au bureau', 'Une revue de revues sépare les interventions qui tiennent de celles qui ne tiennent pas. Le tri est brutal.', 'Quand on empile les revues systématiques sur la prévention des troubles musculo-squelettiques au bureau, un classement apparaît, et il ne ressemble pas à ce que vend le marché du bien-être au travail.
+VALUES ('ergonomie-ce-qui-marche', 'Ce qui marche vraiment, au bureau', 'Une revue de revues sépare les interventions qui tiennent de celles qui ne tiennent pas. Le tri est brutal.', 'Quand on empile les revues systématiques sur la prévention des troubles musculo-squelettiques au bureau, un classement apparaît. Il ne ressemble pas à ce que vend le marché du bien-être au travail.
 
-**Preuve forte d’un effet positif : le renforcement musculaire.** C’est la seule intervention qui sort nettement du lot. Les essais convergent : entraînement en résistance, même bref, même à faible dose.
+## Le classement, du mieux au moins démontré
 
-::figure omoplates | Le renforcement du haut du dos est l’intervention la mieux démontrée de toutes.
+### Preuve forte d''un effet positif : le renforcement musculaire
 
-**Preuve forte d’absence d’effet**, c’est-à-dire qu’on a cherché et qu’on n’a pas trouvé : l’ergonomie participative, les interventions multi-facettes, et les programmes de gestion du stress. Ce sont pourtant les trois formats les plus vendus aux entreprises.
+C''est la seule intervention qui sort nettement du lot. Les essais convergent : entraînement en résistance, même bref, même à faible dose.
 
-**Preuve limitée : l’ergonomie de poste elle-même.** Régler la hauteur du siège et de l’écran n’est pas inutile : les essais sur poste informatique montrent des gains de posture et parfois de douleur lombaire. Mais l’effet est plus petit et moins reproductible qu’on ne le raconte. Une autre revue, portant sur 31 études d’interventions ergonomiques de bureau, va jusqu’à conclure à un effet nul voire défavorable.
+::figure omoplates | Le renforcement du haut du dos est l''intervention la mieux démontrée de toutes.
 
-::figure extension-debout | Bouger reste plus efficace que d’être assis parfaitement.
+### Preuve forte d''absence d''effet
 
-La lecture honnête de tout ça : **un bon réglage de poste vaut mieux qu’un mauvais, mais il ne remplace pas le mouvement.** Passer une heure à régler son siège puis ne plus bouger de la journée, c’est optimiser la mauvaise variable.
+Autrement dit : on a cherché, et on n''a pas trouvé.
 
-À garder en tête : ces revues agrègent des études de qualité inégale, avec des mesures auto-rapportées et des durées de suivi courtes. « Preuve forte d’absence d’effet » veut dire que les essais menés n’ont rien montré, pas qu’un effet est impossible.', 'preuve', 'partielle', 4, 'Overview of systematic reviews, Applied Ergonomics, 2019', 'https://www.sciencedirect.com/science/article/abs/pii/S0169814119300319', 9)
+- l''ergonomie participative
+- les interventions multi-facettes
+- les programmes de gestion du stress
+
+Ce sont pourtant les trois formats les plus vendus aux entreprises.
+
+### Preuve limitée : l''ergonomie de poste
+
+Régler la hauteur du siège et de l''écran n''est pas inutile — les essais sur poste informatique montrent des gains de posture et parfois de douleur lombaire. Mais l''effet est plus petit et moins reproductible qu''on ne le raconte. Une autre revue, portant sur 31 études d''interventions ergonomiques de bureau, va jusqu''à conclure à un effet nul voire défavorable.
+
+::figure extension-debout | Bouger reste plus efficace que d''être assis parfaitement.
+
+## Comment lire ce tri
+
+Trois niveaux, et il vaut la peine de les distinguer :
+
+1. **Preuve forte d''un effet** : plusieurs essais de bonne qualité vont dans le même sens.
+2. **Preuve limitée** : les essais existent mais se contredisent, ou sont petits.
+3. **Preuve forte d''absence d''effet** : les essais menés n''ont rien montré. Ce n''est pas la même chose que « ça ne peut pas marcher ».
+
+## Ce que tu peux en faire
+
+1. Mets ton énergie sur le **renforcement**, d''abord. C''est ce qui a le meilleur retour démontré.
+2. Règle ton poste une fois, correctement, et passe à autre chose.
+3. Méfie-toi des programmes d''entreprise multi-facettes : ils sont bien intentionnés, ils ne sont pas démontrés.
+
+> **À retenir** — Un bon réglage de poste vaut mieux qu''un mauvais, mais il ne remplace pas le mouvement. Passer une heure à régler son siège puis ne plus bouger de la journée, c''est optimiser la mauvaise variable.
+
+## Les limites
+
+Ces revues agrègent des études de qualité inégale, avec des mesures auto-rapportées et des durées de suivi courtes.', 'preuve', 'partielle', 3, 'Overview of systematic reviews, Applied Ergonomics, 2019', 'https://www.sciencedirect.com/science/article/abs/pii/S0169814119300319', 9)
 ON CONFLICT (slug) DO UPDATE SET
   title = EXCLUDED.title, dek = EXCLUDED.dek, body_md = EXCLUDED.body_md,
   tag = EXCLUDED.tag, evidence = EXCLUDED.evidence, read_min = EXCLUDED.read_min,
@@ -703,17 +916,43 @@ ON CONFLICT (slug) DO UPDATE SET
 
 -- expiration-plus-longue
 INSERT INTO articles (slug, title, dek, body_md, tag, evidence, read_min, source_label, source_url, sort_order)
-VALUES ('expiration-plus-longue', 'Respirer lentement suffit', 'L’expiration allongée est partout. Un essai à cent participants ne lui trouve pas d’avantage.', 'Toutes les applications de respiration répètent la même chose : allonge l’expiration, c’est elle qui active le système parasympathique. C’est joliment mécaniste, et un essai randomisé de 2023 vient nuancer sérieusement l’affaire.
+VALUES ('expiration-plus-longue', 'Respirer lentement suffit', 'L’expiration allongée est partout. Un essai à cent participants ne lui trouve pas d’avantage.', 'Toutes les applications de respiration répètent la même chose : allonge l''expiration, c''est elle qui active le système parasympathique. C''est joliment mécaniste. Un essai randomisé de 2023 vient sérieusement nuancer l''affaire.
 
-Cent participants, douze semaines, en simple aveugle. Deux groupes : respiration lente avec **expiration plus longue** que l’inspiration, ou respiration lente à durées **égales**. Résultat : la respiration lente réduit significativement le stress psychologique, dans les deux groupes. Allonger l’expiration n’apporte **aucun bénéfice supplémentaire** mesurable.
+## Ce qu''on a mesuré
 
-::figure respiration | Ce qui compte, c’est de ralentir. Le rapport entre inspiration et expiration, beaucoup moins.
+**Cent participants, douze semaines, en simple aveugle.** Deux groupes, qui respiraient tous les deux lentement — la seule différence était le rapport entre les temps :
 
-Une étude de Stanford, la même année, compare de son côté cinq minutes quotidiennes de plusieurs techniques : le soupir cyclique (deux inspirations puis une longue expiration) améliore l’humeur un peu mieux que la méditation de pleine conscience. Les deux résultats ne se contredisent pas vraiment : ralentir marche, et le détail du rythme compte moins qu’on ne le dit.
+- groupe 1 : expiration **plus longue** que l''inspiration
+- groupe 2 : inspiration et expiration de durées **égales**
 
-Ce que l’app en tire : la routine « Souffle » propose toujours quatre temps d’inspiration pour six d’expiration, parce qu’un rythme compté est plus facile à tenir qu’une consigne vague. Mais si compter te gêne, **respire simplement plus lentement**. Tu ne perds rien de démontré.
+Le résultat en deux points :
 
-À garder en tête : essai unique sur un critère auto-rapporté, et douze semaines c’est court. La conclusion prudente est qu’on ne sait pas si le rapport compte, pas qu’il est certainement inutile.', 'preuve', 'partielle', 3, 'Slow breathing for reducing stress: the effect of extending exhale, Vanderbilt, 2023', 'https://pubmed.ncbi.nlm.nih.gov/36871835/', 10)
+1. La respiration lente réduit significativement le stress psychologique — **dans les deux groupes**.
+2. Allonger l''expiration n''apporte **aucun bénéfice supplémentaire** mesurable.
+
+::figure respiration | Ce qui compte, c''est de ralentir. Le rapport entre inspiration et expiration, beaucoup moins.
+
+## Ce qu''une autre étude ajoute
+
+Une équipe de Stanford, la même année, a comparé cinq minutes quotidiennes de plusieurs techniques. Le soupir cyclique — deux inspirations puis une longue expiration — améliore l''humeur un peu mieux que la méditation de pleine conscience.
+
+Les deux résultats ne se contredisent pas vraiment : **ralentir marche**, et le détail du rythme compte moins qu''on ne le dit.
+
+## Pourquoi ralentir suffit
+
+Respirer lentement, c''est respirer moins souvent : six respirations par minute au lieu de douze à quinze. Ce rythme-là allonge mécaniquement l''expiration *et* l''inspiration, augmente l''amplitude de la variabilité cardiaque, et c''est probablement ça que mesurent les essais — pas le rapport entre les deux temps.
+
+## Ce que tu peux en faire
+
+1. Vise **six respirations par minute**, soit dix secondes par cycle. C''est le repère qui a le plus de soutien.
+2. Compte si ça t''aide : la routine « Souffle » d''ici propose quatre temps d''inspiration pour six d''expiration, parce qu''un rythme compté est plus facile à tenir qu''une consigne vague.
+3. Si compter te gêne, **respire simplement plus lentement**. Tu ne perds rien de démontré.
+
+> **À retenir** — Le nombre qui compte est la fréquence, pas le rapport. Ralentis, et arrête de t''inquiéter du 4-6.
+
+## Les limites
+
+Essai unique, critère auto-rapporté, et douze semaines c''est court. La conclusion prudente est qu''on ne sait pas si le rapport compte — pas qu''il est certainement inutile.', 'preuve', 'partielle', 3, 'Slow breathing for reducing stress: the effect of extending exhale, Vanderbilt, 2023', 'https://pubmed.ncbi.nlm.nih.gov/36871835/', 10)
 ON CONFLICT (slug) DO UPDATE SET
   title = EXCLUDED.title, dek = EXCLUDED.dek, body_md = EXCLUDED.body_md,
   tag = EXCLUDED.tag, evidence = EXCLUDED.evidence, read_min = EXCLUDED.read_min,
@@ -722,23 +961,45 @@ ON CONFLICT (slug) DO UPDATE SET
 
 -- open-space
 INSERT INTO articles (slug, title, dek, body_md, tag, evidence, read_min, source_label, source_url, sort_order)
-VALUES ('open-space', 'L’open space, et ce qu’on peut y faire', 'Trente et une études passées en revue : aucune ne trouve de gain de productivité. Voilà ce qui reste sous ton contrôle.', 'Une revue qui a passé au crible plus de dix mille publications pour en retenir trente et une arrive à un constat net : **aucune étude ne met en évidence de gain de productivité lié à l’aménagement en open space.** Le bénéfice annoncé, la collaboration, n’apparaît pas dans les mesures.
+VALUES ('open-space', 'L’open space, et ce qu’on peut y faire', 'Trente et une études passées en revue : aucune ne trouve de gain de productivité. Voilà ce qui reste sous ton contrôle.', 'Une revue a passé au crible plus de dix mille publications pour en retenir trente et une. Son constat est net : **aucune étude ne met en évidence de gain de productivité lié à l''aménagement en open space.** Le bénéfice annoncé, la collaboration, n''apparaît pas dans les mesures.
 
-Le coupable principal est identifié, et ce n’est pas le bruit en général : c’est **la parole intelligible**. Une conversation qu’on comprend capte l’attention bien plus qu’un bruit de fond continu. Les sources les plus citées de perte de productivité sont les discussions de collègues, les téléphones qui sonnent, et les interruptions.
+## Le coupable, et ce n''est pas le bruit
 
-::figure paumes | Une pause pour les yeux est aussi une pause pour l’attention.
+C''est **la parole intelligible** — une conversation dont tu comprends les mots.
 
-Ce qui reste sous ton contrôle, du plus au moins efficace :
+C''est une distinction précise, pas une nuance de style. Un bruit de fond continu, une ventilation, une rue, ton cerveau les filtre. Une phrase compréhensible, non : le langage capte l''attention automatiquement, et la mémoire de travail — celle qui tient ce que tu es en train de faire — est justement celle que le langage occupe.
 
-**Éloigner la parole.** Changer de place, même de quelques mètres, ou trouver une salle pour les tâches qui demandent de la concentration. C’est la seule action qui s’attaque à la cause.
+Les sources les plus citées de perte de productivité sont, dans l''ordre : les discussions de collègues, les téléphones qui sonnent, et les interruptions.
 
-**Masquer plutôt que couvrir.** Un bruit de fond continu et sans paroles (ventilation, bruit rose) rend la parole voisine moins intelligible. La musique avec paroles fait l’inverse.
+::figure paumes | Une pause pour les yeux est aussi une pause pour l''attention.
 
-**Le casque, avec une réserve.** Il fonctionne, mais une étude relève que les personnes qui recourent en permanence au casque ou à la radio pour tenir rapportent davantage de symptômes dépressifs. C’est un outil, pas un mode de vie.
+## Ce que tu peux en faire
 
-::figure haussement-epaules | Le bruit fait monter les épaules toute la journée sans qu’on s’en aperçoive.
+Du plus au moins efficace :
 
-À garder en tête : ces travaux mesurent surtout des performances cognitives en laboratoire et du ressenti auto-rapporté. Le constat « aucun gain de productivité » est solide ; le classement des parades l’est moins.', 'pratique', 'partielle', 3, 'Revue de littérature, Indoor and Built Environment / SAGE, 2023', 'https://journals.sagepub.com/doi/10.1177/1351010X231152841', 11)
+### 1. Éloigner la parole
+
+Changer de place, même de quelques mètres, ou trouver une salle pour les tâches qui demandent de la concentration. C''est la seule action qui s''attaque à la cause plutôt qu''au symptôme.
+
+### 2. Masquer plutôt que couvrir
+
+Un bruit de fond continu et **sans paroles** — ventilation, bruit rose, pluie — rend la parole voisine moins intelligible, donc moins captante. La musique avec paroles fait exactement l''inverse : elle ajoute du langage à du langage.
+
+### 3. Le casque, avec une réserve
+
+Il fonctionne. Mais une étude relève que les personnes qui recourent en permanence au casque ou à la radio pour tenir rapportent davantage de symptômes dépressifs. C''est un outil, pas un mode de vie.
+
+::figure haussement-epaules | Le bruit fait monter les épaules toute la journée sans qu''on s''en aperçoive.
+
+## Ce que le bruit fait au corps
+
+Il ne fatigue pas que l''attention. L''exposition au bruit fait monter les épaules et serrer la mâchoire sans qu''on s''en aperçoive, toute la journée. C''est une des raisons pour lesquelles les routines d''ici commencent souvent par relâcher les trapèzes.
+
+> **À retenir** — Si tu ne peux rien changer à ton bureau, le bruit rose dans un casque est ta meilleure option. Et lève-toi : sortir de la pièce coupe la source, ce qu''aucun casque ne fait.
+
+## Les limites
+
+Ces travaux mesurent surtout des performances cognitives en laboratoire et du ressenti auto-rapporté. Le constat « aucun gain de productivité » est solide ; le classement des parades l''est moins.', 'pratique', 'partielle', 3, 'Revue de littérature, Indoor and Built Environment / SAGE, 2023', 'https://journals.sagepub.com/doi/10.1177/1351010X231152841', 11)
 ON CONFLICT (slug) DO UPDATE SET
   title = EXCLUDED.title, dek = EXCLUDED.dek, body_md = EXCLUDED.body_md,
   tag = EXCLUDED.tag, evidence = EXCLUDED.evidence, read_min = EXCLUDED.read_min,

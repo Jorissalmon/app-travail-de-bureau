@@ -3,6 +3,7 @@ import { api } from '@/lib/api'
 import { localDate } from '@/lib/date'
 import { readCompletionJournal, readEventJournal } from '@/features/reminders/events'
 import { buildLocalStats } from '@/features/session/localStats'
+import { readDayLog } from '@/features/session/daylog'
 import { rangeToSpan } from '@/features/session/stats'
 import type { Stats } from '@/lib/types'
 import { useSettingsStore } from './settings'
@@ -36,12 +37,18 @@ export const useStatsStore = create<StatsState>((set, get) => ({
 
     const today = localDate()
     try {
-      const [events, completions] = await Promise.all([readEventJournal(), readCompletionJournal()])
+      const [events, completions, sessions] = await Promise.all([
+        readEventJournal(),
+        readCompletionJournal(),
+        readDayLog(),
+      ])
       set({
         stats: buildLocalStats({
           events,
           completions,
+          sessions,
           today,
+          now: new Date().toISOString(),
           span: rangeToSpan(r),
           weekdays: useSettingsStore.getState().settings.weekdays,
         }),

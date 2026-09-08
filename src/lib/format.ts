@@ -53,6 +53,17 @@ export function standsLine(stands: number, reminders: number): string {
   )}`
 }
 
+/**
+ * Seconds to « 7 h 12 » or « 48 min ». The journal's unit: a working day is
+ * hours, a break is minutes, and neither should be shouted in capitals the way
+ * the session card does.
+ */
+export function hoursLabel(totalSeconds: number): string {
+  const m = Math.max(0, Math.round(totalSeconds / 60))
+  if (m < 60) return `${m} min`
+  return `${Math.floor(m / 60)} h ${String(m % 60).padStart(2, '0')}`
+}
+
 export function percent(v: number | null): string {
   if (v === null) return '—'
   return `${Math.round(v * 100)} %`

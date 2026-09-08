@@ -93,6 +93,8 @@ export function installReminderListeners(): void {
     void syncPrefs().catch(() => {
       /* Offline, or signed out: the device copy stands. */
     })
+    // And the day: one started on the laptop has to show up here too.
+    void useSessionStore.getState().reconcileRemote()
   })
 }
 

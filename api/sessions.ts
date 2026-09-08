@@ -5,16 +5,33 @@ import { requireUser } from './_auth.js'
 import { requireString } from './_validate.js'
 
 /**
- * Start or stop a work session. The client sends `localDate` (computed from the
- * device timezone) and `at` — the server never derives the day from now()::date
- * (§5). Stop is idempotent: stopping an already-stopped or absent session just
- * returns the latest one.
+ * Start or stop a work session, and say whether one is running.
+ *
+ * The client sends `localDate` (computed from the device timezone) and `at` —
+ * the server never derives the day from now()::date (§5). Stop is idempotent:
+ * stopping an already-stopped or absent session just returns the latest one.
+ *
+ * GET answers « une journée est-elle en cours ? », which is what lets a day
+ * started on the phone show up on the laptop. The reminder engine stays on the
+ * device — only the fact of the day, and the hour it began, travel.
  */
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     if (allowCors(req, res)) return
-    methods(req, 'POST')
+    const method = methods(req, 'GET', 'POST')
     const { sub } = await requireUser(req)
+
+    if (method === 'GET') {
+      const sql = db()
+      const rows = await sql`
+        SELECT id, started_at, ended_at, local_date FROM work_sessions
+        WHERE user_id = ${sub} AND ended_at IS NULL
+        ORDER BY started_at DESC LIMIT 1
+      `
+      json(res, 200, { session: rows[0] ? mapSession(rows[0]) : null })
+      return
+    }
+
     const b = body<{ action?: unknown; at?: unknown; localDate?: unknown }>(req)
 
     const action = requireString(b.action, 'action', 10)

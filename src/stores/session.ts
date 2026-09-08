@@ -30,6 +30,7 @@ import {
 import { flushEvents, logEvent, makeEvent } from '@/features/reminders/events'
 import { alertMode } from '@/features/reminders/alert'
 import { dayEndAt, overrunKind } from '@/features/session/dayend'
+import { logDayEnd, logDayStart } from '@/features/session/daylog'
 import { useSettingsStore } from './settings'
 
 /**
@@ -160,6 +161,15 @@ interface SessionState {
   closeOverrun: () => Promise<boolean>
   /** Answer the end-of-day question with the hour the user gives. */
   confirmClose: (at: Date) => Promise<void>
+  /**
+   * Ask the server whether a day is running, and agree with it.
+   *
+   * The day is the one piece of session state that belongs to the person
+   * rather than to the device: starting one on the phone and opening the
+   * laptop should show the same day, counting from the same hour. The reminder
+   * engine stays local — this only adopts or releases the day itself.
+   */
+  reconcileRemote: () => Promise<void>
   /**
    * Look at the clock: pick up a reminder that fired while the app was not
    * running, and arm one if nothing is. Called on boot and on every foreground.
@@ -305,6 +315,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     const occurrences = await armFrom(id, anchors, now)
     set({ session, occurrences, anchors, pause: null, awaiting: null })
     await persist(session, occurrences, null, null, anchors)
+    await logDayStart(session.startedAt, session.localDate)
 
     // Tell the server, best-effort — truly best-effort: the local session is
     // authoritative and already on screen, so no failure here may surface as a
@@ -333,6 +344,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     await persist(null, [])
 
     if (!session) return
+    await logDayEnd(at.toISOString(), localDate(at))
     if (via === 'notification') {
       await logEvent(
         makeEvent({ kind: 'stand', action: 'dismissed', sessionId: session.id, firedAt: new Date() }),
@@ -402,6 +414,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     if (!pending) return
     set({ pendingClose: null, closeDismissed: false })
     await remove(KEYS.dayClose)
+    await logDayEnd(at.toISOString(), pending.localDate)
     try {
       await api.post('/api/sessions', {
         action: 'stop',
@@ -412,6 +425,57 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       if (!isOffline(e)) console.warn('[session] close not confirmed by server', e)
     }
     void flushEvents()
+  },
+
+  reconcileRemote: async () => {
+    let remote: WorkSession | null
+    try {
+      remote = (await api.get<{ session: WorkSession | null }>('/api/sessions')).session
+    } catch {
+      // Offline, or no account: this device's own copy is the truth.
+      return
+    }
+
+    const local = get().session
+
+    // Nothing running anywhere, or both sides already naming the same day.
+    if (!remote && !local) return
+    if (remote && local && local.id === remote.id) return
+
+    // A day is running elsewhere and this device has none: adopt it. The hour
+    // it began is the server's, so the elapsed time reads the same on both, but
+    // the first reminder is planned from now — this device has not been arming
+    // anything, and firing one the second the laptop is opened would be wrong.
+    if (remote && !local) {
+      const now = new Date()
+      const session: ActiveSession = {
+        id: remote.id,
+        startedAt: remote.startedAt,
+        localDate: remote.localDate,
+        synced: true,
+      }
+      const anchors: Anchors = { stand: now, eyes: now }
+      const occurrences = await armFrom(session.id, anchors, now)
+      set({ session, occurrences, anchors, pause: null, awaiting: null })
+      await persist(session, occurrences, null, null, anchors)
+      await logDayStart(session.startedAt, session.localDate)
+      return
+    }
+
+    // This device thinks a day is running and the server says none is: the
+    // other device ended it. Close this one too, without telling the server
+    // again — it already knows, and a second stop would move the hour.
+    if (!remote && local?.synced) {
+      await cancelAll()
+      set({ session: null, occurrences: [], pause: null, awaiting: null })
+      await persist(null, [])
+      await logDayEnd(new Date().toISOString(), local.localDate)
+      return
+    }
+
+    // Two different days, or a local one the server never confirmed. The local
+    // one wins: it may be an offline start that still has to be sent, and
+    // taking a day away from someone mid-afternoon is the worse mistake.
   },
 
   catchUp: async () => {

@@ -8,7 +8,8 @@ import {
   fillDays,
   type DayCount,
 } from '../src/features/session/stats.js'
-import type { ReminderAction } from '../src/lib/types.js'
+import { buildJournal, type WorkSpan } from '../src/features/session/journal.js'
+import type { Completion, ReminderAction, ReminderEvent } from '../src/lib/types.js'
 
 /**
  * §11.5 — four honest numbers: stands today, a 7-day bar series, the streak, and
@@ -82,6 +83,60 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     `
     const weekdays = (settingsRows[0]?.weekdays as number[] | undefined)?.map(Number) ?? []
 
+    // The journal: what happened, in order, over the range on screen. Days come
+    // from work_sessions — the one thing the device's own journals cannot know
+    // once a day was started somewhere else.
+    const sessionRows = await sql`
+      SELECT started_at, ended_at, local_date::text AS local_date
+      FROM work_sessions
+      WHERE user_id = ${sub}
+        AND local_date > (${today}::date - (${span}::text || ' days')::interval)
+        AND local_date <= ${today}::date
+      ORDER BY started_at
+    `
+    const sessions: WorkSpan[] = sessionRows.map((r) => ({
+      startedAt: new Date(r.started_at as string).toISOString(),
+      endedAt: r.ended_at ? new Date(r.ended_at as string).toISOString() : null,
+      localDate: String(r.local_date).slice(0, 10),
+    }))
+
+    const eventRows = await sql`
+      SELECT client_id, kind, fired_at, action, acted_at, local_date::text AS local_date
+      FROM reminder_events
+      WHERE user_id = ${sub}
+        AND local_date > (${today}::date - (${span}::text || ' days')::interval)
+        AND local_date <= ${today}::date
+      ORDER BY fired_at
+    `
+    const journalEvents = eventRows.map((r) => ({
+      clientId: String(r.client_id),
+      sessionId: null,
+      kind: r.kind,
+      firedAt: new Date(r.fired_at as string).toISOString(),
+      action: r.action,
+      actedAt: r.acted_at ? new Date(r.acted_at as string).toISOString() : null,
+      localDate: String(r.local_date).slice(0, 10),
+    })) as ReminderEvent[]
+
+    const completionRows = await sql`
+      SELECT c.client_id, r.slug AS routine_slug, c.completed_at, c.duration_s,
+             c.local_date::text AS local_date
+      FROM completions c
+      LEFT JOIN routines r ON r.id = c.routine_id
+      WHERE c.user_id = ${sub}
+        AND c.local_date > (${today}::date - (${span}::text || ' days')::interval)
+        AND c.local_date <= ${today}::date
+      ORDER BY c.completed_at
+    `
+    const journalCompletions = completionRows.map((r) => ({
+      clientId: String(r.client_id),
+      routineId: null,
+      routineSlug: r.routine_slug ? String(r.routine_slug) : '',
+      completedAt: new Date(r.completed_at as string).toISOString(),
+      durationS: Number(r.duration_s),
+      localDate: String(r.local_date).slice(0, 10),
+    })) as Completion[]
+
     json(res, 200, {
       standsToday,
       remindersToday,
@@ -89,6 +144,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       streak: computeStreak(days, today, { weekdays }),
       minutesMoved,
       adherence,
+      journal: buildJournal({
+        sessions,
+        events: journalEvents,
+        completions: journalCompletions,
+        today,
+        span,
+        now: new Date().toISOString(),
+      }),
     })
   } catch (e) {
     fail(res, e)

@@ -36,6 +36,8 @@ interface PrefsPayload {
 const PUSH_DEBOUNCE_MS = 1200
 
 let applyLocally: (() => Promise<void>) | null = null
+/** Anything else that should reconcile when a tab comes back into view. */
+let onForeground: (() => Promise<void>) | null = null
 let pushTimer: ReturnType<typeof setTimeout> | null = null
 let installed = false
 let enabled = false
@@ -182,8 +184,12 @@ export async function syncPrefs(): Promise<void> {
  * anyone is signed in — `enable` is what decides whether anything leaves the
  * device, so signing out stops the sync without tearing the watcher down.
  */
-export function installPrefsSync(reload: () => Promise<void>): void {
+export function installPrefsSync(
+  reload: () => Promise<void>,
+  foreground?: () => Promise<void>,
+): void {
   applyLocally = reload
+  onForeground = foreground ?? null
   if (installed) return
   installed = true
   watchStorage((key) => {
@@ -201,6 +207,7 @@ export function installPrefsSync(reload: () => Promise<void>): void {
       void syncPrefs().catch(() => {
         /* Offline, or signed out. */
       })
+      void onForeground?.()
     })
   }
 }

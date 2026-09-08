@@ -53,7 +53,9 @@ async function boot() {
   void loadAlertVolume()
   // Watches device storage for the preferences that follow the account. Sends
   // nothing until the auth store says there is one to follow.
-  installPrefsSync(reloadSyncedPrefs)
+  installPrefsSync(reloadSyncedPrefs, () =>
+    useSessionStore.getState().reconcileRemote(),
+  )
 
   if (isNative()) {
     try {

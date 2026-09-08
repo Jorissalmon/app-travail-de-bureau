@@ -5,6 +5,7 @@ import { DEFAULT_SETTINGS } from '@/lib/defaults'
 import type { Settings, User } from '@/lib/types'
 import { useSettingsStore } from './settings'
 import { disablePrefsSync, enablePrefsSync, syncPrefs } from '@/features/prefs/sync'
+import { useSessionStore } from './session'
 
 /**
  * Auth domain store. Holds the current user and the "am I logged in" flag the
@@ -61,6 +62,8 @@ function syncNow(): void {
   void syncPrefs().catch(() => {
     /* Offline, or the endpoint not deployed yet: the device copy stands. */
   })
+  // And the day itself: one started on the phone has to show up here.
+  void useSessionStore.getState().reconcileRemote()
 }
 
 async function applyAuth(res: AuthResponse): Promise<User> {

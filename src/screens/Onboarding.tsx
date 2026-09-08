@@ -25,11 +25,18 @@ import { renderMarkdown } from '@/lib/markdown'
 
 const INTRO_SLUG = 'pourquoi-30-minutes'
 
-/** The article's opening paragraphs, minus the figure markers and the caveats. */
+/**
+ * The article's opening prose: paragraphs only.
+ *
+ * Headings, figures, lists and the « À retenir » box are all dropped. The
+ * articles gained a teaching structure — sections, numbered steps, a takeaway —
+ * and a welcome screen that reprinted « ## Ce qu'on a mesuré » with nothing
+ * under it would read as a bug rather than as an excerpt.
+ */
 function opening(bodyMd: string, paragraphs: number): string {
   return bodyMd
     .split('\n\n')
-    .filter((block) => !block.startsWith('::figure'))
+    .filter((block) => /^[A-Za-zÀ-ÿ«"']/.test(block.trim()))
     .slice(0, paragraphs)
     .join('\n\n')
 }

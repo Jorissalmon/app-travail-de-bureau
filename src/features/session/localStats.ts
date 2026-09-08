@@ -1,5 +1,6 @@
 import type { Completion, ReminderEvent, Stats } from '@/lib/types'
 import { computeAdherence, computeStreak, fillDays, withinDays, type DayCount } from './stats'
+import { buildJournal, type WorkSpan } from './journal'
 
 /**
  * The tracking screen, computed on the device from the journals.
@@ -25,6 +26,10 @@ export interface LocalStatsInput {
   span: number
   /** The user's working days, so the streak is not reset by every weekend. */
   weekdays: number[]
+  /** When each day began and ended on this device. */
+  sessions: WorkSpan[]
+  /** Now, so a day still running can be counted up to it. */
+  now: string
 }
 
 export function buildLocalStats({
@@ -33,6 +38,8 @@ export function buildLocalStats({
   today,
   span,
   weekdays,
+  sessions,
+  now,
 }: LocalStatsInput): Stats {
   const byDate = new Map<string, DayCount>()
   for (const e of events) {
@@ -57,5 +64,6 @@ export function buildLocalStats({
     adherence: computeAdherence(
       events.filter((e) => withinDays(e.localDate, today, ADHERENCE_DAYS)),
     ),
+    journal: buildJournal({ sessions, events, completions, today, span, now }),
   }
 }

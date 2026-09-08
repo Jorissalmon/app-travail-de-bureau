@@ -26,6 +26,8 @@ export const KEYS = {
    */
   eventJournal: 'events.journal',
   completionJournal: 'completions.journal',
+  /** When each day began and ended on this device, for the journal. */
+  dayLog: 'session.dayLog',
   /** The device is deliberately being used without an account. */
   localOnly: 'auth.localOnly',
   routines: 'content.routines',
