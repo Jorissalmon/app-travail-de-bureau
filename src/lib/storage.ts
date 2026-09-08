@@ -38,6 +38,12 @@ export const KEYS = {
   alertMode: 'reminders.alertMode',
   alertVolume: 'reminders.alertVolume',
   place: 'place',
+  /** What the first run collected: painful zones, how long, how many minutes. */
+  painProfile: 'pain.profile',
+  /** Every 0-10 answer ever given, oldest first. Never drained by a sync. */
+  painJournal: 'pain.journal',
+  /** The analytics ring buffer, see features/analytics. */
+  analyticsJournal: 'analytics.journal',
   stepDurations: 'player.durations',
   customRoutines: 'routines.custom',
   /** When the synced preferences last changed on this device. */

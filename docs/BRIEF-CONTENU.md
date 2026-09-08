@@ -1,5 +1,12 @@
 # Log Off — brief de contenu
 
+> **Mise à jour — pivot « coach douleur ».** L'app ne se limite plus à rappeler
+> de se lever : elle compose chaque jour une séance de 4 à 8 minutes à partir des
+> zones que la personne déclare douloureuses et de l'évolution de ses réponses.
+> **La doctrine de ce document reste intégralement en vigueur.** Ce qui change
+> pour le contenu est décrit au §8, et la spécification complète est dans
+> `docs/PIVOT-COACH-DOULEUR.md`.
+
 Document de passation. Il décrit à quoi sert l'application, ce qu'elle fait
 écran par écran, la forme exacte que doit prendre son contenu, ce qu'elle
 contient déjà, et où il manque quelque chose.
@@ -239,7 +246,11 @@ moins une routine**, sinon la carte d'accueil mène à une page vide.
 
 ## 4. Inventaire actuel
 
-### 13 routines
+### 29 routines
+
+Les treize d'origine (tableau ci-dessous) et les seize du pivot, listées dans
+`docs/PIVOT-COACH-DOULEUR.md` §3.2.
+
 
 | slug | zone | durée | étapes |
 |---|---|---|---|
@@ -257,7 +268,11 @@ moins une routine**, sinon la carte d'accueil mène à une page vide.
 | `yeux` | yeux | 1 min | 3 |
 | `respiration` | bien-etre | 2 min | 3 |
 
-### 42 mouvements
+### 56 mouvements
+
+Les 42 d'origine, plus les 14 mouvements de renforcement du pivot
+(`docs/PIVOT-COACH-DOULEUR.md` §3.1).
+
 
 `marche`, `marche-sur-place`, `extension-debout`, `fente-basse`,
 `regard-au-loin`, `bascule-bassin`, `menton-rentre`, `nuque-diagonale`,
@@ -275,7 +290,7 @@ Huit sont marqués `discreet: false` : `marche-sur-place`, `fente-basse`,
 `cercle-bras`, `chat-vache`, `inclinaison-laterale`, `encadrement-porte`,
 `ischios`, `balancement-hanche`.
 
-### 11 articles
+### 12 articles
 
 | niveau | slug | source |
 |---|---|---|
@@ -290,6 +305,7 @@ Huit sont marqués `discreet: false` : `marche-sur-place`, `fente-basse`,
 | partielle | `open-space` | Indoor and Built Environment / SAGE, 2023 |
 | non démontrée | `vingt-vingt-vingt` | PubMed 36473088 |
 | non démontrée | `lumiere-bleue` | Singh et al., Cochrane, 2023 |
+| partielle | `renforcement-et-douleur` | Gross et al., Cochrane, 2015 |
 
 ---
 
@@ -352,7 +368,13 @@ hauteur d'écran, humidité et flux d'air, éclairage ambiant.
 **Livrable.** Un article `pratique` ou `reglage` qui dit ce qui a un effet
 mesuré sur l'inconfort visuel, avec son niveau de preuve.
 
-### Mission 4 — Neuf zones sur dix n'ont qu'une seule routine
+### Mission 4 — Neuf zones sur dix n'ont qu'une seule routine — **faite**
+
+Nuque, dos, lombaires, hanches, poignets et chevilles ont désormais une routine
+courte et une longue, plus quatre routines de renforcement. Le texte d'origine
+est conservé ci-dessous parce que le raisonnement vaut encore pour les zones qui
+n'ont pas été traitées (`matin`, `yeux`, `bien-etre`).
+
 
 **Le problème.** Seule la zone `bureau` en a quatre. Quelqu'un qui ouvre
 « Nuque » deux jours de suite fait exactement les mêmes sept mouvements. C'est
@@ -389,10 +411,11 @@ travail court à fort effet, sans aucune recherche nouvelle.
 - **Télétravail contre bureau** : l'app a un réglage de lieu et aucun contenu
   qui l'explique au-delà de la discrétion en open space.
 - **La pause déjeuner** : sortir marcher, l'effet sur l'après-midi.
-- **Le renforcement, qui n'est pas dans l'app** : l'article
-  `muscler-le-haut-du-dos` dit que c'est l'intervention la mieux démontrée et
-  qu'elle est absente. Faut-il l'ajouter ? C'est une décision produit, pas une
-  décision de contenu, mais la recherche préalable a sa place ici.
+- **Le renforcement, qui n'est pas dans l'app** — **tranché : il y est.**
+  Quatorze mouvements `type: "strength"`, quatre routines dédiées, et l'article
+  `renforcement-et-douleur` qui porte le niveau `partielle` et dit que la revue
+  qui le soutient ne mesure pas la posture. `muscler-le-haut-du-dos` dit
+  toujours que trois minutes ne remplacent pas la salle, et c'est toujours vrai.
 - **Hauteur d'écran et posture de la nuque** : `regler-son-poste` l'effleure.
 
 ---
@@ -418,10 +441,13 @@ suggestion prévue disparaît sans avertissement.
 
 Il existe **43 clés de figure** déclarées dans
 `src/components/figures/figureKeys.ts`, dessinées en SVG à la main dans le même
-style, deux tons, sans dépendance externe. Quatre ne sont utilisées par aucune
-étape et sont donc disponibles immédiatement :
+style, deux tons, sans dépendance externe.
 
-`chat-vache-b`, `omoplates-b`, `doigts-poing`, `mollet-plat`
+**Les quatre clés libres ont été dépensées par le pivot** (`chat-vache-b`,
+`omoplates-b`, `doigts-poing`, `mollet-plat`), chacune sur le mouvement que son
+dessin représente réellement. Il n'en reste aucune : tout mouvement nouveau
+demande maintenant un dessin, ou la réutilisation d'une figure existante assumée
+comme approximative, ce qui doit rester rare et être noté.
 
 Les clés en `-b` sont des **secondes positions** : un mouvement à deux temps est
 animé en alternant deux dessins. Elles ne conviennent qu'à un mouvement qui a
@@ -461,7 +487,8 @@ moment de la concevoir.
 - un mouvement sans `easier`, sans `muscles` ou sans `avoid` ;
 - un article sans aucune illustration, ou avec une clé de figure inexistante ;
 - une zone qui ne contient aucune routine ;
-- deux slugs identiques.
+- deux slugs identiques ;
+- et, depuis le pivot, tout ce qui est listé au §8.3.
 
 ### 6.5 Le pipeline
 
@@ -488,6 +515,8 @@ commit du JSON **et** du SQL régénéré.
 
 1. Écrire directement dans `src/content/routines.json`,
    `src/content/exercises.json` ou `src/content/articles.json`.
+   Un mouvement porte un `type`, une routine un `goal` et des `targetZones`
+   (§8.1). Une consigne doit se tenir hors de sa routine (§8.4).
 2. Pour chaque article : slug, titre, dek d'une phrase, tag, **niveau de preuve
    assumé**, temps de lecture réaliste, libellé et URL de la source primaire,
    corps en markdown avec au moins une `::figure` et une section de limites.
@@ -508,7 +537,64 @@ commit du JSON **et** du SQL régénéré.
 
 ---
 
-## 8. Où lire le reste
+## 8. Ce que le pivot change pour le contenu
+
+### 8.1 Trois champs de plus
+
+Un mouvement porte désormais **`type`** : `mobility`, `strength` ou `reset`. Une
+routine porte **`goal`** (`pain_relief` / `prevention` / `strength`) et
+**`targetZones`** — les zones du corps qu'elle travaille réellement, qui ne sont
+pas sa zone de rangement : « Debout » est classée `bureau` et cible
+`["hanches", "dos", "chevilles"]`.
+
+`targetZones` est ce que le moteur de composition lit. **Une routine mal
+étiquetée ne casse aucun test et disparaît silencieusement du plan** : c'est le
+champ à vérifier deux fois.
+
+### 8.2 Ce qu'un mouvement de renforcement doit avoir en plus
+
+Les règles du §3.2 s'appliquent, plus une : un mouvement `strength` ne peut pas
+avoir `"Rien de spécifique."` comme `avoid`. Charger une zone qui fait déjà mal
+est le seul endroit où cette réponse n'est pas acceptable, et un test la refuse.
+
+### 8.3 Les tests supplémentaires
+
+`content.test.ts` refuse en plus :
+
+- une routine sans `goal` valide, ou sans `targetZones`, ou avec une zone
+  inconnue dedans ;
+- un mouvement sans `type` valide ;
+- **un mouvement dessiné différemment selon la routine** — la même clé
+  d'exercice doit toujours porter la même `figureKey` ;
+- une zone douloureuse sans mouvement de renforcement disponible ;
+- une zone douloureuse avec moins de quatre mouvements **discrets** — en dessous,
+  le plan sert les mêmes trois choses tous les jours en open space ;
+- une zone douloureuse sans routine `pain_relief` courte (≤ 90 s) **et** longue
+  (4 à 6 min) ;
+- un mouvement `strength` sans article, sans `easier`, ou dont l'`avoid` est
+  « rien de spécifique ».
+
+### 8.4 Écrire pour un plan, pas pour une routine
+
+Le compositeur reprend le **nom, la consigne, la figure et la durée de l'étape
+existante**. Une consigne écrite pour être lue au milieu d'une routine — « Même
+chose de l'autre côté » — se retrouvera donc un jour servie en ouverture d'une
+séance composée, sans le mouvement qu'elle prolongeait.
+
+Règle : **chaque `cue` doit se tenir seule.** Écrire « L'autre côté, même
+lenteur » plutôt que « Idem », et nommer le mouvement quand la consigne est
+ambiguë hors contexte.
+
+### 8.5 Le lieu a trois valeurs
+
+`bureau`, `open-space`, `maison`. En open space le filtre est **dur** : aucun
+repli sur un mouvement `discreet: false`, même si le plan finit plus court. Une
+zone dont le pool discret est pauvre produira donc une séance répétitive avant
+de produire une séance voyante — d'où le test des quatre mouvements discrets.
+
+---
+
+## 9. Où lire le reste
 
 | Quoi | Où |
 |---|---|
@@ -520,4 +606,8 @@ commit du JSON **et** du SQL régénéré.
 | Les suggestions par heure | `src/features/session/daypart.ts` |
 | L'adaptation open space | `src/features/place/place.ts` |
 | Chaque décision de conception, avec sa raison | `DECISIONS.md` |
+| Le pivot coach douleur, en entier | `docs/PIVOT-COACH-DOULEUR.md` |
+| Hypothèses, seuils et protocole de bêta | `docs/VALIDATION-PIVOT.md` |
+| Le moteur de composition | `src/features/plan/compose.ts` |
+| Le journal de douleur | `src/features/plan/pain.ts`, `painStats.ts` |
 | Installation, base, build | `README.md`, `db/README.md` |

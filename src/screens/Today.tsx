@@ -1,7 +1,10 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Flame } from 'lucide-react'
 import { SessionCard } from '@/components/SessionCard'
+import { PlanCard } from '@/components/PlanCard'
+import { PainHeatmap } from '@/components/PainHeatmap'
+import { Segmented } from '@/components/Segmented'
 import { SearchField } from '@/components/SearchField'
 import { ZoneCard } from '@/components/ZoneCard'
 import { PermissionsSheet } from '@/components/PermissionsSheet'
@@ -12,7 +15,13 @@ import { useSettingsStore } from '@/stores/settings'
 import { useAuthStore } from '@/stores/auth'
 import { useStatsStore } from '@/stores/stats'
 import { useContentStore } from '@/stores/content'
-import { FAMILIES, ZONES } from '@/content'
+import { usePlanStore } from '@/stores/plan'
+import { FAMILIES, PAIN_ZONE_LABEL, ZONES } from '@/content'
+import { PLAN_SLUG } from '@/features/plan/compose'
+import { delta } from '@/features/plan/painStats'
+import { freezesLeft } from '@/features/session/stats'
+import { trackNow } from '@/features/analytics/events'
+import { localDate } from '@/lib/date'
 import { useNow } from '@/app/useNow'
 import { dateEyebrow, dayName } from '@/lib/date'
 import { pendingAfter } from '@/features/reminders/schedule'
@@ -20,7 +29,7 @@ import { PermissionsMissingError } from '@/features/reminders/permissions'
 import { primeAlarm, stopAlerting } from '@/features/reminders/alert'
 import { askForTabNotifications } from '@/features/reminders/webAlarm'
 import { standsLine } from '@/lib/format'
-import { KINDS } from '@/features/reminders/kinds'
+import { contextualCopy } from '@/features/reminders/contextual'
 
 /** §11.1 — Aujourd'hui. */
 export function Today() {
@@ -41,6 +50,11 @@ export function Today() {
   const stats = useStatsStore((s) => s.stats)
   const loadStats = useStatsStore((s) => s.load)
   const routines = useContentStore((s) => s.routines)
+  const plan = usePlanStore((s) => s.plan)
+  const entries = usePlanStore((s) => s.entries)
+
+  /** 7, 14 or 30 days of history. Local to the screen: it is a way of looking. */
+  const [span, setSpan] = useState<7 | 14 | 30>(7)
 
   const [busy, setBusy] = useState(false)
   const [showPermissions, setShowPermissions] = useState(false)
@@ -49,6 +63,46 @@ export function Today() {
   useEffect(() => {
     void loadStats()
   }, [loadStats])
+
+  const announced = useRef<string | null>(null)
+  useEffect(() => {
+    if (!plan || plan.blocks.length === 0 || announced.current === plan.id) return
+    announced.current = plan.id
+    trackNow({
+      name: 'plan_shown',
+      goal: plan.goal,
+      zones: plan.targetZones.length,
+      strengthBlocks: plan.blocks.filter((b) => b.type === 'strength').length,
+      durationS: plan.durationS,
+    })
+  }, [plan])
+
+  const today = localDate(now)
+
+  /** The zones with any history, in the order the plan cares about them. */
+  const trackedZones = useMemo(() => {
+    const ordered = [...(plan?.targetZones ?? [])]
+    for (const e of entries) if (!ordered.includes(e.zone)) ordered.push(e.zone)
+    return ordered
+  }, [plan, entries])
+
+  /**
+   * « Nuque : 6 → 3 en 11 jours ». Only for the primary zone, only when there
+   * are answers on two different days, and only ever as the two numbers given
+   * and the days between them — no percentage, no rate of improvement.
+   */
+  const primaryDelta = useMemo(
+    () => (plan?.primaryZone ? delta(entries, plan.primaryZone, today, span) : null),
+    [plan, entries, today, span],
+  )
+
+  const freezes = useMemo(
+    () =>
+      freezesLeft(stats?.standsByDay ?? [], today, {
+        weekdays: useSettingsStore.getState().settings.weekdays,
+      }),
+    [stats, today],
+  )
 
   const active = session !== null
   const elapsedS = active ? Math.max(0, (now.getTime() - new Date(session.startedAt).getTime()) / 1000) : 0
@@ -141,6 +195,58 @@ export function Today() {
         </div>
       </header>
 
+      {/* The plan leads. The work-session card, which used to occupy the top
+          half, has moved under it: the reminder grid is now the second thing
+          the app does, not the first. */}
+      {plan && (
+        <PlanCard
+          plan={plan}
+          busy={busy}
+          onStart={() => navigate(`/player/${PLAN_SLUG}`)}
+        />
+      )}
+
+      {(primaryDelta !== null || trackedZones.length > 0) && (
+        <section className="mt-6">
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <h2 className="t-section">Ce que tu as répondu</h2>
+            <div className="w-[150px]">
+              <Segmented
+                ariaLabel="Fenêtre de l’historique"
+                options={[7, 14, 30] as const}
+                value={span}
+                onChange={setSpan}
+                format={(v) => `${v} j`}
+              />
+            </div>
+          </div>
+
+          {primaryDelta !== null ? (
+            <p className="t-body mb-3">
+              <span style={{ textTransform: 'capitalize' }}>
+                {PAIN_ZONE_LABEL[primaryDelta.zone] ?? primaryDelta.zone}
+              </span>
+              {' : '}
+              <span className="num">{Math.round(primaryDelta.from * 10) / 10}</span>
+              {' → '}
+              <span className="num">{Math.round(primaryDelta.to * 10) / 10}</span>
+              {' en '}
+              <span className="num">{primaryDelta.days}</span>
+              {primaryDelta.days > 1 ? ' jours' : ' jour'}
+            </p>
+          ) : (
+            <p className="t-meta mb-3">
+              Deux réponses sur deux jours différents, et cette ligne dira ce qui a changé.
+            </p>
+          )}
+
+          {trackedZones.length > 0 && (
+            <PainHeatmap entries={entries} zones={trackedZones} today={today} days={span} />
+          )}
+        </section>
+      )}
+
+      <h2 className="t-section mt-7 mb-3">Ta journée</h2>
       <SessionCard
         active={active}
         elapsedS={elapsedS}
@@ -156,7 +262,9 @@ export function Today() {
         onDoExercise={() => {
           if (!awaiting) return
           stopAlerting()
-          navigate(`/player/${KINDS[awaiting.kind].routineSlug}?from=notification`)
+          navigate(
+            `/player/${contextualCopy(awaiting.kind, now, plan).routineSlug}?from=notification`,
+          )
         }}
         busy={busy}
       />
@@ -173,8 +281,9 @@ export function Today() {
         <SearchField value="" onChange={(v) => navigate(`/library?q=${encodeURIComponent(v)}`)} />
       </div>
 
+      <h2 className="t-section mt-7 mb-3">Routines libres</h2>
       {FAMILIES.map((f) => (
-        <section key={f.family} className="mt-7">
+        <section key={f.family} className="mt-5">
           <h2 className="t-section mb-3">{f.label}</h2>
           <div className="grid grid-cols-2 gap-2.5">
             {ZONES.filter((z) => z.family === f.family).map((z) => (
@@ -190,8 +299,15 @@ export function Today() {
         </section>
       ))}
 
+      {/* Counted, never commented on. The freeze line is here rather than on
+          the streak chip because it is the one thing about a streak worth
+          knowing before it breaks. */}
       <p className="t-meta mt-7">
         {standsLine(stats?.standsToday ?? 0, stats?.remindersToday ?? 0)}
+      </p>
+      <p className="t-meta mt-1">
+        Série : {stats?.streak ?? 0} jour{(stats?.streak ?? 0) > 1 ? 's' : ''} · {freezes} jour
+        {freezes > 1 ? 's' : ''} de battement restant{freezes > 1 ? 's' : ''} ce mois-ci
       </p>
 
       <PermissionsSheet

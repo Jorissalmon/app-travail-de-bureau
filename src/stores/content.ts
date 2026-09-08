@@ -110,6 +110,11 @@ export const useContentStore = create<ContentState>((set, get) => ({
       // The catalogue may have moved under the user's routines: rebuild them
       // against what just arrived.
       await rebuildMine(set, get)
+      // And under today's plan, which is composed from it. Imported here
+      // rather than at the top: the plan store reads this one, and a static
+      // import both ways would make the cycle depend on evaluation order.
+      const { usePlanStore } = await import('./plan')
+      usePlanStore.getState().recompose()
     } catch {
       // Keep the cached content.
     }

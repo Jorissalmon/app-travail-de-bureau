@@ -18,6 +18,7 @@ const exercise = (key: string, discreet: boolean): Exercise => ({
   avoid: '…',
   articles: ['a'],
   discreet,
+  type: 'mobility',
 })
 
 const CATALOGUE: Record<string, Exercise> = {
@@ -38,6 +39,8 @@ function routine(keys: string[]): Routine {
     summary: '',
     accent: 'lime',
     sortOrder: 1,
+    goal: 'prevention',
+    targetZones: ['bureau'],
     steps: keys.map((exerciseKey, i) => ({
       position: i + 1,
       name: exerciseKey,

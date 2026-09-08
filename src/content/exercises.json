@@ -22,7 +22,8 @@
       "ce-que-les-pauses-changent",
       "lumiere-du-jour"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "marche-sur-place": {
     "title": "Marche sur place",
@@ -47,7 +48,8 @@
       "debout-nest-pas-actif",
       "ce-que-les-pauses-changent"
     ],
-    "discreet": false
+    "discreet": false,
+    "type": "mobility"
   },
   "extension-debout": {
     "title": "Extension debout",
@@ -73,7 +75,8 @@
       "debout-nest-pas-actif",
       "ce-que-les-pauses-changent"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "fente-basse": {
     "title": "Fente basse",
@@ -98,7 +101,8 @@
       "pourquoi-30-minutes",
       "debout-nest-pas-actif"
     ],
-    "discreet": false
+    "discreet": false,
+    "type": "mobility"
   },
   "regard-au-loin": {
     "title": "Regard au loin",
@@ -122,7 +126,8 @@
       "lumiere-bleue",
       "lumiere-du-jour"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "reset"
   },
   "bascule-bassin": {
     "title": "Bascule du bassin",
@@ -143,9 +148,11 @@
     ],
     "avoid": "Rien de spécifique : c'est un mouvement doux.",
     "articles": [
-      "pourquoi-30-minutes"
+      "pourquoi-30-minutes",
+      "renforcement-et-douleur"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "menton-rentre": {
     "title": "Menton rentré",
@@ -168,7 +175,8 @@
       "muscler-le-haut-du-dos",
       "regler-son-poste"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "nuque-diagonale": {
     "title": "Nuque en diagonale",
@@ -192,7 +200,8 @@
       "muscler-le-haut-du-dos",
       "regler-son-poste"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "rotation-assise": {
     "title": "Rotation assise",
@@ -216,7 +225,8 @@
       "regler-son-poste",
       "ergonomie-ce-qui-marche"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "ischios-assis": {
     "title": "Ischio-jambiers, assis",
@@ -240,7 +250,8 @@
       "regler-son-poste",
       "ergonomie-ce-qui-marche"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "figure4-assise": {
     "title": "Figure 4 assise",
@@ -264,7 +275,8 @@
       "pourquoi-30-minutes",
       "regler-son-poste"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "calin-bras": {
     "title": "Câlin à un bras",
@@ -288,7 +300,8 @@
       "muscler-le-haut-du-dos",
       "ergonomie-ce-qui-marche"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "triceps-tete": {
     "title": "Triceps au-dessus de la tête",
@@ -312,7 +325,8 @@
       "muscler-le-haut-du-dos",
       "ergonomie-ce-qui-marche"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "cercle-bras": {
     "title": "Cercles de bras",
@@ -336,7 +350,8 @@
       "muscler-le-haut-du-dos",
       "ergonomie-ce-qui-marche"
     ],
-    "discreet": false
+    "discreet": false,
+    "type": "mobility"
   },
   "chat-vache": {
     "title": "Chat-vache debout",
@@ -361,7 +376,8 @@
       "pourquoi-30-minutes",
       "ergonomie-ce-qui-marche"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "inclinaison-laterale": {
     "title": "Inclinaison latérale",
@@ -384,7 +400,8 @@
     "articles": [
       "pourquoi-30-minutes"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "respiration-4-6": {
     "title": "Respirer, 4 puis 6",
@@ -407,7 +424,8 @@
       "expiration-plus-longue",
       "open-space"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "reset"
   },
   "nuque-inclinaison": {
     "title": "Inclinaison de nuque",
@@ -431,7 +449,8 @@
       "muscler-le-haut-du-dos",
       "regler-son-poste"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "nuque-rotation": {
     "title": "Rotation lente de la nuque",
@@ -454,7 +473,8 @@
       "muscler-le-haut-du-dos",
       "regler-son-poste"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "haussement-epaules": {
     "title": "Haussements d'épaules",
@@ -477,7 +497,8 @@
       "muscler-le-haut-du-dos",
       "open-space"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "encadrement-porte": {
     "title": "Ouverture à l'encadrement",
@@ -501,7 +522,8 @@
       "muscler-le-haut-du-dos",
       "ergonomie-ce-qui-marche"
     ],
-    "discreet": false
+    "discreet": false,
+    "type": "mobility"
   },
   "nuque-flexion": {
     "title": "Flexion de la nuque",
@@ -524,7 +546,8 @@
       "muscler-le-haut-du-dos",
       "regler-son-poste"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "omoplates": {
     "title": "Serrage d'omoplates",
@@ -546,9 +569,11 @@
     "avoid": "Rien de spécifique.",
     "articles": [
       "muscler-le-haut-du-dos",
-      "ergonomie-ce-qui-marche"
+      "ergonomie-ce-qui-marche",
+      "renforcement-et-douleur"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "ouverture-pectorale": {
     "title": "Ouverture pectorale",
@@ -572,7 +597,8 @@
       "muscler-le-haut-du-dos",
       "ergonomie-ce-qui-marche"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "rotation-externe": {
     "title": "Rotation externe des épaules",
@@ -594,9 +620,11 @@
     "avoid": "Une douleur dans l'épaule : réduis l'amplitude ou arrête.",
     "articles": [
       "muscler-le-haut-du-dos",
-      "ergonomie-ce-qui-marche"
+      "ergonomie-ce-qui-marche",
+      "renforcement-et-douleur"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "extension-chaise": {
     "title": "Extension sur chaise",
@@ -620,7 +648,8 @@
       "muscler-le-haut-du-dos",
       "ergonomie-ce-qui-marche"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "tirage-vide": {
     "title": "Tirage à vide",
@@ -643,9 +672,11 @@
     "avoid": "Rien de spécifique.",
     "articles": [
       "muscler-le-haut-du-dos",
-      "ergonomie-ce-qui-marche"
+      "ergonomie-ce-qui-marche",
+      "renforcement-et-douleur"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "genou-poitrine": {
     "title": "Genou à la poitrine",
@@ -669,7 +700,8 @@
       "pourquoi-30-minutes",
       "regler-son-poste"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "ischios": {
     "title": "Ischio-jambiers, appui surélevé",
@@ -691,7 +723,8 @@
     "articles": [
       "pourquoi-30-minutes"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "balancement-hanche": {
     "title": "Balancement de hanche",
@@ -714,7 +747,8 @@
     "articles": [
       "pourquoi-30-minutes"
     ],
-    "discreet": false
+    "discreet": false,
+    "type": "mobility"
   },
   "poignet-flexion": {
     "title": "Poignet en flexion",
@@ -736,7 +770,8 @@
     "articles": [
       "regler-son-poste"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "poignet-extension": {
     "title": "Poignet en extension",
@@ -758,7 +793,8 @@
     "articles": [
       "regler-son-poste"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "doigts-ecartes": {
     "title": "Doigts écartés",
@@ -780,7 +816,8 @@
     "articles": [
       "regler-son-poste"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "mains-dos-a-dos": {
     "title": "Mains dos à dos",
@@ -802,7 +839,8 @@
     "articles": [
       "regler-son-poste"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "poignet-priere": {
     "title": "Prière",
@@ -824,7 +862,8 @@
     "articles": [
       "regler-son-poste"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "cheville-cercle": {
     "title": "Cercles de cheville",
@@ -848,7 +887,8 @@
       "pourquoi-30-minutes",
       "debout-nest-pas-actif"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "talon-pointe": {
     "title": "Talon-pointe",
@@ -873,7 +913,8 @@
       "pourquoi-30-minutes",
       "debout-nest-pas-actif"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "mollet-releve": {
     "title": "Montées sur la pointe",
@@ -893,9 +934,11 @@
     ],
     "avoid": "Rien de spécifique, hormis l'équilibre : reste près d'un appui.",
     "articles": [
-      "debout-nest-pas-actif"
+      "debout-nest-pas-actif",
+      "renforcement-et-douleur"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "mobility"
   },
   "clignement": {
     "title": "Clignements lents",
@@ -918,7 +961,8 @@
       "vingt-vingt-vingt",
       "lumiere-bleue"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "reset"
   },
   "loin-pres-alterne": {
     "title": "Loin, près",
@@ -940,7 +984,8 @@
       "vingt-vingt-vingt",
       "lumiere-bleue"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "reset"
   },
   "paumes": {
     "title": "Paumes sur les yeux",
@@ -963,7 +1008,8 @@
       "vingt-vingt-vingt",
       "lumiere-bleue"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "reset"
   },
   "installe-toi": {
     "title": "S'installer",
@@ -986,6 +1032,374 @@
       "expiration-plus-longue",
       "open-space"
     ],
-    "discreet": true
+    "discreet": true,
+    "type": "reset"
+  },
+  "isometrie-nuque-avant": {
+    "title": "Isométrie de nuque, appui frontal",
+    "steps": [
+      "Assis, dos contre le dossier, menton légèrement rentré.",
+      "Pose la paume à plat sur le front.",
+      "Pousse la tête contre la main et la main contre la tête, sans que rien ne bouge.",
+      "Tiens dix secondes en respirant normalement, puis relâche cinq secondes."
+    ],
+    "tips": [
+      "L'immobilité est le point : si la tête part en avant, tu pousses trop fort d'un côté.",
+      "Ne bloque pas la respiration. Si tu ne peux plus parler, baisse l'intensité."
+    ],
+    "easier": "Pousse à trois sur dix plutôt qu'à fond, et tiens cinq secondes au lieu de dix.",
+    "muscles": [
+      "Fléchisseurs profonds du cou",
+      "Sterno-cléido-mastoïdien"
+    ],
+    "avoid": "Un vertige, un fourmillement dans un bras, ou une douleur qui monte pendant la tenue : arrête.",
+    "articles": [
+      "renforcement-et-douleur",
+      "muscler-le-haut-du-dos"
+    ],
+    "discreet": true,
+    "type": "strength"
+  },
+  "isometrie-nuque-laterale": {
+    "title": "Isométrie de nuque, appui latéral",
+    "steps": [
+      "Assis, regard droit devant, épaules basses.",
+      "Pose la paume sur la tempe droite.",
+      "Pousse la tête contre la main, sans incliner le cou.",
+      "Dix secondes, puis change de côté."
+    ],
+    "tips": [
+      "L'épaule du côté qui pousse a tendance à monter vers l'oreille : garde-la basse.",
+      "Fais les deux côtés même si un seul te gêne, sinon tu creuses l'écart."
+    ],
+    "easier": "Pose la main plus bas, sur la joue, le bras de levier est plus court.",
+    "muscles": [
+      "Scalènes",
+      "Sterno-cléido-mastoïdien",
+      "Trapèze supérieur"
+    ],
+    "avoid": "Une douleur qui descend dans le bras ou la main : arrête et n'insiste pas.",
+    "articles": [
+      "renforcement-et-douleur",
+      "muscler-le-haut-du-dos"
+    ],
+    "discreet": true,
+    "type": "strength"
+  },
+  "isometrie-nuque-arriere": {
+    "title": "Isométrie de nuque, appui occipital",
+    "steps": [
+      "Assis ou debout, menton légèrement rentré.",
+      "Croise les mains derrière la tête, à la base du crâne.",
+      "Pousse la tête en arrière contre les mains, qui résistent.",
+      "Dix secondes, relâche, recommence."
+    ],
+    "tips": [
+      "Le menton reste rentré pendant toute la tenue : c'est ce qui distingue l'exercice d'un simple regard vers le plafond.",
+      "C'est le côté que la journée d'écran laisse le plus faible, tête en avant."
+    ],
+    "easier": "Appuie l'arrière de la tête contre le dossier de la chaise plutôt que contre tes mains.",
+    "muscles": [
+      "Extenseurs du cou",
+      "Splénius",
+      "Trapèze supérieur"
+    ],
+    "avoid": "Une douleur vive à la base du crâne, ou un mal de tête qui apparaît pendant : arrête.",
+    "articles": [
+      "renforcement-et-douleur",
+      "muscler-le-haut-du-dos"
+    ],
+    "discreet": true,
+    "type": "strength"
+  },
+  "omoplates-tenu": {
+    "title": "Serrage d'omoplates tenu",
+    "steps": [
+      "Assis ou debout, bras relâchés le long du corps.",
+      "Serre les omoplates l'une vers l'autre, comme pour tenir un crayon entre elles.",
+      "Tiens dix secondes sans monter les épaules.",
+      "Relâche complètement cinq secondes, puis recommence."
+    ],
+    "tips": [
+      "C'est la version chargée du serrage d'omoplates : la différence est la tenue, pas l'amplitude.",
+      "Si les épaules montent vers les oreilles, c'est le trapèze supérieur qui travaille à la place du milieu du dos."
+    ],
+    "easier": "Tiens cinq secondes, et pose les avant-bras sur le bureau pour ne pas avoir à tenir les bras.",
+    "muscles": [
+      "Rhomboïdes",
+      "Trapèze moyen",
+      "Trapèze inférieur"
+    ],
+    "avoid": "Un pincement entre les omoplates pendant la tenue : réduis l'intensité de moitié.",
+    "articles": [
+      "renforcement-et-douleur",
+      "muscler-le-haut-du-dos"
+    ],
+    "discreet": true,
+    "type": "strength"
+  },
+  "tirage-isometrique-chaise": {
+    "title": "Tirage isométrique sur la chaise",
+    "steps": [
+      "Assis, attrape le bord de l'assise ou les accoudoirs, mains de chaque côté des hanches.",
+      "Tire vers le haut comme pour soulever la chaise avec toi dessus.",
+      "Coudes vers l'arrière, omoplates serrées, poitrine ouverte.",
+      "Tiens dix secondes, respire, relâche."
+    ],
+    "tips": [
+      "C'est le seul moyen de mettre une vraie résistance sur le haut du dos sans matériel : c'est ton propre poids qui fait la charge.",
+      "Le dos reste droit, ce n'est pas un mouvement de dos rond."
+    ],
+    "easier": "Tire moins fort et tiens cinq secondes. La position compte plus que l'intensité.",
+    "muscles": [
+      "Grand dorsal",
+      "Rhomboïdes",
+      "Trapèze moyen",
+      "Biceps"
+    ],
+    "avoid": "Une chaise à roulettes non bloquée, ou une douleur au coude ou au poignet pendant la traction.",
+    "articles": [
+      "renforcement-et-douleur",
+      "muscler-le-haut-du-dos"
+    ],
+    "discreet": true,
+    "type": "strength"
+  },
+  "rotation-externe-tenue": {
+    "title": "Rotation externe tenue",
+    "steps": [
+      "Assis, coudes collés aux côtes, pliés à quatre-vingt-dix degrés, avant-bras vers l'avant.",
+      "Pose la main gauche contre le dos de la main droite.",
+      "Pousse la main droite vers l'extérieur, la gauche résiste. Rien ne bouge.",
+      "Dix secondes, puis inverse les rôles."
+    ],
+    "tips": [
+      "Le coude reste au contact des côtes : dès qu'il s'écarte, l'épaule fait le travail à la place des rotateurs.",
+      "C'est le groupe musculaire que la position clavier laisse le plus en sommeil."
+    ],
+    "easier": "Pousse à trois sur dix. La rotation externe est faible chez presque tout le monde, c'est normal.",
+    "muscles": [
+      "Infra-épineux",
+      "Petit rond",
+      "Deltoïde postérieur"
+    ],
+    "avoid": "Une douleur pointue sur le dessus ou l'avant de l'épaule : arrête, c'est le signe à ne pas dépasser.",
+    "articles": [
+      "renforcement-et-douleur",
+      "muscler-le-haut-du-dos"
+    ],
+    "discreet": true,
+    "type": "strength"
+  },
+  "elevation-y": {
+    "title": "Élévation en Y",
+    "steps": [
+      "Debout, bras le long du corps, pouces vers l'extérieur.",
+      "Monte les bras en diagonale, vers le haut et vers l'extérieur, jusqu'à former un Y au-dessus de la tête.",
+      "Tiens trois secondes en haut, omoplates basses.",
+      "Redescends lentement, en comptant trois secondes. Six à huit fois."
+    ],
+    "tips": [
+      "La descente lente est la moitié utile du mouvement, ne la laisse pas tomber.",
+      "Si tu ne peux pas monter jusqu'au Y sans cambrer, monte moins haut."
+    ],
+    "easier": "Monte les bras à hauteur d'épaules seulement, en T plutôt qu'en Y.",
+    "muscles": [
+      "Trapèze inférieur",
+      "Deltoïde",
+      "Dentelé antérieur"
+    ],
+    "avoid": "Un accrochage douloureux en passant la hauteur d'épaule : reste sous ce point.",
+    "articles": [
+      "renforcement-et-douleur",
+      "muscler-le-haut-du-dos",
+      "open-space"
+    ],
+    "discreet": false,
+    "type": "strength"
+  },
+  "pompe-bureau": {
+    "title": "Pompe sur le bureau",
+    "steps": [
+      "Pose les mains sur le bord du bureau, écartées de la largeur des épaules.",
+      "Recule les pieds jusqu'à être en planche inclinée, corps aligné.",
+      "Descends la poitrine vers le bureau en gardant les coudes proches du corps.",
+      "Remonte. Six à dix fois, sans creuser le bas du dos."
+    ],
+    "tips": [
+      "Plus tu recules les pieds, plus c'est lourd : c'est ton réglage de charge.",
+      "Vérifie que le bureau ne glisse pas et qu'il tient ton poids avant la première répétition."
+    ],
+    "easier": "Rapproche les pieds du bureau, ou fais-le contre un mur : le corps est plus vertical, la charge diminue.",
+    "muscles": [
+      "Grand pectoral",
+      "Triceps",
+      "Dentelé antérieur",
+      "Abdominaux"
+    ],
+    "avoid": "Une douleur au poignet ou à l'épaule, ou un bas du dos qui s'affaisse : arrête et remonte les mains plus haut.",
+    "articles": [
+      "renforcement-et-douleur",
+      "muscler-le-haut-du-dos",
+      "open-space"
+    ],
+    "discreet": false,
+    "type": "strength"
+  },
+  "gainage-assis": {
+    "title": "Gainage assis",
+    "steps": [
+      "Assis au bord de la chaise, pieds à plat, dos décollé du dossier.",
+      "Bascule légèrement le bassin en arrière pour effacer le creux du bas du dos.",
+      "Serre le ventre comme si tu attendais un coup, sans rentrer le nombril de force.",
+      "Tiens quinze secondes en respirant normalement."
+    ],
+    "tips": [
+      "Respirer pendant la tenue est l'exercice. Bloquer le souffle le vide de son intérêt.",
+      "Personne ne voit rien de l'extérieur : c'est le mouvement de renforcement le plus discret du lot."
+    ],
+    "easier": "Tiens huit secondes, et garde le dos appuyé au dossier.",
+    "muscles": [
+      "Transverse",
+      "Obliques",
+      "Abdominaux"
+    ],
+    "avoid": "Une douleur dans le bas du dos qui augmente pendant la tenue : relâche immédiatement.",
+    "articles": [
+      "renforcement-et-douleur",
+      "ergonomie-ce-qui-marche"
+    ],
+    "discreet": true,
+    "type": "strength"
+  },
+  "charniere-hanche": {
+    "title": "Charnière de hanche",
+    "steps": [
+      "Debout, pieds écartés de la largeur des hanches, genoux à peine fléchis.",
+      "Pose les mains sur le bas du ventre et le bas du dos, pour sentir que le dos reste droit.",
+      "Pousse les fesses vers l'arrière et laisse le buste descendre, dos plat.",
+      "Descends jusqu'à sentir tirer derrière les cuisses, puis remonte en serrant les fessiers. Huit fois."
+    ],
+    "tips": [
+      "Le mouvement vient de la hanche, pas du dos : si le dos s'arrondit, tu es descendu trop bas.",
+      "C'est le geste que tu refais dix fois par jour pour ramasser quelque chose. Autant l'entraîner."
+    ],
+    "easier": "Descends de vingt centimètres seulement, ou fais-le en gardant le dos contre un mur.",
+    "muscles": [
+      "Fessiers",
+      "Ischio-jambiers",
+      "Érecteurs du rachis"
+    ],
+    "avoid": "Une douleur qui descend dans la jambe : arrête, c'est le signe à ne pas dépasser.",
+    "articles": [
+      "renforcement-et-douleur",
+      "ergonomie-ce-qui-marche"
+    ],
+    "discreet": false,
+    "type": "strength"
+  },
+  "assis-debout": {
+    "title": "Se lever, s'asseoir",
+    "steps": [
+      "Assis au bord de la chaise, pieds à plat, écartés de la largeur des hanches.",
+      "Croise les bras sur la poitrine.",
+      "Lève-toi sans t'aider des mains, en poussant dans les talons.",
+      "Rassieds-toi en trois secondes, sans te laisser tomber. Six à dix fois."
+    ],
+    "tips": [
+      "La descente lente est ce qui rend l'exercice utile ; se laisser tomber sur la chaise ne compte pas.",
+      "Si tu n'y arrives pas sans les mains, c'est déjà l'information la plus utile de la journée."
+    ],
+    "easier": "Pose les mains sur les cuisses pour t'aider, et remonte la hauteur de l'assise.",
+    "muscles": [
+      "Quadriceps",
+      "Fessiers",
+      "Abdominaux"
+    ],
+    "avoid": "Une douleur au genou pendant la descente : réduis l'amplitude, ou remonte l'assise.",
+    "articles": [
+      "renforcement-et-douleur",
+      "debout-nest-pas-actif"
+    ],
+    "discreet": false,
+    "type": "strength"
+  },
+  "poing-serre": {
+    "title": "Poing serré",
+    "steps": [
+      "Bras posé sur le bureau, main dans le vide ou sur la cuisse.",
+      "Ferme le poing lentement, pouce par-dessus les doigts.",
+      "Serre à sept sur dix pendant cinq secondes.",
+      "Ouvre complètement la main, doigts écartés, deux secondes. Huit fois, chaque main."
+    ],
+    "tips": [
+      "L'ouverture complète compte autant que la fermeture : c'est elle que la journée au clavier ne fait jamais.",
+      "Une balle de mousse ou une paire de chaussettes roulée donne quelque chose à serrer, ce n'est pas obligatoire."
+    ],
+    "easier": "Serre à quatre sur dix, trois secondes, et fais quatre répétitions.",
+    "muscles": [
+      "Fléchisseurs des doigts",
+      "Avant-bras",
+      "Muscles de la main"
+    ],
+    "avoid": "Un fourmillement dans les doigts ou une douleur au poignet pendant le serrage : arrête.",
+    "articles": [
+      "renforcement-et-douleur",
+      "regler-son-poste"
+    ],
+    "discreet": true,
+    "type": "strength"
+  },
+  "poignet-resiste": {
+    "title": "Poignet contre résistance",
+    "steps": [
+      "Avant-bras posé à plat sur le bureau, main dépassant du bord, paume vers le bas.",
+      "Pose l'autre main sur le dos de celle qui dépasse.",
+      "Essaie de relever la main vers le haut ; l'autre résiste. Rien ne bouge, dix secondes.",
+      "Retourne l'avant-bras, paume vers le haut, et fais la même chose dans l'autre sens."
+    ],
+    "tips": [
+      "Les deux sens comptent : le clavier sollicite les fléchisseurs, ce sont les extenseurs qui décrochent.",
+      "L'avant-bras reste posé pendant toute la tenue, sinon c'est l'épaule qui travaille."
+    ],
+    "easier": "Résiste à trois sur dix pendant cinq secondes, un seul sens à la fois.",
+    "muscles": [
+      "Extenseurs du poignet",
+      "Fléchisseurs du poignet",
+      "Avant-bras"
+    ],
+    "avoid": "Une douleur sur le côté externe du coude, ou un fourmillement dans les doigts : arrête.",
+    "articles": [
+      "renforcement-et-douleur",
+      "regler-son-poste"
+    ],
+    "discreet": true,
+    "type": "strength"
+  },
+  "mollet-excentrique": {
+    "title": "Descente lente sur les talons",
+    "steps": [
+      "Debout derrière ta chaise, mains posées sur le dossier pour l'équilibre.",
+      "Monte sur la pointe des pieds, aussi haut que possible.",
+      "Redescends les talons en comptant lentement jusqu'à quatre.",
+      "Huit à douze fois, sans à-coups."
+    ],
+    "tips": [
+      "C'est la descente qui charge le mollet, la montée n'est qu'un retour en position.",
+      "Sur une jambe, c'est deux fois plus lourd : à garder pour plus tard."
+    ],
+    "easier": "Redescends en comptant jusqu'à deux, et garde plus de poids sur les mains.",
+    "muscles": [
+      "Mollets",
+      "Soléaire",
+      "Cheville"
+    ],
+    "avoid": "Une douleur vive au tendon d'Achille : arrête et n'insiste pas.",
+    "articles": [
+      "renforcement-et-douleur",
+      "debout-nest-pas-actif"
+    ],
+    "discreet": true,
+    "type": "strength"
   }
 }

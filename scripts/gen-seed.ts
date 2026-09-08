@@ -28,6 +28,7 @@ interface Exercise {
   avoid: string
   articles: string[]
   discreet: boolean
+  type: string
 }
 interface Routine {
   slug: string
@@ -37,6 +38,8 @@ interface Routine {
   summary: string
   accent: string
   sortOrder: number
+  goal: string
+  targetZones: string[]
   steps: Step[]
 }
 interface Article {
@@ -99,33 +102,38 @@ lines.push('')
 for (const [key, ex] of Object.entries(exercises)) {
   lines.push(`-- ${key}`)
   lines.push(
-    'INSERT INTO exercises (key, title, steps, tips, easier, muscles, avoid, articles, discreet)',
+    'INSERT INTO exercises (key, title, steps, tips, easier, muscles, avoid, articles, discreet, type)',
   )
   lines.push(
     `VALUES (${q(key)}, ${q(ex.title)}, ${qArray(ex.steps)}, ${qArray(ex.tips)}, ${q(
       ex.easier,
-    )}, ${qArray(ex.muscles)}, ${q(ex.avoid)}, ${qArray(ex.articles)}, ${ex.discreet})`,
+    )}, ${qArray(ex.muscles)}, ${q(ex.avoid)}, ${qArray(ex.articles)}, ${ex.discreet}, ${q(
+      ex.type,
+    )})`,
   )
   lines.push('ON CONFLICT (key) DO UPDATE SET')
   lines.push('  title = EXCLUDED.title, steps = EXCLUDED.steps, tips = EXCLUDED.tips,')
   lines.push('  easier = EXCLUDED.easier, muscles = EXCLUDED.muscles, avoid = EXCLUDED.avoid,')
-  lines.push('  articles = EXCLUDED.articles, discreet = EXCLUDED.discreet;')
+  lines.push('  articles = EXCLUDED.articles, discreet = EXCLUDED.discreet, type = EXCLUDED.type;')
 }
 lines.push('')
 
 for (const r of routines) {
   lines.push(`-- ${r.slug}`)
-  lines.push('INSERT INTO routines (slug, title, zone, duration_s, summary, accent, sort_order)')
+  lines.push(
+    'INSERT INTO routines (slug, title, zone, duration_s, summary, accent, sort_order, goal, target_zones)',
+  )
   lines.push(
     `VALUES (${q(r.slug)}, ${q(r.title)}, ${q(r.zone)}, ${r.durationS}, ${q(r.summary)}, ${q(
       r.accent,
-    )}, ${r.sortOrder})`,
+    )}, ${r.sortOrder}, ${q(r.goal)}, ${qArray(r.targetZones)})`,
   )
   lines.push('ON CONFLICT (slug) DO UPDATE SET')
   lines.push('  title = EXCLUDED.title, zone = EXCLUDED.zone, duration_s = EXCLUDED.duration_s,')
   lines.push(
-    '  summary = EXCLUDED.summary, accent = EXCLUDED.accent, sort_order = EXCLUDED.sort_order;',
+    '  summary = EXCLUDED.summary, accent = EXCLUDED.accent, sort_order = EXCLUDED.sort_order,',
   )
+  lines.push('  goal = EXCLUDED.goal, target_zones = EXCLUDED.target_zones;')
   // Separate statements, not data-modifying CTEs: inside one statement the
   // delete and the insert would race on the (routine_id, position) unique index.
   lines.push(

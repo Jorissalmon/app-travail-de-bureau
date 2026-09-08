@@ -18,8 +18,23 @@ import {
   requestPermission,
 } from '@/features/reminders/permissions'
 import { loadCues, setCues } from '@/features/session/cues'
-import { PLACES, PLACE_LABEL, type Place, loadPlace, setPlace } from '@/features/place/place'
+import {
+  PLACES,
+  PLACE_LABEL,
+  PLACE_NOTE,
+  type Place,
+  loadPlace,
+  setPlace,
+} from '@/features/place/place'
 import { useContentStore } from '@/stores/content'
+import { usePlanStore } from '@/stores/plan'
+import { PLAN_MINUTES, emptyProfile } from '@/features/plan/profile'
+import { suggestMobilityTimes } from '@/features/reminders/contextual'
+import { readCompletionJournal } from '@/features/reminders/events'
+import { PainScale } from '@/components/PainScale'
+import { PAIN_ZONES, PAIN_ZONE_LABEL, ZONE_LABEL } from '@/content'
+import { trackNow } from '@/features/analytics/events'
+import type { PlanMinutes, Zone } from '@/lib/types'
 import {
   ALERT_MODES,
   ALERT_MODE_LABEL,
@@ -112,6 +127,48 @@ export function Settings() {
     void loadPlace().then(setWhere)
   }, [])
 
+  // ---- The plan --------------------------------------------------------
+  const profile = usePlanStore((s) => s.profile)
+  const setProfile = usePlanStore((s) => s.setProfile)
+  const rate = usePlanStore((s) => s.rate)
+  const recompose = usePlanStore((s) => s.recompose)
+
+  /** The zone whose scale is open, so adding one asks for its number at once. */
+  const [rating, setRating] = useState<Zone | null>(null)
+
+  /**
+   * Half hours the person actually finishes sessions at, offered once there is
+   * enough history to mean something. Never applied on its own: a reminder
+   * that moves by itself is a reminder nobody trusts.
+   */
+  const [suggested, setSuggested] = useState<string[] | null>(null)
+  useEffect(() => {
+    void readCompletionJournal().then((done) => {
+      const times = suggestMobilityTimes(done)
+      // Nothing to offer when it already matches what is set.
+      setSuggested(
+        times && times.join() !== settings.mobilityTimes.join() ? times : null,
+      )
+    })
+  }, [settings.mobilityTimes])
+
+  async function setMinutes(minutes: PlanMinutes) {
+    await setProfile({ ...(profile ?? emptyProfile()), minutes })
+  }
+
+  async function toggleZone(zone: Zone) {
+    const base = profile ?? emptyProfile()
+    const on = base.zones.includes(zone)
+    const zones = on ? base.zones.filter((z) => z !== zone) : [...base.zones, zone]
+    const baseline = { ...base.baseline }
+    // Dropping a zone drops the number that came with it, but never the journal
+    // entries: what was answered stays answered, and the history is still there
+    // if the zone comes back.
+    if (on) delete baseline[zone]
+    await setProfile({ ...base, zones, baseline })
+    setRating(on ? null : zone)
+  }
+
   function toggleWeekday(n: number) {
     const set = new Set(settings.weekdays)
     if (set.has(n)) set.delete(n)
@@ -141,6 +198,77 @@ export function Settings() {
         </div>
       )}
 
+      <SettingsSection title="Ton plan">
+        <SettingRow label="Temps par jour" stacked>
+          <Segmented
+            ariaLabel="Temps disponible par jour"
+            options={PLAN_MINUTES}
+            value={profile?.minutes ?? 6}
+            recommended={6}
+            onChange={(v) => void setMinutes(v)}
+            format={(v) => `${v} min`}
+          />
+        </SettingRow>
+
+        <SettingRow label="Zones suivies" stacked>
+          <div className="flex flex-wrap gap-1.5">
+            {PAIN_ZONES.map((z) => {
+              const on = (profile?.zones ?? []).includes(z)
+              return (
+                <button
+                  key={z}
+                  type="button"
+                  aria-pressed={on}
+                  onClick={() => void toggleZone(z)}
+                  className="rounded-full px-3 py-1.5 text-[13px]"
+                  style={{
+                    background: on ? 'var(--accent)' : 'var(--surface-2)',
+                    color: on ? 'var(--accent-ink)' : 'var(--text)',
+                    fontWeight: 700,
+                  }}
+                >
+                  {ZONE_LABEL[z]}
+                </button>
+              )
+            })}
+          </div>
+          {rating !== null && (
+            <div className="mt-4">
+              <p className="t-meta mb-2">
+                {PAIN_ZONE_LABEL[rating]} — aujourd’hui, c’est combien&nbsp;?
+              </p>
+              <PainScale
+                ariaLabel={`Douleur ${PAIN_ZONE_LABEL[rating]}, de 0 à 10`}
+                value={null}
+                onChange={(v) => {
+                  void rate({ zone: rating, score: v, source: 'manual' })
+                  setRating(null)
+                }}
+              />
+            </div>
+          )}
+        </SettingRow>
+
+        {suggested && (
+          <SettingRow label="Rappels mobilité" stacked>
+            <p className="t-meta">
+              Tu bouges surtout vers {suggested.join(' et ')}. Tes rappels sont réglés sur{' '}
+              {settings.mobilityTimes.join(' et ')}.
+            </p>
+            <button
+              type="button"
+              className="btn btn-secondary mt-3"
+              onClick={() => {
+                void update({ mobilityTimes: suggested })
+                setSuggested(null)
+              }}
+            >
+              Les caler sur ces heures
+            </button>
+          </SettingRow>
+        )}
+      </SettingsSection>
+
       <SettingsSection title="Session">
         <SettingRow label="Où tu travailles" stacked>
           <Segmented
@@ -149,10 +277,18 @@ export function Settings() {
             value={where}
             onChange={(v) => {
               setWhere(v)
-              void setPlace(v).then(refreshPlace)
+              trackNow({ name: 'place_changed', place: v })
+              void setPlace(v).then(() => {
+                refreshPlace()
+                // The discretion filter is an input to the composition, so the
+                // plan is rebuilt rather than left claiming movements the new
+                // place will not serve.
+                recompose()
+              })
             }}
             format={(v) => PLACE_LABEL[v]}
           />
+          <p className="t-meta mt-2">{PLACE_NOTE[where]}</p>
         </SettingRow>
         <SettingRow label="Intervalle des rappels" stacked>
           <Segmented

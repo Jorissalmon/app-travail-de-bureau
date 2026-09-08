@@ -9,7 +9,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     methods(req, 'GET')
     const sql = db()
     const routines = await sql`
-      SELECT id, slug, title, zone, duration_s, summary, accent, sort_order
+      SELECT id, slug, title, zone, duration_s, summary, accent, sort_order, goal, target_zones
       FROM routines ORDER BY sort_order, title
     `
     const steps = await sql`
@@ -39,6 +39,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       summary: r.summary,
       accent: r.accent,
       sortOrder: Number(r.sort_order),
+      goal: r.goal,
+      targetZones: r.target_zones ?? [],
       steps: byRoutine.get(r.id as string) ?? [],
     }))
 

@@ -4,7 +4,10 @@ import { X } from 'lucide-react'
 import { FigureBadge } from './FigureBadge'
 import { useContentStore } from '@/stores/content'
 import { useSessionStore } from '@/stores/session'
+import { usePlanStore } from '@/stores/plan'
 import { KINDS } from '@/features/reminders/kinds'
+import { contextualCopy } from '@/features/reminders/contextual'
+import { PLAN_SLUG } from '@/features/plan/compose'
 import { stopAlerting } from '@/features/reminders/alert'
 import { durationLabel } from '@/lib/format'
 
@@ -32,8 +35,16 @@ export function BreakOverlay() {
   const navigate = useNavigate()
   const [busy, setBusy] = useState(false)
 
-  const meta = awaiting ? KINDS[awaiting.kind] : null
-  const routine = useContentStore((s) => (meta ? s.routineBySlug(meta.routineSlug) : undefined))
+  // The prompt must open exactly what the notification promised, so it reads
+  // the same copy the scheduler used rather than the static table.
+  const plan = usePlanStore((s) => s.plan)
+  const planRoutine = usePlanStore((s) => s.planRoutine)
+  const copy = awaiting ? contextualCopy(awaiting.kind, new Date(), plan) : null
+  const meta = awaiting ? { ...KINDS[awaiting.kind], ...copy } : null
+  const catalogue = useContentStore((s) =>
+    meta ? s.routineBySlug(meta.routineSlug) : undefined,
+  )
+  const routine = meta?.routineSlug === PLAN_SLUG ? (planRoutine ?? undefined) : catalogue
 
   // Held work holds the prompt with it: being asked for a break during the
   // meeting you paused for is the opposite of the point. It comes back on

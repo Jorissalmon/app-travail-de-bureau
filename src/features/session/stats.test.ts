@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import {
+  FREEZES_PER_MONTH,
   LOW_ADHERENCE,
   STREAK_THRESHOLD,
   computeAdherence,
   computeStreak,
   fillDays,
+  freezesLeft,
   type DayCount,
 } from './stats'
 
@@ -33,10 +35,37 @@ describe('computeStreak', () => {
     expect(computeStreak(days, today)).toBe(3)
   })
 
-  it('breaks on the second gap', () => {
-    const days = [day('2026-08-28', 5), day('2026-08-31', 4), day('2026-09-01', 4)]
-    // Both 08-29 and 08-30 are missing: one is forgiven, the second ends it.
-    expect(computeStreak(days, today)).toBe(2)
+  it('forgives a second gap in the same month, and breaks on the third', () => {
+    // § pivot — the budget is two freezes per calendar month, not one per run.
+    const two = [day('2026-08-28', 5), day('2026-08-31', 4), day('2026-09-01', 4)]
+    // 08-29 and 08-30 are both missing, both in August: both forgiven, and
+    // neither is counted — the number is still the three days actually moved.
+    expect(computeStreak(two, today)).toBe(3)
+
+    const three = [day('2026-08-27', 5), day('2026-08-31', 4), day('2026-09-01', 4)]
+    // 08-28, 08-29 and 08-30 are missing. The budget covers two of them; the
+    // third ends the run.
+    expect(computeStreak(three, today)).toBe(2)
+  })
+
+  it('gives each calendar month its own budget', () => {
+    // Two gaps in September and two in August: four forgiven days, one run,
+    // because the budget does not carry across the month boundary.
+    const days = [
+      day('2026-08-30', 4),
+      day('2026-08-31', 4),
+      day('2026-09-01', 4),
+      day('2026-09-04', 4),
+    ]
+    // Walking back from 09-04: 09-03 and 09-02 are blank and spend the
+    // September budget, 08-29 and 08-28 are blank and spend the August one.
+    // Four forgiven days inside a single run, and none of them counted.
+    expect(computeStreak(days, '2026-09-04')).toBe(4)
+  })
+
+  it('respects a budget of zero, which is no forgiveness at all', () => {
+    const days = [day('2026-08-29', 5), day('2026-08-31', 4), day('2026-09-01', 4)]
+    expect(computeStreak(days, today, { freezesPerMonth: 0 })).toBe(2)
   })
 
   it('does not forgive a gap that would start the run', () => {
@@ -52,24 +81,31 @@ describe('computeStreak', () => {
   })
 
   it('skips the days the user does not work', () => {
-    // 2026-09-01 is a Tuesday; the weekend before it is 08-29 / 08-30.
+    // Two full working weeks, both weekends blank.
     const days = [
+      day('2026-08-20', 4), // jeudi
+      day('2026-08-21', 4), // vendredi
+      day('2026-08-24', 4), // lundi
+      day('2026-08-25', 4), // mardi
+      day('2026-08-26', 4), // mercredi
       day('2026-08-27', 4), // jeudi
       day('2026-08-28', 4), // vendredi
       day('2026-08-31', 4), // lundi
       day('2026-09-01', 4), // mardi
     ]
     const weekdays = [1, 2, 3, 4, 5]
-    // Without this the Saturday reset the run every single week, and a
+    // Without this the weekends reset the run every single week, and a
     // Monday-to-Friday user could never see a number above five.
-    expect(computeStreak(days, today, { weekdays })).toBe(4)
-    expect(computeStreak(days, today, { weekdays: [] })).toBe(2)
+    expect(computeStreak(days, today, { weekdays })).toBe(9)
+    // Counting weekends as working days, the first blank weekend (08-29 and
+    // 08-30) spends the whole August budget, and the next one ends the run.
+    expect(computeStreak(days, today, { weekdays: [] })).toBe(7)
   })
 
   it('a weekend nobody worked is not a missed day', () => {
     const days = [day('2026-08-31', 4), day('2026-09-01', 4)]
-    // Friday 08-28 is blank, and that is the one gap forgiveness covers; the
-    // weekend in between costs nothing.
+    // 08-28 and 08-27 are blank working days and eat the August budget; the
+    // weekend in between costs nothing, and the run is the two days moved.
     expect(computeStreak(days, today, { weekdays: [1, 2, 3, 4, 5] })).toBe(2)
   })
 
@@ -87,6 +123,34 @@ describe('computeStreak', () => {
 
   it('handles an empty history', () => {
     expect(computeStreak([], today)).toBe(0)
+  })
+})
+
+describe('freezesLeft', () => {
+  it('is the whole budget when nothing has been missed this month', () => {
+    const days = [day('2026-09-01', 4), day('2026-09-02', 4), day('2026-09-03', 4)]
+    expect(freezesLeft(days, '2026-09-03', { weekdays: [1, 2, 3, 4, 5] })).toBe(FREEZES_PER_MONTH)
+  })
+
+  it('counts a missed working day against it', () => {
+    // 09-02 is blank, 09-01 and 09-03 are not. Today is still in progress.
+    const days = [day('2026-09-01', 4), day('2026-09-03', 4)]
+    expect(freezesLeft(days, '2026-09-03', { weekdays: [1, 2, 3, 4, 5] })).toBe(1)
+  })
+
+  it('does not count today, which is not over', () => {
+    const days = [day('2026-09-01', 4), day('2026-09-02', 4)]
+    expect(freezesLeft(days, '2026-09-03', { weekdays: [1, 2, 3, 4, 5] })).toBe(FREEZES_PER_MONTH)
+  })
+
+  it('never goes below zero, however bad the month was', () => {
+    expect(freezesLeft([], '2026-09-30', { weekdays: [1, 2, 3, 4, 5] })).toBe(0)
+  })
+
+  it('looks no further back than the first of the month', () => {
+    // Every August day is blank, and none of them counts against September.
+    const days = [day('2026-09-01', 4), day('2026-09-02', 4)]
+    expect(freezesLeft(days, '2026-09-02', { weekdays: [1, 2, 3, 4, 5] })).toBe(FREEZES_PER_MONTH)
   })
 })
 

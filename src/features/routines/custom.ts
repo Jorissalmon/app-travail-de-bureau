@@ -218,6 +218,11 @@ export function materialise(custom: CustomRoutine, entries: CatalogueEntry[]): R
     // Custom routines are not filed under a body zone: they appear in their own
     // section of the library, so this only ever feeds the colour of the card.
     zone: 'bureau',
+    // The person chose these movements themselves: the plan never composes
+    // from a custom routine, and nothing here should claim it targets a zone
+    // the user did not say it did.
+    goal: 'prevention',
+    targetZones: ['bureau'],
     durationS: steps.reduce((n, s) => n + s.durationS, 0),
     summary:
       steps.length === 0

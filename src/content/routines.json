@@ -7,6 +7,12 @@
     "summary": "La pause de référence. Trois minutes, toutes les trente minutes.",
     "accent": "lime",
     "sortOrder": 1,
+    "goal": "prevention",
+    "targetZones": [
+      "hanches",
+      "dos",
+      "chevilles"
+    ],
     "steps": [
       {
         "position": 1,
@@ -82,6 +88,11 @@
     "summary": "Soixante secondes. La version qu’on tient vraiment, seize fois par jour.",
     "accent": "lime",
     "sortOrder": 2,
+    "goal": "prevention",
+    "targetZones": [
+      "lombaires",
+      "yeux"
+    ],
     "steps": [
       {
         "position": 1,
@@ -117,6 +128,11 @@
     "summary": "Tout se fait sur la chaise. Pour l’open space, ou entre deux réunions.",
     "accent": "sky",
     "sortOrder": 3,
+    "goal": "pain_relief",
+    "targetZones": [
+      "nuque",
+      "hanches"
+    ],
     "steps": [
       {
         "position": 1,
@@ -184,6 +200,11 @@
     "summary": "Le tour complet, sans quitter la chaise. Cinq minutes, une zone après l’autre.",
     "accent": "navy",
     "sortOrder": 4,
+    "goal": "prevention",
+    "targetZones": [
+      "hanches",
+      "dos"
+    ],
     "steps": [
       {
         "position": 1,
@@ -251,6 +272,12 @@
     "summary": "Cinq minutes pour démarrer la journée avant de s'asseoir.",
     "accent": "peach",
     "sortOrder": 5,
+    "goal": "prevention",
+    "targetZones": [
+      "lombaires",
+      "hanches",
+      "nuque"
+    ],
     "steps": [
       {
         "position": 1,
@@ -334,6 +361,10 @@
     "summary": "Trois minutes sur ce qui prend cher quand l'écran est trop bas.",
     "accent": "sky",
     "sortOrder": 6,
+    "goal": "pain_relief",
+    "targetZones": [
+      "nuque"
+    ],
     "steps": [
       {
         "position": 1,
@@ -401,6 +432,10 @@
     "summary": "La zone que le renforcement protège le mieux, d'après les essais.",
     "accent": "navy",
     "sortOrder": 7,
+    "goal": "pain_relief",
+    "targetZones": [
+      "dos"
+    ],
     "steps": [
       {
         "position": 1,
@@ -484,6 +519,10 @@
     "summary": "Le bas du dos n'a pas besoin d'être renforcé après huit heures assis. Il a besoin de bouger.",
     "accent": "sage",
     "sortOrder": 8,
+    "goal": "pain_relief",
+    "targetZones": [
+      "lombaires"
+    ],
     "steps": [
       {
         "position": 1,
@@ -567,6 +606,10 @@
     "summary": "Ce qui se raccourcit vraiment quand on reste assis huit heures.",
     "accent": "blush",
     "sortOrder": 9,
+    "goal": "pain_relief",
+    "targetZones": [
+      "hanches"
+    ],
     "steps": [
       {
         "position": 1,
@@ -634,6 +677,10 @@
     "summary": "Ce que huit heures de clavier et de souris demandent en retour.",
     "accent": "peach",
     "sortOrder": 10,
+    "goal": "pain_relief",
+    "targetZones": [
+      "poignets"
+    ],
     "steps": [
       {
         "position": 1,
@@ -693,6 +740,10 @@
     "summary": "Contre les jambes lourdes de fin de journée. Faisable sous le bureau.",
     "accent": "pine",
     "sortOrder": 11,
+    "goal": "prevention",
+    "targetZones": [
+      "chevilles"
+    ],
     "steps": [
       {
         "position": 1,
@@ -736,6 +787,10 @@
     "summary": "Une minute. Le clignement compte plus que le chronomètre.",
     "accent": "sun",
     "sortOrder": 12,
+    "goal": "prevention",
+    "targetZones": [
+      "yeux"
+    ],
     "steps": [
       {
         "position": 1,
@@ -771,6 +826,10 @@
     "summary": "Deux minutes pour redescendre. Rien de mystique : l’expiration plus longue, c’est tout.",
     "accent": "brick",
     "sortOrder": 13,
+    "goal": "prevention",
+    "targetZones": [
+      "bien-etre"
+    ],
     "steps": [
       {
         "position": 1,
@@ -795,6 +854,1036 @@
         "cue": "Paumes en coupe sur les yeux ouverts, sans appuyer. Noir complet, respire.",
         "figureKey": "paumes",
         "exerciseKey": "paumes"
+      }
+    ]
+  },
+  {
+    "slug": "nuque-flash",
+    "title": "Nuque, 90 secondes",
+    "zone": "nuque",
+    "durationS": 90,
+    "summary": "La version courte, quand la nuque tire et que la réunion reprend dans deux minutes.",
+    "accent": "sky",
+    "sortOrder": 14,
+    "goal": "pain_relief",
+    "targetZones": [
+      "nuque"
+    ],
+    "steps": [
+      {
+        "position": 1,
+        "name": "Menton rentré",
+        "durationS": 30,
+        "cue": "Recule le menton comme pour faire un double menton. Tiens 5 s, relâche.",
+        "figureKey": "menton-rentre",
+        "exerciseKey": "menton-rentre"
+      },
+      {
+        "position": 2,
+        "name": "Inclinaison (droite)",
+        "durationS": 20,
+        "cue": "Oreille vers l'épaule, la main opposée relâche. Ne tire pas.",
+        "figureKey": "nuque-laterale",
+        "exerciseKey": "nuque-inclinaison"
+      },
+      {
+        "position": 3,
+        "name": "Inclinaison (gauche)",
+        "durationS": 20,
+        "cue": "Même chose de l'autre côté, même lenteur.",
+        "figureKey": "nuque-laterale",
+        "exerciseKey": "nuque-inclinaison"
+      },
+      {
+        "position": 4,
+        "name": "Haussements d'épaules",
+        "durationS": 20,
+        "cue": "Monte les épaules vers les oreilles, tiens 3 s, laisse tomber d'un coup.",
+        "figureKey": "haussement-epaules",
+        "exerciseKey": "haussement-epaules"
+      }
+    ]
+  },
+  {
+    "slug": "nuque-soulagement",
+    "title": "Nuque, séance longue",
+    "zone": "nuque",
+    "durationS": 300,
+    "summary": "Cinq minutes : mobilité de la nuque, puis deux tenues pour la charger un peu.",
+    "accent": "sky",
+    "sortOrder": 15,
+    "goal": "pain_relief",
+    "targetZones": [
+      "nuque",
+      "dos"
+    ],
+    "steps": [
+      {
+        "position": 1,
+        "name": "Menton rentré",
+        "durationS": 30,
+        "cue": "Recule le menton comme pour faire un double menton. Tiens 5 s, relâche.",
+        "figureKey": "menton-rentre",
+        "exerciseKey": "menton-rentre"
+      },
+      {
+        "position": 2,
+        "name": "Inclinaison (droite)",
+        "durationS": 30,
+        "cue": "Oreille vers l'épaule, la main opposée relâche. Ne tire pas.",
+        "figureKey": "nuque-laterale",
+        "exerciseKey": "nuque-inclinaison"
+      },
+      {
+        "position": 3,
+        "name": "Inclinaison (gauche)",
+        "durationS": 30,
+        "cue": "Même chose de l'autre côté, même lenteur.",
+        "figureKey": "nuque-laterale",
+        "exerciseKey": "nuque-inclinaison"
+      },
+      {
+        "position": 4,
+        "name": "Nuque en diagonale (droite)",
+        "durationS": 30,
+        "cue": "Menton vers l'aisselle opposée, la main accompagne sans tirer.",
+        "figureKey": "nuque-diagonale",
+        "exerciseKey": "nuque-diagonale"
+      },
+      {
+        "position": 5,
+        "name": "Nuque en diagonale (gauche)",
+        "durationS": 30,
+        "cue": "L'autre diagonale. Le regard suit le menton.",
+        "figureKey": "nuque-diagonale",
+        "exerciseKey": "nuque-diagonale"
+      },
+      {
+        "position": 6,
+        "name": "Rotation lente",
+        "durationS": 30,
+        "cue": "Tourne la tête d'un côté puis de l'autre, comme si tu suivais un horizon.",
+        "figureKey": "nuque-rotation",
+        "exerciseKey": "nuque-rotation"
+      },
+      {
+        "position": 7,
+        "name": "Serrage d'omoplates",
+        "durationS": 30,
+        "cue": "Serre les omoplates l'une vers l'autre, tiens 5 s, relâche.",
+        "figureKey": "omoplates",
+        "exerciseKey": "omoplates"
+      },
+      {
+        "position": 8,
+        "name": "Isométrie, appui frontal",
+        "durationS": 30,
+        "cue": "Paume sur le front, pousse la tête contre la main. Rien ne bouge, 10 s.",
+        "figureKey": "menton-rentre",
+        "exerciseKey": "isometrie-nuque-avant"
+      },
+      {
+        "position": 9,
+        "name": "Isométrie, appui latéral",
+        "durationS": 30,
+        "cue": "Paume sur la tempe, pousse. 10 s d'un côté, 10 s de l'autre.",
+        "figureKey": "nuque-laterale",
+        "exerciseKey": "isometrie-nuque-laterale"
+      },
+      {
+        "position": 10,
+        "name": "Respiration",
+        "durationS": 30,
+        "cue": "Quatre respirations : inspire sur 4 temps, expire sur 6.",
+        "figureKey": "respiration",
+        "exerciseKey": "respiration-4-6"
+      }
+    ]
+  },
+  {
+    "slug": "dos-flash",
+    "title": "Haut du dos, 90 secondes",
+    "zone": "dos",
+    "durationS": 90,
+    "summary": "Trois mouvements pour rouvrir le haut du dos sans quitter la chaise.",
+    "accent": "navy",
+    "sortOrder": 16,
+    "goal": "pain_relief",
+    "targetZones": [
+      "dos"
+    ],
+    "steps": [
+      {
+        "position": 1,
+        "name": "Serrage d'omoplates",
+        "durationS": 30,
+        "cue": "Serre les omoplates l'une vers l'autre, tiens 5 s, relâche.",
+        "figureKey": "omoplates",
+        "exerciseKey": "omoplates"
+      },
+      {
+        "position": 2,
+        "name": "Ouverture pectorale",
+        "durationS": 30,
+        "cue": "Mains croisées derrière la tête, ouvre les coudes vers l'extérieur.",
+        "figureKey": "ouverture-pectorale",
+        "exerciseKey": "ouverture-pectorale"
+      },
+      {
+        "position": 3,
+        "name": "Câlin à un bras",
+        "durationS": 30,
+        "cue": "Bras en travers de la poitrine, l'autre avant-bras le ramène. Change à mi-temps.",
+        "figureKey": "calin-bras",
+        "exerciseKey": "calin-bras"
+      }
+    ]
+  },
+  {
+    "slug": "dos-soulagement",
+    "title": "Haut du dos, séance longue",
+    "zone": "dos",
+    "durationS": 300,
+    "summary": "Cinq minutes : ouvrir le haut du dos, puis deux tenues contre résistance.",
+    "accent": "navy",
+    "sortOrder": 17,
+    "goal": "pain_relief",
+    "targetZones": [
+      "dos",
+      "nuque"
+    ],
+    "steps": [
+      {
+        "position": 1,
+        "name": "Serrage d'omoplates",
+        "durationS": 30,
+        "cue": "Serre les omoplates l'une vers l'autre, tiens 5 s, relâche.",
+        "figureKey": "omoplates",
+        "exerciseKey": "omoplates"
+      },
+      {
+        "position": 2,
+        "name": "Ouverture pectorale",
+        "durationS": 30,
+        "cue": "Mains croisées derrière la tête, ouvre les coudes vers l'extérieur.",
+        "figureKey": "ouverture-pectorale",
+        "exerciseKey": "ouverture-pectorale"
+      },
+      {
+        "position": 3,
+        "name": "Extension sur chaise",
+        "durationS": 30,
+        "cue": "Assis, mains derrière la tête, passe le haut du dos par-dessus le dossier.",
+        "figureKey": "extension-chaise",
+        "exerciseKey": "extension-chaise"
+      },
+      {
+        "position": 4,
+        "name": "Tirage à vide",
+        "durationS": 30,
+        "cue": "Bras tendus devant, tire les coudes vers l'arrière comme sur une machine.",
+        "figureKey": "tirage-vide",
+        "exerciseKey": "tirage-vide"
+      },
+      {
+        "position": 5,
+        "name": "Rotation externe",
+        "durationS": 30,
+        "cue": "Coudes au corps, les avant-bras s'écartent comme deux portes.",
+        "figureKey": "rotation-externe",
+        "exerciseKey": "rotation-externe"
+      },
+      {
+        "position": 6,
+        "name": "Câlin à un bras (droite)",
+        "durationS": 30,
+        "cue": "Bras droit en travers de la poitrine, l'autre avant-bras le ramène.",
+        "figureKey": "calin-bras",
+        "exerciseKey": "calin-bras"
+      },
+      {
+        "position": 7,
+        "name": "Câlin à un bras (gauche)",
+        "durationS": 30,
+        "cue": "Même chose à gauche. Les épaules restent basses.",
+        "figureKey": "calin-bras",
+        "exerciseKey": "calin-bras"
+      },
+      {
+        "position": 8,
+        "name": "Serrage d'omoplates tenu",
+        "durationS": 30,
+        "cue": "Même serrage, mais tenu 10 s. Les épaules ne montent pas.",
+        "figureKey": "omoplates-b",
+        "exerciseKey": "omoplates-tenu"
+      },
+      {
+        "position": 9,
+        "name": "Tirage isométrique",
+        "durationS": 30,
+        "cue": "Attrape le bord de l'assise et tire vers le haut. 10 s, rien ne bouge.",
+        "figureKey": "tirage-vide",
+        "exerciseKey": "tirage-isometrique-chaise"
+      },
+      {
+        "position": 10,
+        "name": "Respiration",
+        "durationS": 30,
+        "cue": "Quatre respirations : inspire sur 4 temps, expire sur 6.",
+        "figureKey": "respiration",
+        "exerciseKey": "respiration-4-6"
+      }
+    ]
+  },
+  {
+    "slug": "lombaires-flash",
+    "title": "Lombaires, 90 secondes",
+    "zone": "lombaires",
+    "durationS": 90,
+    "summary": "Trois mouvements pour le bas du dos, debout à côté de la chaise.",
+    "accent": "sage",
+    "sortOrder": 18,
+    "goal": "pain_relief",
+    "targetZones": [
+      "lombaires"
+    ],
+    "steps": [
+      {
+        "position": 1,
+        "name": "Bascule du bassin",
+        "durationS": 30,
+        "cue": "Debout, bascule le bassin d'avant en arrière, sans forcer.",
+        "figureKey": "bascule-bassin",
+        "exerciseKey": "bascule-bassin"
+      },
+      {
+        "position": 2,
+        "name": "Extension debout",
+        "durationS": 30,
+        "cue": "Mains dans le bas du dos, ouvre la poitrine, regarde vers le plafond. Doucement.",
+        "figureKey": "extension-debout",
+        "exerciseKey": "extension-debout"
+      },
+      {
+        "position": 3,
+        "name": "Genou à la poitrine",
+        "durationS": 30,
+        "cue": "Assis, ramène un genou vers la poitrine avec les deux mains. Change à mi-temps.",
+        "figureKey": "genou-poitrine",
+        "exerciseKey": "genou-poitrine"
+      }
+    ]
+  },
+  {
+    "slug": "lombaires-soulagement",
+    "title": "Lombaires, séance longue",
+    "zone": "lombaires",
+    "durationS": 300,
+    "summary": "Cinq minutes : mobiliser le bas du dos, puis deux mouvements qui le chargent.",
+    "accent": "sage",
+    "sortOrder": 19,
+    "goal": "pain_relief",
+    "targetZones": [
+      "lombaires",
+      "hanches"
+    ],
+    "steps": [
+      {
+        "position": 1,
+        "name": "Bascule du bassin",
+        "durationS": 30,
+        "cue": "Debout, bascule le bassin d'avant en arrière, sans forcer.",
+        "figureKey": "bascule-bassin",
+        "exerciseKey": "bascule-bassin"
+      },
+      {
+        "position": 2,
+        "name": "Chat-vache debout",
+        "durationS": 30,
+        "cue": "Mains sur les cuisses, arrondis puis creuse.",
+        "figureKey": "chat-vache",
+        "exerciseKey": "chat-vache"
+      },
+      {
+        "position": 3,
+        "name": "Rotation assise (droite)",
+        "durationS": 30,
+        "cue": "Pieds au sol, tourne le buste, attrape le dossier. Le regard suit.",
+        "figureKey": "rotation-assise",
+        "exerciseKey": "rotation-assise"
+      },
+      {
+        "position": 4,
+        "name": "Rotation assise (gauche)",
+        "durationS": 30,
+        "cue": "L'autre côté, même lenteur.",
+        "figureKey": "rotation-assise",
+        "exerciseKey": "rotation-assise"
+      },
+      {
+        "position": 5,
+        "name": "Genou à la poitrine (droite)",
+        "durationS": 30,
+        "cue": "Assis, ramène le genou droit vers la poitrine. Le dos reste long.",
+        "figureKey": "genou-poitrine",
+        "exerciseKey": "genou-poitrine"
+      },
+      {
+        "position": 6,
+        "name": "Genou à la poitrine (gauche)",
+        "durationS": 30,
+        "cue": "Même chose à gauche.",
+        "figureKey": "genou-poitrine",
+        "exerciseKey": "genou-poitrine"
+      },
+      {
+        "position": 7,
+        "name": "Extension debout",
+        "durationS": 30,
+        "cue": "Mains dans le bas du dos, ouvre la poitrine. Doucement.",
+        "figureKey": "extension-debout",
+        "exerciseKey": "extension-debout"
+      },
+      {
+        "position": 8,
+        "name": "Gainage assis",
+        "durationS": 30,
+        "cue": "Assis au bord de la chaise, serre le ventre 15 s. Continue de respirer.",
+        "figureKey": "bascule-bassin",
+        "exerciseKey": "gainage-assis"
+      },
+      {
+        "position": 9,
+        "name": "Charnière de hanche",
+        "durationS": 30,
+        "cue": "Fesses vers l'arrière, dos plat, buste qui descend. Huit fois.",
+        "figureKey": "chat-vache-b",
+        "exerciseKey": "charniere-hanche"
+      },
+      {
+        "position": 10,
+        "name": "Respiration",
+        "durationS": 30,
+        "cue": "Quatre respirations : inspire sur 4 temps, expire sur 6.",
+        "figureKey": "respiration",
+        "exerciseKey": "respiration-4-6"
+      }
+    ]
+  },
+  {
+    "slug": "hanches-flash",
+    "title": "Hanches, 90 secondes",
+    "zone": "hanches",
+    "durationS": 90,
+    "summary": "Trois mouvements pour les hanches, sans se lever.",
+    "accent": "blush",
+    "sortOrder": 20,
+    "goal": "pain_relief",
+    "targetZones": [
+      "hanches"
+    ],
+    "steps": [
+      {
+        "position": 1,
+        "name": "Figure 4 assise (droite)",
+        "durationS": 30,
+        "cue": "Cheville droite sur le genou gauche, penche le buste, dos droit.",
+        "figureKey": "figure4-assise",
+        "exerciseKey": "figure4-assise"
+      },
+      {
+        "position": 2,
+        "name": "Figure 4 assise (gauche)",
+        "durationS": 30,
+        "cue": "L'autre côté, même position.",
+        "figureKey": "figure4-assise",
+        "exerciseKey": "figure4-assise"
+      },
+      {
+        "position": 3,
+        "name": "Ischio assis",
+        "durationS": 30,
+        "cue": "Talon au sol, jambe tendue devant, penche le buste depuis les hanches. Change à mi-temps.",
+        "figureKey": "ischios-assis",
+        "exerciseKey": "ischios-assis"
+      }
+    ]
+  },
+  {
+    "slug": "hanches-soulagement",
+    "title": "Hanches, séance longue",
+    "zone": "hanches",
+    "durationS": 300,
+    "summary": "Cinq minutes : ouvrir les hanches, puis trois mouvements qui les chargent.",
+    "accent": "blush",
+    "sortOrder": 21,
+    "goal": "pain_relief",
+    "targetZones": [
+      "hanches",
+      "lombaires"
+    ],
+    "steps": [
+      {
+        "position": 1,
+        "name": "Figure 4 assise (droite)",
+        "durationS": 30,
+        "cue": "Cheville droite sur le genou gauche, penche le buste, dos droit.",
+        "figureKey": "figure4-assise",
+        "exerciseKey": "figure4-assise"
+      },
+      {
+        "position": 2,
+        "name": "Figure 4 assise (gauche)",
+        "durationS": 30,
+        "cue": "L'autre côté, même position.",
+        "figureKey": "figure4-assise",
+        "exerciseKey": "figure4-assise"
+      },
+      {
+        "position": 3,
+        "name": "Ischio assis (droite)",
+        "durationS": 30,
+        "cue": "Talon au sol, jambe tendue devant, penche depuis les hanches. Dos droit.",
+        "figureKey": "ischios-assis",
+        "exerciseKey": "ischios-assis"
+      },
+      {
+        "position": 4,
+        "name": "Ischio assis (gauche)",
+        "durationS": 30,
+        "cue": "Même chose de l'autre côté.",
+        "figureKey": "ischios-assis",
+        "exerciseKey": "ischios-assis"
+      },
+      {
+        "position": 5,
+        "name": "Genou à la poitrine (droite)",
+        "durationS": 30,
+        "cue": "Ramène le genou droit vers la poitrine avec les deux mains.",
+        "figureKey": "genou-poitrine",
+        "exerciseKey": "genou-poitrine"
+      },
+      {
+        "position": 6,
+        "name": "Genou à la poitrine (gauche)",
+        "durationS": 30,
+        "cue": "Même chose à gauche.",
+        "figureKey": "genou-poitrine",
+        "exerciseKey": "genou-poitrine"
+      },
+      {
+        "position": 7,
+        "name": "Balancement de hanche",
+        "durationS": 30,
+        "cue": "Debout, jambe libre, balance d'avant en arrière. Amplitude confortable.",
+        "figureKey": "balancement-hanche",
+        "exerciseKey": "balancement-hanche"
+      },
+      {
+        "position": 8,
+        "name": "Charnière de hanche",
+        "durationS": 30,
+        "cue": "Fesses vers l'arrière, dos plat, buste qui descend. Huit fois.",
+        "figureKey": "chat-vache-b",
+        "exerciseKey": "charniere-hanche"
+      },
+      {
+        "position": 9,
+        "name": "Se lever, s'asseoir",
+        "durationS": 30,
+        "cue": "Bras croisés, lève-toi sans les mains, rassieds-toi en trois secondes.",
+        "figureKey": "extension-chaise",
+        "exerciseKey": "assis-debout"
+      },
+      {
+        "position": 10,
+        "name": "Respiration",
+        "durationS": 30,
+        "cue": "Quatre respirations : inspire sur 4 temps, expire sur 6.",
+        "figureKey": "respiration",
+        "exerciseKey": "respiration-4-6"
+      }
+    ]
+  },
+  {
+    "slug": "poignets-flash",
+    "title": "Poignets, une minute",
+    "zone": "poignets",
+    "durationS": 60,
+    "summary": "Soixante secondes, sans lâcher le clavier des yeux plus longtemps que ça.",
+    "accent": "peach",
+    "sortOrder": 22,
+    "goal": "pain_relief",
+    "targetZones": [
+      "poignets"
+    ],
+    "steps": [
+      {
+        "position": 1,
+        "name": "Poignet en flexion",
+        "durationS": 20,
+        "cue": "Bras tendu devant, paume vers le bas, l'autre main tire les doigts vers toi.",
+        "figureKey": "poignet-flexion",
+        "exerciseKey": "poignet-flexion"
+      },
+      {
+        "position": 2,
+        "name": "Poignet en extension",
+        "durationS": 20,
+        "cue": "Paume vers le haut, l'autre main tire les doigts vers le sol. Change à mi-temps.",
+        "figureKey": "poignet-extension",
+        "exerciseKey": "poignet-extension"
+      },
+      {
+        "position": 3,
+        "name": "Doigts écartés",
+        "durationS": 20,
+        "cue": "Écarte les doigts au maximum, tiens 3 s, referme le poing. Dix fois.",
+        "figureKey": "doigts-ecartes",
+        "exerciseKey": "doigts-ecartes"
+      }
+    ]
+  },
+  {
+    "slug": "poignets-soulagement",
+    "title": "Poignets, séance longue",
+    "zone": "poignets",
+    "durationS": 240,
+    "summary": "Quatre minutes : les quatre directions du poignet, puis deux mouvements de force.",
+    "accent": "peach",
+    "sortOrder": 23,
+    "goal": "pain_relief",
+    "targetZones": [
+      "poignets"
+    ],
+    "steps": [
+      {
+        "position": 1,
+        "name": "Poignet en flexion (droite)",
+        "durationS": 30,
+        "cue": "Bras tendu devant, paume vers le bas, l'autre main tire les doigts vers toi.",
+        "figureKey": "poignet-flexion",
+        "exerciseKey": "poignet-flexion"
+      },
+      {
+        "position": 2,
+        "name": "Poignet en flexion (gauche)",
+        "durationS": 30,
+        "cue": "Même chose de l'autre côté.",
+        "figureKey": "poignet-flexion",
+        "exerciseKey": "poignet-flexion"
+      },
+      {
+        "position": 3,
+        "name": "Poignet en extension",
+        "durationS": 30,
+        "cue": "Paume vers le haut, l'autre main tire les doigts vers le sol. Change à mi-temps.",
+        "figureKey": "poignet-extension",
+        "exerciseKey": "poignet-extension"
+      },
+      {
+        "position": 4,
+        "name": "Prière",
+        "durationS": 30,
+        "cue": "Paumes jointes devant la poitrine, descends les mains en gardant les paumes collées.",
+        "figureKey": "poignet-priere",
+        "exerciseKey": "poignet-priere"
+      },
+      {
+        "position": 5,
+        "name": "Mains dos à dos",
+        "durationS": 30,
+        "cue": "Dos des mains l'un contre l'autre devant la poitrine, coudes vers l'extérieur.",
+        "figureKey": "priere-inversee",
+        "exerciseKey": "mains-dos-a-dos"
+      },
+      {
+        "position": 6,
+        "name": "Doigts écartés",
+        "durationS": 30,
+        "cue": "Écarte les doigts au maximum, tiens 3 s, referme le poing. Dix fois.",
+        "figureKey": "doigts-ecartes",
+        "exerciseKey": "doigts-ecartes"
+      },
+      {
+        "position": 7,
+        "name": "Poing serré",
+        "durationS": 30,
+        "cue": "Serre le poing 5 s, ouvre la main en grand 2 s. Huit fois, chaque main.",
+        "figureKey": "doigts-poing",
+        "exerciseKey": "poing-serre"
+      },
+      {
+        "position": 8,
+        "name": "Poignet contre résistance",
+        "durationS": 30,
+        "cue": "Avant-bras sur le bureau, l'autre main résiste. 10 s dans un sens, 10 s dans l'autre.",
+        "figureKey": "poignet-extension",
+        "exerciseKey": "poignet-resiste"
+      }
+    ]
+  },
+  {
+    "slug": "chevilles-flash",
+    "title": "Chevilles, 90 secondes",
+    "zone": "chevilles",
+    "durationS": 90,
+    "summary": "Trois mouvements pour la pompe du mollet, assis ou debout.",
+    "accent": "pine",
+    "sortOrder": 24,
+    "goal": "pain_relief",
+    "targetZones": [
+      "chevilles"
+    ],
+    "steps": [
+      {
+        "position": 1,
+        "name": "Cercles de cheville",
+        "durationS": 30,
+        "cue": "Décolle le pied, dessine un cercle large, dans un sens puis dans l'autre. Change à mi-temps.",
+        "figureKey": "cheville-cercle",
+        "exerciseKey": "cheville-cercle"
+      },
+      {
+        "position": 2,
+        "name": "Talon-pointe",
+        "durationS": 30,
+        "cue": "Assis ou debout, alterne l'appui sur les talons puis sur la pointe. Sans à-coups.",
+        "figureKey": "talon-pointe",
+        "exerciseKey": "talon-pointe"
+      },
+      {
+        "position": 3,
+        "name": "Descente lente sur les talons",
+        "durationS": 30,
+        "cue": "Monte sur la pointe, redescends en comptant jusqu'à quatre. Huit fois.",
+        "figureKey": "mollet-plat",
+        "exerciseKey": "mollet-excentrique"
+      }
+    ]
+  },
+  {
+    "slug": "renfort-nuque",
+    "title": "Renfort nuque",
+    "zone": "nuque",
+    "durationS": 180,
+    "summary": "Trois minutes de tenues contre résistance. Rien ne bouge, personne ne voit rien.",
+    "accent": "slate",
+    "sortOrder": 25,
+    "goal": "strength",
+    "targetZones": [
+      "nuque"
+    ],
+    "steps": [
+      {
+        "position": 1,
+        "name": "Menton rentré",
+        "durationS": 30,
+        "cue": "Recule le menton comme pour faire un double menton. Tiens 5 s, relâche.",
+        "figureKey": "menton-rentre",
+        "exerciseKey": "menton-rentre"
+      },
+      {
+        "position": 2,
+        "name": "Isométrie, appui frontal",
+        "durationS": 30,
+        "cue": "Paume sur le front, pousse la tête contre la main. Rien ne bouge, 10 s.",
+        "figureKey": "menton-rentre",
+        "exerciseKey": "isometrie-nuque-avant"
+      },
+      {
+        "position": 3,
+        "name": "Isométrie latérale (droite)",
+        "durationS": 30,
+        "cue": "Paume sur la tempe droite, pousse sans incliner le cou. 10 s.",
+        "figureKey": "nuque-laterale",
+        "exerciseKey": "isometrie-nuque-laterale"
+      },
+      {
+        "position": 4,
+        "name": "Isométrie latérale (gauche)",
+        "durationS": 30,
+        "cue": "Même chose à gauche. L'épaule reste basse.",
+        "figureKey": "nuque-laterale",
+        "exerciseKey": "isometrie-nuque-laterale"
+      },
+      {
+        "position": 5,
+        "name": "Isométrie, appui occipital",
+        "durationS": 30,
+        "cue": "Mains derrière la tête, pousse en arrière contre elles. Menton rentré, 10 s.",
+        "figureKey": "nuque-flexion",
+        "exerciseKey": "isometrie-nuque-arriere"
+      },
+      {
+        "position": 6,
+        "name": "Serrage d'omoplates tenu",
+        "durationS": 30,
+        "cue": "Serre les omoplates et tiens 10 s. Les épaules ne montent pas.",
+        "figureKey": "omoplates-b",
+        "exerciseKey": "omoplates-tenu"
+      }
+    ]
+  },
+  {
+    "slug": "renfort-haut-du-dos",
+    "title": "Renfort haut du dos",
+    "zone": "dos",
+    "durationS": 270,
+    "summary": "Quatre minutes et demie de charge pour le haut du dos, sans matériel.",
+    "accent": "slate",
+    "sortOrder": 26,
+    "goal": "strength",
+    "targetZones": [
+      "dos"
+    ],
+    "steps": [
+      {
+        "position": 1,
+        "name": "Serrage d'omoplates",
+        "durationS": 30,
+        "cue": "Serre les omoplates l'une vers l'autre, tiens 5 s, relâche. Mise en route.",
+        "figureKey": "omoplates",
+        "exerciseKey": "omoplates"
+      },
+      {
+        "position": 2,
+        "name": "Serrage d'omoplates tenu",
+        "durationS": 45,
+        "cue": "Même serrage, tenu 10 s, relâché 5 s. Trois fois.",
+        "figureKey": "omoplates-b",
+        "exerciseKey": "omoplates-tenu"
+      },
+      {
+        "position": 3,
+        "name": "Tirage isométrique",
+        "durationS": 45,
+        "cue": "Attrape le bord de l'assise et tire vers le haut. 10 s, trois fois.",
+        "figureKey": "tirage-vide",
+        "exerciseKey": "tirage-isometrique-chaise"
+      },
+      {
+        "position": 4,
+        "name": "Rotation externe tenue",
+        "durationS": 45,
+        "cue": "Coudes au corps, une main résiste à l'autre. 10 s de chaque côté.",
+        "figureKey": "rotation-externe",
+        "exerciseKey": "rotation-externe-tenue"
+      },
+      {
+        "position": 5,
+        "name": "Élévation en Y",
+        "durationS": 45,
+        "cue": "Monte les bras en Y, tiens 3 s en haut, redescends en 3 s. Six fois.",
+        "figureKey": "cercle-bras",
+        "exerciseKey": "elevation-y"
+      },
+      {
+        "position": 6,
+        "name": "Pompe sur le bureau",
+        "durationS": 45,
+        "cue": "Mains sur le bord du bureau, corps aligné. Six à dix descentes contrôlées.",
+        "figureKey": "encadrement-porte",
+        "exerciseKey": "pompe-bureau"
+      },
+      {
+        "position": 7,
+        "name": "Respiration",
+        "durationS": 15,
+        "cue": "Deux respirations : inspire sur 4 temps, expire sur 6.",
+        "figureKey": "respiration",
+        "exerciseKey": "respiration-4-6"
+      }
+    ]
+  },
+  {
+    "slug": "renfort-tronc",
+    "title": "Renfort tronc et jambes",
+    "zone": "lombaires",
+    "durationS": 240,
+    "summary": "Quatre minutes de charge pour le bas du dos, les fessiers et les mollets.",
+    "accent": "slate",
+    "sortOrder": 27,
+    "goal": "strength",
+    "targetZones": [
+      "lombaires",
+      "hanches",
+      "chevilles"
+    ],
+    "steps": [
+      {
+        "position": 1,
+        "name": "Bascule du bassin",
+        "durationS": 30,
+        "cue": "Debout, bascule le bassin d'avant en arrière. Mise en route.",
+        "figureKey": "bascule-bassin",
+        "exerciseKey": "bascule-bassin"
+      },
+      {
+        "position": 2,
+        "name": "Gainage assis",
+        "durationS": 45,
+        "cue": "Assis au bord de la chaise, serre le ventre 15 s. Deux fois, en respirant.",
+        "figureKey": "bascule-bassin",
+        "exerciseKey": "gainage-assis"
+      },
+      {
+        "position": 3,
+        "name": "Charnière de hanche",
+        "durationS": 45,
+        "cue": "Fesses vers l'arrière, dos plat. Huit descentes, remontée fessiers serrés.",
+        "figureKey": "chat-vache-b",
+        "exerciseKey": "charniere-hanche"
+      },
+      {
+        "position": 4,
+        "name": "Se lever, s'asseoir",
+        "durationS": 45,
+        "cue": "Bras croisés, lève-toi sans les mains, rassieds-toi en trois secondes. Huit fois.",
+        "figureKey": "extension-chaise",
+        "exerciseKey": "assis-debout"
+      },
+      {
+        "position": 5,
+        "name": "Descente lente sur les talons",
+        "durationS": 45,
+        "cue": "Monte sur la pointe, redescends en comptant jusqu'à quatre. Dix fois.",
+        "figureKey": "mollet-plat",
+        "exerciseKey": "mollet-excentrique"
+      },
+      {
+        "position": 6,
+        "name": "Extension debout",
+        "durationS": 30,
+        "cue": "Mains dans le bas du dos, ouvre la poitrine. Doucement, pour finir.",
+        "figureKey": "extension-debout",
+        "exerciseKey": "extension-debout"
+      }
+    ]
+  },
+  {
+    "slug": "renfort-poignets",
+    "title": "Renfort poignets",
+    "zone": "poignets",
+    "durationS": 150,
+    "summary": "Deux minutes et demie de force pour la main et l'avant-bras, au bureau.",
+    "accent": "slate",
+    "sortOrder": 28,
+    "goal": "strength",
+    "targetZones": [
+      "poignets"
+    ],
+    "steps": [
+      {
+        "position": 1,
+        "name": "Doigts écartés",
+        "durationS": 30,
+        "cue": "Écarte les doigts au maximum, tiens 3 s, referme le poing. Mise en route.",
+        "figureKey": "doigts-ecartes",
+        "exerciseKey": "doigts-ecartes"
+      },
+      {
+        "position": 2,
+        "name": "Poing serré",
+        "durationS": 45,
+        "cue": "Serre le poing 5 s, ouvre la main en grand 2 s. Huit fois, chaque main.",
+        "figureKey": "doigts-poing",
+        "exerciseKey": "poing-serre"
+      },
+      {
+        "position": 3,
+        "name": "Poignet contre résistance",
+        "durationS": 45,
+        "cue": "Avant-bras sur le bureau, l'autre main résiste. 10 s dans un sens, 10 s dans l'autre.",
+        "figureKey": "poignet-extension",
+        "exerciseKey": "poignet-resiste"
+      },
+      {
+        "position": 4,
+        "name": "Prière",
+        "durationS": 30,
+        "cue": "Paumes jointes devant la poitrine, descends les mains en gardant les paumes collées.",
+        "figureKey": "poignet-priere",
+        "exerciseKey": "poignet-priere"
+      }
+    ]
+  },
+  {
+    "slug": "chevilles-circulation",
+    "title": "Chevilles, séance longue",
+    "zone": "chevilles",
+    "durationS": 240,
+    "summary": "Quatre minutes pour la pompe du mollet, quand les jambes sont lourdes en fin de journée.",
+    "accent": "pine",
+    "sortOrder": 29,
+    "goal": "pain_relief",
+    "targetZones": [
+      "chevilles"
+    ],
+    "steps": [
+      {
+        "position": 1,
+        "name": "Marche",
+        "durationS": 30,
+        "cue": "Lève-toi et marche. Deux minutes debout font plus pour la circulation que n'importe quel étirement.",
+        "figureKey": "marche",
+        "exerciseKey": "marche"
+      },
+      {
+        "position": 2,
+        "name": "Cercles de cheville (droite)",
+        "durationS": 30,
+        "cue": "Décolle le pied droit, dessine un cercle large, dans un sens puis dans l'autre.",
+        "figureKey": "cheville-cercle",
+        "exerciseKey": "cheville-cercle"
+      },
+      {
+        "position": 3,
+        "name": "Cercles de cheville (gauche)",
+        "durationS": 30,
+        "cue": "Même chose à gauche, même amplitude.",
+        "figureKey": "cheville-cercle",
+        "exerciseKey": "cheville-cercle"
+      },
+      {
+        "position": 4,
+        "name": "Talon-pointe",
+        "durationS": 30,
+        "cue": "Assis ou debout, alterne l'appui sur les talons puis sur la pointe. Sans à-coups.",
+        "figureKey": "talon-pointe",
+        "exerciseKey": "talon-pointe"
+      },
+      {
+        "position": 5,
+        "name": "Montées sur la pointe",
+        "durationS": 30,
+        "cue": "Monte sur la pointe des pieds, redescends lentement. Vingt fois.",
+        "figureKey": "mollet-releve",
+        "exerciseKey": "mollet-releve"
+      },
+      {
+        "position": 6,
+        "name": "Descente lente sur les talons",
+        "durationS": 45,
+        "cue": "Monte sur la pointe, redescends en comptant jusqu'à quatre. Dix fois.",
+        "figureKey": "mollet-plat",
+        "exerciseKey": "mollet-excentrique"
+      },
+      {
+        "position": 7,
+        "name": "Marche sur place",
+        "durationS": 30,
+        "cue": "Genoux hauts, bras qui accompagnent. La pompe du mollet, à plein régime.",
+        "figureKey": "marche",
+        "exerciseKey": "marche-sur-place"
+      },
+      {
+        "position": 8,
+        "name": "Respiration",
+        "durationS": 15,
+        "cue": "Deux respirations : inspire sur 4 temps, expire sur 6.",
+        "figureKey": "respiration",
+        "exerciseKey": "respiration-4-6"
       }
     ]
   }

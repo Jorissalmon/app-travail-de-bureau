@@ -12,7 +12,29 @@ import type { Exercise, Routine } from '@/lib/types'
  * phone is, not who owns it, and it changes from one day to the next.
  */
 
-export type Place = 'bureau' | 'maison'
+export type Place = 'bureau' | 'open-space' | 'maison'
+
+/**
+ * How much discretion the place demands.
+ *
+ * The switch used to be binary, and it hid a real difference: a shared office
+ * with a door is not an open space. `bureau` still trims what nobody does at a
+ * desk; `open-space` additionally refuses to fall back on a movement that
+ * would draw looks, even when the plan comes up a block short. `maison` filters
+ * nothing.
+ */
+export type Discretion = 'none' | 'moderate' | 'strict'
+
+export const DISCRETION: Record<Place, Discretion> = {
+  maison: 'none',
+  bureau: 'moderate',
+  'open-space': 'strict',
+}
+
+/** True where a movement marked `discreet: false` has no business being served. */
+export function needsDiscretion(where: Place): boolean {
+  return DISCRETION[where] !== 'none'
+}
 
 /**
  * Below this share of surviving steps, a routine is not trimmed for the office
@@ -21,15 +43,23 @@ export type Place = 'bureau' | 'maison'
  */
 const MIN_KEPT = 0.5
 
-export const PLACES: readonly Place[] = ['bureau', 'maison']
+export const PLACES: readonly Place[] = ['bureau', 'open-space', 'maison']
 
 export const PLACE_LABEL: Record<Place, string> = {
-  bureau: 'Au bureau',
-  maison: 'À la maison',
+  bureau: 'Bureau',
+  'open-space': 'Open space',
+  maison: 'Maison',
+}
+
+/** The one line each choice changes, for the screens that have room to say it. */
+export const PLACE_NOTE: Record<Place, string> = {
+  bureau: 'Les mouvements au sol et les fentes sont retirés.',
+  'open-space': 'Seuls les mouvements que personne ne remarque sont proposés.',
+  maison: 'Tout est proposé, rien n’est retiré.',
 }
 
 function isPlace(v: string | null): v is Place {
-  return v === 'bureau' || v === 'maison'
+  return v === 'bureau' || v === 'open-space' || v === 'maison'
 }
 
 let current: Place = 'bureau'
@@ -67,7 +97,7 @@ export function adaptToPlace(
   where: Place,
   exerciseByKey: (key: string) => Exercise | undefined,
 ): Routine {
-  if (where === 'maison') return routine
+  if (!needsDiscretion(where)) return routine
 
   const kept = routine.steps.filter((s) => exerciseByKey(s.exerciseKey)?.discreet !== false)
   if (kept.length === routine.steps.length) return routine
@@ -87,7 +117,7 @@ export function hiddenAtOffice(
   where: Place,
   exerciseByKey: (key: string) => Exercise | undefined,
 ): number {
-  if (where === 'maison') return 0
+  if (!needsDiscretion(where)) return 0
   const adapted = adaptToPlace(routine, where, exerciseByKey)
   // Counted from what actually happened, so the note can never claim a
   // movement was removed when the routine was in fact left whole.
@@ -104,7 +134,7 @@ export function suitsPlace(
   where: Place,
   exerciseByKey: (key: string) => Exercise | undefined,
 ): boolean {
-  if (where === 'maison') return true
+  if (!needsDiscretion(where)) return true
   const kept = routine.steps.filter((s) => exerciseByKey(s.exerciseKey)?.discreet !== false)
   return kept.length >= routine.steps.length * MIN_KEPT
 }

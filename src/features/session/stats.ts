@@ -28,6 +28,9 @@ function weekdayOf(dateStr: string): number {
   return js === 0 ? 7 : js
 }
 
+/** § pivot — at most this many forgiven days inside one calendar month. */
+export const FREEZES_PER_MONTH = 2
+
 export interface StreakOptions {
   /**
    * The days the user works, ISO 1..7. A day outside this list is skipped, not
@@ -37,14 +40,24 @@ export interface StreakOptions {
    */
   weekdays?: number[]
   /**
-   * One missed working day is forgiven; the second ends the run. Forums are
-   * unanimous that the day a long streak breaks is the day the app gets
-   * deleted, and a counter that punishes one dentist appointment is a counter
-   * that will be wrong about you for a month. The forgiven day is NOT counted,
-   * so the number stays exactly "days you actually moved" — the app does not
-   * get to inflate it on your behalf.
+   * Missed working days are forgiven, up to FREEZES_PER_MONTH inside any one
+   * calendar month; the next one ends the run. Forums are unanimous that the
+   * day a long streak breaks is the day the app gets deleted, and a counter
+   * that punishes one dentist appointment is a counter that will be wrong
+   * about you for a month.
+   *
+   * Budgeted per month rather than per run, which is the whole change: one
+   * forgiveness for a run built over a year was, in practice, no forgiveness
+   * at all — a single illness in month three cost the streak, and the person
+   * who lost it did not come back. Two a month is enough for a trip and a bad
+   * week, and small enough that a streak still means something.
+   *
+   * A forgiven day is NOT counted, so the number stays exactly "days you
+   * actually moved" — the app does not get to inflate it on your behalf.
    */
   grace?: boolean
+  /** Override the budget, for the tests and for anyone who wants none. */
+  freezesPerMonth?: number
 }
 
 /**
@@ -57,13 +70,14 @@ export function computeStreak(
   today: string,
   options: StreakOptions = {},
 ): number {
-  const { weekdays = [], grace = true } = options
+  const { weekdays = [], grace = true, freezesPerMonth = FREEZES_PER_MONTH } = options
   const active = (d: string) => weekdays.length === 0 || weekdays.includes(weekdayOf(d))
   const stands = new Map(days.map((d) => [d.localDate, d.stands]))
   const qualifies = (d: string) => (stands.get(d) ?? 0) >= STREAK_THRESHOLD
 
   let streak = 0
-  let forgiven = 0
+  /** Freezes already spent, per "YYYY-MM". Walking back, so per calendar month. */
+  const spent = new Map<string, number>()
   let cursor = today
 
   // If today is not yet a qualifying day, start counting from yesterday so the
@@ -78,15 +92,42 @@ export function computeStreak(
     }
     if (qualifies(cursor)) {
       streak++
-    } else if (grace && forgiven === 0 && streak > 0) {
-      // Never as the first step back: a run does not begin with a blank day.
-      forgiven++
     } else {
-      break
+      const month = cursor.slice(0, 7)
+      const used = spent.get(month) ?? 0
+      // Never as the first step back: a run does not begin with a blank day.
+      if (grace && used < freezesPerMonth && streak > 0) spent.set(month, used + 1)
+      else break
     }
     cursor = addDays(cursor, -1)
   }
   return streak
+}
+
+/**
+ * Freezes left in the month a date falls in, for the one line the tracking
+ * screen shows. Counted from the same journal the streak is, so the two can
+ * never disagree; null when the streak has no run to protect.
+ */
+export function freezesLeft(
+  days: DayCount[],
+  today: string,
+  options: StreakOptions = {},
+): number {
+  const { weekdays = [], freezesPerMonth = FREEZES_PER_MONTH } = options
+  const active = (d: string) => weekdays.length === 0 || weekdays.includes(weekdayOf(d))
+  const stands = new Map(days.map((d) => [d.localDate, d.stands]))
+  const month = today.slice(0, 7)
+
+  let used = 0
+  let cursor = today
+  // Only the current month, and only working days already past: a day still
+  // running has not been missed yet.
+  for (let i = 0; i < 31 && cursor.slice(0, 7) === month; i++) {
+    if (cursor !== today && active(cursor) && (stands.get(cursor) ?? 0) < STREAK_THRESHOLD) used++
+    cursor = addDays(cursor, -1)
+  }
+  return Math.max(0, freezesPerMonth - used)
 }
 
 /**

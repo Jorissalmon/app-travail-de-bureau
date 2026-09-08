@@ -634,6 +634,71 @@ sont dans le rapport de session ; ce qui suit, c'est ce qu'on en a fait.
   l'arrêt. Le jour où le WebView la livre, baisser la musique cessera de
   demander un APK.
 
+## Pivot « coach douleur & posture adaptatif »
+
+Le détail est dans `docs/PIVOT-COACH-DOULEUR.md` ; ici, uniquement les choix qui
+s'écartent de ce qui était demandé, ou qui coûtent quelque chose.
+
+- **Aucune zone `epaules` créée**, alors que le positionnement en parle. Le
+  brief fait d'un ajout de zone une modification du type `Zone`, de `ZONES`, de
+  la carte d'accueil et du schéma SQL ; les mouvements d'épaule vivent déjà sous
+  `nuque` et `dos`, où quelqu'un qui a mal à l'épaule regarde d'abord. Le coût
+  aurait été payé par toute l'app pour une étiquette.
+- **`PAIN_ZONES` est dérivé, pas listé** — c'est la famille `corps`. Une zone
+  ajoutée un jour à cette famille devient notable sans qu'on y pense, et une
+  liste écrite à la main aurait divergé au premier ajout.
+- **`Place` passe à trois valeurs** (`bureau`, `open-space`, `maison`). Le
+  binaire cachait une vraie différence : un bureau fermé n'est pas un open space.
+  Le filtre est dur en open space et souple au bureau — sinon les deux valeurs
+  seraient le même réglage écrit deux fois.
+- **Le plan n'est jamais stocké.** C'est une fonction pure du profil, du journal
+  et de la date. Le persister aurait créé une deuxième vérité, périmée à minuit,
+  et rendu irreproductible la question « pourquoi ce mouvement ».
+- **La rotation des pools est déterministe** (jours depuis la création du
+  profil), pas aléatoire : un tirage au sort ne se rejoue pas quand quelqu'un
+  demande pourquoi il a eu cette séance.
+- **Zéro renforcement au-dessus de 6/10**, quelle que soit la tendance. La revue
+  Cochrane que l'app cite ne trouve **aucune** preuve sur la douleur de nuque
+  aiguë ; charger sur la foi de rien est exactement ce que cette app dit ne pas
+  faire.
+- **La tendance est nulle sous quatre jours de réponses.** Le plan reste alors
+  sur de la mobilité. Deux points ne sont pas une tendance, et se tromper du
+  côté prudent est le seul biais acceptable ici.
+- **Un jour sans réponse est une case vide dans la heatmap**, jamais un zéro.
+  L'app ne peut pas savoir qu'un jour sans réponse était un bon jour, et une
+  grille qui comblerait ses trous en vert inventerait précisément le genre de
+  chiffre que la doctrine interdit.
+- **L'écran des autorisations Android est sorti du premier lancement.** Il
+  mettait quatre boîtes de dialogue système entre l'ouverture et la première
+  séance, pour protéger des rappels qui ne comptent qu'au deuxième jour.
+  `PermissionsSheet` s'ouvre toujours depuis l'accueil dès qu'une session
+  manque d'une autorisation — au moment où la demande a un sens. C'est le prix
+  payé pour la cible des 90 secondes, et il est assumé.
+- **Rien n'est pré-rempli sur l'échelle 0-10.** Un défaut à 5 mettrait un
+  chiffre dans la bouche de l'utilisateur, et tout nombre affiché par cette app
+  doit être un nombre qu'il a tapé.
+- **« Répondre plus tard » existe** sur la question de fin de séance, alors
+  qu'elle est décrite comme obligatoire. Un écran dont on ne peut pas sortir est
+  un écran qu'on tue ; le refus est journalisé (`pain_skipped`) et sera plus
+  informatif qu'une réponse arrachée.
+- **Le streak passe à deux gels par mois civil** au lieu d'un pardon par série.
+  Un pardon unique pour une série d'un an, c'était en pratique aucun pardon.
+  Trois tests existants changent de valeur attendue, délibérément.
+- **`suggestMobilityTimes` ne replanifie rien tout seul.** Il propose, dans le
+  profil, à partir des séances réellement terminées. Un rappel qui se déplace de
+  lui-même est un rappel auquel personne ne se fie.
+- **L'analytique est locale et sans SDK tiers**, bornée à 500 événements, sans
+  aucun texte libre. Il n'y a pas encore d'endpoint pour la drainer : c'est le
+  premier travail avant la bêta, et sans lui aucun des quatre seuils de
+  `VALIDATION-PIVOT.md` n'est mesurable. Dit plutôt que caché.
+- **Les quatre clés de figure libres sont dépensées**, chacune sur le mouvement
+  que son dessin représente vraiment. Quatre autres mouvements de renforcement
+  réutilisent une figure approchante ; ils sont listés dans le doc du pivot pour
+  qu'un lot de dessins soit demandé plus tard.
+- **`/api/pain` n'est pas écrit.** La table `pain_entries` existe (migration
+  004), l'app fonctionne entièrement sans, sur l'appareil, comme le journal
+  d'activité. La synchronisation viendra avec le compte, pas avant.
+
 ## À la charge du propriétaire (secrets, hors dépôt)
 
 - Créer le rôle `releve_app` + la base `releve`, appliquer les migrations

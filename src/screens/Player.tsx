@@ -10,6 +10,11 @@ import { ExerciseSections } from '@/components/ExerciseSections'
 import { useContentStore } from '@/stores/content'
 import { useSettingsStore } from '@/stores/settings'
 import { useSessionStore } from '@/stores/session'
+import { usePlanStore } from '@/stores/plan'
+import { PainScale } from '@/components/PainScale'
+import { PLAN_SLUG, zoneSentence } from '@/features/plan/compose'
+import { PAIN_ZONES } from '@/content'
+import { trackNow } from '@/features/analytics/events'
 import { isNative } from '@/lib/platform'
 import { mmss } from '@/lib/format'
 import { localDate } from '@/lib/date'
@@ -27,7 +32,7 @@ import {
 } from '@/features/session/cues'
 import { durationFor, loadDurations } from '@/features/session/durations'
 import { stopAlerting } from '@/features/reminders/alert'
-import type { Completion } from '@/lib/types'
+import type { Completion, Zone } from '@/lib/types'
 
 /**
  * §11.3 — full-screen guided player, one step at a time. The single most
@@ -41,7 +46,15 @@ export function Player() {
   const [params] = useSearchParams()
   const fromNotification = params.get('from') === 'notification'
 
-  const routine = useContentStore((s) => (slug ? s.routineBySlug(slug) : undefined))
+  // The composed session is not in the catalogue: it is rebuilt from the pain
+  // journal on every render of the home screen, and the player reads the same
+  // object rather than a stored copy that could be a day old.
+  const catalogue = useContentStore((s) => (slug ? s.routineBySlug(slug) : undefined))
+  const planRoutine = usePlanStore((s) => s.planRoutine)
+  const plan = usePlanStore((s) => s.plan)
+  const rate = usePlanStore((s) => s.rate)
+  const isPlan = slug === PLAN_SLUG
+  const routine = isPlan ? (planRoutine ?? undefined) : catalogue
   const exerciseByKey = useContentStore((s) => s.exerciseByKey)
   const vibrate = useSettingsStore((s) => s.settings.vibrate)
   const markDone = useSessionStore((s) => s.markDone)
@@ -62,6 +75,33 @@ export function Player() {
 
   /** Every exercise opens with a few seconds to get into position. */
   const [phase, setPhase] = useState<'ready' | 'work'>('ready')
+
+  /**
+   * The zone the closing question asks about, or null when there is nothing
+   * honest to ask — a breathing routine, or the eye set, do not have one.
+   *
+   * For a composed session it is the plan's primary zone, which is the zone the
+   * session was built around. For a shipped routine it is its first target
+   * zone, when that is a zone someone can have pain in. This is the whole
+   * measurement loop of the app: skip the question and the plan has nothing new
+   * to adapt on, which is why the answer is the button that closes the screen.
+   */
+  const [answer, setAnswer] = useState<number | null>(null)
+  const currentZone: Zone | null = useMemo(() => {
+    if (isPlan) return plan?.primaryZone ?? null
+    const first = routine?.targetZones.find((z) => PAIN_ZONES.includes(z))
+    return first ?? null
+  }, [isPlan, plan, routine])
+
+  /**
+   * Frozen the moment the session ends. Answering recomposes the plan, which
+   * can promote a different zone to primary — and a question that changes
+   * which body part it is asking about between the tap and the read is a
+   * question whose answer means nothing.
+   */
+  const askedRef = useRef<Zone | null>(null)
+  if (!finished) askedRef.current = currentZone
+  const askZone = askedRef.current
 
   const steps = useMemo(() => routine?.steps ?? [], [routine])
   const step = steps[stepIndex]
@@ -94,6 +134,38 @@ export function Player() {
     setStepIndex((i) => i + 1)
     tick()
   }, [isLast, tick])
+
+  // One start event per mount, once there is a routine to name.
+  const announced = useRef(false)
+  useEffect(() => {
+    if (!routine || announced.current) return
+    announced.current = true
+    trackNow({
+      name: 'session_started',
+      kind: isPlan ? 'plan' : 'routine',
+      slug: routine.slug,
+      source: fromNotification ? 'notification' : params.get('from') === 'onboarding' ? 'home' : 'library',
+      durationS: routine.durationS,
+    })
+  }, [routine, isPlan, fromNotification, params])
+
+  // Leaving before the last block is the other half of the completion rate.
+  // Reported from a ref so the cleanup reads the step it actually stopped on.
+  const progressRef = useRef({ slug: '', index: 0, finished: false })
+  progressRef.current.slug = routine?.slug ?? ''
+  progressRef.current.index = stepIndex
+  useEffect(() => {
+    const snapshot = progressRef.current
+    return () => {
+      if (snapshot.finished || !snapshot.slug) return
+      trackNow({
+        name: 'session_abandoned',
+        kind: snapshot.slug === PLAN_SLUG ? 'plan' : 'routine',
+        slug: snapshot.slug,
+        atBlock: snapshot.index + 1,
+      })
+    }
+  }, [])
 
   // Keep the screen awake while playing (§11.3).
   useEffect(() => {
@@ -199,6 +271,13 @@ export function Player() {
       localDate: localDate(),
     }
     void logCompletion(completion)
+    progressRef.current.finished = true
+    trackNow({
+      name: 'session_completed',
+      kind: routine.slug === PLAN_SLUG ? 'plan' : 'routine',
+      slug: routine.slug,
+      durationS,
+    })
     if (fromNotification) void markDone(new Date(startedAtRef.current))
     else void routineDone()
   }, [finished, routine, fromNotification, markDone, routineDone])
@@ -226,14 +305,55 @@ export function Player() {
       <FullScreen>
         <h1 className="t-day">Terminé.</h1>
         <p className="t-meta mt-2">{mmss(durationS)} de mouvement.</p>
-        <button
-          type="button"
-          className="btn btn-accent btn-block mt-8"
-          style={{ maxWidth: 320 }}
-          onClick={() => navigate('/', { replace: true })}
-        >
-          Retour
-        </button>
+
+        {askZone !== null ? (
+          <div className="mt-8 w-full" style={{ maxWidth: 360 }}>
+            <p className="t-body mb-3" style={{ fontSize: 18 }}>
+              Comment est ta {zoneSentence(askZone)} maintenant&nbsp;?
+            </p>
+            <PainScale
+              ariaLabel={`Douleur ${zoneSentence(askZone)} après la séance, de 0 à 10`}
+              value={answer}
+              onChange={(v) => {
+                setAnswer(v)
+                void rate({
+                  zone: askZone,
+                  score: v,
+                  source: 'post-session',
+                  routineSlug: routine.slug,
+                })
+              }}
+            />
+            <button
+              type="button"
+              className="btn btn-accent btn-block mt-6"
+              disabled={answer === null}
+              onClick={() => navigate('/', { replace: true })}
+            >
+              Retour
+            </button>
+            <button
+              type="button"
+              className="t-meta mt-4 w-full"
+              style={{ color: 'var(--text-3)' }}
+              onClick={() => {
+                trackNow({ name: 'pain_skipped', zone: askZone })
+                navigate('/', { replace: true })
+              }}
+            >
+              Répondre plus tard
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            className="btn btn-accent btn-block mt-8"
+            style={{ maxWidth: 320 }}
+            onClick={() => navigate('/', { replace: true })}
+          >
+            Retour
+          </button>
+        )}
       </FullScreen>
     )
   }

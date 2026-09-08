@@ -17,6 +17,8 @@ import { useSettingsStore } from '@/stores/settings'
 import { useContentStore } from '@/stores/content'
 import { useSessionStore } from '@/stores/session'
 import { useOnboardingStore } from '@/stores/onboarding'
+import { usePlanStore } from '@/stores/plan'
+import { loadAnalytics } from '@/features/analytics/events'
 import { flushEvents } from '@/features/reminders/events'
 import { installPrefsSync } from '@/features/prefs/sync'
 import { reloadSyncedPrefs } from '@/features/prefs/apply'
@@ -75,6 +77,11 @@ async function boot() {
   void useContentStore.getState().load()
   void useAuthStore.getState().bootstrap()
   void useOnboardingStore.getState().load()
+  // The pain profile, the pain journal and today's composed session. Loaded
+  // here rather than by the home screen: the plan is what the reminder taps
+  // land on too, and it must exist before the first render that needs it.
+  void usePlanStore.getState().load()
+  void loadAnalytics()
 
   const root = document.getElementById('root')
   if (!root) throw new Error('#root missing')

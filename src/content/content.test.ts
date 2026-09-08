@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { LOCAL_ARTICLES, LOCAL_EXERCISES, LOCAL_ROUTINES, ZONES } from './index'
+import { GOALS, LOCAL_ARTICLES, LOCAL_EXERCISES, LOCAL_ROUTINES, PAIN_ZONES, TYPES, ZONES } from './index'
 import { FIGURE_KEYS, isFigureKey } from '@/components/figures/figureKeys'
 import { articleFigures } from '@/lib/markdown'
 import { secondFrame } from '@/components/figures/figureFrames'
@@ -59,6 +59,34 @@ describe('routines', () => {
       }
     }
   })
+
+  it('declare a goal the plan knows how to serve', () => {
+    for (const r of LOCAL_ROUTINES) {
+      expect(GOALS, `${r.slug}`).toContain(r.goal)
+    }
+  })
+
+  it('target zones the app actually offers, and at least one', () => {
+    for (const r of LOCAL_ROUTINES) {
+      expect(r.targetZones.length, `${r.slug} targets nothing`).toBeGreaterThan(0)
+      for (const z of r.targetZones) {
+        expect(zoneKeys, `${r.slug} targets "${z}"`).toContain(z)
+      }
+    }
+  })
+
+  it('draw a movement the same way everywhere it appears', () => {
+    // Two routines showing the same movement under two different drawings is
+    // the kind of thing only a reader notices, and it reads as a bug.
+    const drawn = new Map<string, string>()
+    for (const r of LOCAL_ROUTINES) {
+      for (const s of r.steps) {
+        const first = drawn.get(s.exerciseKey)
+        if (first === undefined) drawn.set(s.exerciseKey, s.figureKey)
+        else expect(s.figureKey, `${s.exerciseKey} in ${r.slug}`).toBe(first)
+      }
+    }
+  })
 })
 
 describe('exercises', () => {
@@ -86,6 +114,12 @@ describe('exercises', () => {
   it('each point at least one article, so the sheet never ends on a dead section', () => {
     for (const ex of LOCAL_EXERCISES) {
       expect(ex.articles.length, `${ex.key}`).toBeGreaterThan(0)
+    }
+  })
+
+  it('declare a type the plan can dose on', () => {
+    for (const ex of LOCAL_EXERCISES) {
+      expect(TYPES, `${ex.key}`).toContain(ex.type)
     }
   })
 
@@ -132,6 +166,57 @@ describe('articles', () => {
   it('are illustrated', () => {
     for (const a of LOCAL_ARTICLES) {
       expect(articleFigures(a.bodyMd).length, `${a.slug}`).toBeGreaterThan(0)
+    }
+  })
+})
+
+describe('the adaptive plan has something to compose with', () => {
+  const byKey = new Map(LOCAL_EXERCISES.map((e) => [e.key, e]))
+
+  it('holds strength movements for every zone the plan can be asked to load', () => {
+    // Below this the plan would repeat the same movement two days running on
+    // the zone that hurts, which is the abandonment case the pivot exists for.
+    for (const zone of PAIN_ZONES) {
+      const strength = LOCAL_ROUTINES.filter((r) => r.targetZones.includes(zone))
+        .flatMap((r) => r.steps)
+        .filter((s) => byKey.get(s.exerciseKey)?.type === 'strength')
+      expect(new Set(strength.map((s) => s.exerciseKey)).size, `zone "${zone}"`).toBeGreaterThan(0)
+    }
+  })
+
+  it('can fill a whole session out of discreet movements alone', () => {
+    // Open space is the main context. If the discreet pool for a painful zone
+    // is thin, the plan silently serves the same three movements every day.
+    for (const zone of PAIN_ZONES) {
+      const discreet = LOCAL_ROUTINES.filter((r) => r.targetZones.includes(zone))
+        .flatMap((r) => r.steps)
+        .filter((s) => byKey.get(s.exerciseKey)?.discreet === true)
+      expect(new Set(discreet.map((s) => s.exerciseKey)).size, `zone "${zone}"`).toBeGreaterThanOrEqual(4)
+    }
+  })
+
+  it('offers a short and a long pain_relief routine for every painful zone', () => {
+    for (const zone of PAIN_ZONES) {
+      const relief = LOCAL_ROUTINES.filter(
+        (r) => r.goal === 'pain_relief' && r.targetZones.includes(zone),
+      )
+      expect(relief.some((r) => r.durationS <= 90), `zone "${zone}" has no short one`).toBe(true)
+      expect(
+        relief.some((r) => r.durationS >= 240 && r.durationS <= 360),
+        `zone "${zone}" has no 4-6 min one`,
+      ).toBe(true)
+    }
+  })
+
+  it('closes every strength movement on an article, an easier way and a stop sign', () => {
+    // Loading a body part that already hurts is the one place where "rien de
+    // spécifique" is not an acceptable answer.
+    for (const ex of LOCAL_EXERCISES.filter((e) => e.type === 'strength')) {
+      expect(ex.articles.length, `${ex.key}`).toBeGreaterThan(0)
+      expect(ex.easier.trim().length, `${ex.key}`).toBeGreaterThan(0)
+      expect(ex.avoid.toLowerCase(), `${ex.key} has no real stop sign`).not.toContain(
+        'rien de spécifique',
+      )
     }
   })
 })

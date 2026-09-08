@@ -1,4 +1,13 @@
-import type { AccentKey, Article, Exercise, Family, Routine, Zone } from '@/lib/types'
+import type {
+  AccentKey,
+  Article,
+  Exercise,
+  ExerciseType,
+  Family,
+  Routine,
+  RoutineGoal,
+  Zone,
+} from '@/lib/types'
 import routinesJson from './routines.json'
 import articlesJson from './articles.json'
 import exercisesJson from './exercises.json'
@@ -64,6 +73,45 @@ export const ZONE_FAMILY: Record<Zone, Family> = Object.fromEntries(
 export const ZONE_LABEL: Record<Zone, string> = Object.fromEntries(
   ZONES.map((z) => [z.zone, z.label]),
 ) as Record<Zone, string>
+
+/**
+ * The zones a person can report pain in — the `corps` family, derived rather
+ * than listed again. `matin` and `bureau` are moments, `yeux` and `bien-etre`
+ * are not a body part that hurts on a 0-10 scale, and nothing in the app knows
+ * what to do with "j'ai mal au souffle".
+ *
+ * Deliberately not a new zone for the shoulders: BRIEF-CONTENU §3.4 makes
+ * adding one a change to the type, the SQL and the home screen, and the
+ * shoulder movements already live under `nuque` and `dos`, which is where
+ * someone with a sore shoulder looks first.
+ */
+export const PAIN_ZONES: Zone[] = ZONES.filter((z) => z.family === 'corps').map((z) => z.zone)
+
+/** Zone labels as they read in a sentence: « Comment est ta nuque ? » */
+export const PAIN_ZONE_LABEL: Record<string, string> = {
+  nuque: 'nuque',
+  dos: 'haut du dos',
+  lombaires: 'bas du dos',
+  hanches: 'hanches',
+  poignets: 'poignets',
+  chevilles: 'chevilles',
+}
+
+/** The two closed vocabularies the content test validates against. */
+export const GOALS: RoutineGoal[] = ['pain_relief', 'prevention', 'strength']
+export const TYPES: ExerciseType[] = ['mobility', 'strength', 'reset']
+
+export const GOAL_LABEL: Record<RoutineGoal, string> = {
+  pain_relief: 'Soulagement',
+  prevention: 'Entretien',
+  strength: 'Renforcement',
+}
+
+export const TYPE_LABEL: Record<ExerciseType, string> = {
+  mobility: 'Mobilité',
+  strength: 'Renforcement',
+  reset: 'Retour au calme',
+}
 
 export const EVIDENCE_LABEL = {
   solide: 'solide',

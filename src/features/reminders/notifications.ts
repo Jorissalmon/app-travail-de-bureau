@@ -5,8 +5,9 @@ import {
 } from '@capacitor/local-notifications'
 import { isNative } from '@/lib/platform'
 import type { Occurrence } from './schedule'
-import { KINDS, alertRoute } from './kinds'
-import { nudgeFor } from '@/features/session/daypart'
+import { alertRoute } from './kinds'
+import { contextualCopy } from './contextual'
+import { usePlanStore } from '@/stores/plan'
 import { cancelWakeAlerts, scheduleWakeAlerts } from './screenwake'
 
 /**
@@ -100,14 +101,18 @@ export async function ensureChannelAndActions(): Promise<void> {
 // recorded refusal has to be routed to the matching Android settings screen.
 
 function toSchedule(occ: Occurrence, ctx: ScheduleContext): ScheduleOptions['notifications'][number] {
-  const copy = KINDS[occ.kind]
+  // Read at scheduling time, not at import time: the plan is recomposed after
+  // every answer, and a reminder armed this morning should say what the plan
+  // says now. Read defensively — a notification must never fail to schedule
+  // because the plan store has not hydrated yet.
+  const copy = contextualCopy(occ.kind, occ.at, usePlanStore.getState().plan)
   return {
     id: occ.id,
     title: copy.title,
-    // The stand reminder speaks to the hour it fires at — the reason to get up
-    // at 15 h is not the reason at 9 h. The other two are about a body part,
-    // and time does not change what they are for.
-    body: occ.kind === 'stand' ? nudgeFor(occ.at) : copy.body,
+    // The stand reminder speaks to the hour it fires at, the mobility one to
+    // the zone the plan was composed for. The eye reminder is neither, and is
+    // left as it was.
+    body: copy.body,
     channelId: channelFor(ctx),
     actionTypeId: ACTION_TYPE,
     schedule: { at: occ.at, allowWhileIdle: true },
@@ -134,7 +139,7 @@ export async function scheduleAll(occurrences: Occurrence[], ctx: ScheduleContex
       id: o.id,
       at: o.at.getTime(),
       route: alertRoute(o.kind),
-      title: KINDS[o.kind].title,
+      title: contextualCopy(o.kind, o.at, usePlanStore.getState().plan).title,
       // Asked to be alerted: the break takes the screen whatever its state.
       always: ctx.sound,
     })),

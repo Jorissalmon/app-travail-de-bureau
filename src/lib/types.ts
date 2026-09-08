@@ -33,6 +33,25 @@ export type ReminderAction = 'done' | 'snoozed' | 'dismissed' | 'expired'
 export type EvidenceLevel = 'solide' | 'partielle' | 'non-demontree'
 export type ArticleTag = 'preuve' | 'reglage' | 'pratique'
 
+/**
+ * What a movement is for. The pivot (§ coach douleur) needs the distinction:
+ * mobility restores range, strength puts load on a muscle, reset does neither
+ * and is there to close a session or slow the breath down. The adaptive plan
+ * doses the three differently — mobility carries a painful zone, strength is
+ * only introduced once the pain has actually come down, and a reset always
+ * ends the session.
+ */
+export type ExerciseType = 'mobility' | 'strength' | 'reset'
+
+/**
+ * What a routine is trying to do, which is not the same as which zone it
+ * touches. `pain_relief` is served to a zone that hurts today, `prevention` to
+ * one that does not, `strength` only to someone whose reported pain is coming
+ * down. Nothing here claims an effect: it is a composition rule, and the
+ * article it points at says what the evidence actually supports.
+ */
+export type RoutineGoal = 'pain_relief' | 'prevention' | 'strength'
+
 export interface User {
   id: string
   email: string
@@ -96,6 +115,8 @@ export interface Exercise {
   articles: string[]
   /** Doable at a desk in an open space without drawing looks. */
   discreet: boolean
+  /** Mobility, strength or reset — what the adaptive plan doses on. */
+  type: ExerciseType
 }
 
 export interface Routine {
@@ -107,6 +128,14 @@ export interface Routine {
   summary: string
   accent: AccentKey
   sortOrder: number
+  /** What it is composed for. See RoutineGoal. */
+  goal: RoutineGoal
+  /**
+   * The body zones it actually works, which the browse zone does not always
+   * say: « Debout » lives under `bureau` and works the hips, the upper back
+   * and the calves. This is what the plan matches a painful zone against.
+   */
+  targetZones: Zone[]
   steps: RoutineStep[]
 }
 
@@ -183,6 +212,88 @@ export interface Stats {
   adherence: number | null
   /** Day by day, newest first: what happened and how long it took. */
   journal: JournalDay[]
+}
+
+/**
+ * ---------------------------------------------------------------------------
+ * Coach douleur — the adaptive plan (§ pivot)
+ * ---------------------------------------------------------------------------
+ * The app used to fire a timer and serve a fixed routine. It now composes a
+ * session from what the person reported hurting, and re-composes it as that
+ * report changes. Everything below is what that needs, and nothing more: no
+ * score, no index, no estimated benefit. A number here was either typed by the
+ * user or counted from what they did.
+ */
+
+/**
+ * A pain rating, 0 to 10, as the person typed it on a slider. Not a
+ * measurement and not a diagnosis — the app never converts it into anything
+ * else, and never claims it means more than "what you answered that day".
+ */
+export type PainScore = number
+
+/** One zone rated at one moment. Device-local, like the activity journal. */
+export interface PainEntry {
+  /** ISO instant the rating was given. */
+  at: string
+  localDate: string
+  zone: Zone
+  score: PainScore
+  /**
+   * Where the rating came from: the first-run questionnaire, the mandatory
+   * question at the end of a session, or a manual edit. Kept so a before/after
+   * delta is never computed across two different kinds of moment.
+   */
+  source: 'onboarding' | 'post-session' | 'manual'
+  /** For a post-session rating: the plan or routine that had just been done. */
+  routineSlug?: string
+}
+
+/** How long the pain has been there, asked once at first run. */
+export type PainDuration = 'moins-1-mois' | '1-6-mois' | 'plus-6-mois'
+
+/** How much time the person is willing to give per day. */
+export type PlanMinutes = 4 | 6 | 8
+
+/** What the first run collected, and what the profile screen can change. */
+export interface PainProfile {
+  /** Zones declared painful at first run, most painful first. */
+  zones: Zone[]
+  /** The first-run rating per zone, 0..10. Only zones in `zones` appear. */
+  baseline: Partial<Record<Zone, PainScore>>
+  since: PainDuration | null
+  minutes: PlanMinutes
+  /** ISO instant the profile was first completed. */
+  startedAt: string
+}
+
+/** One movement in a composed session. Same shape as a routine step, plus why. */
+export interface PlanBlock extends RoutineStep {
+  /** Which of the three the block is, so the screen can say what it is doing. */
+  type: ExerciseType
+  /** The zone this block was picked for, or null for an opener/closer. */
+  forZone: Zone | null
+}
+
+/**
+ * The session the app proposes today. Rebuilt, not stored: it is a pure
+ * function of the profile, the pain journal and the date, so two devices with
+ * the same history propose the same thing and a bug is reproducible.
+ */
+export interface AdaptivePlan {
+  /** Stable within a day: "plan-2026-09-08". */
+  id: string
+  localDate: string
+  /** Exactly the sum of the blocks. */
+  durationS: number
+  goal: RoutineGoal
+  /** Ordered, most painful zone first. At most two. */
+  targetZones: Zone[]
+  /** The zone the closing question asks about. Null when nothing was declared. */
+  primaryZone: Zone | null
+  blocks: PlanBlock[]
+  /** One factual line saying why this composition, shown on the card. */
+  rationale: string
 }
 
 export interface ApiError {
