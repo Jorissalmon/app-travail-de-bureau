@@ -3,8 +3,10 @@ import type { Settings } from '@/lib/types'
 import {
   EYE_INTERVAL_MIN,
   HORIZON_MINUTES,
+  MISS_BACKOFF_MIN,
   SNOOZE_MINUTES,
   allowedAt,
+  backoffMinutes,
   dueBy,
   firstOccurrence,
   inQuietWindow,
@@ -436,5 +438,32 @@ describe('nextAutoStart', () => {
   it('is null when no selected day exists', () => {
     expect(nextAutoStart('09:00', [], new Date('2026-03-10T07:00:00'))).not.toBeNull()
     expect(nextAutoStart('09:00', [8], new Date('2026-03-10T07:00:00'))).toBeNull()
+  })
+})
+
+describe('backoffMinutes', () => {
+  it('is the ordinary cadence while nothing has been missed', () => {
+    expect(backoffMinutes(0, 30)).toBe(30)
+  })
+
+  it('re-proposes sooner after one miss, then later after a second', () => {
+    expect(backoffMinutes(1, 30)).toBe(MISS_BACKOFF_MIN[0])
+    expect(backoffMinutes(2, 30)).toBe(MISS_BACKOFF_MIN[1])
+  })
+
+  it('stops trying differently after the third, and returns to the cadence', () => {
+    // Three in a row is information, not a reason to ask harder.
+    expect(backoffMinutes(3, 30)).toBe(30)
+    expect(backoffMinutes(12, 30)).toBe(30)
+  })
+
+  it('never outruns the interval the user chose', () => {
+    expect(backoffMinutes(2, 15)).toBe(15)
+    expect(backoffMinutes(1, 5)).toBe(5)
+  })
+
+  it('never returns zero, whatever it is handed', () => {
+    expect(backoffMinutes(1, 0)).toBeGreaterThan(0)
+    expect(backoffMinutes(-3, -3)).toBeGreaterThan(0)
   })
 })

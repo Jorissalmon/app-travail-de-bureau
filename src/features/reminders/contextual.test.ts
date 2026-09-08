@@ -34,46 +34,90 @@ function plan(over: Partial<AdaptivePlan> = {}): AdaptivePlan {
   }
 }
 
+/** The default situation: a plan composed and not yet done. */
+function due(over: Partial<AdaptivePlan> = {}) {
+  return { plan: plan(over), planDoneToday: false }
+}
+
+describe('contextualCopy — the Timer ↔ Plan rule', () => {
+  it('sends the stand reminder to the plan while the plan is undone', () => {
+    const copy = contextualCopy('stand', AT, due())
+    expect(copy.routineSlug).toBe(PLAN_SLUG)
+    expect(copy.body).toContain('6 min')
+    expect(copy.body).toContain('nuque')
+  })
+
+  it('sends it back to the three-minute break once the plan is done', () => {
+    // Sixteen minutes of exercise an hour is nobody's product. The plan is the
+    // day's dose; the reminders after it are the break the app always had.
+    const copy = contextualCopy('stand', AT, { plan: plan(), planDoneToday: true })
+    expect(copy.routineSlug).toBe(KINDS.stand.routineSlug)
+    expect(copy.title).toBe(KINDS.stand.title)
+  })
+
+  it('keeps the hour-context nudge on the fallback stand reminder', () => {
+    const morning = contextualCopy('stand', new Date('2026-03-16T09:30:00'), {
+      plan: null,
+      planDoneToday: false,
+    })
+    const evening = contextualCopy('stand', new Date('2026-03-16T18:30:00'), {
+      plan: null,
+      planDoneToday: false,
+    })
+    expect(morning.body).not.toBe(evening.body)
+  })
+
+  it('keeps the word « Debout » on the stand reminder even when it opens the plan', () => {
+    // It is still the reminder to get up; what changes is what getting up gets
+    // you, not what the reminder is called.
+    expect(contextualCopy('stand', AT, due()).title).toBe(KINDS.stand.title)
+  })
+})
+
 describe('contextualCopy', () => {
   it('names the zone the plan was composed for, and opens the plan', () => {
-    const copy = contextualCopy('mobility', AT, plan())
+    const copy = contextualCopy('mobility', AT, due())
     expect(copy.title).toBe('Ta nuque.')
     expect(copy.body).toContain('6 min')
     expect(copy.routineSlug).toBe(PLAN_SLUG)
   })
 
-  it('gives the composer\'s own reason, not a canned one', () => {
-    const p = plan({ rationale: 'Nuque à 7/10 : mobilité seule aujourd’hui.' })
-    expect(contextualCopy('mobility', AT, p).why).toBe(p.rationale)
+  it("gives the composer's own reason, not a canned one", () => {
+    const rationale = 'Nuque à 7/10 : mobilité seule aujourd’hui.'
+    expect(contextualCopy('mobility', AT, due({ rationale })).why).toBe(rationale)
   })
 
   it('says what the session is made of', () => {
-    const withLoad = plan({ blocks: [block(), block({ type: 'strength', position: 2 })] })
+    const withLoad = due({ blocks: [block(), block({ type: 'strength', position: 2 })] })
     expect(contextualCopy('mobility', AT, withLoad).body).toContain('1 mouvement de renforcement')
-    expect(contextualCopy('mobility', AT, plan()).body).toContain('Mobilité seule')
+    expect(contextualCopy('mobility', AT, due()).body).toContain('Mobilité seule')
+  })
+
+  it('takes the article the zone actually needs', () => {
+    const wrists = due({ primaryZone: 'poignets', targetZones: ['poignets'] })
+    expect(contextualCopy('mobility', AT, wrists).body).toContain('les poignets')
+    expect(contextualCopy('mobility', AT, due()).body).toContain('la nuque')
   })
 
   it('falls back to the ordinary sentence when there is no plan', () => {
-    expect(contextualCopy('mobility', AT, null)).toEqual({ ...KINDS.mobility })
+    const copy = contextualCopy('mobility', AT, { plan: null, planDoneToday: false })
+    expect(copy).toEqual({ ...KINDS.mobility })
   })
 
   it('falls back when the plan targets nothing', () => {
-    const blank = plan({ primaryZone: null, blocks: [], targetZones: [] })
+    const blank = due({ primaryZone: null, blocks: [], targetZones: [] })
     expect(contextualCopy('mobility', AT, blank)).toEqual({ ...KINDS.mobility })
   })
 
-  it('leaves the stand reminder on the hour, not on the body', () => {
-    const copy = contextualCopy('stand', AT, plan())
-    expect(copy.title).toBe(KINDS.stand.title)
-    expect(copy.routineSlug).toBe(KINDS.stand.routineSlug)
-  })
-
-  it('leaves the eye reminder alone', () => {
-    expect(contextualCopy('eyes', AT, plan())).toEqual({ ...KINDS.eyes })
+  it('leaves the eye reminder alone, plan or no plan', () => {
+    expect(contextualCopy('eyes', AT, due())).toEqual({ ...KINDS.eyes })
+    expect(contextualCopy('eyes', AT, { plan: null, planDoneToday: false })).toEqual({
+      ...KINDS.eyes,
+    })
   })
 
   it('keeps the body short enough for a lock screen', () => {
-    const long = plan({ primaryZone: 'lombaires', blocks: [block({ forZone: 'lombaires' })] })
+    const long = due({ primaryZone: 'lombaires', blocks: [block({ forZone: 'lombaires' })] })
     expect(contextualCopy('mobility', AT, long).body.length).toBeLessThanOrEqual(90)
   })
 })

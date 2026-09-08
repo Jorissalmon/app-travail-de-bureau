@@ -8,6 +8,7 @@ import { Segmented } from '@/components/Segmented'
 import { SearchField } from '@/components/SearchField'
 import { ZoneCard } from '@/components/ZoneCard'
 import { PermissionsSheet } from '@/components/PermissionsSheet'
+import { NextReminders } from '@/components/NextReminders'
 import { DayCard } from '@/components/DayCard'
 import { adviceFor } from '@/features/session/daypart'
 import { useSessionStore } from '@/stores/session'
@@ -46,17 +47,22 @@ export function Today() {
   const resumeWork = useSessionStore((s) => s.resumeWork)
 
   const intervalMin = useSettingsStore((s) => s.settings.intervalMin)
+  const mobilityTimes = useSettingsStore((s) => s.settings.mobilityTimes)
+  const eyeReminders = useSettingsStore((s) => s.settings.eyeReminders)
+  const weekdays = useSettingsStore((s) => s.settings.weekdays)
   const user = useAuthStore((s) => s.user)
   const stats = useStatsStore((s) => s.stats)
   const loadStats = useStatsStore((s) => s.load)
   const routines = useContentStore((s) => s.routines)
   const plan = usePlanStore((s) => s.plan)
   const entries = usePlanStore((s) => s.entries)
+  const planDoneToday = usePlanStore((s) => s.doneToday)
 
   /** 7, 14 or 30 days of history. Local to the screen: it is a way of looking. */
   const [span, setSpan] = useState<7 | 14 | 30>(7)
 
   const [busy, setBusy] = useState(false)
+  const [showReminders, setShowReminders] = useState(false)
   const [showPermissions, setShowPermissions] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -98,10 +104,8 @@ export function Today() {
 
   const freezes = useMemo(
     () =>
-      freezesLeft(stats?.standsByDay ?? [], today, {
-        weekdays: useSettingsStore.getState().settings.weekdays,
-      }),
-    [stats, today],
+      freezesLeft(stats?.standsByDay ?? [], today, { weekdays }),
+    [stats, today, weekdays],
   )
 
   const active = session !== null
@@ -263,7 +267,9 @@ export function Today() {
           if (!awaiting) return
           stopAlerting()
           navigate(
-            `/player/${contextualCopy(awaiting.kind, now, plan).routineSlug}?from=notification`,
+            `/player/${
+              contextualCopy(awaiting.kind, now, { plan, planDoneToday }).routineSlug
+            }?from=notification`,
           )
         }}
         busy={busy}
@@ -274,6 +280,17 @@ export function Today() {
           {error}
         </p>
       )}
+
+      {/* A reminder can now open either the plan or the ordinary break, so what
+          is armed and what it will open has to be readable somewhere. */}
+      <button
+        type="button"
+        className="t-meta mt-3 underline underline-offset-4"
+        style={{ color: 'var(--text-2)' }}
+        onClick={() => setShowReminders(true)}
+      >
+        Voir les prochains rappels
+      </button>
 
       {advice && <DayCard advice={advice} />}
 
@@ -309,6 +326,18 @@ export function Today() {
         Série : {stats?.streak ?? 0} jour{(stats?.streak ?? 0) > 1 ? 's' : ''} · {freezes} jour
         {freezes > 1 ? 's' : ''} de battement restant{freezes > 1 ? 's' : ''} ce mois-ci
       </p>
+
+      <NextReminders
+        open={showReminders}
+        onClose={() => setShowReminders(false)}
+        occurrences={occurrences}
+        mobilityTimes={mobilityTimes}
+        eyeReminders={eyeReminders}
+        now={now}
+        plan={plan}
+        planDoneToday={planDoneToday}
+        sessionActive={active}
+      />
 
       <PermissionsSheet
         open={showPermissions}

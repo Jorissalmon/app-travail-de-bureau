@@ -1,7 +1,8 @@
 import { create } from 'zustand'
 import { localDate } from '@/lib/date'
 import { place, loadPlace } from '@/features/place/place'
-import { composePlan, planToRoutine } from '@/features/plan/compose'
+import { PLAN_SLUG, composePlan, planToRoutine } from '@/features/plan/compose'
+import { readCompletionJournal } from '@/features/reminders/events'
 import { loadPain, painEntries, recordPain } from '@/features/plan/pain'
 import { emptyProfile, loadProfile, profile, saveProfile } from '@/features/plan/profile'
 import { trackNow } from '@/features/analytics/events'
@@ -26,12 +27,26 @@ interface PlanState {
   plan: AdaptivePlan | null
   /** The plan as the player reads it, or null before the first composition. */
   planRoutine: Routine | null
+  /**
+   * Whether today's plan has already been carried to the end.
+   *
+   * The Timer ↔ Plan rule reads this and nothing else: while it is false the
+   * next reminder opens the plan, and once it is true the reminders go back to
+   * being the three-minute break. Derived from the completion journal, which is
+   * a record of sessions actually finished — not from a flag the app sets when
+   * it thinks you probably did it.
+   */
+  doneToday: boolean
   loaded: boolean
 
   load: () => Promise<void>
   /** Re-run the composition against whatever the inputs say now. */
   recompose: () => void
   setProfile: (next: PainProfile) => Promise<void>
+  /** Called by the player when the composed session reaches its last block. */
+  markPlanDone: () => void
+  /** Re-read the completion journal, e.g. after the day rolls over. */
+  refreshDone: () => Promise<void>
   rate: (input: {
     zone: Zone
     score: PainScore
@@ -45,6 +60,7 @@ export const usePlanStore = create<PlanState>((set, get) => ({
   entries: [],
   plan: null,
   planRoutine: null,
+  doneToday: false,
   loaded: false,
 
   recompose: () => {
@@ -82,7 +98,23 @@ export const usePlanStore = create<PlanState>((set, get) => ({
     await Promise.all([loadProfile(), loadPain(), loadPlace()])
     set({ profile: profile(), entries: painEntries(), loaded: true })
     get().recompose()
+    await get().refreshDone()
   },
+
+  refreshDone: async () => {
+    try {
+      const today = localDate()
+      const done = await readCompletionJournal()
+      set({
+        doneToday: done.some((c) => c.routineSlug === PLAN_SLUG && c.localDate === today),
+      })
+    } catch {
+      // A journal that will not read must not make the app forget the plan
+      // exists; the worst case is a reminder offering a session already done.
+    }
+  },
+
+  markPlanDone: () => set({ doneToday: true }),
 
   setProfile: async (next) => {
     await saveProfile(next)

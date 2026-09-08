@@ -695,6 +695,28 @@ s'écartent de ce qui était demandé, ou qui coûtent quelque chose.
   que son dessin représente vraiment. Quatre autres mouvements de renforcement
   réutilisent une figure approchante ; ils sont listés dans le doc du pivot pour
   qu'un lot de dessins soit demandé plus tard.
+- **Le plan est servi par le premier rappel du jour, pas par tous.** « Un rappel
+  toutes les trente minutes » et « le rappel ouvre le plan de 4 à 8 min »
+  donnent ensemble seize minutes d'exercice par heure. Le plan est la dose du
+  jour, le timer la structure de la journée : le premier rappel qui trouve le
+  plan non fait l'ouvre, les suivants redeviennent la pause de trois minutes.
+  Le drapeau vient du journal des séances terminées, pas d'un booléen posé par
+  optimisme. L'autre lecture — découper le plan en tranches — casserait la
+  question de fin de séance et rendrait le delta de douleur inexploitable.
+- **Le rappel raté ne gèle plus la journée.** Dix minutes, vingt, puis retour à
+  la cadence et plus de relance. La dette reste posée, visible et au journal ;
+  seul le gel disparaît. Le troisième raté d'affilée est une information, pas
+  une raison d'insister. Le backoff ne dépasse jamais l'intervalle choisi et ne
+  traverse jamais une plage silencieuse — un snooze n'est pas un moyen de
+  contourner les heures qu'on a fermées.
+- **Le compteur de ratés est persisté.** Un redémarrage au milieu d'un backoff
+  qui repartirait à dix minutes serait l'app qui relance exactement là où elle a
+  promis de reculer. Il est lu depuis le store dans `persist` plutôt que passé
+  aux seize appels : quinze « inchangé » explicites, c'est un champ qui finit
+  faux dans l'un d'eux.
+- **`INTERVAL_CHOICES` n'a pas été réduit à 30/45/60.** Ces trois valeurs y sont
+  déjà, 30 est le défaut ; retirer 15, 20 et 25 enlèverait un réglage à ceux qui
+  l'utilisent pour satisfaire une formulation.
 - **`/api/pain` n'est pas écrit.** La table `pain_entries` existe (migration
   004), l'app fonctionne entièrement sans, sur l'appareil, comme le journal
   d'activité. La synchronisation viendra avec le compte, pas avant.

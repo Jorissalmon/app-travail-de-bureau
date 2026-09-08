@@ -105,7 +105,8 @@ function toSchedule(occ: Occurrence, ctx: ScheduleContext): ScheduleOptions['not
   // every answer, and a reminder armed this morning should say what the plan
   // says now. Read defensively — a notification must never fail to schedule
   // because the plan store has not hydrated yet.
-  const copy = contextualCopy(occ.kind, occ.at, usePlanStore.getState().plan)
+  const { plan, doneToday } = usePlanStore.getState()
+  const copy = contextualCopy(occ.kind, occ.at, { plan, planDoneToday: doneToday })
   return {
     id: occ.id,
     title: copy.title,
@@ -139,7 +140,10 @@ export async function scheduleAll(occurrences: Occurrence[], ctx: ScheduleContex
       id: o.id,
       at: o.at.getTime(),
       route: alertRoute(o.kind),
-      title: contextualCopy(o.kind, o.at, usePlanStore.getState().plan).title,
+      title: contextualCopy(o.kind, o.at, {
+        plan: usePlanStore.getState().plan,
+        planDoneToday: usePlanStore.getState().doneToday,
+      }).title,
       // Asked to be alerted: the break takes the screen whatever its state.
       always: ctx.sound,
     })),

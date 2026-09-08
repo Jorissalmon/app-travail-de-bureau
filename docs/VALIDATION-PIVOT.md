@@ -103,6 +103,7 @@ t'invente pas de chiffres » ne peut pas embarquer un traceur qui les revend.
 | `pain_skipped` | `zone` | taux de réponse à la question de fin |
 | `plan_adapted` | `zone`, `from`, `to`, `strengthBlocks` | **preuve que l'adaptation n'est pas cosmétique (H3)** |
 | `reminder_acted` | `kind`, `action` | efficacité du rappel contextuel |
+| `reminder_backoff` | `misses`, `nextInMin` | le snooze recule-t-il ou l'app relance-t-elle |
 | `streak_freeze_used` | `left` | un gel qui ne se déclenche jamais est un mensonge |
 | `place_changed` | `place` | le filtre de discrétion est la première cause de plan pauvre |
 | `article_opened` | `slug`, `evidence`, `from` | est-ce que la doctrine est lue, ou seulement affichée |

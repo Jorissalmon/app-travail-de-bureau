@@ -39,7 +39,10 @@ export function BreakOverlay() {
   // the same copy the scheduler used rather than the static table.
   const plan = usePlanStore((s) => s.plan)
   const planRoutine = usePlanStore((s) => s.planRoutine)
-  const copy = awaiting ? contextualCopy(awaiting.kind, new Date(), plan) : null
+  const planDoneToday = usePlanStore((s) => s.doneToday)
+  const copy = awaiting
+    ? contextualCopy(awaiting.kind, new Date(), { plan, planDoneToday })
+    : null
   const meta = awaiting ? { ...KINDS[awaiting.kind], ...copy } : null
   const catalogue = useContentStore((s) =>
     meta ? s.routineBySlug(meta.routineSlug) : undefined,

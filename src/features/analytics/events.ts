@@ -81,6 +81,12 @@ export type AnalyticsEvent =
   | { name: 'plan_adapted'; zone: Zone; from: RoutineGoal; to: RoutineGoal; strengthBlocks: number }
   /** A contextual reminder fired, and what came of it. */
   | { name: 'reminder_acted'; kind: string; action: string }
+  /**
+   * A reminder went unanswered and the next one was pushed back. Watched
+   * because the promise here is that the app backs off rather than nags: a
+   * `misses` distribution with a long tail means it is still nagging.
+   */
+  | { name: 'reminder_backoff'; misses: number; nextInMin: number }
   /** A freeze was spent. Watched because a freeze that never fires is a lie. */
   | { name: 'streak_freeze_used'; left: number }
   /** The place changed: the discretion filter is the main cause of an empty plan. */

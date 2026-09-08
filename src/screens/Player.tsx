@@ -53,6 +53,7 @@ export function Player() {
   const planRoutine = usePlanStore((s) => s.planRoutine)
   const plan = usePlanStore((s) => s.plan)
   const rate = usePlanStore((s) => s.rate)
+  const markPlanDone = usePlanStore((s) => s.markPlanDone)
   const isPlan = slug === PLAN_SLUG
   const routine = isPlan ? (planRoutine ?? undefined) : catalogue
   const exerciseByKey = useContentStore((s) => s.exerciseByKey)
@@ -272,6 +273,9 @@ export function Player() {
     }
     void logCompletion(completion)
     progressRef.current.finished = true
+    // The Timer ↔ Plan rule turns here: from now until midnight the reminders
+    // go back to being the ordinary three-minute break.
+    if (routine.slug === PLAN_SLUG) markPlanDone()
     trackNow({
       name: 'session_completed',
       kind: routine.slug === PLAN_SLUG ? 'plan' : 'routine',
@@ -280,7 +284,7 @@ export function Player() {
     })
     if (fromNotification) void markDone(new Date(startedAtRef.current))
     else void routineDone()
-  }, [finished, routine, fromNotification, markDone, routineDone])
+  }, [finished, routine, fromNotification, markDone, routineDone, markPlanDone])
 
   const progress = useMemo(() => {
     const total = phase === 'ready' ? READY_S : workSeconds

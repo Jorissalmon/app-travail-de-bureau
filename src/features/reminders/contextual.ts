@@ -14,9 +14,13 @@ import type { AdaptivePlan, ReminderKind } from '@/lib/types'
  * and it is the thing the pivot replaces.
  *
  * It now names the zone the plan was composed for, the time the plan actually
- * takes, and lands on the plan itself. The stand and eye reminders are left
- * alone: they are not about a painful zone, and dressing them up as if they
- * were would be the app pretending to know something.
+ * takes, and lands on the plan itself. § pivot — so does the stand reminder,
+ * which is the point where the timer and the plan become one product: the
+ * first reminder of the day that finds the plan undone opens it, and every
+ * reminder after that is the ordinary three-minute break.
+ *
+ * The eye reminder is left alone. It is not about a painful zone, and dressing
+ * it up as if it were would be the app pretending to know something.
  *
  * Pure, so the copy can be tested without a device and without the scheduler.
  */
@@ -30,43 +34,82 @@ export interface ContextualCopy {
   routineSlug: string
 }
 
+export interface ContextualInput {
+  /** Today's composed session, or null before the first composition. */
+  plan: AdaptivePlan | null
+  /**
+   * Whether the plan has already been carried to the end today.
+   *
+   * This is the whole Timer ↔ Plan rule in one flag. A reminder every thirty
+   * minutes that each time opened a six-minute session would be sixteen
+   * minutes of exercise an hour, which nobody does and nobody asked for. So
+   * the plan is the day's dose, served by the first reminder that finds it
+   * undone; every reminder after it is the ordinary three-minute break the
+   * app has always had.
+   */
+  planDoneToday: boolean
+}
+
 /** Nothing over this many characters survives a lock screen intact. */
 const MAX_BODY = 90
 
-export function contextualCopy(
-  kind: ReminderKind,
-  at: Date,
-  plan: AdaptivePlan | null,
-): ContextualCopy {
-  const fallback = KINDS[kind]
+/** « la nuque », « les poignets » — the article the zone actually takes. */
+const PLURAL_ZONES = new Set(['hanches', 'poignets', 'chevilles'])
 
-  if (kind === 'stand') {
-    // Already contextual, on the hour rather than on the body.
-    return {
-      title: fallback.title,
-      body: nudgeFor(at),
-      why: fallback.why,
-      routineSlug: fallback.routineSlug,
-    }
-  }
-  if (kind !== 'mobility') return { ...fallback }
-
-  // No plan yet, or a plan with nothing in it: say the ordinary thing rather
-  // than a personalised sentence built on no information.
-  if (!plan || plan.blocks.length === 0 || plan.primaryZone === null) return { ...fallback }
-
-  const zone = PAIN_ZONE_LABEL[plan.primaryZone] ?? plan.primaryZone
+function zoneLine(plan: AdaptivePlan, zone: string): string {
   const minutes = Math.round(plan.durationS / 60)
   const strength = plan.blocks.filter((b) => b.type === 'strength').length
   const what =
     strength === 0
       ? 'Mobilité seule.'
       : `Mobilité, puis ${strength} mouvement${strength > 1 ? 's' : ''} de renforcement.`
-  const body = `${minutes} min pour ${zone === 'hanches' || zone === 'poignets' || zone === 'chevilles' ? 'les' : 'la'} ${zone}. ${what}`
+  const article = PLURAL_ZONES.has(zone) ? 'les' : 'la'
+  const body = `${minutes} min pour ${article} ${zone}. ${what}`
+  return body.length > MAX_BODY ? `${minutes} min pour ${article} ${zone}.` : body
+}
+
+/**
+ * True when the plan is in a state worth pointing a reminder at: composed, not
+ * empty, aimed at a zone, and not already done today.
+ */
+function planIsDue(input: ContextualInput): input is ContextualInput & {
+  plan: AdaptivePlan & { primaryZone: string }
+} {
+  const { plan, planDoneToday } = input
+  return plan !== null && !planDoneToday && plan.blocks.length > 0 && plan.primaryZone !== null
+}
+
+export function contextualCopy(
+  kind: ReminderKind,
+  at: Date,
+  input: ContextualInput,
+): ContextualCopy {
+  const fallback = KINDS[kind]
+
+  // The eye reminder is not about a painful zone, and dressing it up as one
+  // would be the app pretending to know something.
+  if (kind === 'eyes') return { ...fallback }
+
+  if (!planIsDue(input)) {
+    // No plan to serve, or it is already done. The stand reminder keeps its
+    // hour-context nudge, which is the contextual thing it has always had.
+    return {
+      title: fallback.title,
+      body: kind === 'stand' ? nudgeFor(at) : fallback.body,
+      why: fallback.why,
+      routineSlug: fallback.routineSlug,
+    }
+  }
+
+  const plan = input.plan as AdaptivePlan
+  const zone = PAIN_ZONE_LABEL[plan.primaryZone as string] ?? (plan.primaryZone as string)
 
   return {
-    title: `Ta ${zone}.`,
-    body: body.length > MAX_BODY ? `${minutes} min pour ${zone}.` : body,
+    // The stand reminder keeps its own word — getting up is what it is for —
+    // and says what getting up will get you. The mobility one is named by the
+    // zone, because that is all it is.
+    title: kind === 'stand' ? fallback.title : `Ta ${zone}.`,
+    body: zoneLine(plan, zone),
     // Straight from the composer, so the prompt can never give a reason the
     // engine did not use.
     why: plan.rationale,

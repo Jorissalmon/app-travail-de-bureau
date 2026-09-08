@@ -10,12 +10,78 @@ doctrine de `BRIEF-CONTENU.md` — qui reste en vigueur, entière.
 ## 1. Le positionnement
 
 > Pour les personnes qui travaillent assises et souffrent déjà de nuque, dos,
-> épaules ou poignets, Log Off est le coach quotidien ultra-court qui réduit
-> réellement la douleur perçue grâce à un plan adaptatif de mobilité +
-> renforcement léger, tout en restant radicalement honnête sur les preuves.
+> épaules ou poignets, Log Off est le coach quotidien ultra-court qui **structure
+> ta journée de travail** et réduit réellement la douleur perçue grâce à un plan
+> adaptatif de mobilité + renforcement léger, tout en restant radicalement
+> honnête sur les preuves.
 
 **Modèle économique cible.** B2C freemium / abonnement, B2B possible plus tard.
 La valeur doit tenir une rétention D30 ≥ 35 % sur la cohorte « douleur ≥ 3/10 ».
+
+### La boucle : Timer × Plan
+
+Le moteur de session de travail est **gardé**. Ce qui change est le contenu de
+la pause, et ce que le rappel ouvre.
+
+1. La personne démarre sa journée (ou le démarrage automatique la lance).
+2. À l'intervalle réglé — 30 par défaut, 45 et 60 offerts — un rappel arrive.
+3. **Le premier rappel qui trouve le plan du jour non fait ouvre le plan**
+   (4 à 8 min). Les suivants ouvrent la pause courte de trois minutes.
+4. À la fin : « Comment est ta nuque maintenant ? », 0-10.
+5. Le plan est recomposé, la heatmap bouge.
+6. Rappel raté → **pas de gel de journée**, un snooze qui recule.
+
+#### Pourquoi « le premier rappel », et pas tous
+
+C'est le seul point du cahier des charges qui ne se résolvait pas tout seul.
+« Un rappel toutes les trente minutes » et « le rappel ouvre le plan de 4 à 8
+minutes » donnent ensemble jusqu'à **seize minutes d'exercice par heure**.
+Personne ne fait ça, et une app qui le propose est désinstallée le deuxième jour.
+
+La règle retenue : **le plan est la dose du jour, le timer est la structure de la
+journée.** Le plan est servi par le premier rappel qui le trouve non fait ;
+ensuite les rappels redeviennent ce qu'ils ont toujours été, une pause de trois
+minutes pour se lever. Les deux objets gardent leur raison d'être et ne se
+concurrencent pas.
+
+Le drapeau qui décide est `usePlanStore().doneToday`, dérivé du **journal des
+séances terminées** — pas d'un booléen que l'app met quand elle pense que tu l'as
+sans doute faite. Il retombe à faux au changement de jour, puisqu'il est calculé
+sur la date locale.
+
+L'autre lecture possible — découper le plan en tranches servies à chaque rappel —
+a été écartée : elle casse la question de fin de séance, qui a besoin d'un corps
+qui vient de finir de bouger, et elle rend le delta de douleur inexploitable.
+
+#### Le rappel raté ne gèle plus la journée
+
+Avant : un rappel sans réponse n'armait **rien d'autre** jusqu'à ce qu'un
+intervalle complet passe. Ignorer un prompt pendant une réunion coûtait
+l'après-midi. C'est, mot pour mot, la raison que les gens donnent pour supprimer
+ce genre d'app.
+
+Maintenant (`backoffMinutes`, `armBackoff`) :
+
+| Ratés d'affilée | Prochain rappel |
+|---|---|
+| 1 | dans 10 min |
+| 2 | dans 20 min |
+| 3 et plus | à la cadence normale, plus de relance |
+
+Jamais plus long que l'intervalle choisi — quelqu'un réglé sur quinze minutes a
+demandé quinze minutes, et un backoff qui le dépasserait serait l'app qui passe
+outre le réglage. Jamais dans une plage silencieuse ni un jour non travaillé :
+la grille ordinaire reprend la main dans ces cas-là, un snooze n'est pas un moyen
+de contourner les heures qu'on a fermées.
+
+**Le troisième raté est une information**, pas une raison d'insister : ce n'est
+pas le bon moment, ou pas le bon jour. La bonne réponse est d'arrêter de demander
+autrement. La dette (`awaiting`) reste posée, reste visible dans le prompt, et
+reste au journal — ce qui disparaît est seulement le gel.
+
+Le compteur est **persisté** : un redémarrage d'app au milieu d'un backoff ne
+doit pas le remettre à dix minutes, sinon l'app relance précisément là où elle a
+promis de reculer.
 
 ### Ce qui change vraiment
 
@@ -26,10 +92,11 @@ l'utilisateur**, et fait dépendre la séance du lendemain de cette réponse.
 
 | Avant | Après |
 |---|---|
-| Un minuteur toutes les 30 min | Un plan composé, 4 à 8 min, servi une fois par jour |
+| Un minuteur toutes les 30 min | Le même minuteur, dont le premier rappel du jour ouvre le plan |
 | Une routine fixe par zone | Une séance recomposée chaque jour depuis le catalogue |
 | Mobilité seule | Mobilité + renforcement, dosé sur la douleur déclarée |
 | On compte les levers | On compte les levers **et** ce que la personne répond |
+| Un rappel raté gelait la journée | Snooze qui recule : 10 min, 20 min, puis on arrête |
 | Accueil = carte de session | Accueil = plan du jour + heatmap de douleur |
 
 ### Ce qui ne change pas — la doctrine
@@ -410,9 +477,25 @@ ouvrait « Hanches » dans les deux cas. Il nomme désormais la zone du plan, di
 la durée réelle et ce que la séance contient, et **ouvre le plan**. Sa raison est
 la phrase du compositeur.
 
-Le rappel de lever reste contextuel à l'heure ; le rappel des yeux est laissé
-tel quel — ce n'est pas une zone douloureuse, et l'habiller comme telle serait
-faire semblant de savoir.
+**Le rappel de lever fait de même** tant que le plan n'est pas fait : c'est le
+point où le timer et le plan deviennent un seul produit. Il garde son mot —
+« Debout. », se lever est ce à quoi il sert — et son corps dit ce que se lever
+va donner. Une fois le plan fait, il retrouve son texte contextuel à l'heure et
+rouvre `debout`.
+
+Le rappel des yeux est laissé tel quel : ce n'est pas une zone douloureuse, et
+l'habiller comme telle serait faire semblant de savoir.
+
+### 6.6 « Voir les prochains rappels » (`NextReminders.tsx`)
+
+Un seul rappel est armé à la fois (§8.2 du brief), donc la seule chose visible
+était « prochain rappel dans 12 min ». Maintenant qu'un rappel peut ouvrir soit
+le plan soit la pause courte, cette ambiguïté coûte quelque chose : la feuille
+dit ce qui est armé, à quelle heure, et **ce que le tap ouvrira** — en appelant
+la même fonction que le planificateur, donc la liste ne peut pas mentir.
+
+Elle dit aussi ce qu'elle ne promet pas : une plage silencieuse, un jour non
+travaillé ou une pause peuvent annuler n'importe lequel.
 
 `suggestMobilityTimes` lit le **journal des séances terminées** et propose les
 deux demi-heures où la personne bouge réellement. Compté, pas déduit ; rien en
@@ -439,6 +522,7 @@ reste du mois, affiché sur l'accueil.
 | Streak intelligent, 2 gels / mois | `features/session/stats.ts` |
 | Sessions ultra-courtes + mode discret | budget 4/6/8 min ; `DISCRETION` par lieu |
 | Rappels contextuels | `features/reminders/contextual.ts` |
+| Rappel raté sans gel de journée | `backoffMinutes`, `armBackoff` |
 | Aucune culpabilité, aucun « Bravo » | vérifié par test sur la phrase du plan ; aucune félicitation dans les écrans |
 
 ---

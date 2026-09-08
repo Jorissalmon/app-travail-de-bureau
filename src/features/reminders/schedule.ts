@@ -164,6 +164,36 @@ export function planSnooze(sessionId: string, from: Date): Occurrence {
 }
 
 /**
+ * How long to wait before re-proposing a reminder nobody answered, by number
+ * of consecutive misses.
+ *
+ * § pivot — the day used to freeze instead. A reminder that went unanswered
+ * armed nothing else until a whole interval had passed, which meant ignoring
+ * one prompt during a meeting cost the rest of the afternoon. That is, word for
+ * word, the reason people give for deleting this kind of app.
+ *
+ * What replaces it backs off rather than nags: ten minutes, then twenty, then
+ * back to the ordinary cadence and no more retries. The third miss is
+ * information — this is not a good moment, or not a good day — and the right
+ * answer to it is to stop asking differently, not to ask harder.
+ */
+export const MISS_BACKOFF_MIN = [10, 20] as const
+
+/**
+ * Minutes until the next reminder, given how many in a row went unanswered.
+ *
+ * Never longer than the cadence the user chose: someone on a fifteen-minute
+ * interval asked to be reminded every fifteen minutes, and a backoff that
+ * outran it would be the app quietly overruling the setting.
+ */
+export function backoffMinutes(misses: number, intervalMin: number): number {
+  const cadence = Math.max(1, intervalMin)
+  if (misses <= 0) return cadence
+  const step = MISS_BACKOFF_MIN[misses - 1]
+  return step === undefined ? cadence : Math.min(step, cadence)
+}
+
+/**
  * When each kind of reminder last had its turn. Every kind runs on its own
  * cadence from its own anchor, which is what keeps them independent.
  */

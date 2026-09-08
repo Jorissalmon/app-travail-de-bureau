@@ -7,7 +7,9 @@ import type { ReminderKind, WorkSession } from '@/lib/types'
 import {
   type Anchors,
   type Occurrence,
+  MISS_BACKOFF_MIN,
   allowedAt,
+  backoffMinutes,
   dueBy,
   firstOccurrence,
   pendingAfter,
@@ -28,6 +30,7 @@ import {
   readPermissions,
 } from '@/features/reminders/permissions'
 import { flushEvents, logEvent, makeEvent } from '@/features/reminders/events'
+import { trackNow } from '@/features/analytics/events'
 import { alertMode } from '@/features/reminders/alert'
 import { dayEndAt, overrunKind } from '@/features/session/dayend'
 import { logDayEnd, logDayStart } from '@/features/session/daylog'
@@ -110,6 +113,8 @@ interface StoredState {
   anchors?: { stand: string; eyes: string }
   pause?: Pause | null
   awaiting?: Awaiting | null
+  /** Consecutive unanswered reminders. Absent on state written before the pivot. */
+  misses?: number
   /** Written by versions before the pause had a reason; read once, then dropped. */
   pausedAt?: string | null
 }
@@ -133,6 +138,14 @@ interface SessionState {
   anchors: Anchors
   pause: Pause | null
   awaiting: Awaiting | null
+  /**
+   * Reminders that went unanswered in a row, reset by any answer.
+   *
+   * § pivot — this is what makes the snooze intelligent rather than insistent:
+   * the first miss is re-proposed in ten minutes, the second in twenty, and the
+   * third stops the retries and hands the day back to its ordinary cadence.
+   */
+  misses: number
   /** A closed-by-itself day still owing the hour it really ended at. */
   pendingClose: PendingClose | null
   /**
@@ -226,6 +239,12 @@ async function persist(
     occurrences: serialize(occurrences),
     pause,
     awaiting,
+    // Read from the store rather than passed in: every caller sets it before
+    // persisting, and threading it through sixteen call sites to say "unchanged"
+    // fifteen times is how a field ends up wrong in one of them. A backoff that
+    // restarted at ten minutes after an app kill would be the app nagging
+    // exactly where it promised to back off.
+    misses: useSessionStore.getState().misses,
     ...(anchors
       ? { anchors: { stand: anchors.stand.toISOString(), eyes: anchors.eyes.toISOString() } }
       : {}),
@@ -247,6 +266,32 @@ async function armFrom(sessionId: string, anchors: Anchors, now: Date): Promise<
   return [next]
 }
 
+/**
+ * What to arm after a reminder went unanswered.
+ *
+ * The backoff occurrence, unless it would land in a quiet window or on a day
+ * off — in which case the ordinary grid takes over, because a snooze must never
+ * be a way round the hours the user closed.
+ */
+async function armBackoff(
+  sessionId: string,
+  anchors: Anchors,
+  kind: ReminderKind,
+  misses: number,
+  now: Date,
+): Promise<Occurrence[]> {
+  const settings = useSettingsStore.getState().settings
+  const at = new Date(now.getTime() + backoffMinutes(misses, settings.intervalMin) * 60_000)
+  // Past the third in a row, stop re-proposing and let the cadence carry it.
+  if (misses > MISS_BACKOFF_MIN.length || !allowedAt(at, settings)) {
+    return armFrom(sessionId, anchors, now)
+  }
+  const occ = planResume(sessionId, kind, at)
+  await cancelAll()
+  await scheduleOne(occ, scheduleContext())
+  return [occ]
+}
+
 /** Moving only the cadence that just had its turn is the whole point. */
 function anchorFor(anchors: Anchors, kind: ReminderKind | undefined, at: Date): Anchors {
   if (kind === 'stand') return { ...anchors, stand: at }
@@ -260,6 +305,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   anchors: { stand: new Date(), eyes: new Date() },
   pause: null,
   awaiting: null,
+  misses: 0,
   pendingClose: null,
   promptDismissed: false,
   closeDismissed: false,
@@ -290,6 +336,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       // was a bare instant and only ever meant an exercise was on screen.
       pause: stored.pause ?? (stored.pausedAt ? { at: stored.pausedAt, reason: 'break' } : null),
       awaiting: stored.awaiting ?? null,
+      misses: stored.misses ?? 0,
       pendingClose,
       ready: true,
     })
@@ -507,38 +554,41 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     }
     if (pause) return
 
-    // An owed exercise is a debt, not a life sentence.
+    // An owed exercise is a debt, not a hold on the day.
     //
-    // Nothing else is armed while one stands, and that is deliberate: it is
-    // what makes a missed reminder impossible to shrug off by closing the app.
-    // But holding it for ever meant ignoring one reminder during a meeting
-    // killed the rest of the day — no reminder until the exercise was answered,
-    // and a pop-up ambushing you at every foreground. That is, word for word,
-    // the reason people give for deleting this kind of app: a reminder that
-    // lands at the wrong moment, and an app that then nags rather than waits.
-    // Past one interval the debt lapses, the miss stays on the record, and the
-    // day starts again.
+    // It used to be both: nothing was armed while a debt stood, so ignoring one
+    // reminder during a meeting killed the rest of the afternoon — no reminder
+    // until the exercise was answered, and a pop-up ambushing you at every
+    // foreground. That is, word for word, the reason people give for deleting
+    // this kind of app.
+    //
+    // § pivot — the debt still stands, still shows, and still goes on the
+    // record. What it no longer does is stop the clock. Past one interval it
+    // lapses on its own, exactly as before.
     if (awaiting) {
       const lapse = Math.max(15, settings.intervalMin) * 60_000
-      if (now.getTime() - Date.parse(awaiting.firedAt) < lapse) return
-      if (awaiting.logged === false) {
-        await logEvent(
-          makeEvent({
-            kind: awaiting.kind,
-            action: 'expired',
-            sessionId: session.id,
-            firedAt: new Date(awaiting.firedAt),
-          }),
-        )
+      if (now.getTime() - Date.parse(awaiting.firedAt) >= lapse) {
+        if (awaiting.logged === false) {
+          await logEvent(
+            makeEvent({
+              kind: awaiting.kind,
+              action: 'expired',
+              sessionId: session.id,
+              firedAt: new Date(awaiting.firedAt),
+            }),
+          )
+        }
+        set({ awaiting: null })
       }
-      set({ awaiting: null })
     }
 
     const missed = dueBy(occurrences, now)
     if (missed) {
-      // It fired while the app was not looking. Freeze here rather than arming
-      // the next one: the day should not move on without the exercise.
-      await cancelAll()
+      // It fired while the app was not looking. The miss goes on the record and
+      // the exercise stays owed — but the next one is armed on a backoff rather
+      // than the grid being cleared. Ten minutes, then twenty, then back to the
+      // ordinary cadence: after three unanswered in a row the app has been told
+      // something, and the answer is to stop asking differently.
       const next: Awaiting = {
         kind: missed.kind,
         firedAt: missed.at.toISOString(),
@@ -553,8 +603,15 @@ export const useSessionStore = create<SessionState>((set, get) => ({
         }),
       )
       const anchors = anchorFor(get().anchors, missed.kind, missed.at)
-      set({ occurrences: [], awaiting: next, anchors })
-      await persist(session, [], null, next, anchors)
+      const misses = get().misses + 1
+      const armed = await armBackoff(session.id, anchors, missed.kind, misses, now)
+      trackNow({
+        name: 'reminder_backoff',
+        misses,
+        nextInMin: backoffMinutes(misses, settings.intervalMin),
+      })
+      set({ occurrences: armed, awaiting: next, anchors, misses })
+      await persist(session, armed, null, next, anchors)
       return
     }
 
@@ -651,7 +708,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   routineDone: async () => {
     const { session, awaiting, occurrences, pause } = get()
     if (!session || !awaiting) return
-    set({ awaiting: null })
+    set({ awaiting: null, misses: 0 })
     await persist(session, occurrences, pause, null)
   },
 
@@ -691,7 +748,8 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     const now = new Date()
     const anchors = anchorFor(get().anchors, awaiting?.kind ?? 'stand', now)
     const armed = await armFrom(session.id, anchors, now)
-    set({ occurrences: armed, awaiting: null, anchors })
+    // Answering ends the run: the next miss starts again at ten minutes.
+    set({ occurrences: armed, awaiting: null, anchors, misses: 0 })
     await persist(session, armed, get().pause, null, anchors)
   },
 
@@ -711,7 +769,8 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     const occ = planSnooze(session.id, new Date())
     await cancelAll()
     await scheduleOne(occ, scheduleContext())
-    set({ occurrences: [occ], awaiting: null })
+    // Choosing to put it off is an answer, not a miss.
+    set({ occurrences: [occ], awaiting: null, misses: 0 })
     await persist(session, [occ], get().pause, null)
   },
 }))
