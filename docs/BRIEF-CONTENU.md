@@ -439,15 +439,21 @@ suggestion prévue disparaît sans avertissement.
 
 ### 6.2 Les illustrations sont une ressource limitée
 
-Il existe **43 clés de figure** déclarées dans
+Il existe **47 clés de figure** déclarées dans
 `src/components/figures/figureKeys.ts`, dessinées en SVG à la main dans le même
 style, deux tons, sans dépendance externe.
 
-**Les quatre clés libres ont été dépensées par le pivot** (`chat-vache-b`,
-`omoplates-b`, `doigts-poing`, `mollet-plat`), chacune sur le mouvement que son
-dessin représente réellement. Il n'en reste aucune : tout mouvement nouveau
-demande maintenant un dessin, ou la réutilisation d'une figure existante assumée
-comme approximative, ce qui doit rester rare et être noté.
+Les quatre clés autrefois libres ont été dépensées par le pivot
+(`chat-vache-b`, `omoplates-b`, `doigts-poing`, `mollet-plat`), chacune sur le
+mouvement que son dessin représente réellement, et **quatre dessins neufs** ont
+été ajoutés pour les mouvements de renforcement qu'aucune figure existante ne
+montrait honnêtement : `isometrie-nuque`, `elevation-y`, `pompe-bureau`,
+`assis-debout`.
+
+**Il ne reste aucune clé libre.** Tout mouvement réellement nouveau demande donc
+un dessin. Le vocabulaire à respecter : viewBox 100×100, tout hérite de
+`currentColor`, traits de 6,5 px à bouts ronds (4,5 pour un détail, 3,5 en
+filigrane à 55 %), tête pleine sans visage, sol et mobilier à 25 % d'opacité.
 
 Les clés en `-b` sont des **secondes positions** : un mouvement à deux temps est
 animé en alternant deux dessins. Elles ne conviennent qu'à un mouvement qui a

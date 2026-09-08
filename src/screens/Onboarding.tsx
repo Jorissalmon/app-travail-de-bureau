@@ -279,14 +279,22 @@ export function Onboarding() {
   const current = steps[step]
   const last = step === steps.length - 1
 
-  /** Everything the questions collected, written before the plan is previewed. */
+  /**
+   * Everything the questions collected, written before the plan is previewed.
+   *
+   * `startedAt` is fixed at the first render rather than read inside the memo:
+   * it is the anchor the plan rotates its movement pools on, and a value that
+   * moved with every tap would have been a different anchor each time the memo
+   * re-ran.
+   */
+  const startedAt = useRef(new Date().toISOString())
   const draft: PainProfile = useMemo(
     () => ({
       zones: [...zones].sort((a, b) => (scores[b] ?? 0) - (scores[a] ?? 0)),
       baseline: scores,
       since,
       minutes,
-      startedAt: new Date().toISOString(),
+      startedAt: startedAt.current,
     }),
     [zones, scores, since, minutes],
   )

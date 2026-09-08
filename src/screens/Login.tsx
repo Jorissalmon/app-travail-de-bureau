@@ -83,7 +83,11 @@ export function Login() {
         <h1 className="mb-3">
           <Wordmark size={38} />
         </h1>
-        <p className="t-meta mb-9">Lève-toi. L’app s’occupe du reste.</p>
+        {/* The first line anyone reads. It sold the old product — a timer that
+            tells you to stand up — for as long as the pivot had shipped. */}
+        <p className="t-meta mb-9">
+          Quatre à huit minutes par jour, réglées sur ce qui te fait mal.
+        </p>
 
         {!showForm && (
           <div className="flex flex-col gap-3">

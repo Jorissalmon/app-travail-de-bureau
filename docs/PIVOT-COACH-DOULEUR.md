@@ -202,17 +202,17 @@ quatre mouvements que leur dessin représente réellement.
 
 | Clé | Zone | Figure | Discret |
 |---|---|---|---|
-| `isometrie-nuque-avant` | nuque | `menton-rentre` | oui |
+| `isometrie-nuque-avant` | nuque | `isometrie-nuque` *(dessin neuf)* | oui |
 | `isometrie-nuque-laterale` | nuque | `nuque-laterale` | oui |
 | `isometrie-nuque-arriere` | nuque | `nuque-flexion` | oui |
 | `omoplates-tenu` | haut du dos | `omoplates-b` *(libre)* | oui |
 | `tirage-isometrique-chaise` | haut du dos | `tirage-vide` | oui |
 | `rotation-externe-tenue` | épaules | `rotation-externe` | oui |
-| `elevation-y` | épaules | `cercle-bras` | non |
-| `pompe-bureau` | épaules / pectoraux | `encadrement-porte` | non |
+| `elevation-y` | épaules | `elevation-y` *(dessin neuf)* | non |
+| `pompe-bureau` | épaules / pectoraux | `pompe-bureau` *(dessin neuf)* | non |
 | `gainage-assis` | tronc | `bascule-bassin` | oui |
 | `charniere-hanche` | lombaires / fessiers | `chat-vache-b` *(libre)* | non |
-| `assis-debout` | jambes / fessiers | `extension-chaise` | non |
+| `assis-debout` | jambes / fessiers | `assis-debout` *(dessin neuf)* | non |
 | `poing-serre` | main | `doigts-poing` *(libre)* | oui |
 | `poignet-resiste` | poignet | `poignet-extension` | oui |
 | `mollet-excentrique` | mollets | `mollet-plat` *(libre)* | oui |
@@ -225,10 +225,13 @@ spécifique. » sur un mouvement de renforcement, parce que charger une zone qui
 fait déjà mal est le seul endroit où cette réponse n'est pas acceptable — au
 moins un muscle et au moins un article.
 
-**Dessins à demander plus tard** (aucun ne bloque) : une pompe inclinée sur le
-bureau, une élévation en Y, un lever de chaise, une isométrie de nuque main sur
-le front. Les figures actuelles sont proches mais pas exactes ; le pas-à-pas de
-la fiche dit précisément quoi faire.
+**Les quatre dessins qui manquaient ont été faits** : `isometrie-nuque`,
+`elevation-y`, `pompe-bureau` et `assis-debout`, dans le même vocabulaire que
+les 43 autres — viewBox 100×100, traits de 6,5 px à bouts ronds, tête pleine,
+sol à 25 % d'opacité, aucun détail de visage. Ils ont été rendus et relus à côté
+des figures qu'ils remplacent (`menton-rentre`, `cercle-bras`,
+`encadrement-porte`, `extension-chaise`) pour vérifier qu'un lecteur les
+distingue. Il y a donc **47 clés de figure**, et plus aucune libre.
 
 ### 3.2 Seize routines
 
@@ -442,6 +445,12 @@ La ligne de delta n'apparaît qu'avec des réponses sur **deux jours différents
 Sinon : « Deux réponses sur deux jours différents, et cette ligne dira ce qui a
 changé. » — ce qui est une information, pas une exhortation.
 
+Elle prend la zone primaire, **puis n'importe quelle zone suivie qui en a une**.
+La zone primaire est souvent celle déclarée au premier lancement et jamais
+renotée depuis ; se taire pendant qu'une autre zone porte quinze jours de
+réponses cachait exactement ce que la personne revenait voir. La ligne nomme sa
+zone, donc ce repli ne dit rien de faux.
+
 ### 6.2 Heatmap (`PainHeatmap.tsx`)
 
 Une ligne par zone réellement notée — jamais une ligne pour une zone que
@@ -527,13 +536,61 @@ reste du mois, affiché sur l'accueil.
 
 ---
 
-## 8. Ce qui reste à faire
+## 8. La synchronisation et la mesure
 
-- **Synchroniser le journal de douleur** : la table `pain_entries` existe,
-  l'endpoint `/api/pain` n'est pas écrit. L'app fonctionne entièrement sans, sur
-  l'appareil.
-- **Drainer le journal analytique** : les événements sont écrits localement et
-  bornés à 500. Il faut un endpoint, ou un export manuel pour la bêta.
-- **Les quatre dessins** listés en §3.1.
+### 8.1 Le journal de douleur
+
+`POST /api/pain` accepte un lot, idempotent sur `(user_id, client_id)` comme
+`/api/events`. `GET /api/pain` renvoie tout l'historique du compte.
+
+Côté appareil, le même partage que le journal d'activité : le **journal** est le
+dossier et n'est jamais vidé, la **file** est ce que le serveur n'a pas encore
+accepté. C'est ce qui fait qu'une personne sans compte, ou hors ligne, voit
+quand même son historique — le dossier ne dépend pas du réseau.
+
+`pullPain` fusionne par `clientId` plutôt que de remplacer : l'appareil peut
+détenir des réponses que le serveur n'a jamais vues (hors ligne, ou données
+avant la création du compte), et un deuxième appareil en détient d'autres.
+Écraser l'un ou l'autre perdrait une réponse que quelqu'un a donnée, ce qui est
+la seule chose que ce journal existe pour ne pas faire.
+
+L'idempotence compte plus ici qu'ailleurs : une réponse dupliquée fausserait
+silencieusement la moyenne du jour sur laquelle tout le plan est dosé.
+
+### 8.2 Le journal analytique
+
+`POST /api/analytics`, table `analytics_events` (migration 005). L'endpoint est
+volontairement le plus étroit de l'app :
+
+- **Vocabulaire fermé de noms.** Un événement dont le nom n'est pas dans `NAMES`
+  est jeté. Un client ne peut pas inventer un événement en l'envoyant, et la
+  liste est auditable contre l'union de `src/features/analytics/events.ts`.
+- **Aucun texte libre, vérifié côté serveur.** `scalarsOnly` ne garde que
+  nombres, booléens et chaînes tronquées à 120 caractères, et jette tout objet
+  ou tableau. Une union typée sur l'appareil est une convention ; c'est cette
+  fonction qui tient quand quelqu'un poste à la main.
+- **Idempotent**, pour qu'un rejeu ne gonfle pas un taux de complétion.
+
+Le drain tourne une fois après le premier rendu, pas à chaque événement :
+l'analytique est le trafic le moins prioritaire de l'app, et une requête par tap
+coûterait de la batterie pour des données que personne ne lit avant la fin de la
+semaine. Une note de douleur, elle, se pousse tout de suite.
+
+### 8.3 L'export
+
+« Copier mon journal d'usage (JSON) » dans le profil, dans exactement la forme
+que le serveur reçoit. C'est le pendant honnête de « aucun SDK tiers » : si
+l'app le collecte, la personne sur qui c'est collecté peut lire la même chose.
+C'est aussi comment un testeur **sans compte** sort ses chiffres — sans quoi les
+quatre seuils n'auraient été mesurables que sur les inscrits, ce qui aurait
+biaisé la cohorte dès le premier jour.
+
+## 9. Ce qui reste à faire
+
 - **Le paywall** : rien n'a été construit côté abonnement. La frontière proposée
   est en §5 de `VALIDATION-PIVOT.md`.
+- **Le bras B du protocole de bêta** (routine fixe), sans lequel H3 n'est pas
+  testable. C'est une variante de composition, pas un chantier.
+- **Le tampon analytique est borné à 500 événements** par appareil. Suffisant
+  pour une bêta de soixante jours à quelques événements par séance ; à revoir si
+  la cadence augmente.

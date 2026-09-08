@@ -20,7 +20,9 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
-    include: ['src/**/*.test.ts'],
+    // The migration splitter lives in scripts/ and is pure: it earned a test
+    // the hard way, by shipping a migration that could not run.
+    include: ['src/**/*.test.ts', 'scripts/**/*.test.ts'],
     // Pinned so the daylight-saving cases actually cross a DST boundary; in UTC
     // they would pass without proving anything.
     env: { TZ: 'Europe/Paris' },

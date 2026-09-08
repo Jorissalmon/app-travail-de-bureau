@@ -4,9 +4,9 @@
 -- generee par scripts/gen-seed.ts ; ce fichier ne fait qu ouvrir la place
 -- ou 002 vient ecrire.
 --
--- Ne jamais mettre d apostrophe ASCII dans ces commentaires : le decoupeur
--- de scripts/migrate.ts ne saute pas les commentaires -- et la lirait comme
--- une chaine.
+-- Le decoupeur (scripts/sql-split.ts) saute les commentaires --, donc une
+-- apostrophe ou un point-virgule ici ne coupe plus le fichier. Ce ne fut pas
+-- toujours le cas : le point-virgule de la ligne 4 le coupait en plein milieu.
 
 BEGIN;
 

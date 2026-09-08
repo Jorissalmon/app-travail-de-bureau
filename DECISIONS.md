@@ -688,13 +688,23 @@ s'écartent de ce qui était demandé, ou qui coûtent quelque chose.
   profil, à partir des séances réellement terminées. Un rappel qui se déplace de
   lui-même est un rappel auquel personne ne se fie.
 - **L'analytique est locale et sans SDK tiers**, bornée à 500 événements, sans
-  aucun texte libre. Il n'y a pas encore d'endpoint pour la drainer : c'est le
-  premier travail avant la bêta, et sans lui aucun des quatre seuils de
-  `VALIDATION-PIVOT.md` n'est mesurable. Dit plutôt que caché.
+  aucun texte libre. Elle draine désormais vers `/api/analytics`, dont le
+  serveur revalide le nom contre une liste fermée et ne garde que des scalaires :
+  une union typée côté appareil est une convention, `scalarsOnly` est la partie
+  qui tient quand quelqu'un poste à la main.
+- **Un export manuel double le drain**, et ce n'est pas du confort. Sans lui les
+  seuils n'auraient été mesurables que sur les inscrits, alors que quelqu'un qui
+  teste sans créer de compte est exactement le profil que la rétention doit
+  mesurer. C'est aussi le pendant de « aucun SDK tiers » : si l'app le collecte,
+  la personne concernée peut lire la même chose.
 - **Les quatre clés de figure libres sont dépensées**, chacune sur le mouvement
-  que son dessin représente vraiment. Quatre autres mouvements de renforcement
-  réutilisent une figure approchante ; ils sont listés dans le doc du pivot pour
-  qu'un lot de dessins soit demandé plus tard.
+  que son dessin représente vraiment, et **quatre dessins neufs** ont été faits
+  pour les mouvements qu'aucune figure existante ne montrait honnêtement
+  (`isometrie-nuque`, `elevation-y`, `pompe-bureau`, `assis-debout`). Une pompe
+  au bureau dessinée par un étirement à l'encadrement de porte ne se lit pas
+  comme un dessin inexact, elle se lit comme le mauvais exercice. Rendus au
+  navigateur et relus à côté des figures qu'ils remplacent, pour vérifier qu'on
+  les distingue. Il n'y a plus aucune clé libre.
 - **Le plan est servi par le premier rappel du jour, pas par tous.** « Un rappel
   toutes les trente minutes » et « le rappel ouvre le plan de 4 à 8 min »
   donnent ensemble seize minutes d'exercice par heure. Le plan est la dose du
@@ -717,9 +727,41 @@ s'écartent de ce qui était demandé, ou qui coûtent quelque chose.
 - **`INTERVAL_CHOICES` n'a pas été réduit à 30/45/60.** Ces trois valeurs y sont
   déjà, 30 est le défaut ; retirer 15, 20 et 25 enlèverait un réglage à ceux qui
   l'utilisent pour satisfaire une formulation.
-- **`/api/pain` n'est pas écrit.** La table `pain_entries` existe (migration
-  004), l'app fonctionne entièrement sans, sur l'appareil, comme le journal
-  d'activité. La synchronisation viendra avec le compte, pas avant.
+- **`pullPain` fusionne par `clientId`, il ne remplace pas.** L'appareil détient
+  des réponses que le serveur n'a jamais vues (hors ligne, ou avant le compte) et
+  un deuxième appareil en détient d'autres. Écraser l'un des deux perdrait une
+  réponse donnée par quelqu'un, ce qui est la seule chose que ce journal existe
+  pour ne pas faire.
+- **Le drain analytique tourne après le premier rendu, pas à chaque événement.**
+  Une requête par tap coûterait de la batterie pour des données que personne ne
+  lit avant la fin de la semaine. Une note de douleur, elle, part tout de suite :
+  c'est le nombre sur lequel le plan est dosé.
+- **StrictMode écrivait un abandon fantôme à chaque ouverture du lecteur.** Le
+  double montage de développement déclenchait le nettoyage de l'effet, donc
+  `session_abandoned`, donc un taux de complétion illisible dans tout build de
+  dev — sur l'une des quatre métriques du pivot. Gardé par un seuil d'une
+  seconde : personne n'ouvre et ne quitte une séance en moins que ça.
+
+- **Le découpeur de migrations saute désormais les commentaires** — et ce n'est
+  pas du rangement. Un point-virgule dans un commentaire `--` coupait le fichier
+  en plein milieu d'une phrase et envoyait à Postgres une instruction commençant
+  par « the rows survive. ». `db/002_seed_content.sql` portait exactement ça,
+  généré dedans par `gen-seed.ts`, et personne ne pouvait le voir sans base
+  vivante. Le garde-fou en place était un commentaire demandant à tout futur
+  auteur de ne jamais écrire d'apostrophe dans un commentaire : un avertissement
+  à la place d'un correctif. Le découpeur est sorti dans `scripts/sql-split.ts`,
+  et il a maintenant un test qui passe les vraies migrations dedans et exige que
+  chaque morceau ressemble à du SQL.
+
+- **Deux défauts trouvés en faisant tourner l'app, pas en la relisant.** Les
+  écrans ont été chargés dans un navigateur, pilotés sur les trois routes
+  refaites et photographiés. Ça a sorti (1) l'écran de connexion qui vendait
+  encore l'ancien produit — « Lève-toi. L'app s'occupe du reste. » était la
+  première phrase que lisait un nouvel utilisateur, des semaines après le pivot ;
+  (2) la ligne de delta muette quand la zone primaire était celle déclarée au
+  premier lancement et jamais renotée, alors qu'une autre zone portait quinze
+  jours de réponses. Ni l'un ni l'autre n'était visible dans un typage ou un
+  test unitaire.
 
 ## À la charge du propriétaire (secrets, hors dépôt)
 

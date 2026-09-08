@@ -114,10 +114,19 @@ aucun horodatage plus fin que la seconde. Les quatre métriques n'en ont pas
 besoin, et un événement qui ne sert aucune d'elles n'a rien à faire dans le
 fichier.
 
-**Ce qu'il manque encore** : les événements sont écrits localement et ne sont
-drainés nulle part. Avant la bêta il faut soit un endpoint `/api/analytics`, soit
-un export manuel depuis le profil. Sans l'un des deux, aucun de ces seuils n'est
-mesurable — c'est le premier travail à faire.
+**Comment les données sortent.** Deux chemins, et il en faut deux :
+
+1. `POST /api/analytics` draine la file après le premier rendu, pour les
+   comptes. Le serveur valide le nom contre une liste fermée et ne garde que des
+   scalaires — la promesse « aucun texte libre » est tenue là, pas seulement
+   dans le typage du client.
+2. **Export manuel** depuis le profil, dans la même forme. Sans lui, les seuils
+   ne seraient mesurables que sur les inscrits, ce qui biaiserait la cohorte dès
+   le premier jour : quelqu'un qui teste sans créer de compte est exactement le
+   profil que la rétention doit mesurer.
+
+Le tampon local est borné à 500 événements par appareil, ce qui couvre soixante
+jours à quelques événements par séance.
 
 ---
 

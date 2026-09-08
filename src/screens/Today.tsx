@@ -97,10 +97,21 @@ export function Today() {
    * are answers on two different days, and only ever as the two numbers given
    * and the days between them — no percentage, no rate of improvement.
    */
-  const primaryDelta = useMemo(
-    () => (plan?.primaryZone ? delta(entries, plan.primaryZone, today, span) : null),
-    [plan, entries, today, span],
-  )
+  const primaryDelta = useMemo(() => {
+    // The primary zone first, because that is the one the session was built
+    // for. But it is often the zone declared at first run and never rated
+    // since, and going silent while another zone holds a fortnight of answers
+    // hid the one thing the person came back to see. The line names its zone,
+    // so falling back says nothing untrue.
+    const ordered = plan?.primaryZone
+      ? [plan.primaryZone, ...trackedZones.filter((z) => z !== plan.primaryZone)]
+      : trackedZones
+    for (const zone of ordered) {
+      const d = delta(entries, zone, today, span)
+      if (d !== null) return d
+    }
+    return null
+  }, [plan, trackedZones, entries, today, span])
 
   const freezes = useMemo(
     () =>

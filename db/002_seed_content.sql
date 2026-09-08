@@ -8,8 +8,9 @@
 -- completion history of every user. Upserting keeps routine ids stable, so a
 -- completion stays attached to the routine it was done for.
 --
--- Never put an ASCII apostrophe in these comments: the statement splitter in
--- scripts/migrate.ts does not skip -- comments and would read it as a string.
+-- The statement splitter (scripts/sql-split.ts) skips -- comments, so an
+-- apostrophe or a semicolon in one is safe. It was not always: a semicolon
+-- in the comment below used to cut this file mid-sentence.
 
 BEGIN;
 
@@ -663,7 +664,7 @@ VALUES
   ((SELECT id FROM routines WHERE slug = 'nuque-soulagement'), 5, 'Nuque en diagonale (gauche)', 30, 'L''autre diagonale. Le regard suit le menton.', 'nuque-diagonale', 'nuque-diagonale'),
   ((SELECT id FROM routines WHERE slug = 'nuque-soulagement'), 6, 'Rotation lente', 30, 'Tourne la tête d''un côté puis de l''autre, comme si tu suivais un horizon.', 'nuque-rotation', 'nuque-rotation'),
   ((SELECT id FROM routines WHERE slug = 'nuque-soulagement'), 7, 'Serrage d''omoplates', 30, 'Serre les omoplates l''une vers l''autre, tiens 5 s, relâche.', 'omoplates', 'omoplates'),
-  ((SELECT id FROM routines WHERE slug = 'nuque-soulagement'), 8, 'Isométrie, appui frontal', 30, 'Paume sur le front, pousse la tête contre la main. Rien ne bouge, 10 s.', 'menton-rentre', 'isometrie-nuque-avant'),
+  ((SELECT id FROM routines WHERE slug = 'nuque-soulagement'), 8, 'Isométrie, appui frontal', 30, 'Paume sur le front, pousse la tête contre la main. Rien ne bouge, 10 s.', 'isometrie-nuque', 'isometrie-nuque-avant'),
   ((SELECT id FROM routines WHERE slug = 'nuque-soulagement'), 9, 'Isométrie, appui latéral', 30, 'Paume sur la tempe, pousse. 10 s d''un côté, 10 s de l''autre.', 'nuque-laterale', 'isometrie-nuque-laterale'),
   ((SELECT id FROM routines WHERE slug = 'nuque-soulagement'), 10, 'Respiration', 30, 'Quatre respirations : inspire sur 4 temps, expire sur 6.', 'respiration', 'respiration-4-6');
 
@@ -769,7 +770,7 @@ VALUES
   ((SELECT id FROM routines WHERE slug = 'hanches-soulagement'), 6, 'Genou à la poitrine (gauche)', 30, 'Même chose à gauche.', 'genou-poitrine', 'genou-poitrine'),
   ((SELECT id FROM routines WHERE slug = 'hanches-soulagement'), 7, 'Balancement de hanche', 30, 'Debout, jambe libre, balance d''avant en arrière. Amplitude confortable.', 'balancement-hanche', 'balancement-hanche'),
   ((SELECT id FROM routines WHERE slug = 'hanches-soulagement'), 8, 'Charnière de hanche', 30, 'Fesses vers l''arrière, dos plat, buste qui descend. Huit fois.', 'chat-vache-b', 'charniere-hanche'),
-  ((SELECT id FROM routines WHERE slug = 'hanches-soulagement'), 9, 'Se lever, s''asseoir', 30, 'Bras croisés, lève-toi sans les mains, rassieds-toi en trois secondes.', 'extension-chaise', 'assis-debout'),
+  ((SELECT id FROM routines WHERE slug = 'hanches-soulagement'), 9, 'Se lever, s''asseoir', 30, 'Bras croisés, lève-toi sans les mains, rassieds-toi en trois secondes.', 'assis-debout', 'assis-debout'),
   ((SELECT id FROM routines WHERE slug = 'hanches-soulagement'), 10, 'Respiration', 30, 'Quatre respirations : inspire sur 4 temps, expire sur 6.', 'respiration', 'respiration-4-6');
 
 -- poignets-flash
@@ -830,7 +831,7 @@ DELETE FROM routine_steps WHERE routine_id = (SELECT id FROM routines WHERE slug
 INSERT INTO routine_steps (routine_id, position, name, duration_s, cue, figure_key, exercise_key)
 VALUES
   ((SELECT id FROM routines WHERE slug = 'renfort-nuque'), 1, 'Menton rentré', 30, 'Recule le menton comme pour faire un double menton. Tiens 5 s, relâche.', 'menton-rentre', 'menton-rentre'),
-  ((SELECT id FROM routines WHERE slug = 'renfort-nuque'), 2, 'Isométrie, appui frontal', 30, 'Paume sur le front, pousse la tête contre la main. Rien ne bouge, 10 s.', 'menton-rentre', 'isometrie-nuque-avant'),
+  ((SELECT id FROM routines WHERE slug = 'renfort-nuque'), 2, 'Isométrie, appui frontal', 30, 'Paume sur le front, pousse la tête contre la main. Rien ne bouge, 10 s.', 'isometrie-nuque', 'isometrie-nuque-avant'),
   ((SELECT id FROM routines WHERE slug = 'renfort-nuque'), 3, 'Isométrie latérale (droite)', 30, 'Paume sur la tempe droite, pousse sans incliner le cou. 10 s.', 'nuque-laterale', 'isometrie-nuque-laterale'),
   ((SELECT id FROM routines WHERE slug = 'renfort-nuque'), 4, 'Isométrie latérale (gauche)', 30, 'Même chose à gauche. L''épaule reste basse.', 'nuque-laterale', 'isometrie-nuque-laterale'),
   ((SELECT id FROM routines WHERE slug = 'renfort-nuque'), 5, 'Isométrie, appui occipital', 30, 'Mains derrière la tête, pousse en arrière contre elles. Menton rentré, 10 s.', 'nuque-flexion', 'isometrie-nuque-arriere'),
@@ -850,8 +851,8 @@ VALUES
   ((SELECT id FROM routines WHERE slug = 'renfort-haut-du-dos'), 2, 'Serrage d''omoplates tenu', 45, 'Même serrage, tenu 10 s, relâché 5 s. Trois fois.', 'omoplates-b', 'omoplates-tenu'),
   ((SELECT id FROM routines WHERE slug = 'renfort-haut-du-dos'), 3, 'Tirage isométrique', 45, 'Attrape le bord de l''assise et tire vers le haut. 10 s, trois fois.', 'tirage-vide', 'tirage-isometrique-chaise'),
   ((SELECT id FROM routines WHERE slug = 'renfort-haut-du-dos'), 4, 'Rotation externe tenue', 45, 'Coudes au corps, une main résiste à l''autre. 10 s de chaque côté.', 'rotation-externe', 'rotation-externe-tenue'),
-  ((SELECT id FROM routines WHERE slug = 'renfort-haut-du-dos'), 5, 'Élévation en Y', 45, 'Monte les bras en Y, tiens 3 s en haut, redescends en 3 s. Six fois.', 'cercle-bras', 'elevation-y'),
-  ((SELECT id FROM routines WHERE slug = 'renfort-haut-du-dos'), 6, 'Pompe sur le bureau', 45, 'Mains sur le bord du bureau, corps aligné. Six à dix descentes contrôlées.', 'encadrement-porte', 'pompe-bureau'),
+  ((SELECT id FROM routines WHERE slug = 'renfort-haut-du-dos'), 5, 'Élévation en Y', 45, 'Monte les bras en Y, tiens 3 s en haut, redescends en 3 s. Six fois.', 'elevation-y', 'elevation-y'),
+  ((SELECT id FROM routines WHERE slug = 'renfort-haut-du-dos'), 6, 'Pompe sur le bureau', 45, 'Mains sur le bord du bureau, corps aligné. Six à dix descentes contrôlées.', 'pompe-bureau', 'pompe-bureau'),
   ((SELECT id FROM routines WHERE slug = 'renfort-haut-du-dos'), 7, 'Respiration', 15, 'Deux respirations : inspire sur 4 temps, expire sur 6.', 'respiration', 'respiration-4-6');
 
 -- renfort-tronc
@@ -867,7 +868,7 @@ VALUES
   ((SELECT id FROM routines WHERE slug = 'renfort-tronc'), 1, 'Bascule du bassin', 30, 'Debout, bascule le bassin d''avant en arrière. Mise en route.', 'bascule-bassin', 'bascule-bassin'),
   ((SELECT id FROM routines WHERE slug = 'renfort-tronc'), 2, 'Gainage assis', 45, 'Assis au bord de la chaise, serre le ventre 15 s. Deux fois, en respirant.', 'bascule-bassin', 'gainage-assis'),
   ((SELECT id FROM routines WHERE slug = 'renfort-tronc'), 3, 'Charnière de hanche', 45, 'Fesses vers l''arrière, dos plat. Huit descentes, remontée fessiers serrés.', 'chat-vache-b', 'charniere-hanche'),
-  ((SELECT id FROM routines WHERE slug = 'renfort-tronc'), 4, 'Se lever, s''asseoir', 45, 'Bras croisés, lève-toi sans les mains, rassieds-toi en trois secondes. Huit fois.', 'extension-chaise', 'assis-debout'),
+  ((SELECT id FROM routines WHERE slug = 'renfort-tronc'), 4, 'Se lever, s''asseoir', 45, 'Bras croisés, lève-toi sans les mains, rassieds-toi en trois secondes. Huit fois.', 'assis-debout', 'assis-debout'),
   ((SELECT id FROM routines WHERE slug = 'renfort-tronc'), 5, 'Descente lente sur les talons', 45, 'Monte sur la pointe, redescends en comptant jusqu''à quatre. Dix fois.', 'mollet-plat', 'mollet-excentrique'),
   ((SELECT id FROM routines WHERE slug = 'renfort-tronc'), 6, 'Extension debout', 30, 'Mains dans le bas du dos, ouvre la poitrine. Doucement, pour finir.', 'extension-debout', 'extension-debout');
 

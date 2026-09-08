@@ -49,6 +49,13 @@ lisant le dossier : ajouter une migration, c'est ajouter un fichier.
 2. `002_seed_content.sql` — contenu (routines + articles). **Généré** depuis
    `src/content/*.json` par `pnpm gen:seed` ; ne l'édite pas à la main.
 3. `003_prefs.sql` — `user_prefs`, les préférences rattachées au compte.
+4. `004_adaptive.sql` — le coach douleur : `exercises.type`, `routines.goal`,
+   `routines.target_zones`, et la table `pain_entries` (une ligne par réponse
+   0-10). Les trois colonnes sont ensuite écrites par le seed généré, donc 004
+   doit avoir tourné **avant** 002 sur une base existante — l'ordre numérique
+   du runner s'en charge.
+5. `005_analytics.sql` — `analytics_events`, sans quoi aucun des quatre seuils
+   de `docs/VALIDATION-PIVOT.md` n'est mesurable.
 
 Une table `schema_migrations` retient ce qui a déjà tourné, parce que
 `001_init.sql` n'est pas rejouable (ses `CREATE TABLE` n'ont pas de

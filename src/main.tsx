@@ -18,7 +18,7 @@ import { useContentStore } from '@/stores/content'
 import { useSessionStore } from '@/stores/session'
 import { useOnboardingStore } from '@/stores/onboarding'
 import { usePlanStore } from '@/stores/plan'
-import { loadAnalytics } from '@/features/analytics/events'
+import { flushAnalytics, loadAnalytics } from '@/features/analytics/events'
 import { flushEvents } from '@/features/reminders/events'
 import { installPrefsSync } from '@/features/prefs/sync'
 import { reloadSyncedPrefs } from '@/features/prefs/apply'
@@ -98,6 +98,12 @@ async function boot() {
   // After the first paint: opportunistic sync + OTA check (§9.3 / §13.2).
   requestAnimationFrame(() => {
     void flushEvents()
+    // The pain journal and the analytics buffer drain here rather than on every
+    // write: both are low-volume and neither is worth a request per tap. A
+    // rating still pushes itself immediately — it is the one number the plan is
+    // dosed on, and it should reach a second device the same day.
+    void usePlanStore.getState().sync()
+    void flushAnalytics()
     void checkForUpdate()
   })
 }

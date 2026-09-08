@@ -440,6 +440,62 @@ const figures: Record<FigureKey, () => JSX.Element> = {
   // needs both, or the figure shows half the exercise. These are the "b" frames
   // that figureFrames.ts pairs with the "a" ones above.
 
+  // ---- Renforcement (§ pivot) ----------------------------------------------
+  // Four movements the pivot added were drawn with the nearest existing figure,
+  // which was honest but approximate: a doorway stretch standing in for a desk
+  // push-up reads as the wrong exercise before it reads as an inexact one.
+
+  'isometrie-nuque': () => (
+    <g>
+      <Head cx={46} cy={36} r={13} />
+      <path {...S} d="M46 50 L46 66" />
+      <path {...S} d="M28 74 L64 74" />
+      {/* The palm, flat against the forehead, and the forearm behind it. */}
+      <rect x={60} y={27} width={6} height={18} rx={3} fill="currentColor" />
+      <path {...THIN} d="M80 36 L66 36" />
+    </g>
+  ),
+
+  'elevation-y': () => (
+    <g>
+      <Ground />
+      <Head cx={50} cy={32} />
+      <path {...S} d="M50 41 L50 62" />
+      <path {...S} d="M50 62 L43 82" />
+      <path {...S} d="M50 62 L57 82" />
+      <path {...S} d="M50 45 L30 22" />
+      <path {...S} d="M50 45 L70 22" />
+      {/* Thumbs out, which is what turns a raise into this raise. */}
+      <path {...HAIR} d="M26 26 L30 22 M74 26 L70 22" />
+    </g>
+  ),
+
+  'pompe-bureau': () => (
+    <g>
+      <Ground />
+      {/* The desk: the surface the hands are on, and one leg to say what it is. */}
+      <rect x={58} y={43} width={32} height={7} rx={3.5} fill="currentColor" opacity={0.25} />
+      <rect x={82} y={50} width={6} height={32} rx={3} fill="currentColor" opacity={0.25} />
+      <Head cx={54} cy={33} />
+      <path {...S} d="M50 41 L34 62" />
+      <path {...S} d="M34 62 L22 80" />
+      <path {...S} d="M50 41 L64 45" />
+    </g>
+  ),
+
+  'assis-debout': () => (
+    <g>
+      <Chair />
+      <Ground />
+      <Head cx={34} cy={24} />
+      <path {...S} d="M37 33 L48 50" />
+      <path {...S} d="M48 50 L36 66 L34 82" />
+      {/* Arms crossed on the chest: no hands to push up with. */}
+      <path {...THIN} d="M28 39 L46 46" />
+      <path {...THIN} d="M46 39 L28 46" />
+    </g>
+  ),
+
   'chat-vache-b': () => (
     <g>
       <Ground />

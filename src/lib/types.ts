@@ -234,6 +234,8 @@ export type PainScore = number
 
 /** One zone rated at one moment. Device-local, like the activity journal. */
 export interface PainEntry {
+  /** Generated on the device, so a replayed sync cannot duplicate a rating. */
+  clientId: string
   /** ISO instant the rating was given. */
   at: string
   localDate: string

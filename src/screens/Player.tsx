@@ -155,10 +155,18 @@ export function Player() {
   const progressRef = useRef({ slug: '', index: 0, finished: false })
   progressRef.current.slug = routine?.slug ?? ''
   progressRef.current.index = stepIndex
+  const mountedAt = useRef(Date.now())
   useEffect(() => {
     const snapshot = progressRef.current
+    const openedAt = mountedAt.current
     return () => {
       if (snapshot.finished || !snapshot.slug) return
+      // StrictMode mounts, unmounts and remounts inside the same tick in
+      // development, which wrote a phantom abandonment on every single open and
+      // would have made the completion rate — one of the four numbers the pivot
+      // is judged on — unreadable in every dev build. A person cannot open and
+      // leave a session in under a second.
+      if (Date.now() - openedAt < 1000) return
       trackNow({
         name: 'session_abandoned',
         kind: snapshot.slug === PLAN_SLUG ? 'plan' : 'routine',

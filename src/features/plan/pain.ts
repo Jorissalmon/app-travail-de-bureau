@@ -1,6 +1,8 @@
 import { KEYS, getJSON, setJSON } from '@/lib/storage'
+import { api, isOffline } from '@/lib/api'
 import { localDate } from '@/lib/date'
 import { uuid } from '@/lib/uuid'
+import { removeConfirmed } from '@/features/reminders/queue'
 import type { PainEntry, PainScore, Zone } from '@/lib/types'
 
 /**
@@ -51,6 +53,7 @@ export async function recordPain(input: {
 }): Promise<PainEntry> {
   const at = input.at ?? new Date()
   const entry: PainEntry = {
+    clientId: uuid(),
     at: at.toISOString(),
     localDate: localDate(at),
     zone: input.zone,
@@ -60,16 +63,76 @@ export async function recordPain(input: {
   }
   entries = [...entries, entry].slice(-MAX_ENTRIES)
   await setJSON(KEYS.painJournal, entries)
+  await setJSON(KEYS.painQueue, [...(await queued()), entry])
+  void flushPain()
   return entry
+}
+
+/**
+ * The sync buffer, beside the journal — the same split as the activity journal
+ * (features/reminders/events.ts). The journal is the record and is never
+ * drained; the queue is emptied by a successful flush. Keeping the two apart is
+ * what lets someone without an account, or offline, still see their own
+ * history: the record does not depend on the network having worked.
+ */
+function queued(): Promise<PainEntry[]> {
+  return getJSON<PainEntry[]>(KEYS.painQueue, [])
+}
+
+let flushing = false
+
+/**
+ * Push the queued ratings. Idempotent on `(user_id, client_id)` server-side, so
+ * a replayed batch cannot duplicate an answer — which matters more here than
+ * anywhere else in the app: a duplicated rating would silently reweight the
+ * day mean the whole plan is dosed on.
+ *
+ * Silent on failure, like every other flush: no account and no network are the
+ * normal case, not an error to report.
+ */
+export async function flushPain(): Promise<void> {
+  if (flushing) return
+  flushing = true
+  try {
+    const pending = await queued()
+    if (pending.length === 0) return
+    await api.post<{ inserted: number }>('/api/pain', pending)
+    await setJSON(
+      KEYS.painQueue,
+      removeConfirmed(await queued(), pending.map((e) => e.clientId)),
+    )
+  } catch (e) {
+    if (!isOffline(e)) console.warn('[pain] flush failed', e)
+  } finally {
+    flushing = false
+  }
+}
+
+/**
+ * Merge what the server holds into the local journal.
+ *
+ * Union by clientId rather than replace: the device may hold ratings the server
+ * has never seen (offline, or given before the account existed), and a second
+ * device holds ratings this one has not. Dropping either would lose an answer
+ * somebody gave, which is the one thing this journal exists not to do.
+ */
+export async function pullPain(): Promise<void> {
+  try {
+    const remote = await api.get<PainEntry[]>('/api/pain')
+    if (!Array.isArray(remote)) return
+    const byId = new Map(entries.map((e) => [e.clientId, e]))
+    for (const e of remote) if (e?.clientId) byId.set(e.clientId, e)
+    entries = [...byId.values()].sort((a, b) => a.at.localeCompare(b.at)).slice(-MAX_ENTRIES)
+    await setJSON(KEYS.painJournal, entries)
+  } catch {
+    // No account, offline, or an old build of the API: the device's own
+    // journal stands, and it is the whole record for anyone who never signed up.
+  }
 }
 
 /** Used by the profile screen when someone clears their history. */
 export async function clearPain(): Promise<void> {
   entries = []
   await setJSON(KEYS.painJournal, entries)
-}
-
-/** A client id for the day a server copy of this journal exists. */
-export function painClientId(): string {
-  return uuid()
+  await setJSON(KEYS.painQueue, [])
 }

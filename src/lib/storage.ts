@@ -42,6 +42,10 @@ export const KEYS = {
   painProfile: 'pain.profile',
   /** Every 0-10 answer ever given, oldest first. Never drained by a sync. */
   painJournal: 'pain.journal',
+  /** The ratings not yet accepted by the server. Drained by a flush. */
+  painQueue: 'pain.queue',
+  /** The analytics events not yet accepted by the server. */
+  analyticsQueue: 'analytics.queue',
   /** The analytics ring buffer, see features/analytics. */
   analyticsJournal: 'analytics.journal',
   stepDurations: 'player.durations',

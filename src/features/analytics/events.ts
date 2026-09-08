@@ -1,5 +1,8 @@
 import { KEYS, getJSON, setJSON } from '@/lib/storage'
+import { api, isOffline } from '@/lib/api'
 import { localDate } from '@/lib/date'
+import { uuid } from '@/lib/uuid'
+import { removeConfirmed } from '@/features/reminders/queue'
 import type { PlanMinutes, RoutineGoal, Zone } from '@/lib/types'
 import type { Place } from '@/features/place/place'
 
@@ -16,9 +19,11 @@ import type { Place } from '@/features/place/place'
  * Three rules, which are the doctrine applied to measurement:
  *
  * 1. **No third-party SDK.** Nothing here loads a script, opens a socket or
- *    talks to an analytics vendor. Events land in a device-local ring buffer
- *    and go to the app's own API, or nowhere. An app whose pitch is « on ne
- *    t'invente pas de chiffres » cannot ship a tracker that sells them.
+ *    talks to an analytics vendor. Events land in a device-local ring buffer,
+ *    drain to the app's own `/api/analytics`, and go nowhere else. An app whose
+ *    pitch is « on ne t'invente pas de chiffres » cannot ship a tracker that
+ *    sells them. Without an account nothing leaves the phone at all, and the
+ *    buffer can still be exported by hand from the profile screen.
  * 2. **No free text, ever.** Every payload below is a closed vocabulary or a
  *    number. A pain score is a number the user typed; a zone is one of ten
  *    known strings. Nothing a person writes is collected, because nothing a
@@ -95,9 +100,25 @@ export type AnalyticsEvent =
   | { name: 'article_opened'; slug: string; evidence: string; from: 'exercise' | 'list' | 'plan' }
 
 export interface StoredEvent {
+  /** Generated on the device: the batch is replayable without double-counting. */
+  clientId: string
   at: string
   localDate: string
   event: AnalyticsEvent
+}
+
+/** The wire shape: the name is a column, the rest of the event is the payload. */
+interface WireEvent {
+  clientId: string
+  at: string
+  localDate: string
+  name: string
+  payload: Record<string, unknown>
+}
+
+function toWire(e: StoredEvent): WireEvent {
+  const { name, ...payload } = e.event
+  return { clientId: e.clientId, at: e.at, localDate: e.localDate, name, payload }
 }
 
 /**
@@ -127,13 +148,72 @@ export async function track(event: AnalyticsEvent): Promise<void> {
   try {
     if (!loaded) await loadAnalytics()
     const now = new Date()
-    buffer = [...buffer, { at: now.toISOString(), localDate: localDate(now), event }].slice(
-      -MAX_EVENTS,
-    )
+    const stored: StoredEvent = {
+      clientId: uuid(),
+      at: now.toISOString(),
+      localDate: localDate(now),
+      event,
+    }
+    buffer = [...buffer, stored].slice(-MAX_EVENTS)
     await setJSON(KEYS.analyticsJournal, buffer)
+    // The buffer is the record and is capped; the queue is what the server has
+    // not accepted yet. Same split as the activity and pain journals.
+    await setJSON(KEYS.analyticsQueue, [...(await queued()), stored].slice(-MAX_EVENTS))
   } catch {
     /* Measuring the app must never be able to break it. */
   }
+}
+
+function queued(): Promise<StoredEvent[]> {
+  return getJSON<StoredEvent[]>(KEYS.analyticsQueue, [])
+}
+
+let flushing = false
+
+/**
+ * Drain the queue to the app's own API.
+ *
+ * Deliberately not called on every event: analytics is the lowest-priority
+ * traffic in the app, and a request per tap would cost battery for data nobody
+ * reads before the end of the week. It runs once after the first paint and
+ * whenever the queue has built up.
+ *
+ * Silent on every failure, including a missing account. Someone using the app
+ * without signing up is the normal case, not an error, and their numbers stay
+ * on their phone — where the export below can still reach them.
+ */
+export async function flushAnalytics(): Promise<void> {
+  if (flushing) return
+  flushing = true
+  try {
+    const pending = await queued()
+    if (pending.length === 0) return
+    await api.post<{ inserted: number }>('/api/analytics', pending.map(toWire))
+    await setJSON(
+      KEYS.analyticsQueue,
+      removeConfirmed(await queued(), pending.map((e) => e.clientId)),
+    )
+  } catch (e) {
+    if (!isOffline(e)) console.warn('[analytics] flush failed', e)
+  } finally {
+    flushing = false
+  }
+}
+
+/**
+ * Everything the buffer holds, as one JSON document.
+ *
+ * The beta has to be readable for someone who never made an account, and for
+ * anyone who would rather hand over a file than a login. It is also the honest
+ * counterpart of the no-SDK rule: if the app collects it, the person it was
+ * collected from can read exactly the same thing.
+ */
+export function exportAnalytics(): string {
+  return JSON.stringify(
+    { exportedAt: new Date().toISOString(), count: buffer.length, events: buffer.map(toWire) },
+    null,
+    2,
+  )
 }
 
 /** Fire-and-forget, for call sites inside a render or an effect. */
@@ -144,4 +224,5 @@ export function trackNow(event: AnalyticsEvent): void {
 export async function clearAnalytics(): Promise<void> {
   buffer = []
   await setJSON(KEYS.analyticsJournal, buffer)
+  await setJSON(KEYS.analyticsQueue, [])
 }

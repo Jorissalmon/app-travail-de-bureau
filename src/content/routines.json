@@ -979,7 +979,7 @@
         "name": "Isométrie, appui frontal",
         "durationS": 30,
         "cue": "Paume sur le front, pousse la tête contre la main. Rien ne bouge, 10 s.",
-        "figureKey": "menton-rentre",
+        "figureKey": "isometrie-nuque",
         "exerciseKey": "isometrie-nuque-avant"
       },
       {
@@ -1392,7 +1392,7 @@
         "name": "Se lever, s'asseoir",
         "durationS": 30,
         "cue": "Bras croisés, lève-toi sans les mains, rassieds-toi en trois secondes.",
-        "figureKey": "extension-chaise",
+        "figureKey": "assis-debout",
         "exerciseKey": "assis-debout"
       },
       {
@@ -1588,7 +1588,7 @@
         "name": "Isométrie, appui frontal",
         "durationS": 30,
         "cue": "Paume sur le front, pousse la tête contre la main. Rien ne bouge, 10 s.",
-        "figureKey": "menton-rentre",
+        "figureKey": "isometrie-nuque",
         "exerciseKey": "isometrie-nuque-avant"
       },
       {
@@ -1675,7 +1675,7 @@
         "name": "Élévation en Y",
         "durationS": 45,
         "cue": "Monte les bras en Y, tiens 3 s en haut, redescends en 3 s. Six fois.",
-        "figureKey": "cercle-bras",
+        "figureKey": "elevation-y",
         "exerciseKey": "elevation-y"
       },
       {
@@ -1683,7 +1683,7 @@
         "name": "Pompe sur le bureau",
         "durationS": 45,
         "cue": "Mains sur le bord du bureau, corps aligné. Six à dix descentes contrôlées.",
-        "figureKey": "encadrement-porte",
+        "figureKey": "pompe-bureau",
         "exerciseKey": "pompe-bureau"
       },
       {
@@ -1740,7 +1740,7 @@
         "name": "Se lever, s'asseoir",
         "durationS": 45,
         "cue": "Bras croisés, lève-toi sans les mains, rassieds-toi en trois secondes. Huit fois.",
-        "figureKey": "extension-chaise",
+        "figureKey": "assis-debout",
         "exerciseKey": "assis-debout"
       },
       {

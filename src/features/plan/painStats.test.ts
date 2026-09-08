@@ -12,6 +12,7 @@ const TODAY = '2026-03-16'
 
 function e(zone: Zone, score: number, localDate: string, hour = 17): PainEntry {
   return {
+    clientId: `${zone}-${localDate}-${score}`,
     at: `${localDate}T${String(hour).padStart(2, '0')}:00:00.000Z`,
     localDate,
     zone,

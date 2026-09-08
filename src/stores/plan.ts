@@ -3,7 +3,7 @@ import { localDate } from '@/lib/date'
 import { place, loadPlace } from '@/features/place/place'
 import { PLAN_SLUG, composePlan, planToRoutine } from '@/features/plan/compose'
 import { readCompletionJournal } from '@/features/reminders/events'
-import { loadPain, painEntries, recordPain } from '@/features/plan/pain'
+import { flushPain, loadPain, painEntries, pullPain, recordPain } from '@/features/plan/pain'
 import { emptyProfile, loadProfile, profile, saveProfile } from '@/features/plan/profile'
 import { trackNow } from '@/features/analytics/events'
 import { useContentStore } from './content'
@@ -47,6 +47,11 @@ interface PlanState {
   markPlanDone: () => void
   /** Re-read the completion journal, e.g. after the day rolls over. */
   refreshDone: () => Promise<void>
+  /**
+   * Push what this device holds, pull what the account holds, recompose.
+   * A no-op without an account, which is the normal case and not an error.
+   */
+  sync: () => Promise<void>
   rate: (input: {
     zone: Zone
     score: PainScore
@@ -115,6 +120,18 @@ export const usePlanStore = create<PlanState>((set, get) => ({
   },
 
   markPlanDone: () => set({ doneToday: true }),
+
+  sync: async () => {
+    await flushPain()
+    await pullPain()
+    const merged = painEntries()
+    // Only touch state when the pull actually brought something new: an
+    // identical array would recompose the plan and reset the card for nothing.
+    if (merged.length !== get().entries.length) {
+      set({ entries: [...merged] })
+      get().recompose()
+    }
+  },
 
   setProfile: async (next) => {
     await saveProfile(next)

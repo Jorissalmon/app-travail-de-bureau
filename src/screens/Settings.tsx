@@ -33,7 +33,7 @@ import { suggestMobilityTimes } from '@/features/reminders/contextual'
 import { readCompletionJournal } from '@/features/reminders/events'
 import { PainScale } from '@/components/PainScale'
 import { PAIN_ZONES, PAIN_ZONE_LABEL, ZONE_LABEL } from '@/content'
-import { trackNow } from '@/features/analytics/events'
+import { exportAnalytics, trackNow } from '@/features/analytics/events'
 import type { PlanMinutes, Zone } from '@/lib/types'
 import {
   ALERT_MODES,
@@ -167,6 +167,27 @@ export function Settings() {
     if (on) delete baseline[zone]
     await setProfile({ ...base, zones, baseline })
     setRating(on ? null : zone)
+  }
+
+  /**
+   * The export.
+   *
+   * The counterpart of « aucun SDK tiers » : if the app collects it, the person
+   * it was collected from can read exactly the same thing, in the same shape
+   * the server would get. It is also how a beta tester without an account gets
+   * their numbers out at all.
+   */
+  const [exported, setExported] = useState<string | null>(null)
+  async function copyExport() {
+    const text = exportAnalytics()
+    try {
+      await navigator.clipboard.writeText(text)
+      setExported(`Copié : ${text.length} caractères. Colle-les où tu veux.`)
+    } catch {
+      // A WebView without clipboard permission, or an insecure context. Saying
+      // so is better than a button that silently does nothing.
+      setExported('La copie a été refusée par le système. Rien n’a été copié.')
+    }
   }
 
   function toggleWeekday(n: number) {
@@ -469,6 +490,23 @@ export function Settings() {
             </div>
           </>
         )}
+      </SettingsSection>
+
+      <SettingsSection title="Tes données">
+        <div className="py-3.5" style={{ borderBottom: '1px solid var(--border)' }}>
+          <button
+            type="button"
+            onClick={() => void copyExport()}
+            className="text-[16px] underline underline-offset-4"
+            style={{ color: 'var(--accent)' }}
+          >
+            Copier mon journal d’usage (JSON)
+          </button>
+          <p className="t-meta mt-2">
+            {exported ??
+              'Ce que l’app a enregistré sur ton usage : des noms d’événements et des nombres, aucun texte que tu aurais écrit. Rien n’est envoyé à un service tiers.'}
+          </p>
+        </div>
       </SettingsSection>
 
       <SettingsSection title="À propos">

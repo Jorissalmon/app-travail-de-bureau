@@ -37,6 +37,7 @@ function profile(over: Partial<PainProfile> = {}): PainProfile {
 
 function entry(zone: Zone, score: number, localDate: string): PainEntry {
   return {
+    clientId: `${zone}-${localDate}-${score}`,
     at: `${localDate}T17:00:00.000Z`,
     localDate,
     zone,
