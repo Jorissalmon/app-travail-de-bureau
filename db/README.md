@@ -56,6 +56,13 @@ Une table `schema_migrations` retient ce qui a déjà tourné, parce que
 appliqué dès que la table `users` existe. Le seed, lui, est un rafraîchissement
 de contenu : il rejoue à chaque fois.
 
+> **Le workflow GitHub « DB migrate » ne peut pas tourner** tant que le secret
+> `DATABASE_URL` n'existe pas dans Settings → Secrets and variables → Actions.
+> Sans lui il échoue tout de suite, et une modification de `src/content/*.json`
+> reste dans le bundle sans jamais atteindre la base — l'app la récupère ensuite
+> par `/api/articles` et écrase la version embarquée. Crée le secret, ou applique
+> le seed à la main.
+
 ### Option A — script fourni
 
 ```bash
